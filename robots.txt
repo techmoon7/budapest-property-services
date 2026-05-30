@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://techmoon7.github.io/budapest-property-services/sitemap.xml
