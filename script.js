@@ -78,10 +78,10 @@ const galleries = {
     { src: pexels("4792495"), alt: "Screws and fixings for small repairs" },
   ],
   property: [
-    { src: pexels("34046213"), alt: "Freshly painted apartment wall" },
-    { src: pexels("6474490"), alt: "Interior painting for a rental refresh" },
-    { src: pexels("6474313"), alt: "Drywall and ceiling refresh work" },
     { src: pexels("3990359"), alt: "Clean interior construction preparation" },
+    { src: pexels("6474129"), alt: "Plasterboard ceiling finishing" },
+    { src: pexels("6474313"), alt: "Drywall and ceiling refresh work" },
+    { src: pexels("6474490"), alt: "Interior painting for a rental refresh" },
     { src: pexels("5583119"), alt: "Wall repair before tenant handover" },
     { src: pexels("4981802"), alt: "Small apartment repair work" },
     { src: pexels("6728930"), alt: "Outdoor maintenance for a property" },
@@ -264,7 +264,7 @@ phoneActions.forEach((phoneAction) => {
     try {
       await navigator.clipboard.writeText("+36 20 667 1832");
       phoneAction.textContent =
-        currentLanguage === "en" ? "Copied: +36 20 667 1832" : "Kimásolva: +36 20 667 1832";
+        currentLanguage === "en" ? "Copied: +36 20 667 1832" : "Masolva: +36 20 667 1832";
     } catch {
       phoneAction.textContent = "+36 20 667 1832";
     }
