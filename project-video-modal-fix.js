@@ -124,12 +124,15 @@
     document.body.classList.add("modal-open");
   };
 
-  const renderVideoStrip = () => {
+  let activeProjectIndex = null;
+
+  const renderVideoStrip = (forcedIndex = null) => {
     const modal = document.getElementById("projectModal");
     const inner = document.getElementById("projectInner");
     if (!modal?.classList.contains("open") || !inner) return;
 
-    const index = getProjectIndex(inner);
+    const index = Number.isFinite(forcedIndex) ? forcedIndex : getProjectIndex(inner);
+    activeProjectIndex = index;
     const project = videosByProject[index];
     const patchKey = `${index}-${lang()}`;
     const existing = inner.querySelector(".project-video-strip");
@@ -176,23 +179,25 @@
 
   const boot = () => {
     installStyles();
-    renderVideoStrip();
 
     document.addEventListener(
       "click",
       (event) => {
-        if (event.target.closest?.("[data-project], [data-close], .lang")) {
-          setTimeout(renderVideoStrip, 140);
+        const trigger = event.target.closest?.("[data-project]");
+        if (trigger) {
+          const index = Number(trigger.dataset.project);
+          activeProjectIndex = index;
+          setTimeout(() => renderVideoStrip(index), 220);
+          setTimeout(() => renderVideoStrip(index), 520);
+          return;
+        }
+
+        if (event.target.closest?.(".lang")) {
+          setTimeout(() => renderVideoStrip(activeProjectIndex), 220);
         }
       },
       true
     );
-
-    const observer = new MutationObserver(() => {
-      clearTimeout(window.__projectVideoModalFixTimer);
-      window.__projectVideoModalFixTimer = setTimeout(renderVideoStrip, 120);
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
   };
 
   if (document.readyState === "loading") {
