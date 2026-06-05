@@ -236,7 +236,7 @@
       const slide = event.target.closest("[data-patch-slide]");
       if (slide) {
         event.stopPropagation();
-        return openGallery(Number(carousel.dataset.patchCarousel), Number(slide.datasetPatchSlide));
+        return openGallery(Number(carousel.dataset.patchCarousel), Number(slide.dataset.patchSlide));
       }
     }
     const gallery = event.target.closest("[data-patch-gallery]");
