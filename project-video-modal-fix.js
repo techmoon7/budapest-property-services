@@ -131,7 +131,13 @@
 
     const index = getProjectIndex(inner);
     const project = videosByProject[index];
+    const patchKey = `${index}-${lang()}`;
+    const existing = inner.querySelector(".project-video-strip");
+
+    if (inner.dataset.videoModalPatched === patchKey && existing) return;
+
     inner.querySelectorAll(".project-video-strip").forEach((strip) => strip.remove());
+    inner.dataset.videoModalPatched = patchKey;
     if (!project?.videos?.length) return;
 
     const carousel = inner.querySelector(".patched-carousel") || inner.querySelector(".project-carousel");
