@@ -75,9 +75,9 @@
     return `
       <div class="project-carousel ${large ? "large" : "compact"} patched-carousel" data-patch-carousel="${index}" data-patch-active="0">
         <div class="carousel-head"><strong>${t(project.title)}</strong><span>${project.photos.length} ${labels[lang()].count}</span></div>
-        <div class="carousel-shell">
+        <div class="carousel-stage">
           <button class="carousel-arrow carousel-prev" type="button" data-patch-prev aria-label="Previous">‹</button>
-          <div class="carousel-window"><div class="carousel-track">
+          <div class="carousel-viewport"><div class="carousel-track">
             ${project.photos.map((photo, photoIndex) => `
               <button class="carousel-slide" type="button" data-patch-slide="${photoIndex}">
                 <img src="${cdn(photo[0], large ? 1300 : 640)}" alt="${caption(project, photo[1])}" loading="lazy">
@@ -86,7 +86,7 @@
           </div></div>
           <button class="carousel-arrow carousel-next" type="button" data-patch-next aria-label="Next">›</button>
         </div>
-        <div class="carousel-dots">
+        <div class="carousel-thumbs">
           ${project.photos.map((photo, photoIndex) => `
             <button type="button" data-patch-dot="${photoIndex}" aria-label="${caption(project, photo[1])}">
               <img src="${cdn(photo[0], 180)}" alt="" loading="lazy">
@@ -107,11 +107,25 @@
   const patchCompare = (root, project) => {
     const before = project.photos.find((photo) => photo[1] === "before") || project.photos[0];
     const after = [...project.photos].reverse().find((photo) => photo[1] === "after") || project.photos.at(-1);
-    const imgs = root.querySelectorAll(".compare img, .case-preview img");
-    if (imgs[0] && before) imgs[0].src = cdn(before[0], 1400);
-    if (imgs[1] && after) imgs[1].src = cdn(after[0], 1400);
-    if (imgs[0]) imgs[0].alt = caption(project, "before");
-    if (imgs[1]) imgs[1].alt = caption(project, "after");
+    const compareBefore = root.querySelector(".compare .before");
+    const compareAfter = root.querySelector(".compare .after");
+    if (compareBefore && before) {
+      compareBefore.src = cdn(before[0], 1400);
+      compareBefore.alt = caption(project, "before");
+    }
+    if (compareAfter && after) {
+      compareAfter.src = cdn(after[0], 1400);
+      compareAfter.alt = caption(project, "after");
+    }
+    const previewImgs = root.querySelectorAll(".case-preview img");
+    if (previewImgs[0] && before) {
+      previewImgs[0].src = cdn(before[0], 1200);
+      previewImgs[0].alt = caption(project, "before");
+    }
+    if (previewImgs[1] && after) {
+      previewImgs[1].src = cdn(after[0], 1200);
+      previewImgs[1].alt = caption(project, "after");
+    }
   };
 
   const patchCards = () => {
@@ -138,6 +152,9 @@
     patchCompare(inner, project);
     const current = inner.querySelector(".project-carousel");
     if (current) current.outerHTML = carouselMarkup(project, index, "modal");
+    const videoStrip = inner.querySelector(".project-video-strip");
+    const patchedCarousel = inner.querySelector(".patched-carousel");
+    if (videoStrip && patchedCarousel) patchedCarousel.before(videoStrip);
     inner.querySelectorAll("[data-patch-carousel]").forEach((carousel) => showSlide(carousel, 0));
   };
 
@@ -183,6 +200,31 @@
     gallery.querySelectorAll("[data-gallery-thumb]").forEach((thumb, thumbIndex) => thumb.classList.toggle("active", thumbIndex === index));
   };
 
+  const installSwipe = () => {
+    let startX = 0;
+    let startY = 0;
+    let target = null;
+    document.addEventListener("pointerdown", (event) => {
+      const carousel = event.target.closest("[data-patch-carousel] .carousel-viewport");
+      const gallery = event.target.closest("[data-patch-gallery] .gallery-main");
+      target = carousel ? carousel.closest("[data-patch-carousel]") : gallery?.closest("[data-patch-gallery]");
+      if (!target) return;
+      startX = event.clientX;
+      startY = event.clientY;
+    });
+    document.addEventListener("pointerup", (event) => {
+      if (!target) return;
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+      const active = Number(target.dataset.patchActive || 0);
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+        if (target.matches("[data-patch-carousel]")) showSlide(target, active + (dx < 0 ? 1 : -1));
+        if (target.matches("[data-patch-gallery]")) showGallery(active + (dx < 0 ? 1 : -1));
+      }
+      target = null;
+    });
+  };
+
   document.addEventListener("click", (event) => {
     const carousel = event.target.closest("[data-patch-carousel]");
     if (carousel) {
@@ -194,7 +236,7 @@
       const slide = event.target.closest("[data-patch-slide]");
       if (slide) {
         event.stopPropagation();
-        return openGallery(Number(carousel.dataset.patchCarousel), Number(slide.dataset.patchSlide));
+        return openGallery(Number(carousel.dataset.patchCarousel), Number(slide.datasetPatchSlide));
       }
     }
     const gallery = event.target.closest("[data-patch-gallery]");
@@ -213,13 +255,17 @@
     .project img{transition:transform 1.4s ease}.project:hover img{transform:scale(1.035)}
     .patched-carousel .carousel-slide{position:relative;text-align:left}.patched-carousel .slide-caption,.gallery-caption{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;padding:10px 12px;border-radius:9px;background:rgba(17,24,20,.78);color:white;backdrop-filter:blur(7px);line-height:1.32}
     .patched-carousel .slide-caption b,.gallery-caption b{display:block;color:#f3c275;text-transform:uppercase;font-size:11px;letter-spacing:.05em}.patched-carousel .slide-caption span,.gallery-caption span{display:block;font-size:13px}
-    .patched-carousel .carousel-dots button.active,.patched-gallery .thumb-grid button.active{outline:3px solid #c4813a;outline-offset:2px}
+    .patched-carousel .carousel-thumbs button.active,.patched-gallery .thumb-grid button.active{outline:3px solid #c4813a;outline-offset:2px}
     .patched-gallery .gallery-main{position:relative}.patched-gallery #patchGalleryImg{width:100%;height:min(62vh,680px);object-fit:cover;display:block}
     @media(max-width:680px){.patched-carousel .slide-caption{position:relative;left:auto;right:auto;bottom:auto;border-radius:0;background:#173629}.patched-gallery #patchGalleryImg{height:48vh}.gallery-caption{position:relative;left:auto;right:auto;bottom:auto;border-radius:0;background:#173629}}
   `;
   document.head.appendChild(style);
 
   const boot = () => {
+    if (!window.__projectGallerySwipeInstalled) {
+      window.__projectGallerySwipeInstalled = true;
+      installSwipe();
+    }
     patchCards();
     patchProjectModal();
     const observer = new MutationObserver(() => {
