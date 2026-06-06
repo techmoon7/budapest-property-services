@@ -174,6 +174,9 @@
       (event) => {
         const trigger = event.target.closest?.("[data-project]");
         if (trigger) scheduleRender(Number(trigger.dataset.project));
+        if (event.target.closest?.("#galleryModal [data-close]") && Number.isFinite(activeProjectIndex)) {
+          setTimeout(() => renderProjectVideos(activeProjectIndex), 280);
+        }
         if (event.target.closest?.(".lang") && Number.isFinite(activeProjectIndex)) {
           setTimeout(() => renderProjectVideos(activeProjectIndex), 260);
         }
