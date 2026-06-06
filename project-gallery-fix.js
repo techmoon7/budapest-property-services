@@ -34,7 +34,7 @@
         process: { hu: "Fűnyírás, vágás, összegyűjtés és rendezési munka nagyobb kertrészben.", en: "Mowing, trimming, collecting and tidying across a wider outdoor area." },
         after: { hu: "Rendezettebb kert, tisztább udvar és jobb első benyomás az ingatlannal.", en: "A cleaner garden, tidier yard and better first impression for the property." },
       },
-      photos: [["17972815", "before"], ["26593079", "before"], ["33219998", "before"], ["1453499", "process"], ["24595769", "process"], ["5027602", "process"], ["5027601", "process"], ["7587878", "after"], ["7601179", "after"], ["280229", "after"]],
+      photos: [["17972815", "before"], ["26593079", "before"], ["33219998", "before"], ["9229821", "process"], ["24595769", "process"], ["5027602", "process"], ["5027601", "process"], ["7587878", "after"], ["7601179", "after"], ["280229", "after"]],
     },
     {
       title: { hu: "Airbnb és lakás átadás előtt", en: "Airbnb and apartment handover" },
@@ -128,11 +128,38 @@
     }
   };
 
+  const patchCompareControl = (root) => {
+    const compare = root.querySelector(".compare");
+    const range = root.querySelector("input.range");
+    if (!compare || !range || compare.dataset.compareControlPatched) return;
+    compare.dataset.compareControlPatched = "true";
+    compare.style.cursor = "ew-resize";
+    const setSplit = (value) => {
+      const next = Math.max(5, Math.min(95, Number(value) || 50));
+      range.value = String(next);
+      compare.style.setProperty("--split", `${next}%`);
+    };
+    const updateFromPointer = (event) => {
+      const rect = compare.getBoundingClientRect();
+      if (!rect.width) return;
+      setSplit(((event.clientX - rect.left) / rect.width) * 100);
+    };
+    range.addEventListener("input", () => setSplit(range.value));
+    compare.addEventListener("pointerdown", (event) => {
+      compare.setPointerCapture?.(event.pointerId);
+      updateFromPointer(event);
+    });
+    compare.addEventListener("pointermove", (event) => {
+      if (event.buttons) updateFromPointer(event);
+    });
+  };
+
   const patchCards = () => {
     document.querySelectorAll(".project").forEach((card, index) => {
       const project = projects[index];
       if (!project) return;
       patchCompare(card, project);
+      patchCompareControl(card);
       const current = card.querySelector(".project-carousel");
       if (current && !current.classList.contains("patched-carousel")) {
         current.outerHTML = carouselMarkup(project, index, "card");
@@ -150,6 +177,7 @@
     if (!project || inner.dataset.galleryPatched === String(index)) return;
     inner.dataset.galleryPatched = String(index);
     patchCompare(inner, project);
+    patchCompareControl(inner);
     const current = inner.querySelector(".project-carousel");
     if (current) current.outerHTML = carouselMarkup(project, index, "modal");
     const videoStrip = inner.querySelector(".project-video-strip");
