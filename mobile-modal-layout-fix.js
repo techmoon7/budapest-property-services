@@ -4,9 +4,6 @@
     #projectModal .project-layout,
     #projectModal .project-layout > *,
     #projectModal .details,
-    #projectModal .project-video-strip,
-    #projectModal .project-video-grid,
-    #projectModal .project-video-button,
     #projectModal .project-carousel,
     #projectModal .carousel-stage,
     #projectModal .carousel-viewport,
@@ -16,14 +13,10 @@
     }
 
     #projectModal .project-layout,
-    #projectModal .details,
-    #projectModal .project-video-strip {
+    #projectModal .details {
       overflow-x: hidden;
     }
 
-    #projectModal .project-video-strip,
-    #projectModal .project-video-grid,
-    #projectModal .project-video-button,
     #projectModal .project-carousel,
     #projectModal .carousel-stage,
     #projectModal .carousel-viewport,
@@ -37,10 +30,6 @@
       max-width: 100%;
     }
 
-    #projectModal .project-video-grid {
-      grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
-    }
-
     @media (max-width: 680px) {
       #projectModal .project-layout {
         grid-template-columns: minmax(0, 1fr);
@@ -51,14 +40,6 @@
       #projectModal .details {
         width: 100%;
         overflow-wrap: anywhere;
-      }
-
-      #projectModal .project-video-button {
-        grid-template-columns: 72px minmax(0, 1fr);
-      }
-
-      #projectModal .project-video-thumb {
-        height: 58px;
       }
 
       #projectModal .carousel-arrow {
@@ -86,3 +67,4 @@
   `;
   document.head.append(style);
 })();
+
