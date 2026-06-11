@@ -16,13 +16,13 @@
       if (!close) return;
 
       const galleryModal = close.closest("#galleryModal.open");
-      const videoModal = close.closest("#videoModal.open");
-      if (!galleryModal && !videoModal) return;
+      if (!galleryModal) return;
 
       event.preventDefault();
       event.stopImmediatePropagation();
-      closeSingleModal(galleryModal || videoModal);
+      closeSingleModal(galleryModal);
     },
     true
   );
 })();
+
