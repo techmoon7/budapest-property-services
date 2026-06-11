@@ -73,13 +73,13 @@
   const carouselMarkup = (project, index, size = "card") => {
     const large = size === "modal";
     return `
-      <div class="project-carousel ${large ? "large" : "compact"} patched-carousel" data-patch-carousel="${index}" data-patch-active="0">
-        <div class="carousel-head"><strong>${t(project.title)}</strong><span>${project.photos.length} ${labels[lang()].count}</span></div>
+      <div class="project-carousel ${large ? "large" : "compact"} patched-carousel" data-patch-carousel="${index}" data-patch-active="0" data-patch-phase="all">
+        <div class="carousel-head"><strong>${t(project.title)}</strong><span data-patch-counter>${project.photos.length} ${labels[lang()].count}</span></div>
         <div class="carousel-stage">
           <button class="carousel-arrow carousel-prev" type="button" data-patch-prev aria-label="Previous">‹</button>
           <div class="carousel-viewport"><div class="carousel-track">
             ${project.photos.map((photo, photoIndex) => `
-              <button class="carousel-slide" type="button" data-patch-slide="${photoIndex}">
+              <button class="carousel-slide" type="button" data-patch-slide="${photoIndex}" data-phase="${photo[1]}">
                 <img src="${cdn(photo[0], large ? 1300 : 640)}" alt="${caption(project, photo[1])}" loading="lazy">
                 <span class="slide-caption"><b>${phaseName(photo[1])}</b><span>${t(project.note[photo[1]])}</span></span>
               </button>`).join("")}
@@ -88,7 +88,7 @@
         </div>
         <div class="carousel-thumbs">
           ${project.photos.map((photo, photoIndex) => `
-            <button type="button" data-patch-dot="${photoIndex}" aria-label="${caption(project, photo[1])}">
+            <button type="button" data-patch-dot="${photoIndex}" data-phase="${photo[1]}" aria-label="${caption(project, photo[1])}">
               <img src="${cdn(photo[0], 180)}" alt="" loading="lazy">
             </button>`).join("")}
         </div>
@@ -97,11 +97,24 @@
 
   const showSlide = (carousel, next) => {
     const slides = [...carousel.querySelectorAll("[data-patch-slide]")];
-    if (!slides.length) return;
-    const index = (next + slides.length) % slides.length;
+    const dots = [...carousel.querySelectorAll("[data-patch-dot]")];
+    const phase = carousel.dataset.patchPhase || "all";
+    slides.forEach((slide) => {
+      slide.hidden = phase !== "all" && slide.dataset.phase !== phase;
+    });
+    dots.forEach((dot) => {
+      dot.hidden = phase !== "all" && dot.dataset.phase !== phase;
+    });
+    const visibleSlides = slides.filter((slide) => !slide.hidden);
+    const visibleDots = dots.filter((dot) => !dot.hidden);
+    if (!visibleSlides.length) return;
+    const index = (next + visibleSlides.length) % visibleSlides.length;
     carousel.dataset.patchActive = String(index);
     carousel.querySelector(".carousel-track").style.transform = `translateX(${-index * 100}%)`;
-    carousel.querySelectorAll("[data-patch-dot]").forEach((dot, i) => dot.classList.toggle("active", i === index));
+    dots.forEach((dot) => dot.classList.remove("active"));
+    visibleDots[index]?.classList.add("active");
+    const counter = carousel.querySelector("[data-patch-counter]");
+    if (counter) counter.textContent = `${index + 1} / ${visibleSlides.length} ${labels[lang()].count}`;
   };
 
   const patchCompare = (root, project) => {
@@ -155,7 +168,8 @@
   };
 
   const patchCards = () => {
-    document.querySelectorAll(".project").forEach((card, index) => {
+    document.querySelectorAll(".project").forEach((card) => {
+      const index = Number(card.querySelector("[data-project]")?.dataset.project);
       const project = projects[index];
       if (!project) return;
       patchCompare(card, project);
@@ -180,9 +194,6 @@
     patchCompareControl(inner);
     const current = inner.querySelector(".project-carousel");
     if (current) current.outerHTML = carouselMarkup(project, index, "modal");
-    const videoStrip = inner.querySelector(".project-video-strip");
-    const patchedCarousel = inner.querySelector(".patched-carousel");
-    if (videoStrip && patchedCarousel) patchedCarousel.before(videoStrip);
     inner.querySelectorAll("[data-patch-carousel]").forEach((carousel) => showSlide(carousel, 0));
   };
 
@@ -254,13 +265,24 @@
   };
 
   document.addEventListener("click", (event) => {
+    const phaseButton = event.target.closest("#projectModal [data-phase-filter]");
+    if (phaseButton) {
+      const carousel = document.querySelector("#projectModal [data-patch-carousel]");
+      if (carousel) {
+        carousel.dataset.patchPhase = phaseButton.dataset.phaseFilter || "all";
+        showSlide(carousel, 0);
+      }
+    }
     const carousel = event.target.closest("[data-patch-carousel]");
     if (carousel) {
       const active = Number(carousel.dataset.patchActive || 0);
       if (event.target.closest("[data-patch-prev]")) return showSlide(carousel, active - 1);
       if (event.target.closest("[data-patch-next]")) return showSlide(carousel, active + 1);
       const dot = event.target.closest("[data-patch-dot]");
-      if (dot) return showSlide(carousel, Number(dot.dataset.patchDot));
+      if (dot) {
+        const visibleDots = [...carousel.querySelectorAll("[data-patch-dot]")].filter((item) => !item.hidden);
+        return showSlide(carousel, visibleDots.indexOf(dot));
+      }
       const slide = event.target.closest("[data-patch-slide]");
       if (slide) {
         event.stopPropagation();
@@ -312,3 +334,4 @@
     setTimeout(boot, 500);
   }
 })();
+
