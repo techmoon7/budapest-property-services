@@ -3,7 +3,11 @@
   const tel = "tel:+36206671832";
   const wa = "https://wa.me/36206671832";
   const img = (id, w = 1200) =>
-    `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
+    id.startsWith("assets/")
+      ? id
+      : `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
+
+  const heroImage = "assets/budapest-apartment-wall-refresh.jpg";
 
   const state = {
     lang: localStorage.getItem("bps-lang") || "hu",
@@ -11,8 +15,6 @@
     galleryIndex: 0,
     projectIndex: 0,
     projectFilter: "all",
-    videoIndex: 0,
-    reel: 0,
   };
 
   const tx = (value) => value?.[state.lang] || value?.hu || "";
@@ -30,35 +32,35 @@
     nav: {
       services: { hu: "Szolgáltatások", en: "Services" },
       clients: { hu: "Ügyfelek", en: "Clients" },
-      projects: { hu: "Projektek", en: "Projects" },
+      projects: { hu: "Munkapéldák", en: "Work examples" },
       contact: { hu: "Kapcsolat", en: "Contact" },
     },
     hero: {
       label: { hu: "Budapesti ingatlankarbantartás", en: "Property services in Budapest" },
       title: {
-        hu: "Lakás, Airbnb és iroda karbantartás szervezetten.",
-        en: "Reliable property maintenance for apartments, rentals and offices.",
+        hu: "Budapesti ingatlanok karbantartása, szervezetten.",
+        en: "Organised maintenance for Budapest properties.",
       },
       text: {
         hu:
-          "Festés, gipszkarton javítás, kisebb szerelés és kerti munka Budapesten. A cél egyszerű: gyors egyeztetés, tiszta munka, fotós visszajelzés és olyan végeredmény, amit tulajdonosként nyugodtan továbbadhat.",
+          "Festés, gipszkarton-javítás, kisebb szerelés és kertgondozás budapesti lakásokban, irodákban és képviseleti ingatlanokban. Magyar és angol egyeztetés, rendezett munkavégzés és fotós visszajelzés.",
         en:
-          "Painting, drywall repair, small handyman work and garden care in Budapest. Clear communication, tidy work and photo updates make it easier to manage a property even when you are not on site.",
+          "Painting, drywall repair, small maintenance jobs and garden care for Budapest apartments, offices and representative properties. Communication is available in Hungarian and English, with clear photo updates for owners who are not on site.",
       },
-      primary: { hu: "Kérek visszahívást", en: "Request a call" },
-      secondary: { hu: "Projektpéldák", en: "View projects" },
-      noteTitle: { hu: "Nem kell nagy kivitelező minden apró munkához", en: "Small jobs still need a reliable system" },
+      primary: { hu: "Telefonos egyeztetés", en: "Discuss the job" },
+      secondary: { hu: "Munkapéldák", en: "View work examples" },
+      noteTitle: { hu: "Kisebb munkák, átlátható szervezéssel", en: "Small jobs, clearly coordinated" },
       noteText: {
         hu:
-          "Bérlőváltás, vendégérkezés vagy irodaátadás előtt sokszor néhány javítás dönt arról, mennyire tűnik rendezettnek az ingatlan.",
+          "Bérlőváltás, vendégérkezés vagy irodaátadás előtt néhány jól ütemezett javítás is sokat számít.",
         en:
-          "Before a guest arrival, tenant handover or office visit, a few small fixes can change how professional the property feels.",
+          "Before a guest arrival, tenant handover or office visit, a few well-planned repairs can make a meaningful difference.",
       },
     },
     stats: [
-      { n: "24-48h", hu: "gyors egyeztetés tipikus munkáknál", en: "fast scheduling for typical small jobs" },
       { n: "HU/EN", hu: "magyar és angol kommunikáció", en: "Hungarian and English communication" },
-      { n: "Fotó", hu: "munka előtti és utáni visszajelzés", en: "before and after photo updates" },
+      { n: "Fotók", hu: "állapot- és munkafolyamat-frissítések", en: "condition and progress updates" },
+      { n: "Budapest", hu: "helyi fókusz, lakásoktól az irodákig", en: "local focus, from apartments to offices" },
     ],
     servicesTitle: {
       hu: "Miben segítünk?",
@@ -66,14 +68,14 @@
     },
     servicesText: {
       hu:
-        "Nem általános barkácslistát adunk, hanem tipikus budapesti helyzetekre építünk: bérlő kiköltözött, Airbnb vendég érkezik, iroda gyors frissítésre szorul, vagy a tulajdonos külföldről szeretne kontrollált munkát intézni.",
+        "Tipikus budapesti helyzetekben segítünk: bérlőváltás, Airbnb-vendég érkezése, irodai frissítés vagy külföldről szervezett karbantartás. A feladatot előre tisztázzuk, a fontos állapotokat pedig fotókkal dokumentáljuk.",
       en:
         "The service is built around real Budapest property situations: tenant move-outs, Airbnb turnovers, office touch-ups and owners who need work arranged without being physically present.",
     },
-    problemsTitle: { hu: "Valós helyzetek, gyors megoldások", en: "Real situations, practical solutions" },
-    projectsTitle: { hu: "Munkatípusok és részletes képes példák", en: "Service types and detailed visual examples" },
+    problemsTitle: { hu: "Tipikus helyzetek, gyakorlati segítség", en: "Typical situations, practical support" },
+    projectsTitle: { hu: "Illusztratív munkapéldák", en: "Illustrative work examples" },
     processTitle: { hu: "Hogyan dolgozunk?", en: "How the work is handled" },
-    trustTitle: { hu: "Miért választanak minket?", en: "Why clients choose us" },
+    trustTitle: { hu: "Mitől átlátható az együttműködés?", en: "What makes coordination clear" },
     audienceTitle: { hu: "Kiknek hasznos?", en: "Who this is for" },
     faqTitle: { hu: "Gyakori kérdések", en: "Common questions" },
     contactTitle: { hu: "Beszéljünk a munkáról", en: "Let us discuss the job" },
@@ -134,7 +136,7 @@
     },
     {
       key: "garden",
-      cover: "7601179",
+      cover: "assets/budapest-courtyard-garden-1.jpg",
       title: { hu: "Kert és udvar rendbetétele", en: "Garden and outdoor clean-up" },
       text: {
         hu:
@@ -150,9 +152,9 @@
         ["24595769", "process", { hu: "Benőtt sövény visszavágása teljes oldalszakaszon, hogy a kert széle újra rendezett legyen.", en: "Overgrown hedge trimmed along a full side section so the garden edge looks orderly again." }],
         ["5027602", "process", { hu: "Magasabb növényzet visszavágása a teljes kertkép rendezéséhez.", en: "Tall greenery being trimmed to restore the overall garden appearance." }],
         ["5027601", "process", { hu: "Nagyobb zöldfelület visszavágása, ahol a munka hatása a teljes területen látszik.", en: "Larger green area being cut back, with the effect visible across the site." }],
-        ["7587878", "after", { hu: "Rendezett kert és épület körüli zöldsáv: a teljes külső tér tisztább képet ad.", en: "Tidy garden and green strip around the building, giving the whole exterior a cleaner look." }],
-        ["7601179", "after", { hu: "Rendezett pázsit és ház körüli külső tér: tisztább érkezési élmény.", en: "Tidy lawn and exterior area, creating a cleaner arrival experience." }],
-        ["280229", "after", { hu: "Széles látószögű kész állapot: a kert és a homlokzat együtt mutat rendezett képet.", en: "Wide finished view where the garden and facade read as one tidy property." }],
+        ["assets/budapest-courtyard-garden-1.jpg", "after", { hu: "Rendezett budapesti belső udvar nyírt fűvel, visszavágott sövénnyel és tiszta járdával.", en: "A tidy Budapest courtyard with cut grass, trimmed hedges and a clean path." }],
+        ["assets/budapest-courtyard-garden-2.jpg", "after", { hu: "Karbantartott zöldsáv egy városi lakóépület mellett, egyszerű, jól áttekinthető kialakítással.", en: "A maintained green strip beside an urban residential building, kept simple and easy to manage." }],
+        ["assets/budapest-courtyard-garden-3.jpg", "after", { hu: "Tiszta bejárati út és gondozott növényzet egy budapesti társasházi udvarban.", en: "A clean entrance path and maintained planting in a Budapest apartment courtyard." }],
       ],
     },
     {
@@ -174,7 +176,7 @@
         ["19109111", "after", { hu: "Stabil, kész polcrendszer, amely a korábbi üres vagy rendezetlen falfelületet használhatóvá teszi.", en: "Stable finished shelving that turns an empty or untidy wall into useful storage." }],
         ["9565966", "after", { hu: "Rendezett fali tároló kisebb szerelés után, átadásra alkalmasabb belső képpel.", en: "Orderly wall storage after small installation work, improving the handover impression." }],
         ["5824546", "after", { hu: "Teljes falon megjelenő tároló és polcrendszer kész állapotban.", en: "Full wall storage and shelving shown in finished condition." }],
-        ["6670861", "after", { hu: "Nagyobb beépített tároló és lakótér kész állapotban: a helyiség használhatóbb lett.", en: "Larger built-in storage and living area in finished condition, making the room more usable." }],
+        ["19109111", "after", { hu: "Egyszerű, stabil fali polc elkészült állapotban, hétköznapi lakásbelsőben.", en: "A simple, stable wall shelf in a normal apartment interior." }],
         ["5824575", "after", { hu: "Kész fali tároló teljes nézetben, ahol a javítás eredménye egyértelműen látszik.", en: "Finished wall storage shown in full view, making the result easy to understand." }],
       ],
     },
@@ -230,9 +232,9 @@
     {
       key: "garden",
       type: { hu: "Kert / udvar", en: "Garden / outdoor" },
-      cover: "7601179",
+      cover: "assets/budapest-courtyard-garden-1.jpg",
       before: "17972815",
-      after: "7601179",
+      after: "assets/budapest-courtyard-garden-1.jpg",
       title: { hu: "Elhanyagolt külső részből rendezett érkezés", en: "From neglected outdoor area to a tidier arrival" },
       summary: {
         hu:
@@ -255,7 +257,7 @@
   Object.assign(projects[0], {
     category: "painting",
     location: { hu: "Budapesti kiadó lakás", en: "Budapest rental apartment" },
-    timeline: { hu: "1 napos falfrissítés", en: "1-day wall refresh" },
+    timeline: { hu: "egyeztetett ütemezés", en: "agreed scheduling" },
     client: { hu: "bérlőváltás előtt", en: "before tenant handover" },
     problem: {
       hu:
@@ -276,7 +278,7 @@
     metrics: [
       { n: "10", hu: "képes példa", en: "visual examples" },
       { n: "3", hu: "munkafázis", en: "work phases" },
-      { n: "1 nap", hu: "tipikus átfutás", en: "typical turnaround" },
+      { n: "Egyeztetve", hu: "ütemezés", en: "timing" },
     ],
   });
 
@@ -344,15 +346,15 @@
       cover: "19899060",
       before: "5102904",
       after: "19899060",
-      title: { hu: "Gyors lakásfrissítés vendégérkezés előtt", en: "Fast apartment refresh before guest arrival" },
+      title: { hu: "Lakásfrissítés vendégérkezés előtt", en: "Apartment refresh before guest arrival" },
       location: { hu: "Budapesti Airbnb lakás", en: "Budapest Airbnb apartment" },
-      timeline: { hu: "24-48 órás szervezési cél", en: "24-48h scheduling target" },
+      timeline: { hu: "vendégérkezéshez igazítva", en: "planned around guest arrival" },
       client: { hu: "vendégváltás előtt", en: "before guest turnover" },
       summary: {
         hu:
-          "Vendégváltás előtt a kisebb hibák is értékelésrombolók lehetnek. Ilyenkor a legfontosabb a gyors, tiszta és dokumentált beavatkozás.",
+          "Vendégváltás előtt a kisebb hibák is feltűnőek. Ilyenkor a legfontosabb a pontosan egyeztetett, tiszta és dokumentált munka.",
         en:
-          "Before a guest turnover, even small defects can affect reviews. The priority is fast, tidy and documented work.",
+          "Before a guest turnover, even small defects are noticeable. The priority is clearly scheduled, tidy and documented work.",
       },
       problem: {
         hu:
@@ -393,7 +395,7 @@
         ["19899060", "after", { hu: "Világos, teljes nappali kész állapotban, amely jól mutat vendégfotón és átadáskor.", en: "Bright full living room in finished condition, suitable for guest photos and handover." }],
         ["14505912", "after", { hu: "Átadásra kész nappali nagyobb perspektívából, rendezett bútorozással.", en: "Handover-ready living room from a wider perspective, with orderly furnishing." }],
         ["36887747", "after", { hu: "Modern lakótér kész állapotban: tiszta falak, szabad járófelület és rendezett első benyomás.", en: "Modern living area in finished condition with clean walls, clear circulation and a tidy first impression." }],
-        ["7061674", "after", { hu: "Tiszta, használható nappali tér, ahol a javítások nem vonják el a figyelmet.", en: "Clean, usable living area where repairs no longer distract from the room." }],
+        ["35419415", "after", { hu: "Egyszerű, világos szoba rendezett falakkal, átadásra alkalmas állapotban.", en: "A simple bright room with tidy walls, ready for handover." }],
         ["10117724", "after", { hu: "Átadásra kész közös tér, amely vendégnek és tulajdonosnak is ellenőrizhető.", en: "Handover-ready shared space that is easy for both guest and owner to review." }],
         ["271624", "after", { hu: "Kompakt Airbnb lakótér kész állapotban, rendezett fallal és használható elrendezéssel.", en: "Compact Airbnb living area in finished condition, with tidy walls and usable layout." }],
       ],
@@ -526,24 +528,24 @@
       n: "01",
       title: { hu: "Állapot előtte", en: "Condition before" },
       text: {
-        hu: "A képsorozat megmutatja, milyen problémából indul az adott munkatípus.",
-        en: "The image sequence shows the kind of starting condition the service is designed to address.",
+        hu: "Az illusztráció megmutatja az adott munkatípus jellemző kiinduló állapotát.",
+        en: "The illustration shows a typical starting condition for this kind of work.",
       },
     },
     {
       n: "02",
       title: { hu: "Munka közben", en: "During the work" },
       text: {
-        hu: "A folyamatfotók azt mutatják, hogy nem csak eltakarjuk a hibát, hanem rendezetten halad a munka.",
-        en: "Process photos show that the issue is not simply hidden, but handled in an organised way.",
+        hu: "A képek a jellemző előkészítési és javítási lépéseket szemléltetik.",
+        en: "The images illustrate typical preparation and repair stages.",
       },
     },
     {
       n: "03",
       title: { hu: "Kész átadás", en: "Finished handover" },
       text: {
-        hu: "A végeredmény legyen könnyen érthető: tisztább felület, rendezettebb tér, kevesebb bizonytalanság.",
-        en: "The result should be easy to understand: cleaner surfaces, a tidier space and less uncertainty.",
+        hu: "A várható eredmény egyszerűen látható: tisztább felület és rendezettebb tér.",
+        en: "The expected result is easy to understand: cleaner surfaces and a tidier space.",
       },
     },
   ];
@@ -578,10 +580,10 @@
   ];
 
   const audience = [
-    ["Nagykövetségek", "Embassies", "Diszkrét, pontos kommunikáció, kulturált megjelenés és rendezett munkavégzés."],
-    ["Nemzetközi cégek", "International companies", "Irodák és képviseleti terek kisebb, gyors frissítése."],
-    ["Külföldi tulajdonosok", "Foreign owners", "Távollétben is követhető folyamat fotókkal és érthető egyeztetéssel."],
-    ["Airbnb és bérlemények", "Airbnb and rentals", "Vendégváltás vagy bérlőváltás előtt a látható hibák gyors kezelése."],
+    ["Nagykövetségek és képviseletek", "Embassies and representative offices", "Diszkrét egyeztetés és rendezett munkavégzés lakásokban, irodákban és képviseleti terekben.", "Discreet coordination and tidy work in residences, offices and representative spaces."],
+    ["Nemzetközi cégek", "International companies", "Irodák és közös terek kisebb javításai, lehetőség szerint a napi működéshez igazítva.", "Minor repairs in offices and shared spaces, scheduled around normal operations where possible."],
+    ["Külföldi tulajdonosok", "Foreign owners", "Magyar és angol kommunikáció, valamint fotós frissítések, ha a tulajdonos nincs Budapesten.", "Hungarian and English communication with photo updates when the owner is not in Budapest."],
+    ["Airbnb és bérlemények", "Airbnb and rentals", "Látható hibák, faljavítások és kisebb szerelések kezelése vendég- vagy bérlőváltás előtt.", "Visible defects, wall repairs and small maintenance tasks handled before guest or tenant turnover."],
   ];
 
   const faq = [
@@ -591,20 +593,6 @@
     ["Budapesten kívül is működik?", "Do you work outside Budapest?", "Első körben Budapest és közvetlen környéke a célszerű terület.", "The practical focus is Budapest and the nearby area."],
   ];
 
-  const reel = [
-    ["35419415", { hu: "Falfrissítés", en: "Wall refresh" }],
-    ["7937304", { hu: "Gipszkarton javítás", en: "Drywall repair" }],
-    ["7601179", { hu: "Kert rendezése", en: "Garden care" }],
-    ["1090638", { hu: "Kisebb szerelés", en: "Small repairs" }],
-  ];
-
-  // The only video retained on the site. It is used as a general hero visual,
-  // never presented as footage from a specific customer project.
-  const heroVideo = {
-    src: "https://videos.pexels.com/video-files/6474086/6474086-sd_640_360_25fps.mp4",
-    poster: "35419415",
-  };
-
   projects.forEach((project) => {
     project.description = project.description || project.summary;
     project.images = project.images || project.photos || [];
@@ -612,56 +600,13 @@
     project.videos = [];
   });
 
-  const installStyle = () => {
-    const style = document.createElement("style");
-    style.textContent = `
-      :root{--paper:#f6f1e8;--card:#fffaf2;--ink:#1f2923;--muted:#627167;--green:#285f43;--green2:#173629;--accent:#c4813a;--line:#ded4c3;--shadow:0 22px 58px rgba(49,43,33,.14)}
-      *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,Segoe UI,Arial,sans-serif;font-size:18px;line-height:1.65}body.modal-open{overflow:hidden}a{color:inherit;text-decoration:none}img{max-width:100%}button,input{font:inherit}
-      .wrap{width:min(100% - 40px,1480px);margin:auto}.header{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px clamp(18px,4vw,76px);background:rgba(255,250,242,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
-      .brand{display:flex;align-items:center;gap:14px}.logo{display:grid;place-items:center;width:58px;height:58px;border-radius:9px;background:var(--green);color:white;font-weight:900}.brand strong{display:block;font-size:20px}.brand small{display:block;color:var(--muted);line-height:1.2}.nav{display:flex;gap:26px;font-weight:900}.actions{display:flex;align-items:center;gap:10px}.btn,.lang{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 18px;border-radius:8px;border:1px solid var(--line);background:white;font-weight:900;cursor:pointer}.btn.primary{background:var(--green);color:white;border-color:var(--green);box-shadow:0 14px 30px rgba(40,95,67,.22)}.btn.dark{background:var(--green2);color:white;border-color:var(--green2)}
-      .hero{display:grid;grid-template-columns:1fr .95fr;gap:44px;align-items:center;padding:70px 0}.eyebrow{color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:13px}.hero h1{margin:12px 0 16px;font-size:clamp(42px,6vw,86px);line-height:.98;letter-spacing:0}.lead{font-size:22px;color:var(--muted);max-width:850px}.hero-ctas,.section-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px}.stat,.card,.service,.problem,.project,.step,.review,.faq,.audience,.contact-card{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 32px rgba(49,43,33,.05)}.stat{padding:18px}.stat b{display:block;color:var(--green);font-size:28px;line-height:1}.hero-media{position:relative}.hero-media img,.hero-media video{width:100%;height:620px;object-fit:cover;border-radius:10px;box-shadow:var(--shadow);display:block}.hero-video{background:#17251d}.note{position:absolute;right:-10px;bottom:24px;width:min(370px,82%);padding:22px;background:white;border-radius:10px;box-shadow:var(--shadow)}
-      .section{padding:74px 0}.section-head{max-width:1040px;margin-bottom:30px}.section-head h2{margin:0 0 12px;font-size:clamp(36px,4.4vw,66px);line-height:1.04}.section-head p{margin:0;color:var(--muted);font-size:20px}.grid{display:grid;gap:20px}.grid.four{grid-template-columns:repeat(4,1fr)}.grid.three{grid-template-columns:repeat(3,1fr)}.grid.two{grid-template-columns:repeat(2,1fr)}
-      .service,.project,.problem{overflow:hidden;transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}.service>button,.project .case-open{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;text-align:left;color:inherit;cursor:pointer}.media{height:250px;overflow:hidden;background:#ddd}.media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1s ease}.body{padding:24px}.body h3{margin:0 0 10px;font-size:25px;line-height:1.2}.body p{margin:0;color:var(--muted)}.service:hover,.project:hover,.problem:hover,.card:hover{transform:translateY(-8px);box-shadow:var(--shadow);border-color:rgba(40,95,67,.28)}.service:hover img,.project:hover img,.problem:hover img{transform:scale(1.07)}.link{display:inline-block;margin-top:18px;color:var(--green);font-weight:900}
-      .problem .media{height:205px;position:relative}.tag{position:absolute;left:14px;bottom:14px;padding:7px 11px;border-radius:999px;background:rgba(23,54,41,.9);color:white;font-size:13px;font-weight:900}.solution{margin-top:14px;padding:14px;background:#eee4d6;border-radius:8px;color:#314239}.project .media{height:285px}.phases{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.phases span{padding:7px 10px;border-radius:999px;background:#edf2ed;color:var(--green);font-size:12px;font-weight:900;text-transform:uppercase}
-      .cta{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:34px;padding:26px;background:var(--green2);color:white;border-radius:10px;box-shadow:var(--shadow)}.cta p{margin:4px 0 0;color:rgba(255,255,255,.76)}.split{display:grid;grid-template-columns:.85fr 1.15fr;gap:34px}.steps{display:grid;gap:14px}.step{display:grid;grid-template-columns:58px 1fr;gap:18px;padding:20px}.num{display:grid;place-items:center;width:50px;height:50px;border-radius:9px;background:var(--green);color:white;font-weight:900}.step h3,.audience h3,.review h3,.faq h3{margin:0 0 6px}.step p,.audience p,.review p,.faq p{margin:0;color:var(--muted)}
-      .showreel{display:grid;grid-template-columns:.72fr 1.28fr;overflow:hidden;border-radius:10px;background:var(--green2);color:white;box-shadow:var(--shadow)}.show-copy{padding:42px}.show-copy p{color:rgba(255,255,255,.78)}.show-stage{position:relative;min-height:420px;background:#111;overflow:hidden}.show-stage img{width:100%;height:100%;min-height:420px;object-fit:cover;transition:opacity .35s ease,transform 4s ease}.show-stage:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.7))}.show-caption{position:absolute;left:24px;right:24px;bottom:24px;z-index:2}.show-caption strong{display:block;font-size:36px;line-height:1}
-      .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.review,.faq,.audience{padding:24px}.contact{display:grid;grid-template-columns:1fr 430px;gap:28px;align-items:start;padding:44px;border-radius:10px;background:var(--green2);color:white}.contact p{color:rgba(255,255,255,.78)}.contact-card{padding:24px;color:var(--ink);display:grid;gap:12px}.footer{display:flex;justify-content:space-between;gap:18px;padding:28px clamp(18px,4vw,76px);color:var(--muted)}
-      .modal{position:fixed;inset:0;z-index:90;display:none}.modal.open{display:block}.backdrop{position:absolute;inset:0;background:rgba(17,24,20,.75);border:0}.panel{position:relative;margin:24px auto;width:min(1280px,calc(100% - 24px));max-height:calc(100vh - 48px);overflow:auto;background:var(--paper);border-radius:12px;box-shadow:0 28px 90px rgba(0,0,0,.35)}.close{position:sticky;top:12px;float:right;z-index:5;margin:12px;width:44px;height:44px;border:0;border-radius:9px;background:white;font-size:26px;cursor:pointer}
-      .project-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;padding:30px}.compare{--split:50%;position:relative;height:min(58vh,58vw);min-height:420px;overflow:hidden;border-radius:10px;background:#111}.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.compare .before{z-index:2;clip-path:inset(0 calc(100% - var(--split)) 0 0)}.compare .after{z-index:1}.label{position:absolute;z-index:3;top:14px;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.68);color:white;font-weight:900}.label.left{left:14px}.label.right{right:14px}.handle{position:absolute;z-index:3;top:0;bottom:0;left:var(--split);width:3px;background:white}.range{width:100%;margin:18px 0 12px}.thumb-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.thumb-grid button{padding:0;border:0;border-radius:8px;overflow:hidden;cursor:pointer;background:#ddd}.thumb-grid img{width:100%;height:90px;object-fit:cover;display:block}.details ul{padding-left:20px}.details li{margin:8px 0}.result{padding:18px;background:#edf2ed;border-radius:9px}
-      .gallery-layout{display:grid;grid-template-columns:1.35fr .65fr;gap:22px;padding:26px}.gallery-main{position:relative;border-radius:10px;overflow:hidden;background:#111}.gallery-main img{width:100%;height:min(62vh,68vw);object-fit:cover;display:block}.arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:46px;height:46px;border:0;border-radius:999px;background:white;font-size:30px;cursor:pointer}.prev{left:14px}.next{right:14px}.counter{position:absolute;left:16px;bottom:16px;z-index:2;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.7);color:white}.mobile-cta{display:none}
-      [data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}.visible{opacity:1;transform:none}
-      @media(max-width:1050px){.hero,.split,.showreel,.contact,.project-layout,.gallery-layout{grid-template-columns:1fr}.grid.four{grid-template-columns:repeat(2,1fr)}.grid.three,.reviews{grid-template-columns:1fr 1fr}.hero-media img{height:480px}.compare{height:54vh}.thumb-grid{grid-template-columns:repeat(3,1fr)}}
-      @media(max-width:680px){body{font-size:16px}.header{padding:12px 14px}.nav{display:none}.brand small{display:none}.actions .phone{display:none}.wrap{width:min(100% - 28px,1480px)}.hero{padding:42px 0}.hero h1{font-size:44px}.lead{font-size:18px}.stats,.grid.four,.grid.three,.grid.two,.reviews{grid-template-columns:1fr}.media,.project .media{height:230px}.cta{align-items:flex-start;flex-direction:column}.panel{width:calc(100% - 12px);margin:8px auto;max-height:calc(100vh - 16px)}.project-layout,.gallery-layout{padding:16px}.compare{min-height:340px;height:56vh}.thumb-grid{grid-template-columns:repeat(2,1fr)}.gallery-main img{height:50vh}.mobile-cta{position:fixed;left:10px;right:10px;bottom:10px;z-index:50;display:flex;gap:8px}.mobile-cta a{flex:1;text-align:center;padding:12px 10px;border-radius:9px;background:var(--green);color:white;font-weight:900;box-shadow:var(--shadow)}.footer{padding-bottom:76px}.note{position:relative;right:auto;bottom:auto;width:100%;margin-top:12px}}
-    `;
-    style.textContent += `
-      .reference-panel{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.25fr);gap:22px;align-items:stretch;margin:0 0 28px;padding:26px;border-radius:12px;background:linear-gradient(135deg,var(--green2),#2d6448);color:white;box-shadow:var(--shadow)}
-      .reference-panel h3{margin:6px 0 8px;font-size:clamp(26px,3vw,42px);line-height:1.05}.reference-panel p{margin:0;color:rgba(255,255,255,.78)}.reference-proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.reference-proof{padding:18px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:rgba(255,255,255,.08)}.reference-proof b{display:inline-grid;width:38px;height:38px;margin-bottom:12px;place-items:center;border-radius:9px;background:rgba(255,255,255,.16);color:#f2c885}.reference-proof strong{display:block;font-size:18px}.reference-proof p{font-size:15px;line-height:1.55}
-      .filterbar{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 24px}.filterbar button{border:1px solid var(--line);border-radius:999px;padding:10px 14px;background:white;color:var(--green2);font-weight:900;cursor:pointer;transition:background .22s ease,color .22s ease,transform .22s ease}.filterbar button:hover{transform:translateY(-2px)}.filterbar button.active{background:var(--green);border-color:var(--green);color:white}
-      .project-grid-rich{grid-template-columns:repeat(3,1fr)}.project-card.rich{position:relative;overflow:hidden}.project-card.rich .case-open{height:auto}.case-preview{position:relative;display:grid;grid-template-columns:1fr 1fr;height:260px;overflow:hidden;background:#17251d}.case-preview:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.62))}.case-preview img{width:100%;height:100%;object-fit:cover;transition:transform 1s ease,filter .5s ease}.project-card.rich:hover .case-preview img{transform:scale(1.08);filter:saturate(1.06)}.case-preview .divider{position:absolute;top:0;bottom:0;left:50%;z-index:2;width:2px;background:rgba(255,255,255,.85)}.case-preview .mini-label{position:absolute;z-index:3;bottom:12px;padding:6px 9px;border-radius:999px;background:rgba(23,54,41,.88);color:white;font-size:12px;font-weight:900;text-transform:uppercase}.case-preview .mini-label.before{left:12px}.case-preview .mini-label.after{right:12px}.case-type{display:inline-flex;margin-bottom:10px;padding:6px 10px;border-radius:999px;background:#edf2ed;color:var(--green);font-size:12px;font-weight:900;text-transform:uppercase}.case-topline{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.case-topline span,.evidence-chip,.phase-filter button{border-radius:999px;padding:7px 10px;background:#f0e6d8;color:#334439;font-size:12px;font-weight:900}.case-proof-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.case-proof-row div{padding:12px;border-radius:9px;background:#f7efe4}.case-proof-row b{display:block;color:var(--green);font-size:20px;line-height:1}.case-proof-row small{display:block;color:var(--muted);line-height:1.25}.case-link{display:inline-flex;align-items:center;gap:8px;margin-top:4px;color:var(--green);font-weight:900}.case-link:after{content:"→";transition:transform .2s ease}.project-card.rich:hover .case-link:after{transform:translateX(4px)}
-      .project-spotlight{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;margin-top:20px}.details .project-meta-line{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0 20px}.details .project-meta-line span{border-radius:999px;padding:8px 11px;background:#f0e6d8;color:#314239;font-size:13px;font-weight:900}.project-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.project-metrics div{padding:14px;border-radius:9px;background:#fff7ec;border:1px solid var(--line)}.project-metrics b{display:block;color:var(--green);font-size:26px;line-height:1}.project-metrics small{color:var(--muted);font-weight:800}.story-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.story-card{padding:16px;border-radius:9px;background:white;border:1px solid var(--line)}.story-card strong{display:block;margin-bottom:6px}.story-card p{margin:0;color:var(--muted);font-size:15px;line-height:1.55}.evidence-list{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}.phase-filter{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 12px}.phase-filter button{border:0;cursor:pointer}.phase-filter button.active{background:var(--green);color:white}.thumb-grid button.hidden{display:none}.compare-hint{margin:8px 0 0;color:var(--muted);font-size:14px}
-      .project-carousel{margin:0 18px 20px;padding:14px;border-radius:10px;background:#f8efe3;border:1px solid var(--line)}.project-carousel.large{margin:18px 0 0;padding:16px;background:#fff8ee}.carousel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;color:#2f4238}.carousel-head strong{font-size:14px;text-transform:uppercase;letter-spacing:.04em}.carousel-head span{font-size:13px;color:var(--muted);font-weight:900}.carousel-stage{position:relative}.carousel-viewport{overflow:hidden;border-radius:9px;background:#17251d;touch-action:pan-y}.carousel-track{display:flex;transition:transform .38s ease}.carousel-slide{min-width:100%;border:0;padding:0;background:#17251d;cursor:pointer}.carousel-slide[hidden]{display:none}.carousel-slide img{width:100%;height:170px;object-fit:cover;display:block;transition:transform 1.2s ease}.project-carousel.large .carousel-slide img{height:min(44vh,520px)}.carousel-slide:hover img{transform:scale(1.04)}.carousel-arrow{position:absolute;top:50%;z-index:4;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 10px 28px rgba(0,0,0,.16);color:#173629;font-size:30px;line-height:1;cursor:pointer;transform:translateY(-50%);transition:transform .2s ease,background .2s ease}.carousel-arrow:hover{background:white;transform:translateY(-50%) scale(1.06)}.carousel-prev{left:10px}.carousel-next{right:10px}.carousel-thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}.project-carousel.compact .carousel-thumbs{grid-template-columns:repeat(10,1fr)}.carousel-thumbs button{height:38px;padding:0;border:2px solid transparent;border-radius:7px;background:#ddd;overflow:hidden;cursor:pointer;opacity:.72;transition:opacity .2s ease,border-color .2s ease,transform .2s ease}.carousel-thumbs button[hidden]{display:none}.carousel-thumbs button.active{opacity:1;border-color:var(--green);transform:translateY(-1px)}.carousel-thumbs img{width:100%;height:100%;object-fit:cover;display:block}.video-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.video-card{overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 32px rgba(49,43,33,.05);transition:transform .28s ease,box-shadow .28s ease}.video-card:hover{transform:translateY(-8px);box-shadow:var(--shadow)}.video-card button{width:100%;height:100%;padding:0;border:0;background:transparent;text-align:left;color:inherit;cursor:pointer}.video-poster{position:relative;height:260px;overflow:hidden;background:#17251d}.video-poster img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1s ease}.video-card:hover img{transform:scale(1.06)}.play-mark{position:absolute;left:50%;top:50%;display:grid;place-items:center;width:62px;height:62px;border-radius:999px;background:rgba(255,255,255,.92);color:var(--green);font-size:24px;transform:translate(-50%,-50%);box-shadow:0 16px 34px rgba(0,0,0,.2)}.video-type{position:absolute;left:14px;bottom:14px;padding:7px 10px;border-radius:999px;background:rgba(23,54,41,.9);color:white;font-size:12px;font-weight:900;text-transform:uppercase}.video-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;padding:26px}.video-player{width:100%;max-height:70vh;border-radius:10px;background:#111;display:block}.video-details{padding:12px 0}.video-details p{color:var(--muted)}.video-note{margin-top:18px;padding:16px;border-radius:9px;background:#edf2ed;color:#334439}
-      @media(max-width:1050px){.reference-panel,.project-spotlight{grid-template-columns:1fr}.project-grid-rich{grid-template-columns:1fr 1fr}.reference-proof-grid,.story-grid{grid-template-columns:1fr}.case-preview{height:240px}}
-      @media(max-width:1050px){.video-grid{grid-template-columns:repeat(2,1fr)}.video-layout{grid-template-columns:1fr}}
-      @media(max-width:680px){.reference-panel{padding:20px}.project-grid-rich,.project-metrics,.case-proof-row{grid-template-columns:1fr}.case-preview{height:260px}.story-grid{grid-template-columns:1fr}.filterbar{overflow-x:auto;flex-wrap:nowrap;padding-bottom:6px}.filterbar button{white-space:nowrap}.project-metrics div{padding:12px}.project-carousel{margin:0 12px 16px}.project-carousel.compact .carousel-thumbs{grid-template-columns:repeat(5,1fr)}.carousel-slide img{height:190px}.project-carousel.large .carousel-slide img{height:300px}.video-grid{grid-template-columns:1fr}.video-poster{height:230px}.video-layout{padding:16px}.video-player{max-height:58vh}}
-    `;
-    style.textContent += `
-      .hero-media img,.hero-media video{height:500px}.media{height:210px}.problem .media{height:185px}.project .media{height:220px}.case-preview{height:220px}.video-poster{height:220px}
-      .compare{height:min(52vh,52vw);min-height:360px}.gallery-main img{height:min(54vh,60vw)}.project-carousel.large .carousel-slide img{height:min(38vh,420px)}
-      .counter{top:16px;bottom:auto}.gallery-caption{position:absolute;left:16px;right:16px;bottom:16px;z-index:2;padding:14px 16px;border-radius:10px;background:rgba(17,24,20,.78);color:white;backdrop-filter:blur(8px);line-height:1.35}.gallery-caption b{display:block;margin-bottom:4px;color:#f3c275;text-transform:uppercase;font-size:12px;letter-spacing:.05em}
-      .carousel-slide{position:relative;text-align:left;color:white}.slide-caption{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;padding:10px 12px;border-radius:9px;background:rgba(17,24,20,.76);backdrop-filter:blur(7px);font-size:13px;line-height:1.35}.slide-caption b{display:block;margin-bottom:2px;color:#f3c275;text-transform:uppercase;font-size:11px;letter-spacing:.05em}
-      @media(max-width:1050px){.hero-media img,.hero-media video{height:420px}.case-preview{height:220px}.compare{height:48vh}.video-poster{height:210px}}
-      @media(max-width:680px){.media,.project .media{height:210px}.case-preview{height:220px}.compare{min-height:320px;height:50vh}.gallery-main img{height:46vh}.gallery-caption{position:relative;left:auto;right:auto;bottom:auto;border-radius:0;background:#173629}.slide-caption{font-size:12px;line-height:1.25}.project-carousel.large .carousel-slide img{height:300px}.hero-media img,.hero-media video{height:340px}}
-    `;
-    document.head.appendChild(style);
-  };
-
   const serviceCards = () =>
     services
       .map(
         (item, index) => `
         <article class="service" data-reveal>
           <button data-service="${index}" aria-label="${tx(item.title)}">
-            <div class="media"><img src="${img(item.cover)}" alt="${tx(item.title)}" loading="lazy"></div>
+            <div class="media"><img src="${img(item.cover)}" alt="${tx(item.title)}" loading="lazy" decoding="async"></div>
             <div class="body">
               <h3>${tx(item.title)}</h3>
               <p>${tx(item.text)}</p>
@@ -699,20 +644,20 @@
     return `
       <div class="project-carousel ${isModal ? "large" : "compact"}" data-carousel="${id}" data-project-index="${index}" data-carousel-action="${isModal ? "gallery" : "project"}" data-active="0" data-phase="all">
         <div class="carousel-head">
-          <strong>${state.lang === "hu" ? "Projekt képsorozat" : "Project image sequence"}</strong>
-          <span>${images.length} ${state.lang === "hu" ? "kép" : "images"}</span>
+          <strong>${state.lang === "hu" ? "Illusztratív képsorozat" : "Illustrative image sequence"}</strong>
+          <span data-carousel-count aria-live="polite">${images.length} ${state.lang === "hu" ? "kép" : "images"}</span>
         </div>
         <div class="carousel-stage">
-          <button class="carousel-arrow carousel-prev" type="button" data-carousel-prev="${id}" aria-label="Previous">‹</button>
+          <button class="carousel-arrow carousel-prev" type="button" data-carousel-prev="${id}" aria-label="${state.lang === "hu" ? "Előző kép" : "Previous image"}">‹</button>
           <div class="carousel-viewport">
             <div class="carousel-track">
-              ${images.map((p, i) => `<button class="carousel-slide" type="button" data-slide="${i}" data-phase="${p[1]}"><img src="${img(p[0], isModal ? 1100 : 520)}" alt="${photoCaption(p)}" loading="lazy"><span class="slide-caption"><b>${phaseText(p[1])}</b><span>${photoCaption(p)}</span></span></button>`).join("")}
+              ${images.map((p, i) => `<button class="carousel-slide" type="button" data-slide="${i}" data-phase="${p[1]}"><img src="${img(p[0], isModal ? 1100 : 520)}" alt="${photoCaption(p)}" loading="${isModal && i === 0 ? "eager" : "lazy"}" decoding="async"><span class="slide-caption"><b>${phaseText(p[1])}</b><span>${photoCaption(p)}</span></span></button>`).join("")}
             </div>
           </div>
-          <button class="carousel-arrow carousel-next" type="button" data-carousel-next="${id}" aria-label="Next">›</button>
+          <button class="carousel-arrow carousel-next" type="button" data-carousel-next="${id}" aria-label="${state.lang === "hu" ? "Következő kép" : "Next image"}">›</button>
         </div>
         <div class="carousel-thumbs">
-          ${images.map((p, i) => `<button type="button" data-carousel-dot="${id}" data-slide-to="${i}" data-phase="${p[1]}" aria-label="${phaseText(p[1])} ${i + 1}: ${photoCaption(p)}"><img src="${img(p[0], 180)}" alt="" loading="lazy"></button>`).join("")}
+          ${images.map((p, i) => `<button type="button" data-carousel-dot="${id}" data-slide-to="${i}" data-phase="${p[1]}" aria-label="${phaseText(p[1])} ${i + 1}: ${photoCaption(p)}"><img src="${img(p[0], 180)}" alt="" loading="lazy" decoding="async"></button>`).join("")}
         </div>
       </div>`;
   };
@@ -725,7 +670,7 @@
         <article class="video-card media-reference-card" data-reveal>
           <button type="button" data-project="${index}" aria-label="${tx(item.title)}">
             <div class="video-poster">
-              <img src="${img(item.cover, 900)}" alt="${tx(item.title)}" loading="lazy">
+              <img src="${img(item.cover, 900)}" alt="${tx(item.title)}" loading="lazy" decoding="async">
               <span class="video-type">${state.lang === "hu" ? "10 képes galéria" : "10-photo gallery"}</span>
             </div>
             <div class="body">
@@ -748,8 +693,8 @@
         <article class="project project-card rich" data-reveal>
           <button class="case-open" data-project="${index}" aria-label="${tx(item.title)}">
             <div class="case-preview">
-              <img src="${img(item.before)}" alt="${tx(phaseLabel.before)}" loading="lazy">
-              <img src="${img(item.after)}" alt="${tx(phaseLabel.after)}" loading="lazy">
+              <img src="${img(item.before)}" alt="${tx(phaseLabel.before)}" loading="lazy" decoding="async">
+              <img src="${img(item.after)}" alt="${tx(phaseLabel.after)}" loading="lazy" decoding="async">
               <span class="divider"></span>
               <span class="mini-label before">${tx(phaseLabel.before)}</span>
               <span class="mini-label after">${tx(phaseLabel.after)}</span>
@@ -786,32 +731,36 @@
       <a class="btn primary" href="${tel}">${phone}</a>
     </div>`;
 
+  let globalEventsBound = false;
+  let revealObserver;
+  const modalOpeners = new WeakMap();
+
   const render = () => {
     document.documentElement.lang = state.lang;
     document.body.innerHTML = `
       <header class="header">
-        <a class="brand" href="#">
+        <a class="brand" href="#top" aria-label="Budapest Property Services">
           <span class="logo">BPS</span>
           <span><strong>Budapest Property Services</strong><small>${state.lang === "hu" ? "Festés, gipszkarton, kert, kisebb javítások" : "Painting, drywall, garden care, small repairs"}</small></span>
         </a>
-        <nav class="nav">
+        <nav class="nav" aria-label="${state.lang === "hu" ? "Fő navigáció" : "Main navigation"}">
           <a href="#services">${tx(content.nav.services)}</a>
           <a href="#clients">${tx(content.nav.clients)}</a>
           <a href="#projects">${tx(content.nav.projects)}</a>
-          <a href="#media">${state.lang === "hu" ? "Képgalériák" : "Galleries"}</a>
+          <a href="#media">${state.lang === "hu" ? "Képek" : "Images"}</a>
           <a href="#contact">${tx(content.nav.contact)}</a>
         </nav>
         <div class="actions">
-          <button class="lang" id="langBtn">${state.lang === "hu" ? "EN" : "HU"}</button>
+          <button class="lang" id="langBtn" type="button" aria-label="${state.lang === "hu" ? "Switch to English" : "Váltás magyar nyelvre"}">${state.lang === "hu" ? "EN" : "HU"}</button>
           <a class="btn primary phone" href="${tel}">${phone}</a>
         </div>
       </header>
 
-      <main>
-        <section class="hero wrap">
+      <main id="top">
+        <section class="hero wrap" aria-labelledby="hero-title">
           <div data-reveal>
             <div class="eyebrow">${tx(content.hero.label)}</div>
-            <h1>${tx(content.hero.title)}</h1>
+            <h1 id="hero-title">${tx(content.hero.title)}</h1>
             <p class="lead">${tx(content.hero.text)}</p>
             <div class="hero-ctas">
               <a class="btn primary" href="${tel}">${tx(content.hero.primary)}</a>
@@ -821,12 +770,15 @@
             <div class="stats">${content.stats.map((s) => `<div class="stat"><b>${s.n}</b>${state.lang === "hu" ? s.hu : s.en}</div>`).join("")}</div>
           </div>
           <div class="hero-media" data-reveal>
-            <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="${img(heroVideo.poster, 1200)}" aria-label="Budapest property maintenance overview video">
-              <source src="${heroVideo.src}" type="video/mp4">
-            </video>
+            <img src="${img(heroImage)}" width="1600" height="800" fetchpriority="high" alt="${state.lang === "hu" ? "Falfrissítésre előkészített budapesti polgári lakás" : "Budapest apartment prepared for a careful wall refresh"}">
             <div class="note"><strong>${tx(content.hero.noteTitle)}</strong><p>${tx(content.hero.noteText)}</p></div>
           </div>
         </section>
+
+        <aside class="illustration-note wrap" data-reveal>
+          <span aria-hidden="true">i</span>
+          <p>${state.lang === "hu" ? "Az oldalon szereplő képek illusztrációk, amelyek tipikus munkafolyamatokat és várható eredményeket mutatnak." : "The images on this website are illustrative examples showing typical work processes and expected results."}</p>
+        </aside>
 
         <section id="services" class="section wrap">
           <div class="section-head" data-reveal><h2>${tx(content.servicesTitle)}</h2><p>${tx(content.servicesText)}</p></div>
@@ -837,17 +789,17 @@
         <section class="section wrap">
           <div class="section-head" data-reveal><h2>${tx(content.problemsTitle)}</h2><p>${state.lang === "hu" ? "Olyan helyzetekre készülünk, amelyeknél gyors döntés, tiszta egyeztetés és látható eredmény kell: kiköltözés, vendégváltás, irodai frissítés vagy távolról intézett ingatlanmunka." : "The service is built for situations that need quick decisions, clear communication and a visible result: move-outs, guest turnovers, office refreshes and work arranged from abroad."}</p></div>
           <div class="grid three">
-            ${problems.map((p, i) => `<article class="problem" data-reveal><div class="media"><img src="${img(services[i % services.length].cover)}" alt="${state.lang === "hu" ? p[0] : p[1]}" loading="lazy"><span class="tag">${state.lang === "hu" ? p[0] : p[1]}</span></div><div class="body"><p>${state.lang === "hu" ? p[2] : p[3]}</p><p class="solution">${state.lang === "hu" ? "Megoldás: rövid egyeztetés, célzott munka, fotós visszajelzés." : "Solution: short briefing, focused work and photo feedback."}</p></div></article>`).join("")}
+            ${problems.map((p, i) => `<article class="problem" data-reveal><div class="media"><img src="${img(services[i % services.length].cover)}" alt="${state.lang === "hu" ? p[0] : p[1]}" loading="lazy" decoding="async"><span class="tag">${state.lang === "hu" ? p[0] : p[1]}</span></div><div class="body"><p>${state.lang === "hu" ? p[2] : p[3]}</p><p class="solution">${state.lang === "hu" ? "Megoldás: rövid egyeztetés, célzott munka, fotós visszajelzés." : "Solution: short briefing, focused work and photo feedback."}</p></div></article>`).join("")}
           </div>
         </section>
 
         <section id="projects" class="section wrap">
-          <div class="section-head" data-reveal><h2>${tx(content.projectsTitle)}</h2><p>${state.lang === "hu" ? "A képsorozatok az egyes munkatípusok tipikus kiinduló állapotát, munkafázisait és elérhető végeredményét szemléltetik. A konkrét ingatlan felmérése mindig az ügyféltől kapott fotók és helyszíni adatok alapján indul." : "These image sequences illustrate typical starting conditions, work stages and achievable outcomes for each service. Every real property assessment begins with the client's own photos and site details."}</p></div>
+          <div class="section-head" data-reveal><h2>${tx(content.projectsTitle)}</h2><p>${state.lang === "hu" ? "Ezek nem saját referenciaprojektek, hanem illusztratív képsorozatok. Azt mutatják meg, milyen kiinduló állapotokkal, munkafázisokkal és eredményekkel lehet találkozni az egyes szolgáltatásoknál." : "These are illustrative image sequences, not a portfolio of completed client projects. They show typical starting conditions, work stages and expected results for each service."}</p></div>
           <div class="reference-panel" data-reveal>
             <div>
               <span class="eyebrow">${state.lang === "hu" ? "Munkafolyamat áttekintése" : "Work process overview"}</span>
-              <h3>${state.lang === "hu" ? "Nem csak szép képek, hanem követhető munka." : "Not just nice photos, but work visitors can understand."}</h3>
-              <p>${state.lang === "hu" ? "A képes példák segítenek áttekinteni, hogyan jut el egy munka a kiinduló problémától a rendezett átadásig. A tényleges feladatot minden esetben külön egyeztetjük és dokumentáljuk." : "The visual examples make it easier to understand how work moves from the initial issue to a tidy handover. The actual scope is always agreed and documented separately for each property."}</p>
+              <h3>${state.lang === "hu" ? "A folyamat legyen érthető távolról is." : "A process that remains clear from abroad."}</h3>
+              <p>${state.lang === "hu" ? "A tényleges feladatot az adott ingatlan fotói és helyszíni adatai alapján egyeztetjük. A fontos munkafázisokról kérés szerint fotós frissítés készül." : "The actual scope is agreed from photos and site details for the specific property. Photo updates can document the important stages of the work."}</p>
             </div>
             <div class="reference-proof-grid">${referenceProofCards()}</div>
           </div>
@@ -858,8 +810,8 @@
 
         <section class="section wrap">
           <div class="showreel" data-reveal>
-            <div class="show-copy"><span class="eyebrow">10 sec showreel</span><h2>${state.lang === "hu" ? "Rövid vizuális áttekintés" : "Short visual overview"}</h2><p>${state.lang === "hu" ? "Röviden látható, milyen állapotokkal dolgozunk: faljavítás, gipszkarton, kertgondozás és átadásra kész belső terek." : "A quick look at the types of conditions we handle: wall repair, drywall, garden care and rooms prepared for handover."}</p><a class="btn primary" href="#contact">${state.lang === "hu" ? "Beszéljünk róla" : "Discuss the job"}</a></div>
-            <div class="show-stage"><img id="reelImg" src="${img(reel[0][0])}" alt="Property service showreel"><div class="show-caption"><strong id="reelTitle">${tx(reel[0][1])}</strong></div></div>
+            <div class="show-copy"><span class="eyebrow">${state.lang === "hu" ? "Budapesti fókusz" : "Budapest focus"}</span><h2>${state.lang === "hu" ? "Hétköznapi ingatlanok, rendezett munkavégzés" : "Real properties, organised maintenance"}</h2><p>${state.lang === "hu" ? "Polgári lakások, bérlemények, társasházi udvarok és irodák. A cél nem a látványos ígéret, hanem a tisztán egyeztetett és dokumentálható munka." : "Period apartments, rentals, apartment courtyards and offices. The focus is clearly agreed, documentable work rather than exaggerated promises."}</p><a class="btn primary" href="#contact">${state.lang === "hu" ? "Egyeztessünk" : "Discuss the property"}</a></div>
+            <div class="show-stage"><img src="${img(heroImage)}" width="1600" height="800" loading="lazy" decoding="async" alt="${state.lang === "hu" ? "Budapesti lakás faljavítás közben" : "Budapest apartment during wall maintenance"}"></div>
           </div>
         </section>
 
@@ -875,7 +827,7 @@
         <section id="clients" class="section wrap">
           <div class="split">
             <div class="section-head" data-reveal><h2>${tx(content.audienceTitle)}</h2><p>${state.lang === "hu" ? "A hangsúly a diszkréción, pontosságon, átlátható egyeztetésen és rendezett átadáson van." : "The focus is discretion, punctuality, clear communication and tidy handover."}</p></div>
-            <div class="grid two">${audience.map((a) => `<article class="audience" data-reveal><h3>${state.lang === "hu" ? a[0] : a[1]}</h3><p>${a[2]}</p></article>`).join("")}</div>
+            <div class="grid two">${audience.map((a) => `<article class="audience" data-reveal><h3>${state.lang === "hu" ? a[0] : a[1]}</h3><p>${state.lang === "hu" ? a[2] : a[3]}</p></article>`).join("")}</div>
           </div>
           ${cta("Beszéljünk a projektről", "Let us discuss the project", "Egy rövid hívás elég ahhoz, hogy kiderüljön, milyen munka szükséges.", "A short call is enough to clarify what kind of work is needed.")}
         </section>
@@ -911,12 +863,11 @@
 
       <footer class="footer"><span>Budapest Property Services</span><span>Budapest property services - apartment maintenance - Airbnb support</span></footer>
       <div class="mobile-cta"><a href="${tel}">${phone}</a><a href="#contact">${state.lang === "hu" ? "Kapcsolat" : "Contact"}</a></div>
-      <div id="projectModal" class="modal" aria-hidden="true"><button class="backdrop" data-close></button><div class="panel"><button class="close" data-close>×</button><div id="projectInner"></div></div></div>
-      <div id="galleryModal" class="modal" aria-hidden="true"><button class="backdrop" data-close></button><div class="panel"><button class="close" data-close>×</button><div id="galleryInner"></div></div></div>
+      <div id="projectModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}">×</button><div id="projectInner"></div></div></div>
+      <div id="galleryModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Galéria bezárása" : "Close gallery"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Galéria bezárása" : "Close gallery"}">×</button><div id="galleryInner"></div></div></div>
     `;
     bind();
     reveal();
-    updateReel();
     initCarousels(document);
   };
 
@@ -942,10 +893,32 @@
     document.querySelectorAll("[data-project]").forEach((btn) => {
       btn.addEventListener("click", () => openProject(Number(btn.dataset.project)));
     });
-    document.querySelectorAll("[data-close]").forEach((btn) => btn.addEventListener("click", closeModals));
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeModals();
+    document.getElementById("projectModal").addEventListener("click", (event) => {
+      const slide = event.target.closest('[data-carousel-action="gallery"] [data-slide]');
+      if (!slide) return;
+      const carousel = slide.closest("[data-carousel]");
+      const project = projects[Number(carousel.dataset.projectIndex)];
+      openGallery(project.images, Number(slide.dataset.slide), tx(project.title));
     });
+    document.querySelectorAll("[data-close]").forEach((btn) => {
+      btn.addEventListener("click", () => closeModal(btn.closest(".modal")));
+    });
+    if (!globalEventsBound) {
+      globalEventsBound = true;
+      document.addEventListener("keydown", (event) => {
+        const modal = activeModal();
+        if (event.key === "Escape" && modal) {
+          event.preventDefault();
+          closeModal(modal);
+        } else if (event.key === "Tab" && modal) {
+          trapFocus(event, modal);
+        } else if (modal?.id === "galleryModal" && event.key === "ArrowLeft") {
+          showGallery(state.galleryIndex - 1);
+        } else if (modal?.id === "galleryModal" && event.key === "ArrowRight") {
+          showGallery(state.galleryIndex + 1);
+        }
+      });
+    }
   };
 
   const openProject = (index) => {
@@ -957,14 +930,14 @@
       <div class="project-layout" data-project-index="${index}">
         <div>
           <div class="compare" id="compare">
-            <img class="after" src="${img(item.after, 1500)}" alt="${tx(phaseLabel.after)}">
-            <img class="before" src="${img(item.before, 1500)}" alt="${tx(phaseLabel.before)}">
+            <img class="after" src="${img(item.after, 1200)}" alt="${tx(item.title)} - ${tx(phaseLabel.after)}">
+            <img class="before" src="${img(item.before, 1200)}" alt="${tx(item.title)} - ${tx(phaseLabel.before)}">
             <span class="label left">${tx(phaseLabel.before)}</span>
             <span class="label right">${tx(phaseLabel.after)}</span>
             <span class="handle"></span>
           </div>
           <p class="compare-hint">${state.lang === "hu" ? "Húzza a csúszkát az előtte-utána összehasonlításhoz. A képek az adott munkatípus tipikus állapotait szemléltetik." : "Move the slider to compare before and finished condition. The images illustrate typical stages of this service."}</p>
-          <input class="range" id="range" type="range" min="5" max="95" value="50" aria-label="Before after slider">
+          <input class="range" id="range" type="range" min="5" max="95" value="50" aria-label="${state.lang === "hu" ? "Előtte-utána összehasonlító csúszka" : "Before and after comparison slider"}">
           <div class="phase-filter">
             <button class="active" data-phase-filter="all">${state.lang === "hu" ? "Összes kép" : "All photos"}</button>
             <button data-phase-filter="before">${tx(phaseLabel.before)} (${counts.before})</button>
@@ -975,7 +948,8 @@
         </div>
         <div class="details">
           <small class="eyebrow">${tx(item.type)}</small>
-          <h2>${tx(item.title)}</h2>
+          <h2 id="projectModalTitle">${tx(item.title)}</h2>
+          <p class="example-badge">${state.lang === "hu" ? "Illusztratív példa, nem saját referenciaprojekt." : "Illustrative example, not a completed client project."}</p>
           <div class="project-meta-line">
             <span>${tx(item.location)}</span>
             <span>${tx(item.timeline)}</span>
@@ -993,19 +967,19 @@
           <div class="evidence-list">
             ${tx(item.evidence).map((entry) => `<span class="evidence-chip">${entry}</span>`).join("")}
           </div>
-          <h3>${state.lang === "hu" ? "Elvégzett munkák" : "Work completed"}</h3>
+          <h3>${state.lang === "hu" ? "Jellemző munkalépések" : "Typical work items"}</h3>
           <ul>${tx(item.works).map((work) => `<li>${work}</li>`).join("")}</ul>
-          <div class="result"><strong>${state.lang === "hu" ? "Végeredmény" : "Result"}</strong><p>${tx(item.result)}</p></div>
+          <div class="result"><strong>${state.lang === "hu" ? "Várható eredmény" : "Expected result"}</strong><p>${tx(item.result)}</p></div>
           <div class="section-cta"><a class="btn primary" href="${tel}">${state.lang === "hu" ? "Kérek hasonló felmérést" : "Request a similar scope check"}</a></div>
         </div>
       </div>`;
     const modal = document.getElementById("projectModal");
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-open");
-    document.getElementById("range").addEventListener("input", (event) => {
-      document.getElementById("compare").style.setProperty("--split", `${event.target.value}%`);
-    });
+    modal.setAttribute("aria-labelledby", "projectModalTitle");
+    openModal(modal);
+    const range = document.getElementById("range");
+    const compare = document.getElementById("compare");
+    range.addEventListener("input", () => setComparePosition(compare, range, range.value));
+    initCompare(compare, range);
     document.querySelectorAll("[data-phase-filter]").forEach((btn) => {
       btn.addEventListener("click", () => {
         document.querySelectorAll("[data-phase-filter]").forEach((item) => item.classList.remove("active"));
@@ -1015,6 +989,38 @@
       });
     });
     initCarousels(document.getElementById("projectModal"));
+  };
+
+  const setComparePosition = (compare, range, value) => {
+    const next = Math.max(5, Math.min(95, Number(value)));
+    compare.style.setProperty("--split", `${next}%`);
+    range.value = String(next);
+    range.setAttribute(
+      "aria-valuetext",
+      state.lang === "hu" ? `${next}% előtte kép` : `${next}% before image`
+    );
+  };
+
+  const initCompare = (compare, range) => {
+    let dragging = false;
+    const updateFromPointer = (event) => {
+      const rect = compare.getBoundingClientRect();
+      setComparePosition(compare, range, ((event.clientX - rect.left) / rect.width) * 100);
+    };
+    compare.addEventListener("pointerdown", (event) => {
+      dragging = true;
+      compare.setPointerCapture?.(event.pointerId);
+      updateFromPointer(event);
+    });
+    compare.addEventListener("pointermove", (event) => {
+      if (dragging) updateFromPointer(event);
+    });
+    const stop = () => {
+      dragging = false;
+    };
+    compare.addEventListener("pointerup", stop);
+    compare.addEventListener("pointercancel", stop);
+    setComparePosition(compare, range, range.value);
   };
 
   const initCarousels = (root = document) => {
@@ -1029,11 +1035,7 @@
       });
       carousel.querySelectorAll("[data-slide]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const project = projects[Number(carousel.dataset.projectIndex)];
-          const slideIndex = Number(btn.dataset.slide);
-          if (carousel.dataset.carouselAction === "gallery") {
-            openGallery(project.images, slideIndex, tx(project.title));
-          } else {
+          if (carousel.dataset.carouselAction !== "gallery") {
             openProject(Number(carousel.dataset.projectIndex));
           }
         });
@@ -1046,7 +1048,6 @@
         dragging = true;
         startX = event.clientX;
         lastX = event.clientX;
-        viewport.setPointerCapture?.(event.pointerId);
       });
       viewport.addEventListener("pointermove", (event) => {
         if (!dragging) return;
@@ -1056,7 +1057,9 @@
         if (!dragging) return;
         const delta = lastX - startX;
         dragging = false;
-        if (Math.abs(delta) > 42) moveCarousel(id, delta < 0 ? 1 : -1);
+        if (Math.abs(delta) > 42) {
+          moveCarousel(id, delta < 0 ? 1 : -1);
+        }
       };
       viewport.addEventListener("pointerup", finishDrag);
       viewport.addEventListener("pointercancel", finishDrag);
@@ -1089,8 +1092,19 @@
     const active = ((index % visibleSlides.length) + visibleSlides.length) % visibleSlides.length;
     carousel.dataset.active = String(active);
     carousel.querySelector(".carousel-track").style.transform = `translateX(-${active * 100}%)`;
-    slides.forEach((slide) => slide.classList.toggle("active", slide === visibleSlides[active]));
-    thumbs.forEach((thumb) => thumb.classList.toggle("active", thumb === visibleThumbs[active]));
+    slides.forEach((slide) => {
+      const isActive = slide === visibleSlides[active];
+      slide.classList.toggle("active", isActive);
+      slide.tabIndex = isActive ? 0 : -1;
+      slide.setAttribute("aria-hidden", String(!isActive));
+    });
+    thumbs.forEach((thumb) => {
+      const isActive = thumb === visibleThumbs[active];
+      thumb.classList.toggle("active", isActive);
+      thumb.setAttribute("aria-current", isActive ? "true" : "false");
+    });
+    const counter = carousel.querySelector("[data-carousel-count]");
+    if (counter) counter.textContent = `${active + 1} / ${visibleSlides.length}`;
   };
 
   const openGallery = (photos, index, title) => {
@@ -1100,27 +1114,27 @@
       <div class="gallery-layout">
         <div class="gallery-main">
           <img id="galleryImg" src="" alt="${title}">
-          <button class="arrow prev" id="prev" aria-label="Previous">‹</button>
-          <button class="arrow next" id="next" aria-label="Next">›</button>
-          <span class="counter" id="counter"></span>
+          <button class="arrow prev" id="prev" type="button" aria-label="${state.lang === "hu" ? "Előző kép" : "Previous image"}">‹</button>
+          <button class="arrow next" id="next" type="button" aria-label="${state.lang === "hu" ? "Következő kép" : "Next image"}">›</button>
+          <span class="counter" id="counter" aria-live="polite"></span>
           <div class="gallery-caption" id="galleryCaption"></div>
         </div>
         <div>
           <small class="eyebrow">${title}</small>
-          <h2>${state.lang === "hu" ? "Képes munkafolyamat" : "Visual work process"}</h2>
+          <h2 id="galleryModalTitle">${state.lang === "hu" ? "Képes munkafolyamat" : "Visual work process"}</h2>
           <p>${state.lang === "hu" ? "A képek az adott szolgáltatás tipikus kiinduló állapotát, munkafázisait és elérhető végeredményét mutatják. A konkrét feladatot mindig a helyszín saját fotói alapján egyeztetjük." : "The images show typical starting conditions, work stages and achievable outcomes for this service. The actual scope is always agreed from photos of the specific property."}</p>
-          <div class="thumb-grid" id="thumbs">${photos.map((p, i) => `<button data-thumb="${i}" aria-label="${photoCaption(p)}"><img src="${img(p[0], 360)}" alt="${photoCaption(p)}" loading="lazy"></button>`).join("")}</div>
+          <div class="thumb-grid" id="thumbs">${photos.map((p, i) => `<button type="button" data-thumb="${i}" aria-label="${photoCaption(p)}"><img src="${img(p[0], 360)}" alt="" loading="lazy" decoding="async"></button>`).join("")}</div>
         </div>
       </div>`;
     const modal = document.getElementById("galleryModal");
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-open");
+    modal.setAttribute("aria-labelledby", "galleryModalTitle");
+    openModal(modal);
     document.getElementById("prev").addEventListener("click", () => showGallery(state.galleryIndex - 1));
     document.getElementById("next").addEventListener("click", () => showGallery(state.galleryIndex + 1));
     document.querySelectorAll("#thumbs [data-thumb]").forEach((btn) => {
       btn.addEventListener("click", () => showGallery(Number(btn.dataset.thumb)));
     });
+    initGallerySwipe(document.querySelector("#galleryModal .gallery-main"));
     showGallery(index);
   };
 
@@ -1129,49 +1143,118 @@
     state.galleryIndex = (index + state.gallery.length) % state.gallery.length;
     const current = state.gallery[state.galleryIndex];
     const [id, phase] = current;
-    document.getElementById("galleryImg").src = img(id, 1600);
-    document.getElementById("galleryImg").alt = photoCaption(current);
+    const galleryImg = document.getElementById("galleryImg");
+    const nextSrc = img(id, 1100);
+    if (galleryImg.src !== new URL(nextSrc, document.baseURI).href) galleryImg.src = nextSrc;
+    galleryImg.alt = photoCaption(current);
     document.getElementById("counter").textContent = `${state.galleryIndex + 1} / ${state.gallery.length} - ${phaseText(phase)}`;
     document.getElementById("galleryCaption").innerHTML = `<b>${phaseText(phase)}</b><span>${photoCaption(current)}</span>`;
+    document.querySelectorAll("#thumbs [data-thumb]").forEach((thumb, thumbIndex) => {
+      const isActive = thumbIndex === state.galleryIndex;
+      thumb.classList.toggle("active", isActive);
+      thumb.setAttribute("aria-current", isActive ? "true" : "false");
+    });
   };
 
-  const closeModals = () => {
-    document.querySelectorAll("video").forEach((video) => {
-      if (!video.classList.contains("hero-video")) video.pause();
+  const activeModal = () => [...document.querySelectorAll(".modal.open")].at(-1) || null;
+
+  const openModal = (modal) => {
+    const previous = activeModal();
+    if (previous && previous !== modal) {
+      previous.setAttribute("aria-hidden", "true");
+      previous.setAttribute("inert", "");
+    }
+    modalOpeners.set(modal, document.activeElement);
+    modal.classList.add("open");
+    modal.removeAttribute("inert");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    const panel = modal.querySelector(".panel");
+    if (panel) panel.scrollTop = 0;
+    requestAnimationFrame(() => modal.querySelector(".close")?.focus());
+  };
+
+  const closeModal = (modal) => {
+    if (!modal) return;
+    const opener = modalOpeners.get(modal);
+    modal.classList.remove("open");
+    modal.removeAttribute("inert");
+    modal.setAttribute("aria-hidden", "true");
+    const previous = activeModal();
+    if (previous) {
+      previous.removeAttribute("inert");
+      previous.setAttribute("aria-hidden", "false");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+    if (opener?.isConnected) requestAnimationFrame(() => opener.focus());
+  };
+
+  const trapFocus = (event, modal) => {
+    const focusable = [...modal.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )].filter((element) => !element.hidden && element.getClientRects().length);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  const initGallerySwipe = (target) => {
+    if (!target) return;
+    let startX = 0;
+    let currentX = 0;
+    let swiped = false;
+    target.addEventListener("pointerdown", (event) => {
+      startX = event.clientX;
+      currentX = event.clientX;
+      swiped = false;
     });
-    document.querySelectorAll(".modal").forEach((modal) => {
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden", "true");
+    target.addEventListener("pointermove", (event) => {
+      currentX = event.clientX;
     });
-    document.body.classList.remove("modal-open");
+    target.addEventListener("pointerup", () => {
+      const delta = currentX - startX;
+      if (Math.abs(delta) > 50) {
+        swiped = true;
+        showGallery(state.galleryIndex + (delta < 0 ? 1 : -1));
+      }
+    });
+    target.addEventListener(
+      "click",
+      (event) => {
+        if (!swiped) return;
+        event.preventDefault();
+        event.stopPropagation();
+        swiped = false;
+      },
+      true
+    );
   };
 
   const reveal = () => {
     const items = document.querySelectorAll("[data-reveal]");
+    revealObserver?.disconnect();
     if (!("IntersectionObserver" in window)) {
       items.forEach((item) => item.classList.add("visible"));
       return;
     }
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("visible")),
+    revealObserver = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("visible");
+        revealObserver.unobserve(entry.target);
+      }),
       { threshold: 0.12 }
     );
-    items.forEach((item) => observer.observe(item));
+    items.forEach((item) => revealObserver.observe(item));
   };
 
-  const updateReel = () => {
-    const reelImg = document.getElementById("reelImg");
-    const reelTitle = document.getElementById("reelTitle");
-    if (!reelImg || !reelTitle) return;
-    const current = reel[state.reel % reel.length];
-    reelImg.src = img(current[0], 1400);
-    reelTitle.textContent = tx(current[1]);
-  };
-
-  installStyle();
   render();
-  setInterval(() => {
-    state.reel += 1;
-    updateReel();
-  }, 2500);
 })();
