@@ -862,7 +862,7 @@
       </main>
 
       <footer class="footer"><span>Budapest Property Services</span><span>Budapest property services - apartment maintenance - Airbnb support</span></footer>
-      <div class="mobile-cta"><a href="${tel}">${phone}</a><a href="#contact">${state.lang === "hu" ? "Kapcsolat" : "Contact"}</a></div>
+      <div class="mobile-cta"><a href="${tel}">${phone}</a><a href="${wa}" aria-label="WhatsApp">WhatsApp</a></div>
       <div id="projectModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}">×</button><div id="projectInner"></div></div></div>
       <div id="galleryModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Galéria bezárása" : "Close gallery"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Galéria bezárása" : "Close gallery"}">×</button><div id="galleryInner"></div></div></div>
     `;
@@ -1009,7 +1009,11 @@
     };
     compare.addEventListener("pointerdown", (event) => {
       dragging = true;
-      compare.setPointerCapture?.(event.pointerId);
+      try {
+        compare.setPointerCapture?.(event.pointerId);
+      } catch {
+        // The pointer may already be inactive after an interrupted touch gesture.
+      }
       updateFromPointer(event);
     });
     compare.addEventListener("pointermove", (event) => {
