@@ -193,4 +193,1200 @@
           "Shelves, curtain rails, door adjustments, trims and small fixes before handover. Individually small, but together they strongly shape the property's feel.",
       },
       photos: [
-        ["13909112", "before", { hu: "Bels≈ë t√©r √°tad√°s el≈ëtt, ahol a kisebb szerel√©si √©s rendez√©si pontok adj√°k meg a v√©gs≈ë k√©pet.", en: "Interior before handover where small installation and tidying points shape the final impressi€M∂Ó⁄$z{-ÆÈ‹j◊ù6÷R∆ˆ6Fñˆ‚g&ˆ“ÊV&«íFÜR6÷RfñWwˆñÁB‚÷˜fRFÜR6∆ñFW"FÚ6ˆ◊&R&Vf˜&RÊBgFW"‚'”¬˜‡¢∆ñÁWB6∆73“'&ÊvR"ñC“'&ÊvR"GóS“'&ÊvR"÷ñ„“#R"÷É“#ìR"f«VS“#S"&ñ÷∆&V√“"G∑7FFRÊ∆Êr””“&áR"Ú$VÃYGFR◊WL:Ê;g77¶VÜ6ˆÊÃ:◊L;27<;ß7¶∂"¢$&Vf˜&RÊBgFW"6ˆ◊&ó6ˆ‚6∆ñFW"'“#‡¢∆Fób6∆73“'Ü6R÷fñ«FW"#‡¢∆'WGFˆ‚6∆73“&7FófR"FF◊Ü6R÷fñ«FW#“&∆¬#‚G∑7FFRÊ∆Êr””“&áR"Ú,9g77¶W2º:ó"¢$∆¬Ü˜F˜2'”¬ˆ'WGFˆ„‡¢∆'WGFˆ‚FF◊Ü6R÷fñ«FW#“&&Vf˜&R#‚G∑GÇáÜ6T∆&V¬Ê&Vf˜&Ró“ÇG∂6˜VÁG2Ê&Vf˜&W“ì¬ˆ'WGFˆ„‡¢∆'WGFˆ‚FF◊Ü6R÷fñ«FW#“'&ˆ6W72#‚G∑GÇáÜ6T∆&V¬Á&ˆ6W72ó“ÇG∂6˜VÁG2Á&ˆ6W77“ì¬ˆ'WGFˆ„‡¢∆'WGFˆ‚FF◊Ü6R÷fñ«FW#“&gFW"#‚G∑GÇáÜ6T∆&V¬ÊgFW"ó“ÇG∂6˜VÁG2ÊgFW'“ì¬ˆ'WGFˆ„‡¢¬ˆFóc‡¢G∑&ˆ¶V7D6&˜W6V¬ÜóFV“¬ñÊFWÇ¬&÷ˆF¬"ó–¢¬ˆFóc‡¢∆Fób6∆73“&FWFñ«2#‡¢«6÷∆¬6∆73“&WñV'&˜r#‚G∑GÇÜóFV“ÁGóRó”¬˜6÷∆√‡¢∆É"ñC“'&ˆ¶V7D÷ˆF≈FóF∆R#‚G∑GÇÜóFV“ÁFóF∆Ró”¬ˆÉ#‡¢«6∆73“&WÜ◊∆R÷&FvR#‚G∑7FFRÊ∆Êr””“&áR"Ú$ñ∆«W7ßG&L:◊b:ñ∆F¬ÊV“6¨:B&VfW&VÊ6ñ&ˆ¶V∑B‚"¢$ñ∆«W7G&FófRWÜ◊∆R¬Ê˜B6ˆ◊∆WFVB6∆ñVÁB&ˆ¶V7B‚'”¬˜‡¢∆Fób6∆73“'&ˆ¶V7B÷÷WF÷∆ñÊR#‡¢«7„‚G∑GÇÜóFV“Ê∆ˆ6Fñˆ‚ó”¬˜7„‡¢«7„‚G∑GÇÜóFV“ÁFñ÷V∆ñÊRó”¬˜7„‡¢«7„‚G∑GÇÜóFV“Ê6∆ñVÁBó”¬˜7„‡¢¬ˆFóc‡¢«‚G∑GÇÜóFV“ÊFW67&óFñˆ‚ó”¬˜‡¢∆Fób6∆73“'&ˆ¶V7B÷÷WG&ñ72#‡¢G∂óFV“Ê÷WG&ñ72Ê÷ÇÜ÷WG&ñ2í”‚∆Fóc„∆#‚G∂÷WG&ñ2ÊÁ”¬ˆ#„«6÷∆√‚G∑7FFRÊ∆Êr””“&áR"Ú÷WG&ñ2ÊáR¢÷WG&ñ2ÊVÁ”¬˜6÷∆√„¬ˆFócÊíÊ¶ˆñ‚Ç""ó–¢¬ˆFóc‡¢∆Fób6∆73“'7F˜'í÷w&ñB#‡¢∆'Fñ6∆R6∆73“'7F˜'í÷6&B#„«7G&ˆÊs‚G∑7FFRÊ∆Êr””“&áR"Ú$∂ññÊGVÃ;2ÜV«ó¶WB"¢%7F'FñÊrˆñÁB'”¬˜7G&ˆÊs„«‚G∑GÇÜóFV“Á&ˆ&∆V“ó”¬˜„¬ˆ'Fñ6∆S‡¢∆'Fñ6∆R6∆73“'7F˜'í÷6&B#„«7G&ˆÊs‚G∑7FFRÊ∆Êr””“&áR"Ú$÷Vvº;g¶VÃ:◊L:ó2"¢$&ˆ6Ç'”¬˜7G&ˆÊs„«‚G∑GÇÜóFV“Ê&ˆ6Çó”¬˜„¬ˆ'Fñ6∆S‡¢∆'Fñ6∆R6∆73“'7F˜'í÷6&B#„«7G&ˆÊs‚G∑7FFRÊ∆Êr””“&áR"Ú%l:ñvW&VF‹:ñÁí"¢$fñÊ¬&W7V«B'”¬˜7G&ˆÊs„«‚G∑GÇÜóFV“Á&W7V«Bó”¬˜„¬ˆ'Fñ6∆S‡¢¬ˆFóc‡¢∆Fób6∆73“&WfñFVÊ6R÷∆ó7B#‡¢G∑GÇÜóFV“ÊWfñFVÊ6RíÊ÷ÇÜVÁG'íí”‚«7‚6∆73“&WfñFVÊ6R÷6Üó#‚G∂VÁG'ó”¬˜7„ÊíÊ¶ˆñ‚Ç""ó–¢¬ˆFóc‡¢∆É3‚G∑7FFRÊ∆Êr””“&áR"Ú$¶V∆∆V◊¨Y◊VÊ∂Ã:ó:ó6V≤"¢%Góñ6¬v˜&≤óFV◊2'”¬ˆÉ3‡¢«V√‚G∑GÇÜóFV“Áv˜&∑2íÊ÷Çáv˜&≤í”‚∆∆ì‚G∑v˜&∑”¬ˆ∆ìÊíÊ¶ˆñ‚Ç""ó”¬˜V√‡¢∆Fób6∆73“'&W7V«B#„«7G&ˆÊs‚G∑7FFRÊ∆Êr””“&áR"Ú%l:&ÜL;2W&VF‹:ñÁí"¢$WáV7FVB&W7V«B'”¬˜7G&ˆÊs„«‚G∑GÇÜóFV“Á&W7V«Bó”¬˜„¬ˆFóc‡¢∆Fób6∆73“'6V7Fñˆ‚÷7F#„∆6∆73“&'F‚&ñ÷'í"á&Vc“"G∑FV«“"FF◊ÜˆÊR÷7Fñˆ„‚G∑ÜˆÊT7Fñˆ‰∆&V¬Çó”¬ˆ„¬ˆFóc‡¢¬ˆFóc‡¢¬ˆFócÊ∞¢6ˆÁ7B÷ˆF¬“Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ'&ˆ¶V7D÷ˆF¬"ì∞¢÷ˆF¬Á6WDGG&ñ'WFRÇ&&ñ÷∆&V∆∆VF'í"¬'&ˆ¶V7D÷ˆF≈FóF∆R"ì∞¢˜V‰÷ˆF¬Ü÷ˆF¬ì∞¢6ˆÁ7B&ÊvR“Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ'&ÊvR"ì∞¢6ˆÁ7B6ˆ◊&R“Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ&6ˆ◊&R"ì∞¢&ÊvRÊFDWfVÁD∆ó7FVÊW"Ç&ñÁWB"¬Çí”‚6WD6ˆ◊&U˜6óFñˆ‚Ü6ˆ◊&R¬&ÊvR¬&ÊvRÁf«VRíì∞¢ñÊóD6ˆ◊&RÜ6ˆ◊&R¬&ÊvRì∞¢Fˆ7V÷VÁBÁVW'ï6V∆V7F˜$∆¬Ç%∂FF◊Ü6R÷fñ«FW%“"íÊf˜$V6ÇÇÜ'F‚í”‚∞¢'F‚ÊFDWfVÁD∆ó7FVÊW"Ç&6∆ñ6≤"¬Çí”‚∞¢Fˆ7V÷VÁBÁVW'ï6V∆V7F˜$∆¬Ç%∂FF◊Ü6R÷fñ«FW%“"íÊf˜$V6ÇÇÜóFV“í”‚óFV“Ê6∆74∆ó7BÁ&V÷˜fRÇ&7FófR"íì∞¢'F‚Ê6∆74∆ó7BÊFBÇ&7FófR"ì∞¢6ˆÁ7BÜ6R“'F‚ÊFF6WBÁÜ6Tfñ«FW#∞¢6Ü˜t6&˜W6V¬Ü÷ˆF¬“G∂ñÊFWá÷¬¬Ü6Rì∞¢“ì∞¢“ì∞¢ñÊóD6&˜W6V«2ÜFˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ'&ˆ¶V7D÷ˆF¬"íì∞¢”∞†¢6ˆÁ7B6WD6ˆ◊&U˜6óFñˆ‚“Ü6ˆ◊&R¬&ÊvR¬f«VRí”‚∞¢6ˆÁ7BÊWáB“÷FÇÊ÷ÇÉR¬÷FÇÊ÷ñ‚ÉìR¬ÁV÷&W"áf«VRííì∞¢6ˆ◊&RÁ7Gñ∆RÁ6WE&˜W'GíÇ"“◊7∆óB"¬G∂ÊWáG“Vì∞¢&ÊvRÁf«VR“7G&ñÊrÜÊWáBì∞¢&ÊvRÁ6WDGG&ñ'WFRÄ¢&&ñ◊f«VWFWáB"¿¢7FFRÊ∆Êr””“&áR"ÚG∂ÊWáG“RVÃYGFRº:ó¢G∂ÊWáG“R&Vf˜&Rñ÷vV ¢ì∞¢”∞†¢6ˆÁ7BñÊóD6ˆ◊&R“Ü6ˆ◊&R¬&ÊvRí”‚∞¢∆WBG&vvñÊr“f«6S∞¢6ˆÁ7BWFFTg&ˆ’ˆñÁFW"“ÜWfVÁBí”‚∞¢6ˆÁ7B&V7B“6ˆ◊&RÊvWD&˜VÊFñÊt6∆ñVÁE&V7BÇì∞¢6WD6ˆ◊&U˜6óFñˆ‚Ü6ˆ◊&R¬&ÊvR¬ÇÜWfVÁBÊ6∆ñVÁEÇ“&V7BÊ∆VgBíÚ&V7BÁvñGFÇí¢ì∞¢”∞¢6ˆ◊&RÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW&F˜v‚"¬ÜWfVÁBí”‚∞¢G&vvñÊr“G'VS∞¢G'í∞¢6ˆ◊&RÁ6WEˆñÁFW$6GW&SÚ‚ÜWfVÁBÁˆñÁFW$ñBì∞¢“6F6Ç∞¢ÚÚFÜRˆñÁFW"÷í«&VGí&RñÊ7FófRgFW"‚ñÁFW''WFVBF˜V6ÇvW7GW&R‡¢–¢WFFTg&ˆ’ˆñÁFW"ÜWfVÁBì∞¢“ì∞¢6ˆ◊&RÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW&÷˜fR"¬ÜWfVÁBí”‚∞¢ñbÜG&vvñÊríWFFTg&ˆ’ˆñÁFW"ÜWfVÁBì∞¢“ì∞¢6ˆÁ7B7F˜“Çí”‚∞¢G&vvñÊr“f«6S∞¢”∞¢6ˆ◊&RÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW'W"¬7F˜ì∞¢6ˆ◊&RÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW&6Ê6V¬"¬7F˜ì∞¢6WD6ˆ◊&U˜6óFñˆ‚Ü6ˆ◊&R¬&ÊvR¬&ÊvRÁf«VRì∞¢”∞†¢6ˆÁ7BñÊóD6&˜W6V«2“á&ˆ˜B“Fˆ7V÷VÁBí”‚∞¢&ˆ˜BÁVW'ï6V∆V7F˜$∆¬Ç%∂FF÷6&˜W6V≈“"íÊf˜$V6ÇÇÜ6&˜W6V¬í”‚∞¢ñbÜ6&˜W6V¬ÊFF6WBÊ&˜VÊB””“'G'VR"í&WGW&„∞¢6&˜W6V¬ÊFF6WBÊ&˜VÊB“'G'VR#∞¢6ˆÁ7BñB“6&˜W6V¬ÊFF6WBÊ6&˜W6V√∞¢6&˜W6V¬ÁVW'ï6V∆V7F˜$∆¬Ç%∂FF÷6&˜W6V¬◊&We“"íÊf˜$V6ÇÇÜ'F‚í”‚'F‚ÊFDWfVÁD∆ó7FVÊW"Ç&6∆ñ6≤"¬Çí”‚÷˜fT6&˜W6V¬ÜñB¬”ííì∞¢6&˜W6V¬ÁVW'ï6V∆V7F˜$∆¬Ç%∂FF÷6&˜W6V¬÷ÊWáE“"íÊf˜$V6ÇÇÜ'F‚í”‚'F‚ÊFDWfVÁD∆ó7FVÊW"Ç&6∆ñ6≤"¬Çí”‚÷˜fT6&˜W6V¬ÜñB¬ííì∞¢6&˜W6V¬ÁVW'ï6V∆V7F˜$∆¬Ç%∂FF÷6&˜W6V¬÷F˜E“"íÊf˜$V6ÇÇÜ'F‚í”‚∞¢'F‚ÊFDWfVÁD∆ó7FVÊW"Ç&6∆ñ6≤"¬Çí”‚6Ü˜t6&˜W6V¬ÜñB¬ÁV÷&W"Ü'F‚ÊFF6WBÁ6∆ñFUFÚííì∞¢“ì∞¢6&˜W6V¬ÁVW'ï6V∆V7F˜$∆¬Ç%∂FF◊6∆ñFU“"íÊf˜$V6ÇÇÜ'F‚í”‚∞¢'F‚ÊFDWfVÁD∆ó7FVÊW"Ç&6∆ñ6≤"¬Çí”‚∞¢ñbÜ6&˜W6V¬ÊFF6WBÊ6&˜W6Vƒ7Fñˆ‚”“&v∆∆W'í"í∞¢˜VÂ&ˆ¶V7BÑÁV÷&W"Ü6&˜W6V¬ÊFF6WBÁ&ˆ¶V7DñÊFWÇíì∞¢–¢“ì∞¢“ì∞¢6ˆÁ7BfñWw˜'B“6&˜W6V¬ÁVW'ï6V∆V7F˜"Ç"Ê6&˜W6V¬◊fñWw˜'B"ì∞¢∆WB7F'EÇ“∞¢∆WB∆7EÇ“∞¢∆WBG&vvñÊr“f«6S∞¢fñWw˜'BÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW&F˜v‚"¬ÜWfVÁBí”‚∞¢G&vvñÊr“G'VS∞¢7F'EÇ“WfVÁBÊ6∆ñVÁEÉ∞¢∆7EÇ“WfVÁBÊ6∆ñVÁEÉ∞¢“ì∞¢fñWw˜'BÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW&÷˜fR"¬ÜWfVÁBí”‚∞¢ñbÇG&vvñÊrí&WGW&„∞¢∆7EÇ“WfVÁBÊ6∆ñVÁEÉ∞¢“ì∞¢6ˆÁ7BfñÊó6ÑG&r“Çí”‚∞¢ñbÇG&vvñÊrí&WGW&„∞¢6ˆÁ7BFV«F“∆7EÇ“7F'EÉ∞¢G&vvñÊr“f«6S∞¢ñbÑ÷FÇÊ'2ÜFV«Fí‚C"í∞¢÷˜fT6&˜W6V¬ÜñB¬FV«F¬Ú¢”ì∞¢–¢”∞¢fñWw˜'BÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW'W"¬fñÊó6ÑG&rì∞¢fñWw˜'BÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW&6Ê6V¬"¬fñÊó6ÑG&rì∞¢6Ü˜t6&˜W6V¬ÜñB¬ÁV÷&W"Ü6&˜W6V¬ÊFF6WBÊ7FófR«¬íì∞¢“ì∞¢”∞†¢6ˆÁ7B÷˜fT6&˜W6V¬“ÜñB¬Fó&V7Fñˆ‚í”‚∞¢6ˆÁ7B6&˜W6V¬“Fˆ7V÷VÁBÁVW'ï6V∆V7F˜"Ü∂FF÷6&˜W6V√“"G∂ñG“%÷ì∞¢ñbÇ6&˜W6V¬í&WGW&„∞¢6Ü˜t6&˜W6V¬ÜñB¬ÁV÷&W"Ü6&˜W6V¬ÊFF6WBÊ7FófR«¬í≤Fó&V7Fñˆ‚ì∞¢”∞†¢6ˆÁ7B6Ü˜t6&˜W6V¬“ÜñB¬ñÊFWÇ¬Ü6Rí”‚∞¢6ˆÁ7B6&˜W6V¬“Fˆ7V÷VÁBÁVW'ï6V∆V7F˜"Ü∂FF÷6&˜W6V√“"G∂ñG“%÷ì∞¢ñbÇ6&˜W6V¬í&WGW&„∞¢ñbáÜ6Rí6&˜W6V¬ÊFF6WBÁÜ6R“Ü6S∞¢6ˆÁ7B7FófUÜ6R“6&˜W6V¬ÊFF6WBÁÜ6R«¬&∆¬#∞¢6ˆÁ7B6∆ñFW2“≤‚‚Ê6&˜W6V¬ÁVW'ï6V∆V7F˜$∆¬Ç%∂FF◊6∆ñFU“"ï”∞¢6ˆÁ7BFáV÷'2“≤‚‚Ê6&˜W6V¬ÁVW'ï6V∆V7F˜$∆¬Ç%∂FF÷6&˜W6V¬÷F˜E“"ï”∞¢6∆ñFW2Êf˜$V6ÇÇá6∆ñFRí”‚∞¢6∆ñFRÊÜñFFV‚“7FófUÜ6R”“&∆¬"bb6∆ñFRÊFF6WBÁÜ6R”“7FófUÜ6S∞¢“ì∞¢FáV÷'2Êf˜$V6ÇÇáFáV÷"í”‚∞¢FáV÷"ÊÜñFFV‚“7FófUÜ6R”“&∆¬"bbFáV÷"ÊFF6WBÁÜ6R”“7FófUÜ6S∞¢“ì∞¢6ˆÁ7Bfó6ñ&∆U6∆ñFW2“6∆ñFW2Êfñ«FW"Çá6∆ñFRí”‚6∆ñFRÊÜñFFV‚ì∞¢6ˆÁ7Bfó6ñ&∆UFáV÷'2“FáV÷'2Êfñ«FW"ÇáFáV÷"í”‚FáV÷"ÊÜñFFV‚ì∞¢ñbÇfó6ñ&∆U6∆ñFW2Ê∆VÊwFÇí&WGW&„∞¢6ˆÁ7B7FófR“ÇÜñÊFWÇRfó6ñ&∆U6∆ñFW2Ê∆VÊwFÇí≤fó6ñ&∆U6∆ñFW2Ê∆VÊwFÇíRfó6ñ&∆U6∆ñFW2Ê∆VÊwFÉ∞¢6&˜W6V¬ÊFF6WBÊ7FófR“7G&ñÊrÜ7FófRì∞¢6&˜W6V¬ÁVW'ï6V∆V7F˜"Ç"Ê6&˜W6V¬◊G&6≤"íÁ7Gñ∆RÁG&Á6f˜&““G&Á6∆FUÇÇ“G∂7FófR¢“Rñ∞¢6∆ñFW2Êf˜$V6ÇÇá6∆ñFRí”‚∞¢6ˆÁ7Bó47FófR“6∆ñFR””“fó6ñ&∆U6∆ñFW5∂7FófU”∞¢6∆ñFRÊ6∆74∆ó7BÁFˆvv∆RÇ&7FófR"¬ó47FófRì∞¢6∆ñFRÁF$ñÊFWÇ“ó47FófRÚ¢”∞¢6∆ñFRÁ6WDGG&ñ'WFRÇ&&ñ÷ÜñFFV‚"¬7G&ñÊrÇó47FófRíì∞¢“ì∞¢FáV÷'2Êf˜$V6ÇÇáFáV÷"í”‚∞¢6ˆÁ7Bó47FófR“FáV÷"””“fó6ñ&∆UFáV÷'5∂7FófU”∞¢FáV÷"Ê6∆74∆ó7BÁFˆvv∆RÇ&7FófR"¬ó47FófRì∞¢FáV÷"Á6WDGG&ñ'WFRÇ&&ñ÷7W'&VÁB"¬ó47FófRÚ'G'VR"¢&f«6R"ì∞¢“ì∞¢6ˆÁ7B6˜VÁFW"“6&˜W6V¬ÁVW'ï6V∆V7F˜"Ç%∂FF÷6&˜W6V¬÷6˜VÁE“"ì∞¢ñbÜ6˜VÁFW"í6˜VÁFW"ÁFWáD6ˆÁFVÁB“G∂7FófR≤“ÚG∑fó6ñ&∆U6∆ñFW2Ê∆VÊwFá÷∞¢”∞†¢6ˆÁ7B˜V‰v∆∆W'í“áÜ˜F˜2¬ñÊFWÇ¬FóF∆Rí”‚∞¢7FFRÊv∆∆W'í“Ü˜F˜3∞¢7FFRÊv∆∆W'îñÊFWÇ“ñÊFWÉ∞¢Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ&v∆∆W'îñÊÊW""íÊñÊÊW$ÖD‘¬“ ¢∆Fób6∆73“&v∆∆W'í÷∆ñ˜WB#‡¢∆Fób6∆73“&v∆∆W'í÷÷ñ‚#‡¢∆ñ÷rñC“&v∆∆W'îñ÷r"7&3“""«C“"G∑FóF∆W“#‡¢∆'WGFˆ‚6∆73“&'&˜r&Wb"ñC“'&Wb"GóS“&'WGFˆ‚"&ñ÷∆&V√“"G∑7FFRÊ∆Êr””“&áR"Ú$VÃY¨Yº:ó"¢%&Wfñ˜W2ñ÷vR'“#Ó(ì¬ˆ'WGFˆ„‡¢∆'WGFˆ‚6∆73“&'&˜rÊWáB"ñC“&ÊWáB"GóS“&'WGFˆ‚"&ñ÷∆&V√“"G∑7FFRÊ∆Êr””“&áR"Ú$º;gfWF∂W¨Yº:ó"¢$ÊWáBñ÷vR'“#Ó(£¬ˆ'WGFˆ„‡¢«7‚6∆73“&6˜VÁFW""ñC“&6˜VÁFW""&ñ÷∆ófS“'ˆ∆óFR#„¬˜7„‡¢∆Fób6∆73“&v∆∆W'í÷6Fñˆ‚"ñC“&v∆∆W'î6Fñˆ‚#„¬ˆFóc‡¢¬ˆFóc‡¢∆Fóc‡¢«6÷∆¬6∆73“&WñV'&˜r#‚G∑FóF∆W”¬˜6÷∆√‡¢∆É"ñC“&v∆∆W'î÷ˆF≈FóF∆R#‚G∑7FFRÊ∆Êr””“&áR"Ú$º:óW2◊VÊ∂fˆ«ñ÷B"¢%fó7V¬v˜&≤&ˆ6W72'”¬ˆÉ#‡¢«‚G∑7FFRÊ∆Êr””“&áR"Ú$º:óV≤¢F˜GB7¶ˆ∆|:«FL:2Fóñ∑W2∂ññÊGVÃ;2:∆∆˜L:B¬◊VÊ∂l:¶ó6óB:ó2VÃ:ó&ÜWLYl:ñvW&VF‹:ñÁú:óB◊WFF¨:≤‚∂ˆÊ∑,:óBfV∆FF˜B÷ñÊFñrÜV«ó7¨:÷‚6¨:Bf˜L;6í∆¨:‚VwñWßFWF¨;∆≤‚"¢%FÜRñ÷vW26Ü˜rGóñ6¬7F'FñÊr6ˆÊFóFñˆÁ2¬v˜&≤7FvW2ÊB6ÜñWf&∆R˜WF6ˆ÷W2f˜"FÜó26W'fñ6R‚FÜR7GV¬66˜Ró2«vó2w&VVBg&ˆ“Ü˜F˜2ˆbFÜR7V6ñfñ2&˜W'Gí‚'”¬˜‡¢∆Fób6∆73“'FáV÷"÷w&ñB"ñC“'FáV÷'2#‚G∑Ü˜F˜2Ê÷Çá¬íí”‚∆'WGFˆ‚GóS“&'WGFˆ‚"FF◊FáV÷#“"G∂ó“"&ñ÷∆&V√“"G∑Ü˜FÙ6Fñˆ‚áó“#„∆ñ÷r7&3“"G∂ñ÷rá≥“¬3có“"«C“""∆ˆFñÊs“&∆ßí"FV6ˆFñÊs“&7ñÊ2#„¬ˆ'WGFˆ„ÊíÊ¶ˆñ‚Ç""ó”¬ˆFóc‡¢¬ˆFóc‡¢¬ˆFócÊ∞¢6ˆÁ7B÷ˆF¬“Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ&v∆∆W'î÷ˆF¬"ì∞¢÷ˆF¬Á6WDGG&ñ'WFRÇ&&ñ÷∆&V∆∆VF'í"¬&v∆∆W'î÷ˆF≈FóF∆R"ì∞¢˜V‰÷ˆF¬Ü÷ˆF¬ì∞¢Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ'&Wb"íÊFDWfVÁD∆ó7FVÊW"Ç&6∆ñ6≤"¬Çí”‚6Ü˜tv∆∆W'íá7FFRÊv∆∆W'îñÊFWÇ“íì∞¢Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ&ÊWáB"íÊFDWfVÁD∆ó7FVÊW"Ç&6∆ñ6≤"¬Çí”‚6Ü˜tv∆∆W'íá7FFRÊv∆∆W'îñÊFWÇ≤íì∞¢Fˆ7V÷VÁBÁVW'ï6V∆V7F˜$∆¬Ç"7FáV÷'2∂FF◊FáV÷%“"íÊf˜$V6ÇÇÜ'F‚í”‚∞¢'F‚ÊFDWfVÁD∆ó7FVÊW"Ç&6∆ñ6≤"¬Çí”‚6Ü˜tv∆∆W'íÑÁV÷&W"Ü'F‚ÊFF6WBÁFáV÷"ííì∞¢“ì∞¢ñÊóDv∆∆W'ï7vóRÜFˆ7V÷VÁBÁVW'ï6V∆V7F˜"Ç"6v∆∆W'î÷ˆF¬Êv∆∆W'í÷÷ñ‚"íì∞¢6Ü˜tv∆∆W'íÜñÊFWÇì∞¢”∞†¢6ˆÁ7B6Ü˜tv∆∆W'í“ÜñÊFWÇí”‚∞¢ñbÇ7FFRÊv∆∆W'íÊ∆VÊwFÇí&WGW&„∞¢7FFRÊv∆∆W'îñÊFWÇ“ÜñÊFWÇ≤7FFRÊv∆∆W'íÊ∆VÊwFÇíR7FFRÊv∆∆W'íÊ∆VÊwFÉ∞¢6ˆÁ7B7W'&VÁB“7FFRÊv∆∆W'ï∑7FFRÊv∆∆W'îñÊFWÖ”∞¢6ˆÁ7B∂ñB¬Ü6U““7W'&VÁC∞¢6ˆÁ7Bv∆∆W'îñ÷r“Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ&v∆∆W'îñ÷r"ì∞¢6ˆÁ7BÊWáE7&2“ñ÷rÜñB¬ì∞¢ñbÜv∆∆W'îñ÷rÁ7&2”“ÊWrU$¬ÜÊWáE7&2¬Fˆ7V÷VÁBÊ&6UU$ííÊá&Vbív∆∆W'îñ÷rÁ7&2“ÊWáE7&3∞¢v∆∆W'îñ÷rÊ«B“Ü˜FÙ6Fñˆ‚Ü7W'&VÁBì∞¢Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ&6˜VÁFW""íÁFWáD6ˆÁFVÁB“G∑7FFRÊv∆∆W'îñÊFWÇ≤“ÚG∑7FFRÊv∆∆W'íÊ∆VÊwFá““G∑Ü6UFWáBáÜ6Ró÷∞¢Fˆ7V÷VÁBÊvWDV∆V÷VÁD'îñBÇ&v∆∆W'î6Fñˆ‚"íÊñÊÊW$ÖD‘¬“∆#‚G∑Ü6UFWáBáÜ6Ró”¬ˆ#„«7„‚G∑Ü˜FÙ6Fñˆ‚Ü7W'&VÁBó”¬˜7„Ê∞¢Fˆ7V÷VÁBÁVW'ï6V∆V7F˜$∆¬Ç"7FáV÷'2∂FF◊FáV÷%“"íÊf˜$V6ÇÇáFáV÷"¬FáV÷$ñÊFWÇí”‚∞¢6ˆÁ7Bó47FófR“FáV÷$ñÊFWÇ””“7FFRÊv∆∆W'îñÊFWÉ∞¢FáV÷"Ê6∆74∆ó7BÁFˆvv∆RÇ&7FófR"¬ó47FófRì∞¢FáV÷"Á6WDGG&ñ'WFRÇ&&ñ÷7W'&VÁB"¬ó47FófRÚ'G'VR"¢&f«6R"ì∞¢“ì∞¢”∞†¢6ˆÁ7B7FófT÷ˆF¬“Çí”‚≤‚‚ÊFˆ7V÷VÁBÁVW'ï6V∆V7F˜$∆¬Ç"Ê÷ˆF¬Ê˜V‚"ï“ÊBÇ”í«¬ÁV∆√∞†¢6ˆÁ7B˜V‰÷ˆF¬“Ü÷ˆF¬í”‚∞¢6ˆÁ7B&Wfñ˜W2“7FófT÷ˆF¬Çì∞¢ñbá&Wfñ˜W2bb&Wfñ˜W2”“÷ˆF¬í∞¢&Wfñ˜W2Á6WDGG&ñ'WFRÇ&&ñ÷ÜñFFV‚"¬'G'VR"ì∞¢&Wfñ˜W2Á6WDGG&ñ'WFRÇ&ñÊW'B"¬""ì∞¢–¢÷ˆFƒ˜VÊW'2Á6WBÜ÷ˆF¬¬Fˆ7V÷VÁBÊ7FófTV∆V÷VÁBì∞¢÷ˆF¬Ê6∆74∆ó7BÊFBÇ&˜V‚"ì∞¢÷ˆF¬Á&V÷˜fTGG&ñ'WFRÇ&ñÊW'B"ì∞¢÷ˆF¬Á6WDGG&ñ'WFRÇ&&ñ÷ÜñFFV‚"¬&f«6R"ì∞¢Fˆ7V÷VÁBÊ&ˆGíÊ6∆74∆ó7BÊFBÇ&÷ˆF¬÷˜V‚"ì∞¢6ˆÁ7BÊV¬“÷ˆF¬ÁVW'ï6V∆V7F˜"Ç"ÁÊV¬"ì∞¢ñbáÊV¬íÊV¬Á67&ˆ∆≈F˜“∞¢&WVW7DÊñ÷Fñˆ‰g&÷RÇÇí”‚÷ˆF¬ÁVW'ï6V∆V7F˜"Ç"Ê6∆˜6R"ìÚÊfˆ7W2Çíì∞¢”∞†¢6ˆÁ7B6∆˜6T÷ˆF¬“Ü÷ˆF¬í”‚∞¢ñbÇ÷ˆF¬í&WGW&„∞¢6ˆÁ7B˜VÊW"“÷ˆFƒ˜VÊW'2ÊvWBÜ÷ˆF¬ì∞¢÷ˆF¬Ê6∆74∆ó7BÁ&V÷˜fRÇ&˜V‚"ì∞¢÷ˆF¬Á&V÷˜fTGG&ñ'WFRÇ&ñÊW'B"ì∞¢÷ˆF¬Á6WDGG&ñ'WFRÇ&&ñ÷ÜñFFV‚"¬'G'VR"ì∞¢6ˆÁ7B&Wfñ˜W2“7FófT÷ˆF¬Çì∞¢ñbá&Wfñ˜W2í∞¢&Wfñ˜W2Á&V÷˜fTGG&ñ'WFRÇ&ñÊW'B"ì∞¢&Wfñ˜W2Á6WDGG&ñ'WFRÇ&&ñ÷ÜñFFV‚"¬&f«6R"ì∞¢“V«6R∞¢Fˆ7V÷VÁBÊ&ˆGíÊ6∆74∆ó7BÁ&V÷˜fRÇ&÷ˆF¬÷˜V‚"ì∞¢–¢ñbÜ˜VÊW#ÚÊó46ˆÊÊV7FVBí&WVW7DÊñ÷Fñˆ‰g&÷RÇÇí”‚˜VÊW"Êfˆ7W2Çíì∞¢”∞†¢6ˆÁ7BG&fˆ7W2“ÜWfVÁB¬÷ˆF¬í”‚∞¢6ˆÁ7Bfˆ7W6&∆R“≤‚‚Ê÷ˆF¬ÁVW'ï6V∆V7F˜$∆¬Ä¢v∂á&Ve“¬'WGFˆ„¶Ê˜BÖ∂Fó6&∆VE“í¬ñÁWC¶Ê˜BÖ∂Fó6&∆VE“í¬∑F&ñÊFWÖ”¶Ê˜BÖ∑F&ñÊFWÉ“"”%“íp¢ï“Êfñ«FW"ÇÜV∆V÷VÁBí”‚V∆V÷VÁBÊÜñFFV‚bbV∆V÷VÁBÊvWD6∆ñVÁE&V7G2ÇíÊ∆VÊwFÇì∞¢ñbÇfˆ7W6&∆RÊ∆VÊwFÇí&WGW&„∞¢6ˆÁ7Bfó'7B“fˆ7W6&∆U≥”∞¢6ˆÁ7B∆7B“fˆ7W6&∆RÊBÇ”ì∞¢ñbÜWfVÁBÁ6ÜñgD∂WíbbFˆ7V÷VÁBÊ7FófTV∆V÷VÁB””“fó'7Bí∞¢WfVÁBÁ&WfVÁDFVfV«BÇì∞¢∆7BÊfˆ7W2Çì∞¢“V«6RñbÇWfVÁBÁ6ÜñgD∂WíbbFˆ7V÷VÁBÊ7FófTV∆V÷VÁB””“∆7Bí∞¢WfVÁBÁ&WfVÁDFVfV«BÇì∞¢fó'7BÊfˆ7W2Çì∞¢–¢”∞†¢6ˆÁ7BñÊóDv∆∆W'ï7vóR“áF&vWBí”‚∞¢ñbÇF&vWBí&WGW&„∞¢∆WB7F'EÇ“∞¢∆WB7W'&VÁEÇ“∞¢∆WB7vóVB“f«6S∞¢F&vWBÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW&F˜v‚"¬ÜWfVÁBí”‚∞¢7F'EÇ“WfVÁBÊ6∆ñVÁEÉ∞¢7W'&VÁEÇ“WfVÁBÊ6∆ñVÁEÉ∞¢7vóVB“f«6S∞¢“ì∞¢F&vWBÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW&÷˜fR"¬ÜWfVÁBí”‚∞¢7W'&VÁEÇ“WfVÁBÊ6∆ñVÁEÉ∞¢“ì∞¢F&vWBÊFDWfVÁD∆ó7FVÊW"Ç'ˆñÁFW'W"¬Çí”‚∞¢6ˆÁ7BFV«F“7W'&VÁEÇ“7F'EÉ∞¢ñbÑ÷FÇÊ'2ÜFV«Fí‚Sí∞¢7vóVB“G'VS∞¢6Ü˜tv∆∆W'íá7FFRÊv∆∆W'îñÊFWÇ≤ÜFV«F¬Ú¢”íì∞¢–¢“ì∞¢F&vWBÊFDWfVÁD∆ó7FVÊW"Ä¢&6∆ñ6≤"¿¢ÜWfVÁBí”‚∞¢ñbÇ7vóVBí&WGW&„∞¢WfVÁBÁ&WfVÁDFVfV«BÇì∞¢WfVÁBÁ7F˜&˜vFñˆ‚Çì∞¢7vóVB“f«6S∞¢“¿¢G'VP¢ì∞¢”∞†¢6ˆÁ7B&WfV¬“Çí”‚∞¢6ˆÁ7BóFV◊2“Fˆ7V÷VÁBÁVW'ï6V∆V7F˜$∆¬Ç%∂FF◊&WfV≈“"ì∞¢&WfVƒˆ'6W'fW#ÚÊFó66ˆÊÊV7BÇì∞¢ñbÇÇ$ñÁFW'6V7Fñˆ‰ˆ'6W'fW""ñ‚vñÊF˜ríí∞¢óFV◊2Êf˜$V6ÇÇÜóFV“í”‚óFV“Ê6∆74∆ó7BÊFBÇ'fó6ñ&∆R"íì∞¢&WGW&„∞¢–¢&WfVƒˆ'6W'fW"“ÊWrñÁFW'6V7Fñˆ‰ˆ'6W'fW"Ä¢ÜVÁG&ñW2í”‚VÁG&ñW2Êf˜$V6ÇÇÜVÁG'íí”‚∞¢ñbÇVÁG'íÊó4ñÁFW'6V7FñÊrí&WGW&„∞¢VÁG'íÁF&vWBÊ6∆74∆ó7BÊFBÇ'fó6ñ&∆R"ì∞¢&WfVƒˆ'6W'fW"ÁVÊˆ'6W'fRÜVÁG'íÁF&vWBì∞¢“í¿¢≤Fá&W6Üˆ∆C¢„"–¢ì∞¢óFV◊2Êf˜$V6ÇÇÜóFV“í”‚&WfVƒˆ'6W'fW"Êˆ'6W'fRÜóFV“íì∞¢”∞†¢&VÊFW"Çì∞ß“íÇì∞†
+        ["13909112", "before", { hu: "Bels≈ë t√©r √°tad√°s el≈ëtt, ahol a kisebb szerel√©si √©s rendez√©si pontok adj√°k meg a v√©gs≈ë k√©pet.", en: "Interior before handover where small installation and tidying points shape the final impression." }],
+        ["13588248", "before", { hu: "Rendezetlenebb fali t√°rol√≥ √©s dekor√°ci√≥s fel√ºlet: a c√©l egy haszn√°lhat√≥bb, tiszt√°bb √∂sszk√©p.", en: "Less orderly wall storage and decor area before creating a more usable, cleaner impression." }],
+        ["23224978", "process", { hu: "Fali k√©p vagy tart√≥ pontos be√°ll√≠t√°sa, hogy a helyis√©g rendezettebb legyen.", en: "Wall picture or mount being aligned so the room feels more orderly." }],
+        ["4981802", "process", { hu: "Fali r√∂gz√≠t√©s √©s szerel√©s olyan helyen, ahol a k√©sz eredm√©ny haszn√°lhat√≥bb√° teszi a szob√°t.", en: "Wall fixing work that makes the room more usable once completed." }],
+        ["1090638", "after", { hu: "Felszerelt, rendezett fali polcok: a jav√≠t√°s haszn√°lhat√≥ t√°rol√°st √©s tiszt√°bb k√©pet ad.", en: "Installed wall shelves creating usable storage and a cleaner visual result." }],
+        ["19109111", "after", { hu: "Stabil, k√©sz polcrendszer, amely a kor√°bbi √ºres vagy rendezetlen falfel√ºletet haszn√°lhat√≥v√° teszi.", en: "Stable finished shelving that turns an empty or untidy wall into useful storage." }],
+        ["9565966", "after", { hu: "Rendezett fali t√°rol√≥ kisebb szerel√©s ut√°n, √°tad√°sra alkalmasabb bels≈ë k√©ppel.", en: "Orderly wall storage after small installation work, improving the handover impression." }],
+        ["5824546", "after", { hu: "Teljes falon megjelen≈ë t√°rol√≥ √©s polcrendszer k√©sz √°llapotban.", en: "Full wall storage and shelving shown in finished condition." }],
+        ["19109111", "after", { hu: "Egyszer≈±, stabil fali polc elk√©sz√ºlt √°llapotban, h√©tk√∂znapi lak√°sbels≈ëben.", en: "A simple, stable wall shelf in a normal apartment interior." }],
+        ["5824575", "after", { hu: "K√©sz fali t√°rol√≥ teljes n√©zetben, ahol a jav√≠t√°s eredm√©nye egy√©rtelm≈±en l√°tszik.", en: "Finished wall storage shown in full view, making the result easy to understand." }],
+      ],
+    },
+  ];
+
+  const projects = [
+    {
+      key: "paint",
+      type: { hu: "Fest√©s / faljav√≠t√°s", en: "Painting / wall repair" },
+      cover: "assets/budapest-finished-room-1.jpg",
+      before: "assets/budapest-painting-before-matched.jpg",
+      after: "assets/budapest-finished-room-1.jpg",
+      title: { hu: "Kopott falb√≥l tiszta, egys√©ges fel√ºlet", en: "From tired walls to a clean finish" },
+      summary: {
+        hu:
+          "B√©rl≈ëv√°lt√°s vagy vend√©g√©rkez√©s el≈ëtt a falhib√°k azonnal l√°tszanak. A c√©l az, hogy a helyis√©g gyorsan √∫jra rendezett √©s bemutathat√≥ legyen.",
+        en:
+          "Before a tenant change or guest arrival, wall defects are immediately visible. The goal is to make the room presentable again quickly.",
+      },
+      result: {
+        hu: "A helyis√©g tiszt√°bbnak, gondozottabbnak √©s kiadhat√≥bbnak hat. A l√°togat√≥ nem a hib√°kat veszi √©szre el≈ësz√∂r.",
+        en: "The room feels cleaner, better cared for and easier to present. Visitors notice the space, not the defects.",
+      },
+      works: {
+        hu: ["falhib√°k ellen≈ërz√©se fot√≥k alapj√°n", "fel√ºlet el≈ëk√©sz√≠t√©se", "jav√≠t√°s √©s csiszol√°s", "egys√©ges fest√©s", "fot√≥s visszajelz√©s"],
+        en: ["photo-based wall condition check", "surface preparation", "patching and sanding", "consistent painted finish", "photo update after completion"],
+      },
+      photos: services[0].photos,
+    },
+    {
+      key: "drywall",
+      type: { hu: "Gipszkarton / mennyezet", en: "Drywall / ceiling" },
+      cover: "assets/budapest-finished-room-2.jpg",
+      before: "assets/budapest-drywall-before-matched.jpg",
+      after: "assets/budapest-finished-room-2.jpg",
+      title: { hu: "F√©lk√©sz gipszkartonb√≥l fest√©sre k√©sz fel√ºlet", en: "Drywall prepared for a finished interior" },
+      summary: {
+        hu:
+          "A l√°that√≥ h√©zagok, √©lek √©s csiszolatlan jav√≠t√°sok f√©lk√©sz hat√°st keltenek. Ilyenkor a c√©l nem l√°tv√°nyos tr√ºkk, hanem pontos, tiszta el≈ëk√©sz√≠t√©s.",
+        en:
+          "Visible seams, edges and unsanded areas make a room feel unfinished. The aim is careful preparation, not cosmetic shortcuts.",
+      },
+      result: {
+        hu: "A fal vagy mennyezet rendezett, fest√©sre alkalmas √©s kev√©sb√© vonja mag√°ra a figyelmet.",
+        en: "The wall or ceiling becomes tidy, paint-ready and no longer distracts from the room.",
+      },
+      works: {
+        hu: ["√°llapotfelm√©r√©s", "h√©zagok √©s √©lek jav√≠t√°sa", "csiszol√°s", "fel√ºletkiegyenl√≠t√©s", "√°tad√°s el≈ëtti ellen≈ërz√©s"],
+        en: ["condition check", "seam and edge repair", "sanding", "surface levelling", "pre-handover review"],
+      },
+      photos: services[1].photos,
+    },
+    {
+      key: "garden",
+      type: { hu: "Kert / udvar", en: "Garden / outdoor" },
+      cover: "assets/budapest-courtyard-garden-1.jpg",
+      before: "assets/budapest-garden-before-matched.jpg",
+      after: "assets/budapest-courtyard-garden-1.jpg",
+      title: { hu: "Elhanyagolt k√ºls≈ë r√©szb≈ël rendezett √©rkez√©s", en: "From neglected outdoor area to a tidier arrival" },
+      summary: {
+        hu:
+          "A kert, udvar vagy bej√°rat gyakran az els≈ë pont, ahol az √©rdekl≈ëd≈ë k√©pet alkot az ingatlanr√≥l.",
+        en:
+          "The garden, yard or entrance is often the first place where a visitor forms an opinion about the property.",
+      },
+      result: {
+        hu: "Az ingatlan rendezettebbnek √©s gondozottabbnak t≈±nik m√°r √©rkez√©skor, ami b√©rlem√©nyn√©l √©s Airbnb-n√©l k√ºl√∂n√∂sen fontos.",
+        en: "The property feels better cared for from the first moment, especially for rentals and Airbnb homes.",
+      },
+      works: {
+        hu: ["f≈±ny√≠r√°s", "szeg√©lyrendez√©s", "ben≈ëtt r√©szek visszav√°g√°sa", "z√∂ldhullad√©k √∂sszegy≈±jt√©se", "k√©sz √°llapot fot√≥z√°sa"],
+        en: ["mowing", "edge tidying", "trimming overgrown areas", "green waste collection", "final condition photos"],
+      },
+      photos: services[2].photos,
+    },
+  ];
+
+  Object.assign(projects[0], {
+    category: "painting",
+    location: { hu: "Budapesti kiad√≥ lak√°s", en: "Budapest rental apartment" },
+    timeline: { hu: "egyeztetett √ºtemez√©s", en: "agreed scheduling" },
+    client: { hu: "b√©rl≈ëv√°lt√°s el≈ëtt", en: "before tenant handover" },
+    problem: {
+      hu:
+        "A falakon jav√≠t√°snyomok, kop√°sok √©s foltok voltak. Ilyenkor az ingatlan nem ig√©nyel teljes fel√∫j√≠t√°st, de a l√°that√≥ hib√°k azonnal rontj√°k az els≈ë benyom√°st.",
+      en:
+        "The walls had visible marks, patch areas and wear. This did not require a full renovation, but the visible defects weakened the first impression immediately.",
+    },
+    approach: {
+      hu:
+        "A kritikus falr√©szeket fot√≥k alapj√°n beazonos√≠tjuk, majd a fel√ºletet el≈ëk√©sz√≠tj√ºk, jav√≠tjuk, csiszoljuk √©s egys√©gesebb festett √°llapotban adjuk vissza.",
+      en:
+        "The critical wall areas are identified from photos, then prepared, repaired, sanded and handed back with a more consistent painted finish.",
+    },
+    evidence: {
+      hu: ["el≈ëtte fot√≥k", "fel√ºlet-el≈ëk√©sz√≠t√©s", "jav√≠t√°s √©s csiszol√°s", "k√©sz √°llapot fot√≥k"],
+      en: ["before photos", "surface preparation", "patching and sanding", "finished condition photos"],
+    },
+    metrics: [
+      { n: "10", hu: "k√©pes p√©lda", en: "visual examples" },
+      { n: "3", hu: "munkaf√°zis", en: "work phases" },
+      { n: "Egyeztetve", hu: "√ºtemez√©s", en: "timing" },
+    ],
+  });
+
+  Object.assign(projects[1], {
+    category: "drywall",
+    location: { hu: "Lak√°sbels≈ë / mennyezeti r√©sz", en: "Interior apartment ceiling area" },
+    timeline: { hu: "jav√≠t√°s √©s fest√©sre el≈ëk√©sz√≠t√©s", en: "repair and paint-ready preparation" },
+    client: { hu: "tulajdonosi felk√©sz√≠t√©s", en: "owner preparation" },
+    problem: {
+      hu:
+        "A f√©lk√©sz gipszkarton √©s a rendezetlen h√©zagok amat≈ër hat√°st keltenek. Egy ilyen r√©sz akkor is felt≈±nik, ha a lak√°s t√∂bbi r√©sze rendben van.",
+      en:
+        "Unfinished drywall and rough seams make an interior feel improvised. Even a small area like this can stand out when the rest of the apartment is tidy.",
+    },
+    approach: {
+      hu:
+        "A hangs√∫ly a pontos √©leken, a sim√°bb √°tmeneteken √©s a fest√©sre alkalmas fel√ºleten van. Nem l√°tv√°nyos d√≠sz√≠t√©s, hanem tiszta alapmunka.",
+      en:
+        "The focus is on cleaner edges, smoother transitions and a surface that is ready for painting. It is practical groundwork, not decorative cover-up.",
+    },
+    evidence: {
+      hu: ["gipszkarton √°llapot", "h√©zagjav√≠t√°s", "csiszol√°s", "√°tad√°s el≈ëtti kontroll"],
+      en: ["drywall condition", "seam repair", "sanding", "pre-handover check"],
+    },
+    metrics: [
+      { n: "10", hu: "k√©pes p√©lda", en: "visual examples" },
+      { n: "5", hu: "ellen≈ërz√©si pont", en: "check points" },
+      { n: "HU/EN", hu: "egyeztet√©s", en: "communication" },
+    ],
+  });
+
+  Object.assign(projects[2], {
+    category: "garden",
+    location: { hu: "Budapesti udvar √©s bej√°rati r√©sz", en: "Budapest yard and entrance area" },
+    timeline: { hu: "szezon√°lis rendbet√©tel", en: "seasonal clean-up" },
+    client: { hu: "b√©rlem√©ny / Airbnb el≈ëk√©sz√≠t√©s", en: "rental / Airbnb preparation" },
+    problem: {
+      hu:
+        "A magas f≈±, elhanyagolt szeg√©ly √©s rendezetlen bej√°rat m√°r √©rkez√©skor bizonytalans√°got kelt. Ez k√ºl√∂n√∂sen gond Airbnb-n√©l vagy b√©rlem√©nyn√©l.",
+      en:
+        "Overgrown grass, rough edges and a neglected entrance create doubt before anyone enters the property. This matters especially for rentals and Airbnb homes.",
+    },
+    approach: {
+      hu:
+        "A c√©l nem kert√©p√≠t√©s, hanem gyors, l√°that√≥ rend: ny√≠r√°s, szeg√©lyez√©s, visszav√°g√°s, √∂sszegy≈±jt√©s √©s fot√≥zott k√©sz √°llapot.",
+      en:
+        "The aim is not landscape design, but fast visible order: mowing, edging, trimming, collection and a photographed finished condition.",
+    },
+    evidence: {
+      hu: ["el≈ëtte √°llapot", "ny√≠r√°s √©s szeg√©lyez√©s", "z√∂ldhullad√©k rendez√©se", "k√©sz √°llapot"],
+      en: ["before condition", "mowing and edging", "green waste tidy-up", "finished condition"],
+    },
+    metrics: [
+      { n: "10", hu: "k√©pes dokument√°ci√≥", en: "photo records" },
+      { n: "1", hu: "rendezett √©rkez√©s", en: "tidier arrival" },
+      { n: "0", hu: "felesleges k√∂r", en: "unneeded detours" },
+    ],
+  });
+
+  projects.push(
+    {
+      key: "airbnb-turnover",
+      category: "airbnb",
+      type: { hu: "Airbnb / b√©rl≈ëv√°lt√°s", en: "Airbnb / tenant turnover" },
+      cover: "assets/budapest-airbnb-living-room.jpg",
+      before: "assets/budapest-airbnb-before-turnover-matched.jpg",
+      after: "assets/budapest-airbnb-living-room.jpg",
+      title: { hu: "Lak√°sfriss√≠t√©s vend√©g√©rkez√©s el≈ëtt", en: "Apartment refresh before guest arrival" },
+      location: { hu: "Budapesti Airbnb lak√°s", en: "Budapest Airbnb apartment" },
+      timeline: { hu: "vend√©g√©rkez√©shez igaz√≠tva", en: "planned around guest arrival" },
+      client: { hu: "vend√©gv√°lt√°s el≈ëtt", en: "before guest turnover" },
+      summary: {
+        hu:
+          "Vend√©gv√°lt√°s el≈ëtt a kisebb hib√°k is felt≈±n≈ëek. Ilyenkor a legfontosabb a pontosan egyeztetett, tiszta √©s dokument√°lt munka.",
+        en:
+          "Before a guest turnover, even small defects are noticeable. The priority is clearly scheduled, tidy and documented work.",
+      },
+      problem: {
+        hu:
+          "A lak√°sban t√∂bb kisebb nyom, r√∂gz√≠t√©si hiba √©s jav√≠tand√≥ r√©sz jelent meg egyszerre. A tulajdonosnak nem k√ºl√∂n szakikat kell szerveznie minden apr√≥s√°gra.",
+        en:
+          "Several smaller marks, fixing issues and visible defects appeared at once. The owner should not have to coordinate separate trades for every small item.",
+      },
+      approach: {
+        hu:
+          "A l√°that√≥ hib√°kat rangsoroljuk: ami a vend√©gnek azonnal felt≈±nik, el≈ëre ker√ºl. A munka v√©g√©n k√©pes visszajelz√©s seg√≠ti a t√°voli d√∂nt√©st.",
+        en:
+          "Visible issues are prioritised by guest impact. At completion, photo updates help the owner make decisions remotely.",
+      },
+      result: {
+        hu:
+          "A lak√°s gyorsabban v√°llalhat√≥ √°llapotba ker√ºl, kevesebb bizonytalans√°ggal a vend√©g√©rkez√©s el≈ëtt.",
+        en:
+          "The apartment becomes presentable faster, with less uncertainty before guest arrival.",
+      },
+      works: {
+        hu: ["l√°that√≥ hib√°k list√°z√°sa", "falfriss√≠t√©s", "kisebb r√∂gz√≠t√©sek", "√°tad√°s el≈ëtti ellen≈ërz√©s", "fot√≥s dokument√°ci√≥"],
+        en: ["visible issue list", "wall touch-up", "small fixings", "pre-handover check", "photo documentation"],
+      },
+      evidence: {
+        hu: ["probl√©malista", "jav√≠t√°s k√∂zbeni fot√≥k", "k√©sz √°llapot", "tulajdonosi visszajelz√©sre k√©sz anyag"],
+        en: ["issue list", "work-in-progress photos", "finished condition", "owner-ready update"],
+      },
+      metrics: [
+        { n: "10", hu: "fot√≥", en: "photos" },
+        { n: "4", hu: "jav√≠t√°si t√≠pus", en: "repair types" },
+        { n: "1", hu: "kapcsolattart√°si pont", en: "contact point" },
+      ],
+      photos: [
+        ["5102904", "before", { hu: "Vend√©gv√°lt√°s el≈ëtti lakott √°llapot: a nappalit rendezettebb√© √©s fot√≥zhat√≥bb√° kell tenni.", en: "Lived-in condition before guest turnover: the living room needs to become tidier and easier to present." }],
+        ["6195959", "process", { hu: "Airbnb el≈ëk√©sz√≠t√©s takar√≠t√°ssal √©s ellen≈ërz√©ssel, teljesebb lak√≥t√©rben l√°that√≥ munk√°val.", en: "Airbnb preparation with cleaning and checking, shown in a fuller living-space context." }],
+        ["6764827", "after", { hu: "K√©sz, rendezett nappali vend√©g√©rkez√©shez: tiszta, √°tl√°that√≥ √©s haszn√°lhat√≥ t√©r.", en: "Finished living room for guest arrival: clean, clear and usable." }],
+        ["8135495", "after", { hu: "Rendezett h√°l√≥szoba √°tad√°s el≈ëtt, tiszta textillel √©s ellen≈ërizhet≈ë √∂sszk√©ppel.", en: "Tidy bedroom before handover, with clean textiles and a reviewable overall condition." }],
+        ["19899060", "after", { hu: "Vil√°gos, teljes nappali k√©sz √°llapotban, amely j√≥l mutat vend√©gfot√≥n √©s √°tad√°skor.", en: "Bright full living room in finished condition, suitable for guest photos and handover." }],
+        ["assets/budapest-airbnb-living-room.jpg", "after", { hu: "H√©tk√∂znapi budapesti nappali rendezett, vend√©gfogad√°sra k√©sz √°llapotban.", en: "Everyday Budapest living room in a tidy, guest-ready condition." }],
+        ["assets/budapest-finished-room-2.jpg", "after", { hu: "Frissen festett, egyszer≈± budapesti szoba tiszta j√°r√≥fel√ºlettel.", en: "Freshly painted, simple Budapest room with clear circulation." }],
+        ["assets/budapest-finished-room-1.jpg", "after", { hu: "Vil√°gos budapesti lak√≥szoba rendezett falakkal, √°tad√°sra k√©sz √°llapotban.", en: "Bright Budapest living room with tidy walls, ready for handover." }],
+        ["assets/budapest-airbnb-bedroom.jpg", "after", { hu: "Tiszta, visszafogott h√°l√≥szoba, amely vend√©gnek √©s tulajdonosnak is k√∂nnyen ellen≈ërizhet≈ë.", en: "Clean, understated bedroom that is easy for both guest and owner to review." }],
+        ["271624", "after", { hu: "Kompakt Airbnb lak√≥t√©r k√©sz √°llapotban, rendezett fallal √©s haszn√°lhat√≥ elrendez√©ssel.", en: "Compact Airbnb living area in finished condition, with tidy walls and usable layout." }],
+      ],
+    },
+    {
+      key: "office-touchup",
+      category: "office",
+      type: { hu: "Iroda / k√©pviseleti t√©r", en: "Office / representative space" },
+      cover: "assets/budapest-office-finished-1.jpg",
+      before: "assets/budapest-office-before-touchup-matched.jpg",
+      after: "assets/budapest-office-finished-1.jpg",
+      title: { hu: "Iroda gyors friss√≠t√©se l√°togat√°s el≈ëtt", en: "Office touch-up before a visit" },
+      location: { hu: "Budapesti iroda", en: "Budapest office" },
+      timeline: { hu: "r√∂vid, c√©lzott munka", en: "short, focused work" },
+      client: { hu: "nemzetk√∂zi k√∂rnyezet", en: "international environment" },
+      summary: {
+        hu:
+          "Irod√°kn√°l √©s k√©pviseleti terekn√©l nem f√©r bele a zavaros kivitelez√©s. A munka legyen r√∂vid, diszkr√©t √©s tiszt√°n kommunik√°lt.",
+        en:
+          "Offices and representative spaces need quiet, organised work. The job should be short, discreet and clearly communicated.",
+      },
+      problem: {
+        hu:
+          "A falakon √©s haszn√°lati pontokon apr√≥ s√©r√ºl√©sek rontott√°k a rendezett k√©pet. Ezek nem nagy hib√°k, de egy l√°togat√°sn√°l felt≈±nnek.",
+        en:
+          "Small marks and worn areas affected the professional feel of the office. They were not major defects, but they are noticeable during a visit.",
+      },
+      approach: {
+        hu:
+          "A munka a l√°that√≥ fel√ºletekre koncentr√°l: faljav√≠t√°s, jav√≠t√≥fest√©s, kisebb igaz√≠t√°sok √©s tiszta √°tad√°s.",
+        en:
+          "Work focuses on visible surfaces: wall repair, touch-up painting, small adjustments and clean handover.",
+      },
+      result: {
+        hu:
+          "Az iroda rendezettebb, nyugodtabb √©s vend√©gfogad√°sra alkalmasabb benyom√°st kelt.",
+        en:
+          "The office feels more orderly, calmer and better prepared for visitors.",
+      },
+      works: {
+        hu: ["l√°that√≥ s√©r√ºl√©sek felm√©r√©se", "jav√≠t√≥fest√©s", "gipszkarton r√©szjav√≠t√°s", "kisebb szerel√©s", "tiszta √°tad√°s"],
+        en: ["visible defect check", "touch-up painting", "minor drywall repair", "small adjustments", "tidy handover"],
+      },
+      evidence: {
+        hu: ["diszkr√©t munkaszervez√©s", "r√©szletfot√≥k", "√°tad√°s el≈ëtti ellen≈ërz√©s", "k√©sz √°llapot"],
+        en: ["discreet scheduling", "detail photos", "pre-handover check", "finished condition"],
+      },
+      metrics: [
+        { n: "HU/EN", hu: "kommunik√°ci√≥", en: "communication" },
+        { n: "5", hu: "ellen≈ërz√©si pont", en: "check points" },
+        { n: "10", hu: "k√©p", en: "images" },
+      ],
+      photos: [
+        ["5483236", "before", { hu: "√úres irodat√©r friss√≠t√©s el≈ëtt: a c√©l a tiszta, haszn√°latra k√©sz munkak√∂rnyezet.", en: "Empty office before refresh, with the goal of a clean, usable work environment." }],
+        ["8477444", "before", { hu: "Nagyobb nyitott iroda √°tad√°s el≈ëtt, ahol a teljes t√©r √∂sszk√©pe sz√°m√≠t.", en: "Large open office before handover, where the overall impression matters." }],
+        ["assets/budapest-office-process-wall-touchup.jpg", "process", { hu: "Szervezett jav√≠t√≥fest√©s egy budapesti iroda kisebb falszakasz√°n.", en: "Organised touch-up painting on a small wall section in a Budapest office." }],
+        ["5511098", "process", { hu: "Nagyobb irodai munkat√©r ellen≈ërz√©se friss√≠t√©s el≈ëtt, teljesebb perspekt√≠v√°b√≥l.", en: "Larger office workspace reviewed before refresh, shown from a wider perspective." }],
+        ["assets/budapest-office-finished-1.jpg", "after", { hu: "Rendezett budapesti irodat√©r tiszta falakkal √©s h√©tk√∂znapi berendez√©ssel.", en: "Tidy Budapest office with clean walls and practical furnishings." }],
+        ["assets/budapest-office-finished-2.jpg", "after", { hu: "Vil√°gos, l√°togat√≥fogad√°sra k√©sz budapesti v√°r√≥- √©s k√∂z√∂ss√©gi t√©r.", en: "Bright Budapest waiting and shared area ready to receive visitors." }],
+        ["assets/budapest-office-finished-3.jpg", "after", { hu: "Egyszer≈± budapesti t√°rgyal√≥ egys√©ges falakkal √©s rendezett √∂sszk√©ppel.", en: "Simple Budapest meeting room with consistent walls and an orderly appearance." }],
+        ["7534216", "after", { hu: "K√©sz t√°rgyal√≥ jelleg≈± t√©r, tiszta falakkal √©s rendezett √∂sszk√©ppel.", en: "Finished meeting-style room with clean walls and an orderly appearance." }],
+        ["36631699", "after", { hu: "T√°gas iroda teljes n√©zetben, rendezett munka√°llom√°sokkal.", en: "Spacious office shown in full view, with orderly workstations." }],
+        ["1181406", "after", { hu: "Teljes irodat√©r haszn√°lat k√∂zben: a friss√≠tett k√∂rnyezet professzion√°lisabb k√©pet ad.", en: "Full office area in use, with the refreshed environment supporting a more professional feel." }],
+      ],
+    },
+    {
+      key: "handover-small-fixes",
+      category: "handyman",
+      type: { hu: "Kisebb jav√≠t√°sok / √°tad√°s", en: "Small repairs / handover" },
+      cover: "assets/budapest-airbnb-bedroom.jpg",
+      before: "assets/budapest-handyman-before-matched.jpg",
+      after: "assets/budapest-airbnb-bedroom.jpg",
+      title: { hu: "Apr√≥ hib√°kb√≥l rendezett √°tad√°s", en: "Small defects turned into a tidy handover" },
+      location: { hu: "Budapesti b√©rlem√©ny", en: "Budapest rental property" },
+      timeline: { hu: "√°tad√°s el≈ëtti jav√≠t√°s", en: "pre-handover repairs" },
+      client: { hu: "tulajdonos / kezel≈ë", en: "owner / manager" },
+      summary: {
+        hu:
+          "A kisebb hib√°k k√ºl√∂n-k√ºl√∂n nem t≈±nnek s√∫lyosnak, de egy√ºtt azt sugallj√°k, hogy az ingatlan nincs k√©zben tartva.",
+        en:
+          "Small defects may not look serious individually, but together they suggest the property is not being managed properly.",
+      },
+      problem: {
+        hu:
+          "Karnis, polc, foganty√∫, szeg√©ly vagy ajt√≥igaz√≠t√°s jelleg≈± apr√≥s√°gok gy≈±ltek √∂ssze. Ezek √°tad√°sn√°l vagy fot√≥z√°sn√°l er≈ësen l√°tszanak.",
+        en:
+          "Small items such as rails, shelves, handles, trims or door adjustments had built up. These details are visible during handover or photography.",
+      },
+      approach: {
+        hu:
+          "A munk√°t list√°zzuk, majd egy k√∂rben kezelj√ºk a kisebb hib√°kat. √çgy a tulajdonos nem vesz√≠t id≈ët sok k√ºl√∂n egyeztet√©ssel.",
+        en:
+          "The items are listed and handled in one focused visit, reducing the need for the owner to coordinate multiple small tasks.",
+      },
+      result: {
+        hu:
+          "Az ingatlan rendezettebb √©s √°tadhat√≥bb lett, a jav√≠t√°sok pedig k√∂vethet≈ë list√°ban szerepelnek.",
+        en:
+          "The property becomes tidier and easier to hand over, with completed fixes documented in a clear list.",
+      },
+      works: {
+        hu: ["jav√≠t√°si lista", "kisebb r√∂gz√≠t√©sek", "ajt√≥ √©s szeg√©ly igaz√≠t√°s", "l√°that√≥ hib√°k kezel√©se", "fot√≥s visszajelz√©s"],
+        en: ["repair list", "small fixings", "door and trim adjustments", "visible defect handling", "photo update"],
+      },
+      evidence: {
+        hu: ["feladatlista", "munkafolyamat k√©pek", "k√©sz √°llapot", "√°tad√°sra alkalmasabb t√©r"],
+        en: ["task list", "process images", "finished condition", "more handover-ready space"],
+      },
+      metrics: [
+        { n: "1", hu: "szervezett k√∂r", en: "organised visit" },
+        { n: "10", hu: "fot√≥", en: "photos" },
+        { n: "5+", hu: "tipikus apr√≥ hiba", en: "typical small defects" },
+      ],
+      photos: services[3].photos,
+    }
+  );
+
+  const projectFilters = [
+    { key: "all", label: { hu: "√ñsszes munkat√≠pus", en: "All service types" } },
+    { key: "painting", label: { hu: "Fest√©s", en: "Painting" } },
+    { key: "drywall", label: { hu: "Gipszkarton", en: "Drywall" } },
+    { key: "garden", label: { hu: "Kert", en: "Garden" } },
+    { key: "airbnb", label: { hu: "Airbnb", en: "Airbnb" } },
+    { key: "office", label: { hu: "Iroda", en: "Office" } },
+    { key: "handyman", label: { hu: "Kisebb jav√≠t√°s", en: "Small fixes" } },
+  ];
+
+  const referenceProofs = [
+    {
+      n: "01",
+      title: { hu: "√Ållapot el≈ëtte", en: "Condition before" },
+      text: {
+        hu: "Az illusztr√°ci√≥ megmutatja az adott munkat√≠pus jellemz≈ë kiindul√≥ √°llapot√°t.",
+        en: "The illustration shows a typical starting condition for this kind of work.",
+      },
+    },
+    {
+      n: "02",
+      title: { hu: "Munka k√∂zben", en: "During the work" },
+      text: {
+        hu: "A k√©pek a jellemz≈ë el≈ëk√©sz√≠t√©si √©s jav√≠t√°si l√©p√©seket szeml√©ltetik.",
+        en: "The images illustrate typical preparation and repair stages.",
+      },
+    },
+    {
+      n: "03",
+      title: { hu: "K√©sz √°tad√°s", en: "Finished handover" },
+      text: {
+        hu: "A v√°rhat√≥ eredm√©ny egyszer≈±en l√°that√≥: tiszt√°bb fel√ºlet √©s rendezettebb t√©r.",
+        en: "The expected result is easy to understand: cleaner surfaces and a tidier space.",
+      },
+    },
+  ];
+
+  const phaseCounts = (photos = []) =>
+    photos.reduce(
+      (counts, photo) => {
+        counts[photo[1]] += 1;
+        return counts;
+      },
+      { before: 0, process: 0, after: 0 }
+    );
+
+  const filteredProjects = () =>
+    state.projectFilter === "all" ? projects : projects.filter((project) => project.category === state.projectFilter);
+
+  const problems = [
+    ["K√ºlf√∂ld√∂n √©l≈ë tulajdonos", "Foreign owner", "Az egyeztet√©s fot√≥kkal is elind√≠that√≥, √≠gy nem sz√ºks√©ges minden d√∂nt√©shez Budapesten tart√≥zkodni.", "The conversation can begin with photos, so the owner does not need to be in Budapest for every decision."],
+    ["Airbnb-vend√©gv√°lt√°s", "Airbnb turnover", "A l√°that√≥ hib√°k √©s kisebb jav√≠t√°sok a k√∂vetkez≈ë √©rkez√©shez igaz√≠that√≥k, re√°lis hat√°rid≈ëvel.", "Visible defects and small repairs can be scheduled around the next arrival, with realistic timing."],
+    ["B√©rl≈ë kik√∂lt√∂z√©se ut√°n", "After a tenant moves out", "Falhib√°k, kisebb s√©r√ºl√©sek √©s az √°tad√°s el≈ëtti friss√≠t√©s egy k√∂z√∂s feladatlist√°ba rendezhet≈ë.", "Wall marks, minor damage and pre-handover touch-ups can be organised into one practical scope."],
+    ["C√©lzott falfriss√≠t√©s", "Focused wall refresh", "Nem minden helyzet ig√©nyel teljes fest√©st: gyakran a legink√°bb l√°that√≥ fel√ºletek rendez√©se a megfelel≈ë megold√°s.", "Not every property needs a full repaint; often the right answer is a careful refresh of the most visible areas."],
+    ["Elhanyagolt udvar vagy kert", "Neglected yard or garden", "F≈±ny√≠r√°ssal, metsz√©ssel √©s a j√°r√≥fel√ºletek rendez√©s√©vel a k√ºls≈ë t√©r ism√©t gondozott k√©pet mutathat.", "Mowing, pruning and tidying paths can restore an orderly appearance to the outdoor area."],
+    ["Iroda l√°togat√°s el≈ëtt", "Office before a visit", "Kisebb faljav√≠t√°sok, fest√©s √©s szerel√©sek √∫gy √ºtemezhet≈ëk, hogy a napi m≈±k√∂d√©st a lehet≈ë legkev√©sb√© zavarj√°k.", "Minor wall repairs, painting and fittings can be scheduled to limit disruption to normal office use."],
+  ];
+
+  const process = [
+    ["Fot√≥k √©s r√∂vid le√≠r√°s", "Photos and a short brief", "K√ºldje el, mi a probl√©ma, hol tal√°lhat√≥ az ingatlan √©s milyen hat√°rid≈ë fontos.", "Send the issue, property location and any timing requirement."],
+    ["Feladat √©s k√∂vetkez≈ë l√©p√©s", "Scope and next step", "Tiszt√°zzuk a v√°rhat√≥ munk√°t, √©s jelezz√ºk, ha a pontos√≠t√°shoz helysz√≠ni felm√©r√©s sz√ºks√©ges.", "We clarify the likely scope and explain if an on-site assessment is needed."],
+    ["Egyeztetett kivitelez√©s", "Agreed execution", "A munka a j√≥v√°hagyott feladatokra koncentr√°l, a v√°ltoz√°sokat pedig k√ºl√∂n egyeztetj√ºk.", "Work follows the agreed scope, with any change discussed separately."],
+    ["Fot√≥s visszajelz√©s", "Photo updates", "A l√©nyeges √°llapotokr√≥l k√©r√©s szerint fot√≥ k√©sz√ºl, √≠gy t√°volr√≥l is k√∂vethet≈ë az el≈ërehalad√°s.", "Key stages can be photographed so progress remains visible from abroad."],
+    ["Rendezett √°tad√°s", "Orderly handover", "Az elk√©sz√ºlt feladatokat √∂sszefoglaljuk, az ingatlant pedig haszn√°lhat√≥, rendezett √°llapotban hagyjuk.", "Completed work is summarised and the property is left usable and orderly."],
+  ];
+
+  const audience = [
+    ["Nagyk√∂vets√©gek √©s k√©pviseletek", "Embassies and representative offices", "Diszkr√©t egyeztet√©s √©s rendezett munkav√©gz√©s rezidenci√°kban, irod√°kban √©s k√©pviseleti terekben. A feladatok a helysz√≠n haszn√°lat√°hoz √©s a bel√©p√©si szab√°lyokhoz igaz√≠that√≥k.", "Discreet coordination and orderly work in residences, offices and representative spaces. Tasks can be planned around the use of the property and site-access requirements."],
+    ["Nemzetk√∂zi c√©gek √©s irod√°k", "International companies and offices", "Kisebb jav√≠t√°sok, falfriss√≠t√©s √©s szerel√©si feladatok a napi m≈±k√∂d√©shez igaz√≠tva. A c√©l a rendezett k√∂rnyezet helyre√°ll√≠t√°sa indokolatlan fennakad√°s n√©lk√ºl.", "Minor repairs, wall refreshes and fittings can be scheduled around normal operations. The goal is to restore an orderly environment without unnecessary disruption."],
+    ["K√ºlf√∂ldi tulajdonosok", "Foreign property owners", "Az egyeztet√©s magyarul vagy angolul t√∂rt√©nhet, a fontos √°llapotokr√≥l pedig fot√≥s visszajelz√©s k√©rhet≈ë. Ez k√ºl√∂n√∂sen hasznos, ha a tulajdonos nem tart√≥zkodik Budapesten.", "Communication is available in Hungarian or English, with photo updates for important stages. This is particularly useful when the owner is not in Budapest."],
+    ["Airbnb √©s hossz√∫ t√°v√∫ b√©rlem√©nyek", "Airbnb and long-term rentals", "Vend√©g- vagy b√©rl≈ëv√°lt√°s el≈ëtt a l√°that√≥ hib√°k, faljav√≠t√°sok √©s kisebb karbantart√°si feladatok egy folyamatban kezelhet≈ëk. A hat√°rid≈ët mindig a t√©nyleges munka alapj√°n egyeztetj√ºk.", "Visible defects, wall repairs and small maintenance jobs can be handled together before a guest or tenant change. Timing is always agreed against the actual scope."],
+    ["Mag√°nh√°zak √©s lak√°stulajdonosok", "Private homeowners and apartment owners", "Csal√°di h√°zak √©s saj√°t haszn√°lat√∫ lak√°sok kisebb jav√≠t√°sai, fest√©se, gipszkarton-jav√≠t√°sa, kert- √©s szezon√°lis karbantart√°sa is egy √°tl√°that√≥ feladatlist√°ba rendezhet≈ë. K√∂lt√∂z√©s vagy √©rt√©kes√≠t√©s el≈ëtt seg√≠t√ºnk az otthont rendezett, haszn√°lhat√≥ √©s bemutathat√≥ √°llapotba hozni.", "Small repairs, painting, drywall work, garden care and seasonal maintenance can be organised into one clear scope for family houses and owner-occupied apartments. Before moving in or selling, we help prepare the home so it is tidy, usable and ready to present."],
+  ];
+
+  const faq = [
+    ["Lehet csak kisebb munk√°t k√©rni?", "Can I request a small job?", "Igen. A szolg√°ltat√°s kifejezetten alkalmas kisebb, de fontos jav√≠t√°sokra is, p√©ld√°ul falhib√°kra, szerel√©si feladatokra vagy √°tad√°s el≈ëtti friss√≠t√©sre. A v√°llalhat√≥s√°got mindig a helysz√≠n, a feladatlista √©s az id≈ëz√≠t√©s alapj√°n er≈ës√≠tj√ºk meg.", "Yes. The service is suitable for smaller but important jobs such as wall repairs, fittings or pre-handover touch-ups. Availability is confirmed against the location, task list and required timing."],
+    ["K√ºldhetek fot√≥kat els≈ë k√∂rben?", "Can I send photos first?", "Igen, ez a legegyszer≈±bb kiindul√≥pont. N√©h√°ny j√≥l megvil√°g√≠tott √∂sszk√©p √©s k√∂zelk√©p sokszor el√©g ahhoz, hogy meghat√°rozzuk a k√∂vetkez≈ë l√©p√©st. Ha a pontos m≈±szaki tartalom fot√≥kb√≥l nem √°llap√≠that√≥ meg, helysz√≠ni felm√©r√©st javaslunk.", "Yes, that is usually the easiest place to start. A few clear overview and close-up photos are often enough to identify the next step. If the technical scope cannot be confirmed from images, we will recommend an on-site assessment."],
+    ["Angolul is lehet egyeztetni?", "Is English communication available?", "Igen. A feladat egyeztet√©se, a munkaf√°zisok visszajelz√©se √©s az √°tad√°s magyarul vagy angolul is t√∂rt√©nhet. Ez nem k√ºl√∂n szolg√°ltat√°s, hanem a m≈±k√∂d√©s r√©sze.", "Yes. Scope, progress updates and handover can all be handled in Hungarian or English. Bilingual communication is part of the service, not an add-on."],
+    ["Hogyan alakul az √°r?", "How is pricing established?", "Az √°r a t√©nyleges feladatb√≥l, az anyagig√©nyb≈ël, a hozz√°f√©r√©sb≈ël √©s az id≈ëz√≠t√©sb≈ël √°ll √∂ssze. Fot√≥k alapj√°n gyakran adhat√≥ els≈ë t√°j√©koztat√°s, de √∂sszetettebb vagy rejtett hib√°kn√°l helysz√≠ni felm√©r√©s sz√ºks√©ges lehet. A j√≥v√°hagyott munk√°n t√∫li v√°ltoz√°sokat k√ºl√∂n egyeztetj√ºk.", "Pricing depends on the actual scope, materials, access and timing. Photos can often support an initial indication, while complex or concealed issues may require a site assessment. Changes beyond the agreed work are discussed separately."],
+    ["Tudnak seg√≠teni s√ºrg≈ës Airbnb-helyzetben?", "Can you help with an urgent Airbnb issue?", "A r√∂vid hat√°ridej≈± feladatokat kapacit√°s √©s a munka terjedelme alapj√°n vizsg√°ljuk meg. A fot√≥k, a pontos c√≠m √©s a k√∂vetkez≈ë vend√©g √©rkez√©si ideje seg√≠t gyorsan eld√∂nteni, mi v√°llalhat√≥ re√°lisan. Nem √≠g√©r√ºnk olyan hat√°rid≈ët, amely mellett a munka min≈ës√©ge nem tarthat√≥.", "Short-notice work is considered against current capacity and the real scope. Photos, the exact location and the next arrival time help us assess what can be completed realistically. We do not promise a deadline that would compromise the work."],
+    ["Mi t√∂rt√©nik, ha nem vagyok Budapesten?", "What if I am not in Budapest?", "A feladat t√°volr√≥l is egyeztethet≈ë, ha a bejut√°s √©s a d√∂nt√©si jogosults√°g rendezett. A fontos k√©rd√©seket indul√°s el≈ëtt tiszt√°zzuk, a munk√°r√≥l pedig k√©r√©s szerint fot√≥s friss√≠t√©st k√ºld√ºnk. Kulcs√°tad√°st vagy helysz√≠ni kapcsolattart√≥t minden esetben el≈ëre egyeztet√ºnk.", "The work can be coordinated remotely when access and decision-making authority are clear. Important questions are settled before the visit, with photo updates available on request. Key handover or a local contact is always agreed in advance."],
+    ["Budapesten k√≠v√ºl is v√°llalnak munk√°t?", "Do you work outside Budapest?", "Az els≈ëdleges m≈±k√∂d√©si ter√ºlet Budapest. A k√∂zvetlen k√∂rny√©ken l√©v≈ë feladatokat a t√°vols√°g, a munka m√©rete √©s az id≈ëz√≠t√©s alapj√°n lehet megvizsg√°lni. √ârdemes elk√ºldeni a pontos helysz√≠nt m√°r az els≈ë √ºzenetben.", "Budapest is the primary service area. Jobs in the nearby area can be considered depending on distance, scope and timing. Include the exact location in the first message so feasibility can be assessed quickly."],
+    ["A weboldal k√©pei saj√°t referenci√°k?", "Are the website images completed client projects?", "Nem. Az oldalon szerepl≈ë k√©pek illusztrat√≠v p√©ld√°k, amelyek tipikus kiindul√≥ √°llapotokat, munkaf√°zisokat √©s v√°rhat√≥ eredm√©nyeket mutatnak. Egy konkr√©t ingatlan feladat√°t mindig a helysz√≠n √©s a t√©nyleges √°llapot alapj√°n egyeztetj√ºk.", "No. The images are illustrative examples showing typical starting conditions, work stages and expected outcomes. The scope for a specific property is always agreed from its actual condition and site requirements."],
+  ];
+
+  projects.forEach((project) => {
+    project.description = project.description || project.summary;
+    project.images = project.images || project.photos || [];
+    project.photos = project.images;
+    project.videos = [];
+  });
+
+  const serviceCards = () =>
+    services
+      .map(
+        (item, index) => `
+        <article class="service" data-reveal>
+          <button data-service="${index}" aria-label="${tx(item.title)}">
+            <div class="media"><img src="${img(item.cover)}" alt="${tx(item.title)}" loading="lazy" decoding="async"></div>
+            <div class="body">
+              <h3>${tx(item.title)}</h3>
+              <p>${tx(item.text)}</p>
+              <span class="link">${state.lang === "hu" ? "K√©pek megnyit√°sa" : "Open gallery"}</span>
+            </div>
+          </button>
+        </article>`
+      )
+      .join("");
+
+  const disclosureHint = () => state.lang === "hu" ? "R√©szletek" : "Details";
+
+  const statCards = () =>
+    content.stats
+      .map(
+        (item) => `
+        <details class="stat" name="hero-facts" data-reveal>
+          <summary>
+            <span><b>${state.lang === "hu" ? item.huN : item.enN}</b><small>${state.lang === "hu" ? item.hu : item.en}</small></span>
+            <span class="disclosure-icon" aria-hidden="true">+</span>
+          </summary>
+          <p>${state.lang === "hu" ? item.huDetail : item.enDetail}</p>
+        </details>`
+      )
+      .join("");
+
+  const problemCards = () =>
+    problems
+      .map(
+        (item, index) => `
+        <details class="problem" name="situations" data-reveal>
+          <summary>
+            <span class="media"><img src="${img(services[index % services.length].cover)}" alt="${state.lang === "hu" ? item[0] : item[1]}" loading="lazy" decoding="async"></span>
+            <span class="body">
+              <span class="eyebrow">${state.lang === "hu" ? "Tipikus helyzet" : "Typical situation"}</span>
+              <strong>${state.lang === "hu" ? item[0] : item[1]}</strong>
+              <span class="disclosure-link">${disclosureHint()} <span aria-hidden="true">+</span></span>
+            </span>
+          </summary>
+          <div class="problem-detail">
+            <p>${state.lang === "hu" ? item[2] : item[3]}</p>
+            <p><strong>${state.lang === "hu" ? "A j√≥ kiindul√≥pont:" : "A useful first step:"}</strong> ${state.lang === "hu" ? "n√©h√°ny fot√≥, a helysz√≠n √©s a k√≠v√°nt hat√°rid≈ë." : "a few photos, the location and the preferred timing."}</p>
+          </div>
+        </details>`
+      )
+      .join("");
+
+  const audienceCards = () =>
+    audience
+      .map(
+        (item, index) => `
+        <details class="audience" name="audiences" data-reveal>
+          <summary>
+            <span class="audience-number">0${index + 1}</span>
+            <span><strong>${state.lang === "hu" ? item[0] : item[1]}</strong><small>${disclosureHint()}</small></span>
+            <span class="disclosure-icon" aria-hidden="true">+</span>
+          </summary>
+          <p>${state.lang === "hu" ? item[2] : item[3]}</p>
+        </details>`
+      )
+      .join("");
+
+  const faqAccordion = () =>
+    faq
+      .map(
+        (item, index) => `
+        <details class="faq" name="faq" data-reveal>
+          <summary><span>${state.lang === "hu" ? item[0] : item[1]}</span><span class="disclosure-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer"><p>${state.lang === "hu" ? item[2] : item[3]}</p></div>
+        </details>`
+      )
+      .join("");
+
+  const referenceProofCards = () =>
+    referenceProofs
+      .map(
+        (item) => `
+        <article class="reference-proof" data-reveal>
+          <b>${item.n}</b>
+          <strong>${tx(item.title)}</strong>
+          <p>${tx(item.text)}</p>
+        </article>`
+      )
+      .join("");
+
+  const projectFilterButtons = () =>
+    projectFilters
+      .map(
+        (filter) =>
+          `<button class="${state.projectFilter === filter.key ? "active" : ""}" data-project-filter="${filter.key}">${tx(filter.label)}</button>`
+      )
+      .join("");
+
+  const projectCarousel = (item, index, mode = "card") => {
+    const id = `${mode}-${index}`;
+    const isModal = mode === "modal";
+    const images = item.images || [];
+    return `
+      <div class="project-carousel ${isModal ? "large" : "compact"}" data-carousel="${id}" data-project-index="${index}" data-carousel-action="${isModal ? "gallery" : "project"}" data-active="0" data-phase="all">
+        <div class="carousel-head">
+          <strong>${state.lang === "hu" ? "Illusztrat√≠v k√©psorozat" : "Illustrative image sequence"}</strong>
+          <span data-carousel-count aria-live="polite">${images.length} ${state.lang === "hu" ? "k√©p" : "images"}</span>
+        </div>
+        <div class="carousel-stage">
+          <button class="carousel-arrow carousel-prev" type="button" data-carousel-prev="${id}" aria-label="${state.lang === "hu" ? "El≈ëz≈ë k√©p" : "Previous image"}">‚Äπ</button>
+          <div class="carousel-viewport">
+            <div class="carousel-track">
+              ${images.map((p, i) => `<button class="carousel-slide" type="button" data-slide="${i}" data-phase="${p[1]}"><img src="${img(p[0], isModal ? 1100 : 520)}" alt="${photoCaption(p)}" loading="${isModal && i === 0 ? "eager" : "lazy"}" decoding="async"><span class="slide-caption"><b>${phaseText(p[1])}</b><span>${photoCaption(p)}</span></span></button>`).join("")}
+            </div>
+          </div>
+          <button class="carousel-arrow carousel-next" type="button" data-carousel-next="${id}" aria-label="${state.lang === "hu" ? "K√∂vetkez≈ë k√©p" : "Next image"}">‚Ä∫</button>
+        </div>
+        <div class="carousel-thumbs">
+          ${images.map((p, i) => `<button type="button" data-carousel-dot="${id}" data-slide-to="${i}" data-phase="${p[1]}" aria-label="${phaseText(p[1])} ${i + 1}: ${photoCaption(p)}"><img src="${img(p[0], 180)}" alt="" loading="lazy" decoding="async"></button>`).join("")}
+        </div>
+      </div>`;
+  };
+
+  const mediaReferenceCards = () =>
+    projects
+      .slice(0, 4)
+      .map(
+        (item, index) => `
+        <article class="video-card media-reference-card" data-reveal>
+          <button type="button" data-project="${index}" aria-label="${tx(item.title)}">
+            <div class="video-poster">
+              <img src="${img(item.cover, 900)}" alt="${tx(item.title)}" loading="lazy" decoding="async">
+              <span class="video-type">${state.lang === "hu" ? "10 k√©pes gal√©ria" : "10-photo gallery"}</span>
+            </div>
+            <div class="body">
+              <h3>${tx(item.title)}</h3>
+              <p>${state.lang === "hu" ? "El≈ëtte, munkafolyamat √©s k√©sz √°llapot kiz√°r√≥lag ehhez a munkat√≠pushoz rendezve." : "Before, work-in-progress and finished images organised only for this service type."}</p>
+            </div>
+          </button>
+        </article>`
+      )
+      .join("");
+
+  const projectCards = () =>
+    filteredProjects()
+      .map(
+        (item) => {
+          const index = projects.indexOf(item);
+          const images = item.images || [];
+          const counts = phaseCounts(images);
+          return `
+        <article class="project project-card rich" data-reveal>
+          <button class="case-open" data-project="${index}" aria-label="${tx(item.title)}">
+            <div class="case-preview">
+              <img src="${img(item.before)}" alt="${tx(phaseLabel.before)}" loading="lazy" decoding="async">
+              <img src="${img(item.after)}" alt="${tx(phaseLabel.after)}" loading="lazy" decoding="async">
+              <span class="divider"></span>
+              <span class="mini-label before">${tx(phaseLabel.before)}</span>
+              <span class="mini-label after">${tx(phaseLabel.after)}</span>
+            </div>
+            <div class="body">
+              <span class="case-type">${tx(item.type)}</span>
+              <h3>${tx(item.title)}</h3>
+              <p>${tx(item.summary)}</p>
+              <div class="case-topline">
+                <span>${tx(item.location)}</span>
+                <span>${tx(item.timeline)}</span>
+                <span>${tx(item.client)}</span>
+              </div>
+              <div class="case-proof-row">
+                <div><b>${images.length}</b><small>${state.lang === "hu" ? "fot√≥" : "photos"}</small></div>
+                <div><b>${counts.process}</b><small>${tx(phaseLabel.process)}</small></div>
+                <div><b>3</b><small>${state.lang === "hu" ? "f√°zis" : "phases"}</small></div>
+              </div>
+              <div class="phases">
+                <span>${tx(phaseLabel.before)}</span><span>${tx(phaseLabel.process)}</span><span>${tx(phaseLabel.after)}</span>
+              </div>
+              <span class="case-link">${state.lang === "hu" ? "K√©pes p√©lda megnyit√°sa" : "Open visual example"}</span>
+            </div>
+          </button>
+        </article>`;
+        }
+      )
+      .join("");
+
+  let globalEventsBound = false;
+  let revealObserver;
+  const modalOpeners = new WeakMap();
+
+  const render = () => {
+    document.documentElement.lang = state.lang;
+    document.body.innerHTML = `
+      <header class="header">
+        <a class="brand" href="#top" aria-label="Budapest Property Services">
+          <span class="logo">BPS</span>
+          <span><strong>Budapest Property Services</strong><small>${state.lang === "hu" ? "Fest√©s, gipszkarton, kert, kisebb jav√≠t√°sok" : "Painting, drywall, garden care, small repairs"}</small></span>
+        </a>
+        <nav class="nav" aria-label="${state.lang === "hu" ? "F≈ë navig√°ci√≥" : "Main navigation"}">
+          <a href="#services">${tx(content.nav.services)}</a>
+          <a href="#clients">${tx(content.nav.clients)}</a>
+          <a href="#projects">${tx(content.nav.projects)}</a>
+          <a href="#media">${state.lang === "hu" ? "K√©pek" : "Images"}</a>
+          <a href="#contact">${tx(content.nav.contact)}</a>
+        </nav>
+        <div class="actions">
+          <button class="lang" id="langBtn" type="button" aria-label="${state.lang === "hu" ? "Switch to English" : "V√°lt√°s magyar nyelvre"}">HU / EN</button>
+          <a class="btn primary phone" href="${tel}" data-phone-action aria-label="${phoneActionLabel()}">${phone}</a>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="hero wrap" aria-labelledby="hero-title">
+          <div class="hero-copy" data-reveal>
+            <div class="eyebrow">${tx(content.hero.label)}</div>
+            <h1 id="hero-title">${tx(content.hero.title)}</h1>
+            <p class="lead">${tx(content.hero.text)}</p>
+            <div class="hero-ctas">
+              <a class="btn primary" href="${tel}" data-phone-action>${phoneActionLabel()}</a>
+              <a class="btn" href="#projects">${tx(content.hero.secondary)}</a>
+              <a class="btn text-btn" href="${wa}">WhatsApp <span aria-hidden="true">‚Üó</span></a>
+            </div>
+          </div>
+          <figure class="hero-media" data-reveal>
+            <div class="hero-image-shell"><img src="${img(heroImage)}" width="1600" height="800" fetchpriority="high" alt="${state.lang === "hu" ? "Falfriss√≠t√©sre el≈ëk√©sz√≠tett budapesti polg√°ri lak√°s" : "Budapest apartment prepared for a careful wall refresh"}"></div>
+            <figcaption class="note"><span class="note-mark" aria-hidden="true">01</span><span><strong>${tx(content.hero.noteTitle)}</strong><p>${tx(content.hero.noteText)}</p></span></figcaption>
+          </figure>
+          <div class="stats" data-accordion-group="hero-stats">${statCards()}</div>
+        </section>
+
+        <aside class="illustration-note wrap" data-reveal>
+          <span aria-hidden="true">i</span>
+          <p>${state.lang === "hu" ? "Az oldalon szerepl≈ë k√©pek illusztr√°ci√≥k, amelyek tipikus munkafolyamatokat √©s v√°rhat√≥ eredm√©nyeket mutatnak." : "The images on this website are illustrative examples showing typical work processes and expected results."}</p>
+        </aside>
+
+        <section id="services" class="section section-band">
+          <div class="wrap">
+            <div class="section-head" data-reveal><span class="section-index">01</span><h2>${tx(content.servicesTitle)}</h2><p>${tx(content.servicesText)}</p></div>
+            <div class="grid four service-grid">${serviceCards()}</div>
+          </div>
+        </section>
+
+        <section class="section wrap situations-section">
+          <div class="section-head" data-reveal><span class="section-index">02</span><h2>${tx(content.problemsTitle)}</h2><p>${state.lang === "hu" ? "Nem minden ingatlannak ugyanarra van sz√ºks√©ge. Nyissa meg azt a helyzetet, amelyik legk√∂zelebb √°ll az √ñn√©hez." : "Every property situation is different. Open the scenario that most closely matches yours."}</p></div>
+          <div class="situation-grid" data-accordion-group="situations">${problemCards()}</div>
+        </section>
+
+        <section id="projects" class="section section-band projects-section">
+          <div class="wrap">
+            <div class="section-head" data-reveal><span class="section-index">03</span><h2>${tx(content.projectsTitle)}</h2><p>${state.lang === "hu" ? "A p√©ld√°k tipikus kiindul√≥ √°llapotokat, munkaf√°zisokat √©s v√°rhat√≥ eredm√©nyeket mutatnak. Nem saj√°t referenciaprojektek; egy konkr√©t ingatlan feladat√°t mindig k√ºl√∂n egyeztetj√ºk." : "These examples show typical starting conditions, work stages and expected outcomes. They are not presented as completed client projects; every real scope is agreed separately."}</p></div>
+            <div class="reference-panel" data-reveal>
+              <div>
+                <span class="eyebrow">${state.lang === "hu" ? "T√°volr√≥l is k√∂vethet≈ë" : "Clear from a distance"}</span>
+                <h3>${state.lang === "hu" ? "A l√©nyeges √°llapotok l√°that√≥k maradnak." : "Important stages remain visible."}</h3>
+                <p>${state.lang === "hu" ? "A feladatot az ingatlan t√©nyleges √°llapota alapj√°n r√∂gz√≠tj√ºk, a munkaf√°zisokr√≥l pedig k√©r√©s szerint fot√≥s visszajelz√©s k√©sz√ºl." : "The scope is based on the property's actual condition, with photo updates available for important work stages."}</p>
+              </div>
+              <div class="reference-proof-grid">${referenceProofCards()}</div>
+            </div>
+            <div class="filterbar" data-reveal>${projectFilterButtons()}</div>
+            <div class="grid project-grid-rich">${projectCards()}</div>
+          </div>
+        </section>
+
+        <section id="media" class="section wrap">
+          <div class="section-head" data-reveal><span class="section-index">04</span><h2>${state.lang === "hu" ? "K√©pes munkafolyamatok" : "Visual work processes"}</h2><p>${state.lang === "hu" ? "N√©zze meg a szolg√°ltat√°st√≠pusonk√©nt rendezett k√©psorozatokat. A r√©szletes gal√©ria √©s az el≈ëtte-ut√°na √∂sszehasonl√≠t√°s egyetlen n√©zetben ny√≠lik meg." : "Browse image sequences organised by service type. Each opens a focused view with the full gallery and before-and-after comparison."}</p></div>
+          <div class="video-grid">${mediaReferenceCards()}</div>
+        </section>
+
+        <section id="clients" class="section section-band clients-section">
+          <div class="wrap audience-layout">
+            <div class="section-head" data-reveal><span class="section-index">05</span><h2>${tx(content.audienceTitle)}</h2><p>${state.lang === "hu" ? "A szolg√°ltat√°s azoknak k√©sz√ºlt, akik megb√≠zhat√≥ egyeztet√©st √©s j√≥l dokument√°lt, rendezett munk√°t keresnek Budapesten." : "The service is for clients who value reliable coordination and well-documented, orderly work in Budapest."}</p></div>
+            <div class="audience-list" data-accordion-group="audiences">${audienceCards()}</div>
+          </div>
+        </section>
+
+        <section class="section wrap process-section">
+          <div class="process-layout">
+            <div>
+              <div class="section-head" data-reveal><span class="section-index">06</span><h2>${tx(content.processTitle)}</h2><p>${state.lang === "hu" ? "A folyamat minden pontj√°n egy√©rtelm≈±, mi t√∂rt√©nik, milyen d√∂nt√©s sz√ºks√©ges √©s mikor v√°rhat√≥ visszajelz√©s." : "At every stage, it is clear what happens next, which decisions are needed and when an update is expected."}</p></div>
+              <div class="steps">${process.map((p, i) => `<article class="step" data-reveal><span class="num">${String(i + 1).padStart(2, "0")}</span><div><h3>${state.lang === "hu" ? p[0] : p[1]}</h3><p>${state.lang === "hu" ? p[2] : p[3]}</p></div></article>`).join("")}</div>
+            </div>
+            <aside class="trust-panel" data-reveal>
+              <span class="eyebrow">${state.lang === "hu" ? "Bizalom a gyakorlatban" : "Trust in practice"}</span>
+              <h2>${tx(content.trustTitle)}</h2>
+              <p>${state.lang === "hu" ? "Nem nagy √≠g√©retekre, hanem tiszt√°n r√∂gz√≠tett feladatra √©s k√∂vethet≈ë visszajelz√©sre √©p√≠t√ºnk." : "The service is built on a clearly agreed scope and useful updates, not exaggerated promises."}</p>
+              <div class="trust-list">
+                <div><span aria-hidden="true">‚úì</span><p><strong>${state.lang === "hu" ? "Tiszta feladatlista" : "Clear scope"}</strong>${state.lang === "hu" ? "A munka el≈ëtt r√∂gz√≠tj√ºk, mi tartozik a feladatba." : "What is included is clarified before work starts."}</p></div>
+                <div><span aria-hidden="true">‚úì</span><p><strong>${state.lang === "hu" ? "√ârthet≈ë kommunik√°ci√≥" : "Useful communication"}</strong>${state.lang === "hu" ? "A fontos d√∂nt√©sek √©s v√°ltoz√°sok nem maradnak felt√©telez√©sek." : "Important decisions and changes are not left to assumption."}</p></div>
+                <div><span aria-hidden="true">‚úì</span><p><strong>${state.lang === "hu" ? "Rendezett √°tad√°s" : "Orderly handover"}</strong>${state.lang === "hu" ? "A v√©geredm√©ny mellett az ingatlan haszn√°lhat√≥ √°llapota is sz√°m√≠t." : "A usable, presentable property matters alongside the repair itself."}</p></div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section section-band faq-section">
+          <div class="wrap faq-layout">
+            <div class="section-head" data-reveal><span class="section-index">07</span><h2>${tx(content.faqTitle)}</h2><p>${state.lang === "hu" ? "Gyakorlati v√°laszok a felm√©r√©sr≈ël, √°raz√°sr√≥l, hat√°rid≈ëkr≈ël √©s t√°voli egyeztet√©sr≈ël." : "Practical answers about assessment, pricing, timing and remote coordination."}</p></div>
+            <div class="faq-list" data-accordion-group="faq">${faqAccordion()}</div>
+          </div>
+        </section>
+
+        <section id="contact" class="section wrap">
+          <div class="contact" data-reveal>
+            <div class="contact-copy"><span class="eyebrow">${state.lang === "hu" ? "Els≈ë l√©p√©s" : "First step"}</span><h2>${tx(content.contactTitle)}</h2><p>${tx(content.contactText)}</p><div class="contact-points"><span>${state.lang === "hu" ? "Fot√≥k" : "Photos"}</span><span>${state.lang === "hu" ? "Helysz√≠n" : "Location"}</span><span>${state.lang === "hu" ? "Hat√°rid≈ë" : "Timing"}</span></div></div>
+            <div class="contact-card"><span class="contact-number">${phone}</span><a class="btn primary" href="${wa}">${state.lang === "hu" ? "Fot√≥k k√ºld√©se WhatsAppon" : "Send photos on WhatsApp"}</a><a class="btn" href="${tel}" data-phone-action>${phoneActionLabel()}</a><small>${state.lang === "hu" ? "Els≈ëdleges ter√ºlet: Budapest √©s k√∂zvetlen k√∂rny√©ke." : "Primary service area: Budapest and nearby locations."}</small></div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer"><span>Budapest Property Services</span><span>${state.lang === "hu" ? "Ingatlankarbantart√°s Budapesten, magyar √©s angol kommunik√°ci√≥val." : "Property maintenance in Budapest, with Hungarian and English communication."}</span></footer>
+      <div class="mobile-cta"><a href="${tel}" data-phone-action>${state.lang === "hu" ? "H√≠v√°s" : "Call"}</a><a href="${wa}" aria-label="WhatsApp">WhatsApp</a></div>
+      <div class="toast" id="phoneToast" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div id="projectModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Ablak bez√°r√°sa" : "Close dialog"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Ablak bez√°r√°sa" : "Close dialog"}">√ó</button><div id="projectInner"></div></div></div>
+      <div id="galleryModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Gal√©ria bez√°r√°sa" : "Close gallery"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Gal√©ria bez√°r√°sa" : "Close gallery"}">√ó</button><div id="galleryInner"></div></div></div>
+    `;
+    bind();
+    reveal();
+    initCarousels(document);
+  };
+
+  const showToast = (message) => {
+    const toast = document.getElementById("phoneToast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add("show");
+    window.clearTimeout(showToast.timer);
+    showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2600);
+  };
+
+  const copyPhoneToClipboard = async () => {
+    let copied = false;
+    try {
+      await navigator.clipboard.writeText(phone);
+      copied = true;
+    } catch {
+      const input = document.createElement("textarea");
+      input.value = phone;
+      input.setAttribute("readonly", "");
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.select();
+      copied = document.execCommand("copy");
+      input.remove();
+    }
+    showToast(
+      copied
+        ? state.lang === "hu" ? `Telefonsz√°m m√°solva: ${phone}` : `Phone number copied: ${phone}`
+        : state.lang === "hu" ? `Telefonsz√°m: ${phone}` : `Phone number: ${phone}`
+    );
+  };
+
+  const bind = () => {
+    document.getElementById("langBtn").addEventListener("click", () => {
+      state.lang = state.lang === "hu" ? "en" : "hu";
+      localStorage.setItem("bps-lang", state.lang);
+      render();
+    });
+    document.querySelectorAll("[data-accordion-group]").forEach((group) => {
+      group.querySelectorAll("details").forEach((detail) => {
+        detail.addEventListener("toggle", () => {
+          if (!detail.open) return;
+          group.querySelectorAll("details[open]").forEach((other) => {
+            if (other !== detail) other.open = false;
+          });
+        });
+      });
+    });
+    document.querySelectorAll("[data-project-filter]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.projectFilter = btn.dataset.projectFilter;
+        render();
+        document.getElementById("projects")?.scrollIntoView({ block: "start" });
+      });
+    });
+    document.querySelectorAll("[data-service]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const item = services[Number(btn.dataset.service)];
+        openGallery(item.photos, 0, tx(item.title));
+      });
+    });
+    document.querySelectorAll("[data-project]").forEach((btn) => {
+      btn.addEventListener("click", () => openProject(Number(btn.dataset.project)));
+    });
+    document.getElementById("projectModal").addEventListener("click", (event) => {
+      const slide = event.target.closest('[data-carousel-action="gallery"] [data-slide]');
+      if (!slide) return;
+      const carousel = slide.closest("[data-carousel]");
+      const project = projects[Number(carousel.dataset.projectIndex)];
+      openGallery(project.images, Number(slide.dataset.slide), tx(project.title));
+    });
+    document.querySelectorAll("[data-close]").forEach((btn) => {
+      btn.addEventListener("click", () => closeModal(btn.closest(".modal")));
+    });
+    if (!globalEventsBound) {
+      globalEventsBound = true;
+      document.addEventListener("click", (event) => {
+        const phoneLink = event.target.closest("[data-phone-action]");
+        if (!phoneLink || directCallViewport()) return;
+        event.preventDefault();
+        copyPhoneToClipboard();
+      });
+      document.addEventListener("keydown", (event) => {
+        const modal = activeModal();
+        if (event.key === "Escape" && modal) {
+          event.preventDefault();
+          closeModal(modal);
+        } else if (event.key === "Tab" && modal) {
+          trapFocus(event, modal);
+        } else if (modal?.id === "galleryModal" && event.key === "ArrowLeft") {
+          showGallery(state.galleryIndex - 1);
+        } else if (modal?.id === "galleryModal" && event.key === "ArrowRight") {
+          showGallery(state.galleryIndex + 1);
+        }
+      });
+    }
+  };
+
+  const openProject = (index) => {
+    const item = projects[index];
+    const images = item.images || [];
+    const counts = phaseCounts(images);
+    state.projectIndex = index;
+    document.getElementById("projectInner").innerHTML = `
+      <div class="project-layout" data-project-index="${index}">
+        <div>
+          <div class="compare" id="compare">
+            <img class="after" src="${img(item.after, 1200)}" alt="${tx(item.title)} - ${tx(phaseLabel.after)}">
+            <img class="before" src="${img(item.before, 1200)}" alt="${tx(item.title)} - ${tx(phaseLabel.before)}">
+            <span class="label left">${tx(phaseLabel.before)}</span>
+            <span class="label right">${tx(phaseLabel.after)}</span>
+            <span class="handle"></span>
+          </div>
+          <p class="compare-hint">${state.lang === "hu" ? "Azonos helysz√≠nt k√∂zel azonos n√©z≈ëpontb√≥l bemutat√≥, illusztrat√≠v √°llapotp√°r. H√∫zza a cs√∫szk√°t az el≈ëtte-ut√°na √∂sszehasonl√≠t√°shoz." : "A matched illustrative condition pair showing the same location from nearly the same viewpoint. Move the slider to compare before and after."}</p>
+          <input class="range" id="range" type="range" min="5" max="95" value="50" aria-label="${state.lang === "hu" ? "El≈ëtte-ut√°na √∂sszehasonl√≠t√≥ cs√∫szka" : "Before and after comparison slider"}">
+          <div class="phase-filter">
+            <button class="active" data-phase-filter="all">${state.lang === "hu" ? "√ñsszes k√©p" : "All photos"}</button>
+            <button data-phase-filter="before">${tx(phaseLabel.before)} (${counts.before})</button>
+            <button data-phase-filter="process">${tx(phaseLabel.process)} (${counts.process})</button>
+            <button data-phase-filter="after">${tx(phaseLabel.after)} (${counts.after})</button>
+          </div>
+          ${projectCarousel(item, index, "modal")}
+        </div>
+        <div class="details">
+          <small class="eyebrow">${tx(item.type)}</small>
+          <h2 id="projectModalTitle">${tx(item.title)}</h2>
+          <p class="example-badge">${state.lang === "hu" ? "Illusztrat√≠v p√©lda, nem saj√°t referenciaprojekt." : "Illustrative example, not a completed client project."}</p>
+          <div class="project-meta-line">
+            <span>${tx(item.location)}</span>
+            <span>${tx(item.timeline)}</span>
+            <span>${tx(item.client)}</span>
+          </div>
+          <p>${tx(item.description)}</p>
+          <div class="project-metrics">
+            ${item.metrics.map((metric) => `<div><b>${metric.n}</b><small>${state.lang === "hu" ? metric.hu : metric.en}</small></div>`).join("")}
+          </div>
+          <div class="story-grid">
+            <article class="story-card"><strong>${state.lang === "hu" ? "Kiindul√≥ helyzet" : "Starting point"}</strong><p>${tx(item.problem)}</p></article>
+            <article class="story-card"><strong>${state.lang === "hu" ? "Megk√∂zel√≠t√©s" : "Approach"}</strong><p>${tx(item.approach)}</p></article>
+            <article class="story-card"><strong>${state.lang === "hu" ? "V√©geredm√©ny" : "Final result"}</strong><p>${tx(item.result)}</p></article>
+          </div>
+          <div class="evidence-list">
+            ${tx(item.evidence).map((entry) => `<span class="evidence-chip">${entry}</span>`).join("")}
+          </div>
+          <h3>${state.lang === "hu" ? "Jellemz≈ë munkal√©p√©sek" : "Typical work items"}</h3>
+          <ul>${tx(item.works).map((work) => `<li>${work}</li>`).join("")}</ul>
+          <div class="result"><strong>${state.lang === "hu" ? "V√°rhat√≥ eredm√©ny" : "Expected result"}</strong><p>${tx(item.result)}</p></div>
+          <div class="section-cta"><a class="btn primary" href="${tel}" data-phone-action>${phoneActionLabel()}</a></div>
+        </div>
+      </div>`;
+    const modal = document.getElementById("projectModal");
+    modal.setAttribute("aria-labelledby", "projectModalTitle");
+    openModal(modal);
+    const range = document.getElementById("range");
+    const compare = document.getElementById("compare");
+    range.addEventListener("input", () => setComparePosition(compare, range, range.value));
+    initCompare(compare, range);
+    document.querySelectorAll("[data-phase-filter]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-phase-filter]").forEach((item) => item.classList.remove("active"));
+        btn.classList.add("active");
+        const phase = btn.dataset.phaseFilter;
+        showCarousel(`modal-${index}`, 0, phase);
+      });
+    });
+    initCarousels(document.getElementById("projectModal"));
+  };
+
+  const setComparePosition = (compare, range, value) => {
+    const next = Math.max(5, Math.min(95, Number(value)));
+    compare.style.setProperty("--split", `${next}%`);
+    range.value = String(next);
+    range.setAttribute(
+      "aria-valuetext",
+      state.lang === "hu" ? `${next}% el≈ëtte k√©p` : `${next}% before image`
+    );
+  };
+
+  const initCompare = (compare, range) => {
+    let dragging = false;
+    const updateFromPointer = (event) => {
+      const rect = compare.getBoundingClientRect();
+      setComparePosition(compare, range, ((event.clientX - rect.left) / rect.width) * 100);
+    };
+    compare.addEventListener("pointerdown", (event) => {
+      dragging = true;
+      try {
+        compare.setPointerCapture?.(event.pointerId);
+      } catch {
+        // The pointer may already be inactive after an interrupted touch gesture.
+      }
+      updateFromPointer(event);
+    });
+    compare.addEventListener("pointermove", (event) => {
+      if (dragging) updateFromPointer(event);
+    });
+    const stop = () => {
+      dragging = false;
+    };
+    compare.addEventListener("pointerup", stop);
+    compare.addEventListener("pointercancel", stop);
+    setComparePosition(compare, range, range.value);
+  };
+
+  const initCarousels = (root = document) => {
+    root.querySelectorAll("[data-carousel]").forEach((carousel) => {
+      if (carousel.dataset.bound === "true") return;
+      carousel.dataset.bound = "true";
+      const id = carousel.dataset.carousel;
+      carousel.querySelectorAll("[data-carousel-prev]").forEach((btn) => btn.addEventListener("click", () => moveCarousel(id, -1)));
+      carousel.querySelectorAll("[data-carousel-next]").forEach((btn) => btn.addEventListener("click", () => moveCarousel(id, 1)));
+      carousel.querySelectorAll("[data-carousel-dot]").forEach((btn) => {
+        btn.addEventListener("click", () => showCarousel(id, Number(btn.dataset.slideTo)));
+      });
+      carousel.querySelectorAll("[data-slide]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (carousel.dataset.carouselAction !== "gallery") {
+            openProject(Number(carousel.dataset.projectIndex));
+          }
+        });
+      });
+      const viewport = carousel.querySelector(".carousel-viewport");
+      let startX = 0;
+      let lastX = 0;
+      let dragging = false;
+      viewport.addEventListener("pointerdown", (event) => {
+        dragging = true;
+        startX = event.clientX;
+        lastX = event.clientX;
+      });
+      viewport.addEventListener("pointermove", (event) => {
+        if (!dragging) return;
+        lastX = event.clientX;
+      });
+      const finishDrag = () => {
+        if (!dragging) return;
+        const delta = lastX - startX;
+        dragging = false;
+        if (Math.abs(delta) > 42) {
+          moveCarousel(id, delta < 0 ? 1 : -1);
+        }
+      };
+      viewport.addEventListener("pointerup", finishDrag);
+      viewport.addEventListener("pointercancel", finishDrag);
+      showCarousel(id, Number(carousel.dataset.active || 0));
+    });
+  };
+
+  const moveCarousel = (id, direction) => {
+    const carousel = document.querySelector(`[data-carousel="${id}"]`);
+    if (!carousel) return;
+    showCarousel(id, Number(carousel.dataset.active || 0) + direction);
+  };
+
+  const showCarousel = (id, index, phase) => {
+    const carousel = document.querySelector(`[data-carousel="${id}"]`);
+    if (!carousel) return;
+    if (phase) carousel.dataset.phase = phase;
+    const activePhase = carousel.dataset.phase || "all";
+    const slides = [...carousel.querySelectorAll("[data-slide]")];
+    const thumbs = [...carousel.querySelectorAll("[data-carousel-dot]")];
+    slides.forEach((slide) => {
+      slide.hidden = activePhase !== "all" && slide.dataset.phase !== activePhase;
+    });
+    thumbs.forEach((thumb) => {
+      thumb.hidden = activePhase !== "all" && thumb.dataset.phase !== activePhase;
+    });
+    const visibleSlides = slides.filter((slide) => !slide.hidden);
+    const visibleThumbs = thumbs.filter((thumb) => !thumb.hidden);
+    if (!visibleSlides.length) return;
+    const active = ((index % visibleSlides.length) + visibleSlides.length) % visibleSlides.length;
+    carousel.dataset.active = String(active);
+    carousel.querySelector(".carousel-track").style.transform = `translateX(-${active * 100}%)`;
+    slides.forEach((slide) => {
+      const isActive = slide === visibleSlides[active];
+      slide.classList.toggle("active", isActive);
+      slide.tabIndex = isActive ? 0 : -1;
+      slide.setAttribute("aria-hidden", String(!isActive));
+    });
+    thumbs.forEach((thumb) => {
+      const isActive = thumb === visibleThumbs[active];
+      thumb.classList.toggle("active", isActive);
+      thumb.setAttribute("aria-current", isActive ? "true" : "false");
+    });
+    const counter = carousel.querySelector("[data-carousel-count]");
+    if (counter) counter.textContent = `${active + 1} / ${visibleSlides.length}`;
+  };
+
+  const openGallery = (photos, index, title) => {
+    state.gallery = photos;
+    state.galleryIndex = index;
+    document.getElementById("galleryInner").innerHTML = `
+      <div class="gallery-layout">
+        <div class="gallery-main">
+          <img id="galleryImg" src="" alt="${title}">
+          <button class="arrow prev" id="prev" type="button" aria-label="${state.lang === "hu" ? "El≈ëz≈ë k√©p" : "Previous image"}">‚Äπ</button>
+          <button class="arrow next" id="next" type="button" aria-label="${state.lang === "hu" ? "K√∂vetkez≈ë k√©p" : "Next image"}">‚Ä∫</button>
+          <span class="counter" id="counter" aria-live="polite"></span>
+          <div class="gallery-caption" id="galleryCaption"></div>
+        </div>
+        <div>
+          <small class="eyebrow">${title}</small>
+          <h2 id="galleryModalTitle">${state.lang === "hu" ? "K√©pes munkafolyamat" : "Visual work process"}</h2>
+          <p>${state.lang === "hu" ? "A k√©pek az adott szolg√°ltat√°s tipikus kiindul√≥ √°llapot√°t, munkaf√°zisait √©s el√©rhet≈ë v√©geredm√©ny√©t mutatj√°k. A konkr√©t feladatot mindig a helysz√≠n saj√°t fot√≥i alapj√°n egyeztetj√ºk." : "The images show typical starting conditions, work stages and achievable outcomes for this service. The actual scope is always agreed from photos of the specific property."}</p>
+          <div class="thumb-grid" id="thumbs">${photos.map((p, i) => `<button type="button" data-thumb="${i}" aria-label="${photoCaption(p)}"><img src="${img(p[0], 360)}" alt="" loading="lazy" decoding="async"></button>`).join("")}</div>
+        </div>
+      </div>`;
+    const modal = document.getElementById("galleryModal");
+    modal.setAttribute("aria-labelledby", "galleryModalTitle");
+    openModal(modal);
+    document.getElementById("prev").addEventListener("click", () => showGallery(state.galleryIndex - 1));
+    document.getElementById("next").addEventListener("click", () => showGallery(state.galleryIndex + 1));
+    document.querySelectorAll("#thumbs [data-thumb]").forEach((btn) => {
+      btn.addEventListener("click", () => showGallery(Number(btn.dataset.thumb)));
+    });
+    initGallerySwipe(document.querySelector("#galleryModal .gallery-main"));
+    showGallery(index);
+  };
+
+  const showGallery = (index) => {
+    if (!state.gallery.length) return;
+    state.galleryIndex = (index + state.gallery.length) % state.gallery.length;
+    const current = state.gallery[state.galleryIndex];
+    const [id, phase] = current;
+    const galleryImg = document.getElementById("galleryImg");
+    const nextSrc = img(id, 1100);
+    if (galleryImg.src !== new URL(nextSrc, document.baseURI).href) galleryImg.src = nextSrc;
+    galleryImg.alt = photoCaption(current);
+    document.getElementById("counter").textContent = `${state.galleryIndex + 1} / ${state.gallery.length} - ${phaseText(phase)}`;
+    document.getElementById("galleryCaption").innerHTML = `<b>${phaseText(phase)}</b><span>${photoCaption(current)}</span>`;
+    document.querySelectorAll("#thumbs [data-thumb]").forEach((thumb, thumbIndex) => {
+      const isActive = thumbIndex === state.galleryIndex;
+      thumb.classList.toggle("active", isActive);
+      thumb.setAttribute("aria-current", isActive ? "true" : "false");
+    });
+  };
+
+  const activeModal = () => [...document.querySelectorAll(".modal.open")].at(-1) || null;
+
+  const openModal = (modal) => {
+    const previous = activeModal();
+    if (previous && previous !== modal) {
+      previous.setAttribute("aria-hidden", "true");
+      previous.setAttribute("inert", "");
+    }
+    modalOpeners.set(modal, document.activeElement);
+    modal.classList.add("open");
+    modal.removeAttribute("inert");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    const panel = modal.querySelector(".panel");
+    if (panel) panel.scrollTop = 0;
+    requestAnimationFrame(() => modal.querySelector(".close")?.focus());
+  };
+
+  const closeModal = (modal) => {
+    if (!modal) return;
+    const opener = modalOpeners.get(modal);
+    modal.classList.remove("open");
+    modal.removeAttribute("inert");
+    modal.setAttribute("aria-hidden", "true");
+    const previous = activeModal();
+    if (previous) {
+      previous.removeAttribute("inert");
+      previous.setAttribute("aria-hidden", "false");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+    if (opener?.isConnected) requestAnimationFrame(() => opener.focus());
+  };
+
+  const trapFocus = (event, modal) => {
+    const focusable = [...modal.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )].filter((element) => !element.hidden && element.getClientRects().length);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  const initGallerySwipe = (target) => {
+    if (!target) return;
+    let startX = 0;
+    let currentX = 0;
+    let swiped = false;
+    target.addEventListener("pointerdown", (event) => {
+      startX = event.clientX;
+      currentX = event.clientX;
+      swiped = false;
+    });
+    target.addEventListener("pointermove", (event) => {
+      currentX = event.clientX;
+    });
+    target.addEventListener("pointerup", () => {
+      const delta = currentX - startX;
+      if (Math.abs(delta) > 50) {
+        swiped = true;
+        showGallery(state.galleryIndex + (delta < 0 ? 1 : -1));
+      }
+    });
+    target.addEventListener(
+      "click",
+      (event) => {
+        if (!swiped) return;
+        event.preventDefault();
+        event.stopPropagation();
+        swiped = false;
+      },
+      true
+    );
+  };
+
+  const reveal = () => {
+    const items = document.querySelectorAll("[data-reveal]");
+    revealObserver?.disconnect();
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((item) => item.classList.add("visible"));
+      return;
+    }
+    revealObserver = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("visible");
+        revealObserver.unobserve(entry.target);
+      }),
+      { threshold: 0.12 }
+    );
+    items.forEach((item) => revealObserver.observe(item));
+  };
+
+  render();
+})();
