@@ -13,6 +13,9 @@
     lang: localStorage.getItem("bps-lang") || "hu",
     gallery: [],
     galleryIndex: 0,
+    galleryZoom: 1,
+    galleryPanX: 0,
+    galleryPanY: 0,
     projectIndex: 0,
     projectFilter: "all",
   };
@@ -32,6 +35,14 @@
 
   const phaseText = (phase) => tx(phaseLabel[phase] || phaseLabel.process);
   const photoCaption = (photo) => tx(photo?.[2]) || phaseText(photo?.[1]);
+  const projectLightboxImages = (project) => {
+    const pair = [
+      [project.before, "before", { hu: `${tx(project.title)} - kiinduló állapot`, en: `${tx(project.title)} - starting condition` }],
+      [project.after, "after", { hu: `${tx(project.title)} - rendezett kész állapot`, en: `${tx(project.title)} - finished condition` }],
+    ];
+    const seen = new Set(pair.map((photo) => photo[0]));
+    return [...pair, ...(project.images || []).filter((photo) => !seen.has(photo[0]))];
+  };
 
   const content = {
     nav: {
@@ -761,10 +772,11 @@
       .map(
         (item, index) => `
         <article class="video-card media-reference-card" data-reveal>
-          <button type="button" data-project="${index}" aria-label="${tx(item.title)}">
+          <button type="button" data-project-gallery="${index}" aria-label="${state.lang === "hu" ? `${tx(item.title)} képgalériájának megnyitása` : `Open image gallery for ${tx(item.title)}`}">
             <div class="video-poster">
               <img src="${img(item.cover, 900)}" alt="${tx(item.title)}" loading="lazy" decoding="async">
-              <span class="video-type">${state.lang === "hu" ? "10 képes galéria" : "10-photo gallery"}</span>
+              <span class="video-type">${state.lang === "hu" ? `${projectLightboxImages(item).length} képes galéria` : `${projectLightboxImages(item).length}-photo gallery`}</span>
+              <span class="inspect-icon" aria-hidden="true"></span>
             </div>
             <div class="body">
               <h3>${tx(item.title)}</h3>
@@ -784,14 +796,15 @@
           const counts = phaseCounts(images);
           return `
         <article class="project project-card rich" data-reveal>
-          <button class="case-open" data-project="${index}" aria-label="${tx(item.title)}">
-            <div class="case-preview">
+          <button class="case-preview" type="button" data-project-gallery="${index}" aria-label="${state.lang === "hu" ? `${tx(item.title)} képgalériájának megnyitása` : `Open image gallery for ${tx(item.title)}`}">
               <img src="${img(item.before)}" alt="${tx(phaseLabel.before)}" loading="lazy" decoding="async">
               <img src="${img(item.after)}" alt="${tx(phaseLabel.after)}" loading="lazy" decoding="async">
               <span class="divider"></span>
               <span class="mini-label before">${tx(phaseLabel.before)}</span>
               <span class="mini-label after">${tx(phaseLabel.after)}</span>
-            </div>
+              <span class="inspect-icon" aria-hidden="true"></span>
+          </button>
+          <button class="case-open" type="button" data-project="${index}" aria-label="${tx(item.title)}">
             <div class="body">
               <span class="case-type">${tx(item.type)}</span>
               <h3>${tx(item.title)}</h3>
@@ -1015,12 +1028,11 @@
     document.querySelectorAll("[data-project]").forEach((btn) => {
       btn.addEventListener("click", () => openProject(Number(btn.dataset.project)));
     });
-    document.getElementById("projectModal").addEventListener("click", (event) => {
-      const slide = event.target.closest('[data-carousel-action="gallery"] [data-slide]');
-      if (!slide) return;
-      const carousel = slide.closest("[data-carousel]");
-      const project = projects[Number(carousel.dataset.projectIndex)];
-      openGallery(project.images, Number(slide.dataset.slide), tx(project.title));
+    document.querySelectorAll("[data-project-gallery]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const project = projects[Number(btn.dataset.projectGallery)];
+        openGallery(projectLightboxImages(project), 0, tx(project.title));
+      });
     });
     document.querySelectorAll("[data-close]").forEach((btn) => {
       btn.addEventListener("click", () => closeModal(btn.closest(".modal")));
@@ -1044,6 +1056,15 @@
           showGallery(state.galleryIndex - 1);
         } else if (modal?.id === "galleryModal" && event.key === "ArrowRight") {
           showGallery(state.galleryIndex + 1);
+        } else if (modal?.id === "galleryModal" && ["+", "="].includes(event.key)) {
+          event.preventDefault();
+          changeGalleryZoom("in");
+        } else if (modal?.id === "galleryModal" && event.key === "-") {
+          event.preventDefault();
+          changeGalleryZoom("out");
+        } else if (modal?.id === "galleryModal" && event.key === "0") {
+          event.preventDefault();
+          changeGalleryZoom("reset");
         }
       });
     }
@@ -1203,13 +1224,24 @@
       carousel.querySelectorAll("[data-carousel-prev]").forEach((btn) => btn.addEventListener("click", () => moveCarousel(id, -1)));
       carousel.querySelectorAll("[data-carousel-next]").forEach((btn) => btn.addEventListener("click", () => moveCarousel(id, 1)));
       carousel.querySelectorAll("[data-carousel-dot]").forEach((btn) => {
-        btn.addEventListener("click", () => showCarousel(id, Number(btn.dataset.slideTo)));
+        btn.addEventListener("click", () => {
+          const imageIndex = Number(btn.dataset.slideTo);
+          if (carousel.dataset.carouselAction === "gallery") {
+            const project = projects[Number(carousel.dataset.projectIndex)];
+            openGallery(project.images, imageIndex, tx(project.title));
+            return;
+          }
+          showCarousel(id, imageIndex);
+        });
       });
       carousel.querySelectorAll("[data-slide]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          if (carousel.dataset.carouselAction !== "gallery") {
-            openProject(Number(carousel.dataset.projectIndex));
+          const project = projects[Number(carousel.dataset.projectIndex)];
+          if (carousel.dataset.carouselAction === "gallery") {
+            openGallery(project.images, Number(btn.dataset.slide), tx(project.title));
+            return;
           }
+          openProject(Number(carousel.dataset.projectIndex));
         });
       });
       const viewport = carousel.querySelector(".carousel-viewport");
@@ -1284,19 +1316,26 @@
     state.galleryIndex = index;
     document.getElementById("galleryInner").innerHTML = `
       <div class="gallery-layout">
-        <div class="gallery-main">
-          <img id="galleryImg" src="" alt="${title}">
+        <div class="gallery-main" id="galleryStage">
+          <div class="gallery-viewport" id="galleryViewport">
+            <img id="galleryImg" src="" alt="${title}" draggable="false">
+          </div>
           <button class="arrow prev" id="prev" type="button" aria-label="${state.lang === "hu" ? "Előző kép" : "Previous image"}">‹</button>
           <button class="arrow next" id="next" type="button" aria-label="${state.lang === "hu" ? "Következő kép" : "Next image"}">›</button>
           <span class="counter" id="counter" aria-live="polite"></span>
           <div class="gallery-caption" id="galleryCaption"></div>
+          <div class="gallery-tools" role="toolbar" aria-label="${state.lang === "hu" ? "Kép nagyítása" : "Image zoom controls"}">
+            <button type="button" data-gallery-zoom="out" aria-label="${state.lang === "hu" ? "Kicsinyítés" : "Zoom out"}">−</button>
+            <button type="button" class="zoom-level" data-gallery-zoom="reset" aria-label="${state.lang === "hu" ? "Eredeti nagyítás" : "Reset zoom"}">100%</button>
+            <button type="button" data-gallery-zoom="in" aria-label="${state.lang === "hu" ? "Nagyítás" : "Zoom in"}">+</button>
+          </div>
         </div>
-        <div>
+        <aside class="gallery-info">
           <small class="eyebrow">${title}</small>
           <h2 id="galleryModalTitle">${state.lang === "hu" ? "Képes munkafolyamat" : "Visual work process"}</h2>
-          <p>${state.lang === "hu" ? "A képek az adott szolgáltatás tipikus kiinduló állapotát, munkafázisait és elérhető végeredményét mutatják. A konkrét feladatot mindig a helyszín saját fotói alapján egyeztetjük." : "The images show typical starting conditions, work stages and achievable outcomes for this service. The actual scope is always agreed from photos of the specific property."}</p>
-          <div class="thumb-grid" id="thumbs">${photos.map((p, i) => `<button type="button" data-thumb="${i}" aria-label="${photoCaption(p)}"><img src="${img(p[0], 360)}" alt="" loading="lazy" decoding="async"></button>`).join("")}</div>
-        </div>
+          <p>${state.lang === "hu" ? "Lapozzon a képek között, húzza oldalra mobilon, vagy nagyítsa ki a részleteket. A képek illusztratív példák; a konkrét feladatot mindig a helyszín saját fotói alapján egyeztetjük." : "Browse with the arrows, swipe on mobile or zoom in to inspect details. Images are illustrative examples; the actual scope is always agreed from photos of the specific property."}</p>
+          <div class="thumb-grid" id="thumbs">${photos.map((p, i) => `<button type="button" data-thumb="${i}" aria-label="${photoCaption(p)}"><img src="${img(p[0], 420)}" alt="" loading="lazy" decoding="async"><span class="thumb-zoom" aria-hidden="true"></span></button>`).join("")}</div>
+        </aside>
       </div>`;
     const modal = document.getElementById("galleryModal");
     modal.setAttribute("aria-labelledby", "galleryModalTitle");
@@ -1306,7 +1345,10 @@
     document.querySelectorAll("#thumbs [data-thumb]").forEach((btn) => {
       btn.addEventListener("click", () => showGallery(Number(btn.dataset.thumb)));
     });
-    initGallerySwipe(document.querySelector("#galleryModal .gallery-main"));
+    document.querySelectorAll("[data-gallery-zoom]").forEach((btn) => {
+      btn.addEventListener("click", () => changeGalleryZoom(btn.dataset.galleryZoom));
+    });
+    initGalleryInteraction(document.getElementById("galleryViewport"));
     showGallery(index);
   };
 
@@ -1316,7 +1358,7 @@
     const current = state.gallery[state.galleryIndex];
     const [id, phase] = current;
     const galleryImg = document.getElementById("galleryImg");
-    const nextSrc = img(id, 1100);
+    const nextSrc = img(id, 2000);
     if (galleryImg.src !== new URL(nextSrc, document.baseURI).href) galleryImg.src = nextSrc;
     galleryImg.alt = photoCaption(current);
     document.getElementById("counter").textContent = `${state.galleryIndex + 1} / ${state.gallery.length} - ${phaseText(phase)}`;
@@ -1325,6 +1367,57 @@
       const isActive = thumbIndex === state.galleryIndex;
       thumb.classList.toggle("active", isActive);
       thumb.setAttribute("aria-current", isActive ? "true" : "false");
+    });
+    resetGalleryView();
+    preloadGalleryNeighbors();
+  };
+
+  const applyGalleryTransform = () => {
+    const image = document.getElementById("galleryImg");
+    const viewport = document.getElementById("galleryViewport");
+    if (!image || !viewport) return;
+    const maxX = Math.max(0, (viewport.clientWidth * (state.galleryZoom - 1)) / 2);
+    const maxY = Math.max(0, (viewport.clientHeight * (state.galleryZoom - 1)) / 2);
+    state.galleryPanX = Math.max(-maxX, Math.min(maxX, state.galleryPanX));
+    state.galleryPanY = Math.max(-maxY, Math.min(maxY, state.galleryPanY));
+    image.style.transform = `translate3d(${state.galleryPanX}px, ${state.galleryPanY}px, 0) scale(${state.galleryZoom})`;
+    viewport.classList.toggle("is-zoomed", state.galleryZoom > 1);
+    const level = document.querySelector(".zoom-level");
+    if (level) level.textContent = `${Math.round(state.galleryZoom * 100)}%`;
+  };
+
+  const setGalleryZoom = (zoom, originX = 0, originY = 0) => {
+    const previous = state.galleryZoom;
+    state.galleryZoom = Math.max(1, Math.min(4, Number(zoom)));
+    if (state.galleryZoom === 1) {
+      state.galleryPanX = 0;
+      state.galleryPanY = 0;
+    } else if (previous > 0 && previous !== state.galleryZoom) {
+      const ratio = state.galleryZoom / previous;
+      state.galleryPanX = state.galleryPanX * ratio + originX * (1 - ratio);
+      state.galleryPanY = state.galleryPanY * ratio + originY * (1 - ratio);
+    }
+    applyGalleryTransform();
+  };
+
+  const changeGalleryZoom = (action) => {
+    if (action === "reset") return setGalleryZoom(1);
+    setGalleryZoom(state.galleryZoom + (action === "in" ? 0.5 : -0.5));
+  };
+
+  const resetGalleryView = () => {
+    state.galleryZoom = 1;
+    state.galleryPanX = 0;
+    state.galleryPanY = 0;
+    applyGalleryTransform();
+  };
+
+  const preloadGalleryNeighbors = () => {
+    if (state.gallery.length < 2) return;
+    [-1, 1].forEach((offset) => {
+      const photo = state.gallery[(state.galleryIndex + offset + state.gallery.length) % state.gallery.length];
+      const preload = new Image();
+      preload.src = img(photo[0], 2000);
     });
   };
 
@@ -1378,36 +1471,64 @@
     }
   };
 
-  const initGallerySwipe = (target) => {
+  const initGalleryInteraction = (target) => {
     if (!target) return;
+    const pointers = new Map();
     let startX = 0;
-    let currentX = 0;
-    let swiped = false;
+    let startY = 0;
+    let startPanX = 0;
+    let startPanY = 0;
+    let pinchDistance = 0;
+    let pinchZoom = 1;
     target.addEventListener("pointerdown", (event) => {
+      target.setPointerCapture?.(event.pointerId);
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
       startX = event.clientX;
-      currentX = event.clientX;
-      swiped = false;
-    });
-    target.addEventListener("pointermove", (event) => {
-      currentX = event.clientX;
-    });
-    target.addEventListener("pointerup", () => {
-      const delta = currentX - startX;
-      if (Math.abs(delta) > 50) {
-        swiped = true;
-        showGallery(state.galleryIndex + (delta < 0 ? 1 : -1));
+      startY = event.clientY;
+      startPanX = state.galleryPanX;
+      startPanY = state.galleryPanY;
+      if (pointers.size === 2) {
+        const [a, b] = [...pointers.values()];
+        pinchDistance = Math.hypot(b.x - a.x, b.y - a.y);
+        pinchZoom = state.galleryZoom;
       }
     });
-    target.addEventListener(
-      "click",
-      (event) => {
-        if (!swiped) return;
-        event.preventDefault();
-        event.stopPropagation();
-        swiped = false;
-      },
-      true
-    );
+    target.addEventListener("pointermove", (event) => {
+      if (!pointers.has(event.pointerId)) return;
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      if (pointers.size === 2) {
+        const [a, b] = [...pointers.values()];
+        const distance = Math.hypot(b.x - a.x, b.y - a.y);
+        if (pinchDistance) setGalleryZoom(pinchZoom * (distance / pinchDistance));
+        return;
+      }
+      if (state.galleryZoom > 1) {
+        state.galleryPanX = startPanX + event.clientX - startX;
+        state.galleryPanY = startPanY + event.clientY - startY;
+        applyGalleryTransform();
+      }
+    });
+    const finishPointer = (event) => {
+      const point = pointers.has(event.pointerId) ? { x: event.clientX, y: event.clientY } : null;
+      pointers.delete(event.pointerId);
+      if (!point || pointers.size || state.galleryZoom > 1) return;
+      const deltaX = point.x - startX;
+      const deltaY = point.y - startY;
+      if (Math.abs(deltaX) > 55 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+        showGallery(state.galleryIndex + (deltaX < 0 ? 1 : -1));
+      }
+    };
+    target.addEventListener("pointerup", finishPointer);
+    target.addEventListener("pointercancel", (event) => pointers.delete(event.pointerId));
+    target.addEventListener("dblclick", (event) => {
+      const rect = target.getBoundingClientRect();
+      setGalleryZoom(state.galleryZoom > 1 ? 1 : 2.5, event.clientX - rect.left - rect.width / 2, event.clientY - rect.top - rect.height / 2);
+    });
+    target.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      const rect = target.getBoundingClientRect();
+      setGalleryZoom(state.galleryZoom + (event.deltaY < 0 ? 0.25 : -0.25), event.clientX - rect.left - rect.width / 2, event.clientY - rect.top - rect.height / 2);
+    }, { passive: false });
   };
 
   const reveal = () => {

@@ -1119,6 +1119,10 @@ details[open] .disclosure-link span {
   padding: 22px 4px 4px;
 }
 
+.media-reference-card button {
+  cursor: zoom-in;
+}
+
 .video-card .body h3 {
   font-family: Georgia, Cambria, "Times New Roman", serif;
   font-size: clamp(27px, 2.3vw, 35px);
@@ -1711,6 +1715,473 @@ details[open] .disclosure-link span {
   .footer {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+/* Project image inspection: extends the existing cards and modal without changing page structure. */
+.project-card.rich {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.project-card.rich .case-preview {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: 280px;
+  min-height: 0;
+  padding: 0;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #17251d;
+  color: inherit;
+  cursor: zoom-in;
+}
+
+.project-card.rich .case-open {
+  height: auto;
+  flex: 1;
+}
+
+.project-card.rich .case-preview:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.inspect-icon,
+.thumb-zoom,
+.carousel-slide::before {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  background: rgba(18, 45, 34, 0.82);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  color: white;
+  content: "+";
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.inspect-icon {
+  top: 14px;
+  right: 14px;
+}
+
+.inspect-icon::after,
+.thumb-zoom::after,
+.carousel-slide::after {
+  position: absolute;
+  width: 9px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  content: "";
+  transform: translate(10px, 10px) rotate(45deg);
+}
+
+.carousel-slide {
+  cursor: zoom-in;
+}
+
+.carousel-slide::before {
+  top: 12px;
+  right: 12px;
+}
+
+.carousel-slide::after {
+  top: 40px;
+  right: 7px;
+  transform: rotate(45deg);
+}
+
+.carousel-thumbs {
+  gap: 9px;
+}
+
+.carousel-thumbs button {
+  height: 56px;
+  cursor: zoom-in;
+}
+
+#galleryModal {
+  z-index: 120;
+  padding: 0;
+}
+
+#galleryModal .backdrop {
+  background: rgba(7, 13, 10, 0.96);
+}
+
+#galleryModal .panel {
+  width: 100%;
+  height: 100dvh;
+  max-height: none;
+  overflow: hidden;
+  border-radius: 0;
+  background: #0d1511;
+  color: white;
+  scrollbar-gutter: auto;
+}
+
+#galleryModal #galleryInner {
+  height: 100%;
+}
+
+#galleryModal .close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 20;
+  margin: 0;
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(15, 35, 27, 0.9);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+#galleryModal .gallery-layout {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) 350px;
+  gap: 0;
+  padding: 0;
+}
+
+#galleryModal .gallery-main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 0;
+  background: #09100c;
+}
+
+.gallery-viewport {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  overflow: hidden;
+  place-items: center;
+  cursor: zoom-in;
+  touch-action: none;
+  user-select: none;
+}
+
+#galleryModal .gallery-viewport img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  transform-origin: center;
+  transition: transform 180ms ease;
+  will-change: transform;
+  -webkit-user-drag: none;
+}
+
+.gallery-viewport.is-zoomed {
+  cursor: grab;
+}
+
+.gallery-viewport.is-zoomed:active {
+  cursor: grabbing;
+}
+
+.gallery-viewport.is-zoomed img {
+  transition: none;
+}
+
+#galleryModal .arrow {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+  color: var(--green2);
+}
+
+#galleryModal .prev {
+  left: 18px;
+}
+
+#galleryModal .next {
+  right: 18px;
+}
+
+#galleryModal .counter {
+  top: 18px;
+  bottom: auto;
+  left: 18px;
+  background: rgba(7, 18, 13, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+#galleryModal .gallery-caption {
+  right: 86px;
+  bottom: 20px;
+  left: 86px;
+  max-width: 820px;
+  margin-inline: auto;
+  background: rgba(7, 18, 13, 0.8);
+}
+
+.gallery-tools {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  z-index: 8;
+  display: flex;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(7, 18, 13, 0.78);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
+  transform: translateX(-50%);
+  backdrop-filter: blur(10px);
+}
+
+.gallery-tools button {
+  display: grid;
+  min-width: 46px;
+  height: 46px;
+  padding: 0 12px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.gallery-tools button:hover,
+.gallery-tools button:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+  outline: 0;
+}
+
+.gallery-tools .zoom-level {
+  min-width: 72px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.gallery-info {
+  min-width: 0;
+  overflow: auto;
+  padding: 82px 22px 28px;
+  background: var(--paper);
+  color: var(--ink);
+  overscroll-behavior: contain;
+}
+
+.gallery-info h2 {
+  margin: 8px 0 12px;
+  font-size: 31px;
+  line-height: 1.05;
+}
+
+.gallery-info > p {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+#galleryModal .thumb-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+  overflow: visible;
+  padding: 3px 2px 10px;
+}
+
+#galleryModal .thumb-grid button {
+  position: relative;
+  width: 100%;
+  height: auto;
+  flex: none;
+  aspect-ratio: 4 / 3;
+  border: 2px solid transparent;
+  cursor: zoom-in;
+  opacity: 0.76;
+  transition: opacity 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+#galleryModal .thumb-grid button:hover,
+#galleryModal .thumb-grid button.active {
+  border-color: var(--accent);
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+#galleryModal .thumb-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb-zoom {
+  right: 7px;
+  bottom: 7px;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+}
+
+.thumb-zoom::after {
+  width: 7px;
+  transform: translate(7px, 7px) rotate(45deg);
+}
+
+@media (max-width: 1050px) {
+  .project-card.rich .case-preview {
+    height: 255px;
+  }
+
+  #galleryModal .gallery-layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+}
+
+@media (max-width: 820px) {
+  #galleryModal.open {
+    padding: 0;
+  }
+
+  #galleryModal .panel {
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  #galleryModal .gallery-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(190px, 34dvh);
+    padding: 0;
+  }
+
+  #galleryModal .gallery-main,
+  #galleryModal .gallery-viewport img {
+    height: 100%;
+  }
+
+  #galleryModal .close {
+    top: 8px;
+    right: 8px;
+  }
+
+  #galleryModal .counter {
+    top: 10px;
+    left: 10px;
+  }
+
+  .gallery-tools {
+    top: 8px;
+  }
+
+  .gallery-tools button {
+    min-width: 46px;
+    height: 46px;
+  }
+
+  #galleryModal .prev {
+    left: 8px;
+  }
+
+  #galleryModal .next {
+    right: 8px;
+  }
+
+  #galleryModal .gallery-caption {
+    position: absolute;
+    right: 60px;
+    bottom: 10px;
+    left: 60px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: rgba(7, 18, 13, 0.8);
+    font-size: 13px;
+  }
+
+  .gallery-info {
+    overflow: auto;
+    padding: 18px 14px max(18px, env(safe-area-inset-bottom));
+  }
+
+  .gallery-info h2 {
+    margin: 5px 0 8px;
+    font-size: 25px;
+  }
+
+  .gallery-info > p {
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+
+  #galleryModal .thumb-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .carousel-thumbs button {
+    height: 52px;
+  }
+}
+
+@media (max-width: 560px) {
+  .header {
+    column-gap: 8px;
+  }
+
+  .brand {
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .brand strong {
+    overflow: hidden;
+    font-size: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .actions {
+    margin-left: auto;
+  }
+
+  .lang {
+    min-width: 68px;
+    min-height: 44px;
+    padding-inline: 9px;
+  }
+
+  .project-card.rich .case-preview {
+    height: 235px;
+  }
+
+  .gallery-tools {
+    left: 50%;
+  }
+
+  .gallery-tools .zoom-level {
+    min-width: 58px;
+  }
+
+  #galleryModal .gallery-caption {
+    right: 54px;
+    left: 54px;
   }
 }
 
