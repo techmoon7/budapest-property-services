@@ -282,9 +282,36 @@ input:focus-visible,
 }
 
 .compare {
-  cursor: ew-resize;
+  cursor: grab;
+  outline: 0;
+  overscroll-behavior: contain;
   touch-action: pan-y;
   user-select: none;
+}
+
+.compare img,
+.compare .label,
+.compare .handle {
+  pointer-events: none;
+}
+
+.compare .before {
+  will-change: clip-path;
+}
+
+.compare.is-dragging {
+  cursor: grabbing;
+}
+
+.compare:focus-visible {
+  outline: 3px solid #f3c275;
+  outline-offset: 4px;
+}
+
+.handle {
+  width: 2px;
+  box-shadow: 0 0 0 1px rgba(18, 35, 27, 0.22), 0 0 18px rgba(18, 35, 27, 0.32);
+  transform: translateX(-50%);
 }
 
 .handle::after {
@@ -292,20 +319,16 @@ input:focus-visible,
   top: 50%;
   left: 50%;
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   place-items: center;
   content: "↔";
   border: 2px solid white;
   border-radius: 50%;
-  background: rgba(21, 54, 41, 0.86);
+  background: rgba(21, 54, 41, 0.92);
+  box-shadow: 0 8px 24px rgba(9, 24, 17, 0.28);
   color: white;
   transform: translate(-50%, -50%);
-}
-
-.range {
-  min-height: 44px;
-  accent-color: var(--green);
 }
 
 .carousel-slide {

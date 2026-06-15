@@ -1057,15 +1057,14 @@
     document.getElementById("projectInner").innerHTML = `
       <div class="project-layout" data-project-index="${index}">
         <div>
-          <div class="compare" id="compare">
+          <div class="compare" id="compare" role="slider" tabindex="0" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" aria-label="${state.lang === "hu" ? "Előtte-utána összehasonlító csúszka" : "Before and after comparison slider"}" aria-describedby="compareHint">
             <img class="after" src="${img(item.after, 1200)}" alt="${tx(item.title)} - ${tx(phaseLabel.after)}">
             <img class="before" src="${img(item.before, 1200)}" alt="${tx(item.title)} - ${tx(phaseLabel.before)}">
             <span class="label left">${tx(phaseLabel.before)}</span>
             <span class="label right">${tx(phaseLabel.after)}</span>
-            <span class="handle"></span>
+            <span class="handle" aria-hidden="true"></span>
           </div>
-          <p class="compare-hint">${state.lang === "hu" ? "Azonos helyszínt közel azonos nézőpontból bemutató, illusztratív állapotpár. Húzza a csúszkát az előtte-utána összehasonlításhoz." : "A matched illustrative condition pair showing the same location from nearly the same viewpoint. Move the slider to compare before and after."}</p>
-          <input class="range" id="range" type="range" min="5" max="95" value="50" aria-label="${state.lang === "hu" ? "Előtte-utána összehasonlító csúszka" : "Before and after comparison slider"}">
+          <p class="compare-hint" id="compareHint">${state.lang === "hu" ? "Azonos helyszínt közel azonos nézőpontból bemutató, illusztratív állapotpár. Húzza a fogantyút, vagy használja a nyílbillentyűket az összehasonlításhoz." : "A matched illustrative condition pair showing the same location from nearly the same viewpoint. Drag the handle or use the arrow keys to compare."}</p>
           <div class="phase-filter">
             <button class="active" data-phase-filter="all">${state.lang === "hu" ? "Összes kép" : "All photos"}</button>
             <button data-phase-filter="before">${tx(phaseLabel.before)} (${counts.before})</button>
@@ -1104,10 +1103,8 @@
     const modal = document.getElementById("projectModal");
     modal.setAttribute("aria-labelledby", "projectModalTitle");
     openModal(modal);
-    const range = document.getElementById("range");
     const compare = document.getElementById("compare");
-    range.addEventListener("input", () => setComparePosition(compare, range, range.value));
-    initCompare(compare, range);
+    initCompare(compare);
     document.querySelectorAll("[data-phase-filter]").forEach((btn) => {
       btn.addEventListener("click", () => {
         document.querySelectorAll("[data-phase-filter]").forEach((item) => item.classList.remove("active"));
@@ -1119,24 +1116,41 @@
     initCarousels(document.getElementById("projectModal"));
   };
 
-  const setComparePosition = (compare, range, value) => {
+  const setComparePosition = (compare, value) => {
     const next = Math.max(5, Math.min(95, Number(value)));
     compare.style.setProperty("--split", `${next}%`);
-    range.value = String(next);
-    range.setAttribute(
+    compare.setAttribute("aria-valuenow", String(Math.round(next)));
+    compare.setAttribute(
       "aria-valuetext",
-      state.lang === "hu" ? `${next}% előtte kép` : `${next}% before image`
+      state.lang === "hu" ? `${Math.round(next)}% előtte kép` : `${Math.round(next)}% before image`
     );
   };
 
-  const initCompare = (compare, range) => {
+  const initCompare = (compare) => {
+    if (compare.dataset.bound === "true") return;
+    compare.dataset.bound = "true";
     let dragging = false;
+    let animationFrame = 0;
+    let pendingClientX = 0;
+    const updateFromClientX = (clientX) => {
+      pendingClientX = clientX;
+      if (animationFrame) return;
+      animationFrame = requestAnimationFrame(() => {
+        animationFrame = 0;
+        const rect = compare.getBoundingClientRect();
+        if (!rect.width) return;
+        setComparePosition(compare, ((pendingClientX - rect.left) / rect.width) * 100);
+      });
+    };
     const updateFromPointer = (event) => {
-      const rect = compare.getBoundingClientRect();
-      setComparePosition(compare, range, ((event.clientX - rect.left) / rect.width) * 100);
+      updateFromClientX(event.clientX);
     };
     compare.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
       dragging = true;
+      compare.classList.add("is-dragging");
+      compare.focus({ preventScroll: true });
+      if (event.pointerType === "mouse") event.preventDefault();
       try {
         compare.setPointerCapture?.(event.pointerId);
       } catch {
@@ -1147,12 +1161,38 @@
     compare.addEventListener("pointermove", (event) => {
       if (dragging) updateFromPointer(event);
     });
-    const stop = () => {
+    const stop = (event) => {
       dragging = false;
+      compare.classList.remove("is-dragging");
+      try {
+        if (event?.pointerId !== undefined && compare.hasPointerCapture?.(event.pointerId)) {
+          compare.releasePointerCapture(event.pointerId);
+        }
+      } catch {
+        // Pointer capture may already have been released by the browser.
+      }
     };
     compare.addEventListener("pointerup", stop);
     compare.addEventListener("pointercancel", stop);
-    setComparePosition(compare, range, range.value);
+    compare.addEventListener("lostpointercapture", stop);
+    compare.addEventListener("keydown", (event) => {
+      const current = Number(compare.getAttribute("aria-valuenow")) || 50;
+      const step = event.shiftKey ? 5 : 1;
+      const values = {
+        ArrowLeft: current - step,
+        ArrowDown: current - step,
+        ArrowRight: current + step,
+        ArrowUp: current + step,
+        PageDown: current - 10,
+        PageUp: current + 10,
+        Home: 5,
+        End: 95
+      };
+      if (!(event.key in values)) return;
+      event.preventDefault();
+      setComparePosition(compare, values[event.key]);
+    });
+    setComparePosition(compare, 50);
   };
 
   const initCarousels = (root = document) => {
