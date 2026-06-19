@@ -23,8 +23,8 @@
   const tx = (value) => value?.[state.lang] || value?.hu || "";
   const directCallViewport = () => window.matchMedia("(max-width: 820px)").matches;
   const phoneActionLabel = () => {
-    if (state.lang === "hu") return directCallViewport() ? "Hívás indítása" : "Telefonszám másolása";
-    return directCallViewport() ? "Call now" : "Copy phone number";
+    if (state.lang === "hu") return directCallViewport() ? "Hívás indítása" : "Telefon másolása";
+    return directCallViewport() ? "Call now" : "Copy phone";
   };
 
   const phaseLabel = {
@@ -54,72 +54,72 @@
     hero: {
       label: { hu: "Budapesti ingatlankarbantartás", en: "Property services in Budapest" },
       title: {
-        hu: "Karbantartás budapesti ingatlanokhoz, átláthatóan.",
-        en: "Straightforward property maintenance in Budapest.",
+        hu: "Megbízható ingatlankarbantartás Budapesten, távolról is követhetően.",
+        en: "Reliable Budapest property maintenance you can follow from anywhere.",
       },
       text: {
         hu:
-          "Festés, fal- és gipszkartonjavítás, kisebb szerelések és kertgondozás lakásokban, Airbnb-ingatlanokban, irodákban és képviseleti terekben. Magyar és angol kommunikáció, egyértelmű egyeztetés és fotós visszajelzés.",
+          "Festés, fal- és gipszkartonjavítás, kisebb szerelések és kertgondozás külföldi tulajdonosoknak, Airbnb-házigazdáknak, ingatlankezelőknek, irodáknak és képviseleti ingatlanoknak. Magyar és angol kommunikáció, fotós állapotfrissítések és szervezett munkamenet Budapesten.",
         en:
-          "Painting, wall and drywall repair, small maintenance jobs and garden care for apartments, Airbnb properties, offices and representative spaces. Communication is available in Hungarian and English, with clear photo updates when the owner is away.",
+          "Painting, wall and drywall repair, small maintenance jobs and garden care for foreign owners, Airbnb hosts, property managers, offices and representative properties. Hungarian and English communication, photo updates and an organised workflow in Budapest.",
       },
-      secondary: { hu: "Munkapéldák", en: "View work examples" },
-      noteTitle: { hu: "Egy kapcsolattartó, követhető folyamat", en: "One point of contact, a process you can follow" },
+      secondary: { hu: "Példák és folyamat", en: "Examples and process" },
+      noteTitle: { hu: "Egy kapcsolattartó, követhető munkamenet", en: "One contact, a workflow you can follow" },
       noteText: {
         hu:
-          "A feladatot indulás előtt pontosítjuk, a fontos munkafázisokat dokumentáljuk, az ingatlant pedig rendezett állapotban adjuk át.",
+          "A feladatot indulás előtt pontosítjuk, az egyeztetett munkát dokumentálható lépésekben végezzük, az ingatlant pedig rendezett, használható állapotban adjuk át.",
         en:
-          "The scope is clarified before work begins, important stages are documented and the property is left in an orderly condition.",
+          "The scope is clarified before work begins, agreed tasks are handled in trackable steps and the property is left orderly and ready to use.",
       },
     },
     stats: [
       {
         huN: "HU/EN",
         enN: "HU/EN",
-        hu: "Magyar és angol egyeztetés",
+        hu: "Magyar és angol kommunikáció",
         en: "Hungarian and English communication",
-        huDetail: "A feladat, a határidő és a visszajelzések mindkét nyelven egyértelműen követhetők.",
-        enDetail: "Scope, timing and progress updates can be handled clearly in either language.",
+        huDetail: "A feladatlista, a hozzáférés, a határidő és az átadás magyarul vagy angolul is tisztázható.",
+        enDetail: "Scope, access, timing and handover can be clarified in Hungarian or English.",
       },
       {
         huN: "Fotók",
         enN: "Photos",
-        hu: "Látható állapot és előrehaladás",
-        en: "Visible condition and progress",
-        huDetail: "Kérés szerint fotók készülnek a kiinduló állapotról, a fontos munkafázisokról és az átadásról.",
-        enDetail: "When requested, photos document the starting condition, key work stages and handover.",
+        hu: "Fotós állapotfrissítések",
+        en: "Photo condition updates",
+        huDetail: "Kérés szerint a kiinduló állapot, a fontos munkafázis és az átadás is fotókkal követhető.",
+        enDetail: "When requested, photos show the starting condition, key work stages and handover.",
       },
       {
         huN: "Budapest",
         enN: "Budapest",
-        hu: "Helyi fókusz, több ingatlantípus",
-        en: "Local focus across property types",
-        huDetail: "Polgári lakásoktól és kiadó ingatlanoktól a társasházi udvarokig és irodákig.",
-        enDetail: "From period apartments and rentals to shared courtyards, offices and representative properties.",
+        hu: "Budapesti fókusz",
+        en: "Budapest local focus",
+        huDetail: "Belvárosi lakások, kiadó ingatlanok, társasházi udvarok, irodák és képviseleti terek gyakorlati karbantartása.",
+        enDetail: "Practical maintenance for city apartments, rentals, courtyards, offices and representative spaces.",
       },
     ],
     servicesTitle: {
-      hu: "Miben segítünk?",
-      en: "What we can handle",
+      hu: "Milyen feladatokat érdemes ránk bízni?",
+      en: "What you can confidently hand over",
     },
     servicesText: {
       hu:
-        "Célzott javításokat és karbantartási feladatokat vállalunk olyan helyzetekben, amikor fontos a pontos egyeztetés, a rendezett munkavégzés és a kiszámítható átadás.",
+        "Olyan célzott javításokra és karbantartási feladatokra fókuszálunk, ahol a tiszta egyeztetés, a rendezett kivitelezés és az átadás előtti állapot számít. Ez különösen hasznos tulajdonosoknak, kezelőknek és vendégfogadásra készülő ingatlanoknál.",
       en:
-        "We handle focused repairs and maintenance where clear scope, orderly work and a predictable handover matter.",
+        "We focus on practical repairs and maintenance where clear scope, orderly execution and a presentable handover matter. This is especially useful for owners, managers and properties being prepared for guests, tenants or office use.",
     },
     problemsTitle: { hu: "Tipikus helyzetek, gyakorlati segítség", en: "Typical situations, practical support" },
     projectsTitle: { hu: "Illusztratív munkapéldák", en: "Illustrative work examples" },
-    processTitle: { hu: "Hogyan dolgozunk?", en: "How the work is handled" },
-    trustTitle: { hu: "Amitől követhető marad a munka", en: "What keeps the work easy to follow" },
+    processTitle: { hu: "Hogyan lesz az üzenetből elvégezhető feladat?", en: "From first message to an organised job" },
+    trustTitle: { hu: "Miért könnyű távolról is követni?", en: "Why remote coordination stays clear" },
     audienceTitle: { hu: "Kiknek hasznos?", en: "Who this is for" },
     faqTitle: { hu: "Gyakori kérdések", en: "Common questions" },
-    contactTitle: { hu: "Mutassa meg, miben segíthetünk", en: "Show us what needs attention" },
+    contactTitle: { hu: "Küldjön fotót, és tisztázzuk a következő lépést", en: "Send photos and we’ll clarify the next step" },
     contactText: {
       hu:
-        "Küldjön néhány fotót, az ingatlan budapesti címét vagy kerületét, valamint a kívánt határidőt. Ezek alapján tisztázható a következő lépés, és az is, szükséges-e helyszíni felmérés.",
+        "A leggyorsabb kezdéshez küldjön 2-3 fotót, az ingatlan budapesti címét vagy kerületét, a hozzáférés módját és a kívánt időzítést. Röviden visszajelzünk, milyen információ hiányzik még, és mi lehet a reális következő lépés.",
       en:
-        "Send a few photos, the Budapest address or district, and your preferred timing. From there we can clarify the next step and whether an on-site assessment is needed.",
+        "For the fastest start, send 2-3 photos, the Budapest address or district, access details and your preferred timing. We will respond with what is still needed and what the realistic next step can be.",
     },
   };
 
@@ -130,9 +130,9 @@
       title: { hu: "Festés és falfrissítés", en: "Interior painting and wall refresh" },
       text: {
         hu:
-          "Kopott, foltos vagy javított falak frissítése vendégváltás, bérlőváltás, fotózás vagy irodaátadás előtt. A végeredmény tisztább, rendezettebb első benyomás.",
+          "Kopott, foltos vagy javított falak rendezése vendégváltás, bérlőváltás, fotózás vagy irodai látogatás előtt. A cél nem látványos ígéret, hanem tiszta felület, egységes összkép és vállalható átadás.",
         en:
-          "Freshening marked, patched or tired walls before guest changes, tenant handovers, photoshoots or office visits. The result is a cleaner first impression.",
+          "Refresh marked, patched or tired walls before guest changes, tenant handovers, photoshoots or office visits. The aim is a clean surface, a consistent room impression and a handover you can feel comfortable with.",
       },
       photos: [
         ["12036084", "before", { hu: "Régi, sérült falfelület: itt a fal állapotát kellett javíthatóvá tenni.", en: "Old damaged wall surface: the first task was to make the wall repairable." }],
@@ -153,9 +153,9 @@
       title: { hu: "Gipszkarton és almennyezet", en: "Drywall and ceiling repairs" },
       text: {
         hu:
-          "Sérült vagy félkész gipszkarton, glettelés, csiszolás, hézagok és festésre előkészített felületek. Itt a részletek döntik el, hogy profi vagy félkész hatású lesz-e a helyiség.",
+          "Sérült vagy félkész gipszkarton, hézagok, glettelés, csiszolás és festésre előkészített felületek. A munka lényege, hogy a javítás ne külön hibaként látszódjon, hanem illeszkedjen a teljes helyiséghez.",
         en:
-          "Damaged or unfinished drywall, filling, sanding, seams and paint-ready surfaces. Small details decide whether a room feels finished or improvised.",
+          "Damaged or unfinished drywall, seams, filling, sanding and paint-ready surfaces. The goal is for the repair to blend into the room, not remain visible as a separate defect.",
       },
       photos: [
         ["7937304", "before", { hu: "Üres, félkész helyiség gipszkarton és festés előtti állapotban: a teljes tér látszik.", en: "Empty unfinished room before drywall finishing and painting, showing the full space." }],
@@ -176,9 +176,9 @@
       title: { hu: "Kert és udvar rendbetétele", en: "Garden and outdoor clean-up" },
       text: {
         hu:
-          "Magas fű, elhanyagolt bejárat, terasz vagy udvar rendezése. Airbnb, bérlemény vagy iroda esetén a külső kép már érkezéskor bizalmat épít vagy rombol.",
+          "Magas fű, benőtt udvar, elhanyagolt bejárat vagy terasz rendezése normál budapesti környezetben. Bérleményeknél, Airbnb-nél és irodáknál a külső állapot már érkezéskor meghatározza az első benyomást.",
         en:
-          "Mowing, trimming and tidying entrances, yards and terraces. For rentals, Airbnb and offices, the outdoor area affects trust before anyone steps inside.",
+          "Mowing, trimming and tidying courtyards, entrances and terraces in realistic Budapest settings. For rentals, Airbnb and offices, outdoor condition shapes trust before anyone steps inside.",
       },
       photos: [
         ["assets/budapest-courtyard-before-entrance.jpg", "before", { hu: "Elhanyagolt budapesti társasházi bejárat nyírás és lombgyűjtés előtt.", en: "Neglected Budapest apartment entrance before mowing and leaf collection." }],
@@ -199,9 +199,9 @@
       title: { hu: "Kisebb javítások és szerelés", en: "Small repairs and handyman jobs" },
       text: {
         hu:
-          "Polc, karnis, ajtóigazítás, szegély, apró rögzítések és átadás előtti hibák. Egyenként kicsinek tűnnek, együtt viszont erősen rontják az ingatlan érzetét.",
+          "Polc, karnis, ajtóigazítás, szegély, rögzítés és átadás előtti apró hibák egy feladatlistába rendezve. Ezek külön-külön kicsinek tűnnek, együtt viszont sokat rontanak a tulajdonosi, bérlői vagy vendégélményen.",
         en:
-          "Shelves, curtain rails, door adjustments, trims and small fixes before handover. Individually small, but together they strongly shape the property's feel.",
+          "Shelves, curtain rails, door adjustments, trims, fixings and small handover issues organised into one task list. Individually they may seem minor, but together they strongly affect how the property feels.",
       },
       photos: [
         ["13909112", "before", { hu: "Belső tér átadás előtt, ahol a kisebb szerelési és rendezési pontok adják meg a végső képet.", en: "Interior before handover where small installation and tidying points shape the final impression." }],
@@ -599,20 +599,20 @@
     state.projectFilter === "all" ? projects : projects.filter((project) => project.category === state.projectFilter);
 
   const problems = [
-    ["Külföldön élő tulajdonos", "Foreign owner", "Az egyeztetés fotókkal is elindítható, így nem szükséges minden döntéshez Budapesten tartózkodni.", "The conversation can begin with photos, so the owner does not need to be in Budapest for every decision."],
-    ["Airbnb-vendégváltás", "Airbnb turnover", "A látható hibák és kisebb javítások a következő érkezéshez igazíthatók, reális határidővel.", "Visible defects and small repairs can be scheduled around the next arrival, with realistic timing."],
-    ["Bérlő kiköltözése után", "After a tenant moves out", "Falhibák, kisebb sérülések és az átadás előtti frissítés egy közös feladatlistába rendezhető.", "Wall marks, minor damage and pre-handover touch-ups can be organised into one practical scope."],
-    ["Célzott falfrissítés", "Focused wall refresh", "Nem minden helyzet igényel teljes festést: gyakran a leginkább látható felületek rendezése a megfelelő megoldás.", "Not every property needs a full repaint; often the right answer is a careful refresh of the most visible areas."],
-    ["Elhanyagolt udvar vagy kert", "Neglected yard or garden", "Fűnyírással, metszéssel és a járófelületek rendezésével a külső tér ismét gondozott képet mutathat.", "Mowing, pruning and tidying paths can restore an orderly appearance to the outdoor area."],
-    ["Iroda látogatás előtt", "Office before a visit", "Kisebb faljavítások, festés és szerelések úgy ütemezhetők, hogy a napi működést a lehető legkevésbé zavarják.", "Minor wall repairs, painting and fittings can be scheduled to limit disruption to normal office use."],
+    ["Külföldön élő tulajdonos", "Foreign owner", "A feladat fotókkal és rövid leírással is elindítható, így a tulajdonos akkor is átlátja a helyzetet, ha nincs Budapesten.", "The job can begin with photos and a short brief, so the owner can understand the situation even when they are not in Budapest."],
+    ["Airbnb-vendégváltás", "Airbnb turnover", "A látható hibákat, falnyomokat és kisebb javításokat a következő érkezéshez igazítva lehet priorizálni.", "Visible defects, wall marks and small repairs can be prioritised around the next arrival."],
+    ["Bérlő kiköltözése után", "After a tenant moves out", "Falhibák, kisebb sérülések, szerelési pontok és átadás előtti frissítés egy közös, követhető feladatlistába rendezhető.", "Wall marks, minor damage, fittings and pre-handover touch-ups can be organised into one trackable scope."],
+    ["Ingatlankezelői feladatlista", "Property manager task list", "Több apró karbantartási pont egy egyeztetésben kezelhető, így kevesebb külön kör és kevesebb félreértés marad.", "Several small maintenance items can be handled in one coordination flow, reducing separate follow-ups and misunderstandings."],
+    ["Elhanyagolt udvar vagy kert", "Neglected yard or garden", "Fűnyírással, metszéssel és a járófelületek rendezésével a külső tér ismét gondozott, bemutatható képet mutathat.", "Mowing, pruning and tidying paths can restore an orderly, presentable outdoor area."],
+    ["Iroda vagy képviseleti tér látogatás előtt", "Office or representative space before a visit", "Kisebb faljavítások, festés és szerelések úgy ütemezhetők, hogy a napi működést és a belépési szabályokat is figyelembe vegyük.", "Minor wall repairs, painting and fittings can be scheduled around daily operations and access requirements."],
   ];
 
   const process = [
-    ["Fotók és rövid leírás", "Photos and a short brief", "Küldje el, mi a probléma, hol található az ingatlan és milyen határidő fontos.", "Send the issue, property location and any timing requirement."],
-    ["Feladat és következő lépés", "Scope and next step", "Tisztázzuk a várható munkát, és jelezzük, ha a pontosításhoz helyszíni felmérés szükséges.", "We clarify the likely scope and explain if an on-site assessment is needed."],
-    ["Egyeztetett kivitelezés", "Agreed execution", "A munka a jóváhagyott feladatokra koncentrál, a változásokat pedig külön egyeztetjük.", "Work follows the agreed scope, with any change discussed separately."],
-    ["Fotós visszajelzés", "Photo updates", "A lényeges állapotokról kérés szerint fotó készül, így távolról is követhető az előrehaladás.", "Key stages can be photographed so progress remains visible from abroad."],
-    ["Rendezett átadás", "Orderly handover", "Az elkészült feladatokat összefoglaljuk, az ingatlant pedig használható, rendezett állapotban hagyjuk.", "Completed work is summarised and the property is left usable and orderly."],
+    ["Fotók, cím és időzítés", "Photos, location and timing", "Küldje el a problémát, néhány fotót, a budapesti helyszínt és azt, mikorra fontos az átadás vagy vendégérkezés.", "Send the issue, a few photos, the Budapest location and the timing that matters for handover or guest arrival."],
+    ["Feladatlista és hozzáférés", "Scope and access", "Tisztázzuk, mi tartozik a munkába, hogyan lehet bejutni, ki dönthet a változásokról, és kell-e helyszíni felmérés.", "We clarify what is included, how access works, who can approve changes and whether an on-site assessment is needed."],
+    ["Egyeztetett munkavégzés", "Agreed execution", "A kivitelezés a jóváhagyott feladatokra koncentrál. Ha közben új kérdés merül fel, azt nem feltételezéssel, hanem külön egyeztetéssel kezeljük.", "Work follows the agreed scope. If a new question appears, it is handled by a separate check-in rather than assumption."],
+    ["Fotós állapotfrissítés", "Photo condition update", "Kérés szerint láthatóvá tesszük a kiinduló állapotot, a fontos munkafázist és az elkészült eredményt.", "When requested, photos show the starting condition, important work stages and the finished result."],
+    ["Rendezett átadás", "Orderly handover", "Az elkészült feladatokat röviden összefoglaljuk, az ingatlant pedig használható, tiszta és bemutatható állapotban hagyjuk.", "Completed tasks are summarised and the property is left usable, tidy and ready to present."],
   ];
 
   const audience = [
@@ -620,6 +620,7 @@
     ["Nemzetközi cégek és irodák", "International companies and offices", "Kisebb javítások, falfrissítés és szerelési feladatok a napi működéshez igazítva. A cél a rendezett környezet helyreállítása indokolatlan fennakadás nélkül.", "Minor repairs, wall refreshes and fittings can be scheduled around normal operations. The goal is to restore an orderly environment without unnecessary disruption."],
     ["Külföldi tulajdonosok", "Foreign property owners", "Az egyeztetés magyarul vagy angolul történhet, a fontos állapotokról pedig fotós visszajelzés kérhető. Ez különösen hasznos, ha a tulajdonos nem tartózkodik Budapesten.", "Communication is available in Hungarian or English, with photo updates for important stages. This is particularly useful when the owner is not in Budapest."],
     ["Airbnb és hosszú távú bérlemények", "Airbnb and long-term rentals", "Vendég- vagy bérlőváltás előtt a látható hibák, faljavítások és kisebb karbantartási feladatok egy folyamatban kezelhetők. A határidőt mindig a tényleges munka alapján egyeztetjük.", "Visible defects, wall repairs and small maintenance jobs can be handled together before a guest or tenant change. Timing is always agreed against the actual scope."],
+    ["Ingatlankezelők és helyi kapcsolattartók", "Property managers and local coordinators", "Ha több kisebb feladat gyűlik össze egy lakásban, irodában vagy közös területen, a munkát átlátható listába rendezzük. Ez segít abban, hogy a tulajdonos, kezelő és helyszíni kapcsolattartó ugyanazt lássa.", "When several small tasks build up in an apartment, office or shared area, they are organised into a clear list. This helps the owner, manager and local contact work from the same information."],
     ["Magánházak és lakástulajdonosok", "Private homeowners and apartment owners", "Családi házak és saját használatú lakások kisebb javításai, festése, gipszkarton-javítása, kert- és szezonális karbantartása is egy átlátható feladatlistába rendezhető. Költözés vagy értékesítés előtt segítünk az otthont rendezett, használható és bemutatható állapotba hozni.", "Small repairs, painting, drywall work, garden care and seasonal maintenance can be organised into one clear scope for family houses and owner-occupied apartments. Before moving in or selling, we help prepare the home so it is tidy, usable and ready to present."],
   ];
 
@@ -651,7 +652,7 @@
             <div class="body">
               <h3>${tx(item.title)}</h3>
               <p>${tx(item.text)}</p>
-              <span class="link">${state.lang === "hu" ? "Képek megnyitása" : "Open gallery"}</span>
+              <span class="link">${state.lang === "hu" ? "Példák és képek" : "Examples and photos"}</span>
             </div>
           </button>
         </article>`
@@ -864,7 +865,7 @@
             <div class="hero-ctas">
               <a class="btn primary" href="${tel}" data-phone-action>${phoneActionLabel()}</a>
               <a class="btn" href="#projects">${tx(content.hero.secondary)}</a>
-              <a class="btn text-btn" href="${wa}">WhatsApp <span aria-hidden="true">↗</span></a>
+              <a class="btn text-btn" href="${wa}">${state.lang === "hu" ? "Fotók küldése WhatsAppon" : "Send photos on WhatsApp"} <span aria-hidden="true">↗</span></a>
             </div>
           </div>
           <figure class="hero-media" data-reveal>
@@ -914,7 +915,7 @@
 
         <section id="clients" class="section section-band clients-section">
           <div class="wrap audience-layout">
-            <div class="section-head" data-reveal><span class="section-index">05</span><h2>${tx(content.audienceTitle)}</h2><p>${state.lang === "hu" ? "A szolgáltatás azoknak készült, akik megbízható egyeztetést és jól dokumentált, rendezett munkát keresnek Budapesten." : "The service is for clients who value reliable coordination and well-documented, orderly work in Budapest."}</p></div>
+            <div class="section-head" data-reveal><span class="section-index">05</span><h2>${tx(content.audienceTitle)}</h2><p>${state.lang === "hu" ? "A szolgáltatás azoknak készült, akik Budapesten megbízható egyeztetést, fotós visszajelzést és rendezett munkavégzést várnak el: tulajdonosoknak, kezelőknek, Airbnb-házigazdáknak, irodáknak és képviseleti ingatlanoknak." : "The service is for clients who need reliable coordination, photo updates and orderly work in Budapest: owners, property managers, Airbnb hosts, offices and representative properties."}</p></div>
             <div class="audience-list" data-accordion-group="audiences">${audienceCards()}</div>
           </div>
         </section>
@@ -922,17 +923,18 @@
         <section class="section wrap process-section">
           <div class="process-layout">
             <div>
-              <div class="section-head" data-reveal><span class="section-index">06</span><h2>${tx(content.processTitle)}</h2><p>${state.lang === "hu" ? "A folyamat minden pontján egyértelmű, mi történik, milyen döntés szükséges és mikor várható visszajelzés." : "At every stage, it is clear what happens next, which decisions are needed and when an update is expected."}</p></div>
+              <div class="section-head" data-reveal><span class="section-index">06</span><h2>${tx(content.processTitle)}</h2><p>${state.lang === "hu" ? "A cél az, hogy a munka már az első üzenettől átlátható legyen: mit kell javítani, hogyan lehet bejutni, mikor szükséges döntés, és milyen visszajelzés várható." : "The aim is for the work to stay clear from the first message: what needs fixing, how access works, when a decision is needed and what updates to expect."}</p></div>
               <div class="steps">${process.map((p, i) => `<article class="step" data-reveal><span class="num">${String(i + 1).padStart(2, "0")}</span><div><h3>${state.lang === "hu" ? p[0] : p[1]}</h3><p>${state.lang === "hu" ? p[2] : p[3]}</p></div></article>`).join("")}</div>
             </div>
             <aside class="trust-panel" data-reveal>
               <span class="eyebrow">${state.lang === "hu" ? "Bizalom a gyakorlatban" : "Trust in practice"}</span>
               <h2>${tx(content.trustTitle)}</h2>
-              <p>${state.lang === "hu" ? "Nem nagy ígéretekre, hanem tisztán rögzített feladatra és követhető visszajelzésre építünk." : "The service is built on a clearly agreed scope and useful updates, not exaggerated promises."}</p>
+              <p>${state.lang === "hu" ? "Nem nagy ígéretekre építünk, hanem tisztán rögzített feladatra, használható kommunikációra és követhető visszajelzésre." : "The service is built on a clearly agreed scope, useful communication and trackable updates, not exaggerated promises."}</p>
               <div class="trust-list">
-                <div><span aria-hidden="true">✓</span><p><strong>${state.lang === "hu" ? "Tiszta feladatlista" : "Clear scope"}</strong>${state.lang === "hu" ? "A munka előtt rögzítjük, mi tartozik a feladatba." : "What is included is clarified before work starts."}</p></div>
-                <div><span aria-hidden="true">✓</span><p><strong>${state.lang === "hu" ? "Érthető kommunikáció" : "Useful communication"}</strong>${state.lang === "hu" ? "A fontos döntések és változások nem maradnak feltételezések." : "Important decisions and changes are not left to assumption."}</p></div>
-                <div><span aria-hidden="true">✓</span><p><strong>${state.lang === "hu" ? "Rendezett átadás" : "Orderly handover"}</strong>${state.lang === "hu" ? "A végeredmény mellett az ingatlan használható állapota is számít." : "A usable, presentable property matters alongside the repair itself."}</p></div>
+                <div><span aria-hidden="true">✓</span><p><strong>${state.lang === "hu" ? "Tiszta feladatlista" : "Clear task list"}</strong>${state.lang === "hu" ? "Indulás előtt rögzítjük, mi tartozik a munkába, és mi igényel külön egyeztetést." : "Before work starts, we clarify what is included and what needs separate approval."}</p></div>
+                <div><span aria-hidden="true">✓</span><p><strong>${state.lang === "hu" ? "HU/EN egyeztetés" : "HU/EN coordination"}</strong>${state.lang === "hu" ? "Tulajdonos, kezelő vagy helyszíni kapcsolattartó is követheti a fontos információkat." : "Owners, managers and local contacts can follow the important information clearly."}</p></div>
+                <div><span aria-hidden="true">✓</span><p><strong>${state.lang === "hu" ? "Fotós visszajelzés" : "Photo updates"}</strong>${state.lang === "hu" ? "Kérés szerint a kiinduló állapot és az elkészült eredmény fotóval is ellenőrizhető." : "When requested, the starting condition and finished result can be checked by photo."}</p></div>
+                <div><span aria-hidden="true">✓</span><p><strong>${state.lang === "hu" ? "Budapesti fókusz" : "Budapest focus"}</strong>${state.lang === "hu" ? "A kommunikáció és az ütemezés budapesti lakásokhoz, irodákhoz és bérleményekhez igazodik." : "Communication and timing are shaped around Budapest apartments, offices and rentals."}</p></div>
               </div>
             </aside>
           </div>
@@ -947,14 +949,14 @@
 
         <section id="contact" class="section wrap">
           <div class="contact" data-reveal>
-            <div class="contact-copy"><span class="eyebrow">${state.lang === "hu" ? "Első lépés" : "First step"}</span><h2>${tx(content.contactTitle)}</h2><p>${tx(content.contactText)}</p><div class="contact-points"><span>${state.lang === "hu" ? "Fotók" : "Photos"}</span><span>${state.lang === "hu" ? "Helyszín" : "Location"}</span><span>${state.lang === "hu" ? "Határidő" : "Timing"}</span></div></div>
-            <div class="contact-card"><span class="contact-number">${phone}</span><a class="btn primary" href="${wa}">${state.lang === "hu" ? "Fotók küldése WhatsAppon" : "Send photos on WhatsApp"}</a><a class="btn" href="${tel}" data-phone-action>${phoneActionLabel()}</a><small>${state.lang === "hu" ? "Elsődleges terület: Budapest és közvetlen környéke." : "Primary service area: Budapest and nearby locations."}</small></div>
+            <div class="contact-copy"><span class="eyebrow">${state.lang === "hu" ? "Első lépés" : "First step"}</span><h2>${tx(content.contactTitle)}</h2><p>${tx(content.contactText)}</p><div class="contact-points"><span>${state.lang === "hu" ? "2-3 fotó" : "2-3 photos"}</span><span>${state.lang === "hu" ? "Budapesti cím vagy kerület" : "Budapest address or district"}</span><span>${state.lang === "hu" ? "Hozzáférés" : "Access"}</span><span>${state.lang === "hu" ? "Időzítés" : "Timing"}</span></div></div>
+            <div class="contact-card"><span class="contact-number">${phone}</span><a class="btn primary" href="${wa}">${state.lang === "hu" ? "WhatsApp üzenet küldése" : "Send a WhatsApp message"}</a><a class="btn" href="${tel}" data-phone-action>${phoneActionLabel()}</a><small>${state.lang === "hu" ? "Rövid üzenet is elég: fotók, helyszín, határidő. Elsődleges terület: Budapest és közvetlen környéke." : "A short message is enough: photos, location and timing. Primary service area: Budapest and nearby locations."}</small></div>
           </div>
         </section>
       </main>
 
       <footer class="footer"><span>Budapest Property Services</span><span>${state.lang === "hu" ? "Ingatlankarbantartás Budapesten, magyar és angol kommunikációval." : "Property maintenance in Budapest, with Hungarian and English communication."}</span></footer>
-      <div class="mobile-cta"><a href="${tel}" data-phone-action>${state.lang === "hu" ? "Hívás" : "Call"}</a><a href="${wa}" aria-label="WhatsApp">WhatsApp</a></div>
+      <div class="mobile-cta"><a href="${tel}" data-phone-action>${state.lang === "hu" ? "Hívás" : "Call"}</a><a href="${wa}" aria-label="WhatsApp">${state.lang === "hu" ? "WhatsApp fotókkal" : "WhatsApp photos"}</a></div>
       <div class="toast" id="phoneToast" role="status" aria-live="polite" aria-atomic="true"></div>
       <div id="projectModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}">×</button><div id="projectInner"></div></div></div>
       <div id="galleryModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Galéria bezárása" : "Close gallery"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Galéria bezárása" : "Close gallery"}">×</button><div id="galleryInner"></div></div></div>
