@@ -40,6 +40,7 @@ jobs:
             _site/
           if [ -f CNAME ]; then
             cp CNAME _site/CNAME
+            test -s _site/CNAME
           fi
           cp -R assets _site/assets
           test "$(head -n 1 _site/index.html)" = "<!DOCTYPE html>"
