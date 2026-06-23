@@ -72,7 +72,8 @@
     });
 
     document.querySelectorAll("[data-phone-label]").forEach((node) => {
-      const value = phoneActionLabel(lang);
+      const isHeaderPhone = node.closest(".header");
+      const value = isHeaderPhone && !directCallViewport() ? phone : phoneActionLabel(lang);
       if (node.textContent !== value) node.textContent = value;
       node.setAttribute("aria-label", value);
     });
