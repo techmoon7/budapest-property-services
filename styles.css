@@ -204,7 +204,7 @@ details[open] .disclosure-link {
 }
 
 .case-topline span,
-evidence-chip,
+.evidence-chip,
 .phases span,
 .phase-filter button,
 .details .project-meta-line span {
@@ -262,7 +262,7 @@ evidence-chip,
 }
 
 .slide-caption b,
-gallery-caption b,
+.gallery-caption b,
 .trust-list > div > span {
   color: var(--gold);
 }
