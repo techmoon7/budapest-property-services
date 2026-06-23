@@ -730,6 +730,91 @@ details[open] .disclosure-link {
   justify-self: end;
 }
 
+.hero-media[data-hero-lightbox],
+.service-hero-visual[data-hero-lightbox] {
+  cursor: zoom-in;
+  touch-action: manipulation;
+}
+
+.hero-media[data-hero-lightbox]:focus-visible .hero-image-shell,
+.service-hero-visual[data-hero-lightbox]:focus-visible {
+  outline: 3px solid var(--accent2);
+  outline-offset: 6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-media[data-hero-lightbox] .hero-image-shell,
+  .service-hero-visual[data-hero-lightbox] {
+    transition: box-shadow 420ms ease, border-color 420ms ease;
+  }
+
+  .hero-media[data-hero-lightbox]:hover .hero-image-shell,
+  .service-hero-visual[data-hero-lightbox]:hover {
+    border-color: rgba(255, 250, 242, 0.78);
+    box-shadow: 0 38px 96px rgba(16, 35, 26, 0.27);
+  }
+
+  .service-hero-visual[data-hero-lightbox] > img {
+    transition: transform 1100ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .service-hero-visual[data-hero-lightbox]:hover > img {
+    transform: scale(1.025);
+  }
+}
+
+.hero-lightbox {
+  z-index: 130;
+  padding: 0;
+}
+
+.hero-lightbox .backdrop {
+  background: rgba(7, 13, 10, 0.92);
+}
+
+.hero-lightbox .panel {
+  display: grid;
+  width: min(1180px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: hidden;
+  place-items: center;
+  border-radius: 24px;
+  background: #0d1511;
+  color: #fff;
+}
+
+.hero-lightbox .close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(15, 35, 27, 0.9);
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+
+.hero-lightbox img {
+  display: block;
+  width: 100%;
+  max-height: calc(100dvh - 32px);
+  object-fit: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-media[data-hero-lightbox] .hero-image-shell,
+  .service-hero-visual[data-hero-lightbox],
+  .service-hero-visual[data-hero-lightbox] > img {
+    transition: none;
+  }
+
+  .hero-media[data-hero-lightbox]:hover .hero-image-shell img,
+  .service-hero-visual[data-hero-lightbox]:hover > img {
+    transform: none;
+  }
+}
+
 .hero-media {
   width: min(100%, 600px);
 }

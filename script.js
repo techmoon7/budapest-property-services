@@ -2,6 +2,8 @@
   const phone = "+36 20 667 1832";
   const tel = "tel:+36206671832";
   const storageKey = "bps-lang";
+  let heroLightbox = null;
+  let heroLightboxOpener = null;
 
   const directCallViewport = () => window.matchMedia("(max-width: 820px)").matches;
   const currentLang = () => (localStorage.getItem(storageKey) === "en" ? "en" : "hu");
@@ -30,6 +32,85 @@
     window.clearTimeout(showToast.timer);
     showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2600);
   };
+
+  const closeHeroLightbox = () => {
+    if (!heroLightbox) return;
+
+    heroLightbox.classList.remove("open");
+    heroLightbox.setAttribute("aria-hidden", "true");
+    if (!document.querySelector(".modal.open")) document.body.classList.remove("modal-open");
+
+    const opener = heroLightboxOpener;
+    heroLightboxOpener = null;
+    if (opener?.isConnected) requestAnimationFrame(() => opener.focus());
+  };
+
+  const ensureHeroLightbox = () => {
+    if (heroLightbox?.isConnected) return heroLightbox;
+
+    heroLightbox = document.createElement("div");
+    heroLightbox.id = "heroLightbox";
+    heroLightbox.className = "modal hero-lightbox";
+    heroLightbox.setAttribute("role", "dialog");
+    heroLightbox.setAttribute("aria-modal", "true");
+    heroLightbox.setAttribute("aria-hidden", "true");
+    heroLightbox.innerHTML = `
+      <button class="backdrop" type="button" data-hero-lightbox-close aria-label="Close image"></button>
+      <div class="panel" tabindex="-1">
+        <button class="close" type="button" data-hero-lightbox-close aria-label="Close image">&times;</button>
+        <img alt="">
+      </div>
+    `;
+
+    heroLightbox.querySelectorAll("[data-hero-lightbox-close]").forEach((button) => {
+      button.addEventListener("click", closeHeroLightbox);
+    });
+
+    document.body.appendChild(heroLightbox);
+    return heroLightbox;
+  };
+
+  const openHeroLightbox = (image, opener) => {
+    const modal = ensureHeroLightbox();
+    const modalImage = modal.querySelector("img");
+    const panel = modal.querySelector(".panel");
+
+    heroLightboxOpener = opener;
+    modalImage.src = image.currentSrc || image.src;
+    modalImage.alt = image.alt || "";
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    requestAnimationFrame(() => panel?.focus());
+  };
+
+  const bindHeroLightbox = () => {
+    document.querySelectorAll(".hero-media, .service-hero-visual").forEach((target) => {
+      if (target.dataset.heroLightboxBound === "true") return;
+
+      const image = target.querySelector("img");
+      if (!image) return;
+
+      target.dataset.heroLightbox = "true";
+      target.dataset.heroLightboxBound = "true";
+      target.setAttribute("role", "button");
+      target.setAttribute("tabindex", "0");
+      target.setAttribute("aria-label", "Open hero image");
+
+      target.addEventListener("click", () => openHeroLightbox(image, target));
+      target.addEventListener("keydown", (event) => {
+        if (!["Enter", " "].includes(event.key)) return;
+        event.preventDefault();
+        openHeroLightbox(image, target);
+      });
+    });
+  };
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && heroLightbox?.classList.contains("open")) {
+      closeHeroLightbox();
+    }
+  });
 
   const copyPhoneToClipboard = async (lang = currentLang()) => {
     const success = lang === "hu" ? "Telefonszám másolva." : "Phone number copied.";
@@ -118,6 +199,7 @@
   const initStandalonePage = () => {
     applyStandaloneLanguage();
     bindPhoneActions();
+    bindHeroLightbox();
     initStandaloneReveals();
 
     document.getElementById("langBtn")?.addEventListener("click", () => {
@@ -191,6 +273,7 @@
   const applyHomeEnhancements = () => {
     applySituationImages();
     applyMaintenanceLink();
+    bindHeroLightbox();
   };
 
   const scheduleHomeEnhancements = () => {
