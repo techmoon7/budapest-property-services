@@ -659,7 +659,7 @@ details[open] .disclosure-link {
     left: auto;
     right: auto;
     bottom: auto;
-    margin: -88px 16px 16px;
+    margin: 16px;
   }
 
   .service-trust-strip,
@@ -691,9 +691,6 @@ details[open] .disclosure-link {
     padding: 20px;
   }
 
-  .service-hero-panel {
-    margin-top: -72px;
-  }
 }
 
 /* Hero collision guard: reserve copy space and keep image blocks separate. */
