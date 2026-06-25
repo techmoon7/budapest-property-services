@@ -274,13 +274,21 @@
     const nav = document.querySelector(".header .nav");
     if (!nav) return;
 
-    const existing = nav.querySelector("[data-handyman-link]");
-    if (existing) return;
+    const lang = homeLang();
+    const label = lang === "hu" ? "Ezermester" : "Handyman";
+    const existing =
+      nav.querySelector("[data-handyman-link]") ||
+      nav.querySelector('a[href="handyman-services-budapest.html"]');
+
+    if (existing) {
+      if (existing.textContent !== label) existing.textContent = label;
+      return;
+    }
 
     const link = document.createElement("a");
     link.href = "handyman-services-budapest.html";
     link.dataset.handymanLink = "true";
-    link.textContent = "Handyman";
+    link.textContent = label;
 
     const maintenanceLink = nav.querySelector("[data-maintenance-link]");
     if (maintenanceLink) {
