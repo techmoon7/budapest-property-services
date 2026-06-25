@@ -211,7 +211,7 @@
     window.addEventListener("resize", () => syncTextNodes(currentLang()), { passive: true });
   };
 
-  if (document.body?.dataset.page === "property-maintenance") {
+  if (["property-maintenance", "handyman-services"].includes(document.body?.dataset.page)) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initStandalonePage, { once: true });
     } else {
@@ -270,9 +270,35 @@
     }
   };
 
+  const applyHandymanLink = () => {
+    const nav = document.querySelector(".header .nav");
+    if (!nav) return;
+
+    const existing = nav.querySelector("[data-handyman-link]");
+    if (existing) return;
+
+    const link = document.createElement("a");
+    link.href = "handyman-services-budapest.html";
+    link.dataset.handymanLink = "true";
+    link.textContent = "Handyman";
+
+    const maintenanceLink = nav.querySelector("[data-maintenance-link]");
+    if (maintenanceLink) {
+      maintenanceLink.insertAdjacentElement("afterend", link);
+    } else {
+      const servicesLink = nav.querySelector('a[href="#services"]');
+      if (servicesLink) {
+        servicesLink.insertAdjacentElement("afterend", link);
+      } else {
+        nav.appendChild(link);
+      }
+    }
+  };
+
   const applyHomeEnhancements = () => {
     applySituationImages();
     applyMaintenanceLink();
+    applyHandymanLink();
     bindHeroLightbox();
   };
 
