@@ -31,6 +31,8 @@ jobs:
           cp \
             index.html \
             property-maintenance-budapest.html \
+            handyman-services-budapest.html \
+            painting-wall-repairs-budapest.html \
             styles.css \
             styles-base.css \
             script.js \
@@ -47,6 +49,8 @@ jobs:
           grep -F '<link rel="stylesheet" href="styles.css">' _site/index.html
           grep -F '<script src="script.js" defer></script>' _site/index.html
           test -s _site/property-maintenance-budapest.html
+          test -s _site/handyman-services-budapest.html
+          test -s _site/painting-wall-repairs-budapest.html
           test -s _site/styles.css
           test -s _site/styles-base.css
           test -s _site/script.js
