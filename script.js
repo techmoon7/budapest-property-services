@@ -211,7 +211,7 @@
     window.addEventListener("resize", () => syncTextNodes(currentLang()), { passive: true });
   };
 
-  if (["property-maintenance", "handyman-services"].includes(document.body?.dataset.page)) {
+  if (["property-maintenance", "handyman-services", "painting-wall-repairs"].includes(document.body?.dataset.page)) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initStandalonePage, { once: true });
     } else {
@@ -290,6 +290,42 @@
     link.dataset.handymanLink = "true";
     link.textContent = label;
 
+    const paintingLink =
+      nav.querySelector("[data-painting-link]") ||
+      nav.querySelector('a[href="painting-wall-repairs-budapest.html"]');
+    const maintenanceLink = nav.querySelector("[data-maintenance-link]");
+    if (paintingLink) {
+      paintingLink.insertAdjacentElement("afterend", link);
+    } else if (maintenanceLink) {
+      maintenanceLink.insertAdjacentElement("afterend", link);
+    } else {
+      const servicesLink = nav.querySelector('a[href="#services"]');
+      if (servicesLink) {
+        servicesLink.insertAdjacentElement("afterend", link);
+      } else {
+        nav.appendChild(link);
+      }
+    }
+  };
+
+  const applyPaintingLink = () => {
+    const nav = document.querySelector(".header .nav");
+    if (!nav) return;
+
+    const lang = homeLang();
+    const label = lang === "hu" ? "Festés és faljavítás" : "Painting & Wall Repairs";
+    const existing = nav.querySelector("[data-painting-link]") || nav.querySelector('a[href="painting-wall-repairs-budapest.html"]');
+
+    if (existing) {
+      if (existing.textContent !== label) existing.textContent = label;
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = "painting-wall-repairs-budapest.html";
+    link.dataset.paintingLink = "true";
+    link.textContent = label;
+
     const maintenanceLink = nav.querySelector("[data-maintenance-link]");
     if (maintenanceLink) {
       maintenanceLink.insertAdjacentElement("afterend", link);
@@ -306,6 +342,7 @@
   const applyHomeEnhancements = () => {
     applySituationImages();
     applyMaintenanceLink();
+    applyPaintingLink();
     applyHandymanLink();
     bindHeroLightbox();
   };
