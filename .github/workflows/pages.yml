@@ -33,6 +33,7 @@ jobs:
             property-maintenance-budapest.html \
             handyman-services-budapest.html \
             painting-wall-repairs-budapest.html \
+            garden-maintenance-budapest.html \
             styles.css \
             styles-base.css \
             script.js \
@@ -51,6 +52,7 @@ jobs:
           test -s _site/property-maintenance-budapest.html
           test -s _site/handyman-services-budapest.html
           test -s _site/painting-wall-repairs-budapest.html
+          test -s _site/garden-maintenance-budapest.html
           test -s _site/styles.css
           test -s _site/styles-base.css
           test -s _site/script.js
