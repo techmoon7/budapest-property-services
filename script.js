@@ -8,6 +8,10 @@
   let gardenGalleryIndex = 0;
   let gardenGalleryOpener = null;
   let gardenGalleryTouchStart = 0;
+  let cleaningGalleryModal = null;
+  let cleaningGalleryIndex = 0;
+  let cleaningGalleryOpener = null;
+  let cleaningGalleryTouchStart = 0;
 
   const directCallViewport = () => window.matchMedia("(max-width: 820px)").matches;
   const currentLang = () => (localStorage.getItem(storageKey) === "en" ? "en" : "hu");
@@ -234,7 +238,196 @@
     });
   };
 
+  const getCleaningGalleryItems = () =>
+    [...document.querySelectorAll(".service-hero-visual, .cleaning-gallery .showcase-photo")].filter((target) =>
+      target.querySelector("img")
+    );
+
+  const getFocusableModalItems = (modal) =>
+    [
+      ...modal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      ),
+    ].filter((node) => !node.hidden && !node.disabled && node.offsetParent !== null);
+
+  const trapCleaningGalleryFocus = (event) => {
+    const focusable = getFocusableModalItems(cleaningGalleryModal);
+    if (!focusable.length) {
+      event.preventDefault();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  const closeCleaningGallery = () => {
+    if (!cleaningGalleryModal) return;
+
+    cleaningGalleryModal.classList.remove("open");
+    cleaningGalleryModal.setAttribute("aria-hidden", "true");
+    if (!document.querySelector(".modal.open")) document.body.classList.remove("modal-open");
+
+    const opener = cleaningGalleryOpener;
+    cleaningGalleryOpener = null;
+    if (opener?.isConnected) requestAnimationFrame(() => opener.focus());
+  };
+
+  const setCleaningGalleryImage = (index) => {
+    const items = getCleaningGalleryItems();
+    if (!items.length || !cleaningGalleryModal) return;
+
+    cleaningGalleryIndex = (index + items.length) % items.length;
+    const item = items[cleaningGalleryIndex];
+    const image = item.querySelector("img");
+    const modalImage = cleaningGalleryModal.querySelector("img");
+    const caption = cleaningGalleryModal.querySelector("[data-cleaning-gallery-caption]");
+    const counter = cleaningGalleryModal.querySelector("[data-cleaning-gallery-count]");
+    const navButtons = cleaningGalleryModal.querySelectorAll("[data-cleaning-gallery-step]");
+    const captionText = item.querySelector("figcaption")?.innerText?.trim() || image.alt || "";
+
+    modalImage.src = image.currentSrc || image.src;
+    modalImage.alt = image.alt || "";
+    caption.textContent = captionText;
+    counter.textContent = `${cleaningGalleryIndex + 1} / ${items.length}`;
+    navButtons.forEach((button) => (button.hidden = items.length < 2));
+  };
+
+  const moveCleaningGallery = (step) => setCleaningGalleryImage(cleaningGalleryIndex + step);
+
+  const ensureCleaningGalleryModal = () => {
+    if (cleaningGalleryModal?.isConnected) return cleaningGalleryModal;
+
+    cleaningGalleryModal = document.createElement("div");
+    cleaningGalleryModal.id = "cleaningImageModal";
+    cleaningGalleryModal.className = "modal hero-lightbox cleaning-gallery-modal";
+    cleaningGalleryModal.setAttribute("role", "dialog");
+    cleaningGalleryModal.setAttribute("aria-modal", "true");
+    cleaningGalleryModal.setAttribute("aria-hidden", "true");
+    cleaningGalleryModal.innerHTML = `
+      <button class="backdrop" type="button" data-cleaning-gallery-close aria-label="Close image gallery"></button>
+      <div class="panel" tabindex="-1">
+        <button class="close" type="button" data-cleaning-gallery-close aria-label="Close image gallery">&times;</button>
+        <button class="garden-gallery-nav prev" type="button" data-cleaning-gallery-step="-1" aria-label="Previous image">&#8249;</button>
+        <button class="garden-gallery-nav next" type="button" data-cleaning-gallery-step="1" aria-label="Next image">&#8250;</button>
+        <span class="garden-gallery-count" data-cleaning-gallery-count></span>
+        <img alt="">
+        <p class="garden-gallery-caption" data-cleaning-gallery-caption></p>
+      </div>
+    `;
+
+    cleaningGalleryModal.querySelectorAll("[data-cleaning-gallery-close]").forEach((button) => {
+      button.addEventListener("click", closeCleaningGallery);
+    });
+
+    cleaningGalleryModal.querySelectorAll("[data-cleaning-gallery-step]").forEach((button) => {
+      button.addEventListener("click", () => moveCleaningGallery(Number(button.dataset.cleaningGalleryStep)));
+    });
+
+    cleaningGalleryModal.addEventListener(
+      "touchstart",
+      (event) => {
+        cleaningGalleryTouchStart = event.changedTouches[0]?.clientX || 0;
+      },
+      { passive: true }
+    );
+
+    cleaningGalleryModal.addEventListener(
+      "touchend",
+      (event) => {
+        const end = event.changedTouches[0]?.clientX || 0;
+        const delta = end - cleaningGalleryTouchStart;
+        if (Math.abs(delta) > 48) moveCleaningGallery(delta < 0 ? 1 : -1);
+      },
+      { passive: true }
+    );
+
+    document.body.appendChild(cleaningGalleryModal);
+    return cleaningGalleryModal;
+  };
+
+  const openCleaningGallery = (index, opener) => {
+    const modal = ensureCleaningGalleryModal();
+
+    cleaningGalleryOpener = opener;
+    setCleaningGalleryImage(index);
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    requestAnimationFrame(() => modal.querySelector(".close")?.focus());
+  };
+
+  const bindCleaningImageGallery = () => {
+    if (document.body?.dataset.page !== "cleaning-services") return;
+
+    getCleaningGalleryItems().forEach((target, index) => {
+      if (target.dataset.cleaningGalleryBound === "true") return;
+
+      const image = target.querySelector("img");
+      target.dataset.cleaningGalleryBound = "true";
+      target.dataset.cleaningGalleryItem = "true";
+      target.setAttribute("role", "button");
+      target.setAttribute("tabindex", "0");
+      target.setAttribute("aria-label", image?.alt ? `Open image: ${image.alt}` : "Open cleaning image");
+
+      target.addEventListener("click", () => openCleaningGallery(index, target));
+      target.addEventListener("keydown", (event) => {
+        if (!["Enter", " "].includes(event.key)) return;
+        event.preventDefault();
+        openCleaningGallery(index, target);
+      });
+    });
+  };
+
+  const ensureStandaloneCleaningLink = () => {
+    const nav = document.querySelector(".header .nav");
+    if (!nav) return;
+
+    const existing = nav.querySelector("[data-cleaning-link]") || nav.querySelector('a[href="cleaning-services-budapest.html"]');
+    if (existing) {
+      existing.dataset.textHu = "Takarítás";
+      existing.dataset.textEn = "Cleaning";
+      syncTextNodes(currentLang());
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = "cleaning-services-budapest.html";
+    link.dataset.cleaningLink = "true";
+    link.dataset.textHu = "Takarítás";
+    link.dataset.textEn = "Cleaning";
+    link.textContent = currentLang() === "hu" ? "Takarítás" : "Cleaning";
+
+    const handymanLink = nav.querySelector('a[href="handyman-services-budapest.html"]');
+    const gardenLink = nav.querySelector('a[href="garden-maintenance-budapest.html"]');
+    const paintingLink = nav.querySelector('a[href="painting-wall-repairs-budapest.html"]');
+    if (handymanLink) {
+      handymanLink.insertAdjacentElement("beforebegin", link);
+    } else if (gardenLink) {
+      gardenLink.insertAdjacentElement("afterend", link);
+    } else if (paintingLink) {
+      paintingLink.insertAdjacentElement("afterend", link);
+    } else {
+      nav.appendChild(link);
+    }
+  };
+
   document.addEventListener("keydown", (event) => {
+    if (cleaningGalleryModal?.classList.contains("open")) {
+      if (event.key === "Escape") closeCleaningGallery();
+      if (event.key === "ArrowRight") moveCleaningGallery(1);
+      if (event.key === "ArrowLeft") moveCleaningGallery(-1);
+      if (event.key === "Tab") trapCleaningGalleryFocus(event);
+      return;
+    }
+
     if (gardenGalleryModal?.classList.contains("open")) {
       if (event.key === "Escape") closeGardenGallery();
       if (event.key === "ArrowRight") moveGardenGallery(1);
@@ -332,10 +525,13 @@
   };
 
   const initStandalonePage = () => {
+    ensureStandaloneCleaningLink();
     applyStandaloneLanguage();
     bindPhoneActions();
     if (document.body?.dataset.page === "garden-maintenance") {
       bindGardenImageGallery();
+    } else if (document.body?.dataset.page === "cleaning-services") {
+      bindCleaningImageGallery();
     } else {
       bindHeroLightbox();
     }
@@ -350,7 +546,7 @@
     window.addEventListener("resize", () => syncTextNodes(currentLang()), { passive: true });
   };
 
-  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance"].includes(document.body?.dataset.page)) {
+  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services"].includes(document.body?.dataset.page)) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initStandalonePage, { once: true });
     } else {
@@ -519,11 +715,61 @@
     }
   };
 
+  const applyCleaningLink = () => {
+    const nav = document.querySelector(".header .nav");
+    if (!nav) return;
+
+    const lang = homeLang();
+    const label = lang === "hu" ? "Takarítás" : "Cleaning";
+    const existing =
+      nav.querySelector("[data-cleaning-link]") ||
+      nav.querySelector('a[href="cleaning-services-budapest.html"]');
+
+    if (existing) {
+      if (existing.textContent !== label) existing.textContent = label;
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = "cleaning-services-budapest.html";
+    link.dataset.cleaningLink = "true";
+    link.textContent = label;
+
+    const handymanLink =
+      nav.querySelector("[data-handyman-link]") ||
+      nav.querySelector('a[href="handyman-services-budapest.html"]');
+    const gardenLink =
+      nav.querySelector("[data-garden-link]") ||
+      nav.querySelector('a[href="garden-maintenance-budapest.html"]');
+    const paintingLink =
+      nav.querySelector("[data-painting-link]") ||
+      nav.querySelector('a[href="painting-wall-repairs-budapest.html"]');
+    const maintenanceLink = nav.querySelector("[data-maintenance-link]");
+
+    if (handymanLink) {
+      handymanLink.insertAdjacentElement("beforebegin", link);
+    } else if (gardenLink) {
+      gardenLink.insertAdjacentElement("afterend", link);
+    } else if (paintingLink) {
+      paintingLink.insertAdjacentElement("afterend", link);
+    } else if (maintenanceLink) {
+      maintenanceLink.insertAdjacentElement("afterend", link);
+    } else {
+      const servicesLink = nav.querySelector('a[href="#services"]');
+      if (servicesLink) {
+        servicesLink.insertAdjacentElement("afterend", link);
+      } else {
+        nav.appendChild(link);
+      }
+    }
+  };
+
   const applyHomeEnhancements = () => {
     applySituationImages();
     applyMaintenanceLink();
     applyPaintingLink();
     applyGardenLink();
+    applyCleaningLink();
     applyHandymanLink();
     bindHeroLightbox();
   };

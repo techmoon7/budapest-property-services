@@ -745,7 +745,7 @@ details[open] .disclosure-link {
   min-width: 0;
 }
 
-@media (max-width: 1060px) {
+@media (max-width: 1320px) {
   .service-page .header {
     align-items: flex-start;
     flex-wrap: wrap;
@@ -787,7 +787,7 @@ details[open] .disclosure-link {
   }
 }
 
-@media (max-width: 1120px) and (min-width: 821px) {
+@media (max-width: 1320px) and (min-width: 821px) {
   body:not(.service-page) .header {
     align-items: flex-start;
     flex-wrap: wrap;
@@ -1017,13 +1017,28 @@ body[data-page="garden-maintenance"] [data-garden-gallery-item] {
   transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
 }
 
+body[data-page="cleaning-services"] [data-cleaning-gallery-item] {
+  cursor: zoom-in;
+  transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
+}
+
 body[data-page="garden-maintenance"] [data-garden-gallery-item]:focus-visible {
+  outline: 3px solid var(--accent2);
+  outline-offset: 6px;
+}
+
+body[data-page="cleaning-services"] [data-cleaning-gallery-item]:focus-visible {
   outline: 3px solid var(--accent2);
   outline-offset: 6px;
 }
 
 body[data-page="garden-maintenance"] .showcase-photo img,
 body[data-page="garden-maintenance"] .service-hero-visual > img {
+  transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 320ms ease;
+}
+
+body[data-page="cleaning-services"] .showcase-photo img,
+body[data-page="cleaning-services"] .service-hero-visual > img {
   transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 320ms ease;
 }
 
@@ -1037,13 +1052,25 @@ body[data-page="garden-maintenance"] .service-hero-visual > img {
   body[data-page="garden-maintenance"] [data-garden-gallery-item]:hover img {
     transform: scale(1.035);
   }
+
+  body[data-page="cleaning-services"] [data-cleaning-gallery-item]:hover {
+    border-color: rgba(255, 250, 242, 0.72);
+    box-shadow: 0 30px 82px rgba(16, 35, 26, 0.2);
+    transform: translateY(-3px);
+  }
+
+  body[data-page="cleaning-services"] [data-cleaning-gallery-item]:hover img {
+    transform: scale(1.035);
+  }
 }
 
-.garden-gallery-modal .panel {
+.garden-gallery-modal .panel,
+.cleaning-gallery-modal .panel {
   position: relative;
 }
 
-.garden-gallery-modal img {
+.garden-gallery-modal img,
+.cleaning-gallery-modal img {
   animation: gardenGalleryZoom 260ms ease both;
 }
 
@@ -1152,17 +1179,21 @@ body[data-page="garden-maintenance"] .service-hero-visual > img {
   .service-hero-visual[data-hero-lightbox],
   .service-hero-visual[data-hero-lightbox] > img,
   body[data-page="garden-maintenance"] [data-garden-gallery-item],
-  body[data-page="garden-maintenance"] [data-garden-gallery-item] img {
+  body[data-page="garden-maintenance"] [data-garden-gallery-item] img,
+  body[data-page="cleaning-services"] [data-cleaning-gallery-item],
+  body[data-page="cleaning-services"] [data-cleaning-gallery-item] img {
     transition: none;
   }
 
   .hero-media[data-hero-lightbox]:hover .hero-image-shell img,
   .service-hero-visual[data-hero-lightbox]:hover > img,
-  body[data-page="garden-maintenance"] [data-garden-gallery-item]:hover img {
+  body[data-page="garden-maintenance"] [data-garden-gallery-item]:hover img,
+  body[data-page="cleaning-services"] [data-cleaning-gallery-item]:hover img {
     transform: none;
   }
 
-  .garden-gallery-modal img {
+  .garden-gallery-modal img,
+  .cleaning-gallery-modal img {
     animation: none;
   }
 }
