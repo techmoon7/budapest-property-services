@@ -748,12 +748,16 @@ details[open] .disclosure-link {
 @media (max-width: 1060px) {
   .service-page .header {
     align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   .service-page .nav {
     order: 3;
     width: 100%;
     justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
   }
 
   .service-hero,
@@ -780,6 +784,31 @@ details[open] .disclosure-link {
   .process-grid,
   .why-panel {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1120px) and (min-width: 821px) {
+  body:not(.service-page) .header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  body:not(.service-page) .header .brand {
+    flex: 1 1 min(360px, 100%);
+  }
+
+  body:not(.service-page) .header .actions {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  body:not(.service-page) .header .nav {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
   }
 }
 
