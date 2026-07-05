@@ -20,7 +20,12 @@
     projectFilter: "all",
   };
 
-  const tx = (value) => value?.[state.lang] || value?.en || value?.hu || "";
+  const translateFallback = (value) =>
+    state.lang === "hu" || state.lang === "en"
+      ? value
+      : window.BPS_I18N?.translatePhrase?.(value, state.lang) || value;
+  const tx = (value) => translateFallback(value?.[state.lang] || value?.en || value?.hu || "");
+  const ui = (en, hu) => (state.lang === "hu" ? hu : translateFallback(en));
   const directCallViewport = () => window.matchMedia("(max-width: 820px)").matches;
   const phoneActionLabel = () => {
     if (window.BPS_I18N?.t) return window.BPS_I18N.t(directCallViewport() ? "callNow" : "copyPhone", state.lang);
@@ -660,7 +665,7 @@
       )
       .join("");
 
-  const disclosureHint = () => state.lang === "hu" ? "Részletek" : "Details";
+  const disclosureHint = () => ui("Details", "Részletek");
 
   const statCards = () =>
     content.stats
@@ -951,7 +956,7 @@
         <section id="contact" class="section wrap">
           <div class="contact" data-reveal>
             <div class="contact-copy"><span class="eyebrow">${state.lang === "hu" ? "Első lépés" : "First step"}</span><h2>${tx(content.contactTitle)}</h2><p>${tx(content.contactText)}</p><div class="contact-points"><span>${state.lang === "hu" ? "2-3 fotó" : "2-3 photos"}</span><span>${state.lang === "hu" ? "Budapesti cím vagy kerület" : "Budapest address or district"}</span><span>${state.lang === "hu" ? "Hozzáférés" : "Access"}</span><span>${state.lang === "hu" ? "Időzítés" : "Timing"}</span></div></div>
-            <div class="contact-card"><span class="contact-number">${phone}</span><a class="btn primary" href="${wa}">${state.lang === "hu" ? "WhatsApp üzenet küldése" : "Send a WhatsApp message"}</a><a class="btn" href="${tel}" data-phone-action>${phoneActionLabel()}</a><small>${state.lang === "hu" ? "Rövid üzenet is elég: fotók, helyszín, határidő. Elsődleges terület: Budapest és közvetlen környéke." : "A short message is enough: photos, location and timing. Primary service area: Budapest and nearby locations."}</small></div>
+            <div class="contact-card"><span class="contact-number">${phone}</span><a class="btn primary" href="${wa}">${ui("Send a WhatsApp message", "WhatsApp üzenet küldése")}</a><a class="btn" href="${tel}" data-phone-action>${phoneActionLabel()}</a><small>${state.lang === "hu" ? "Rövid üzenet is elég: fotók, helyszín, határidő. Elsődleges terület: Budapest és közvetlen környéke." : "A short message is enough: photos, location and timing. Primary service area: Budapest and nearby locations."}</small></div>
           </div>
         </section>
       </main>
@@ -1124,6 +1129,7 @@
           <div class="section-cta"><a class="btn primary" href="${tel}" data-phone-action>${phoneActionLabel()}</a></div>
         </div>
       </div>`;
+    window.BPS_I18N?.applyPageLanguage?.();
     const modal = document.getElementById("projectModal");
     modal.setAttribute("aria-labelledby", "projectModalTitle");
     openModal(modal);
@@ -1146,7 +1152,7 @@
     compare.setAttribute("aria-valuenow", String(Math.round(next)));
     compare.setAttribute(
       "aria-valuetext",
-      state.lang === "hu" ? `${Math.round(next)}% előtte kép` : `${Math.round(next)}% before image`
+      `${Math.round(next)}% ${ui("before image", "előtte kép")}`
     );
   };
 
@@ -1340,6 +1346,7 @@
           <div class="thumb-grid" id="thumbs">${photos.map((p, i) => `<button type="button" data-thumb="${i}" aria-label="${photoCaption(p)}"><img src="${img(p[0], 420)}" alt="" loading="lazy" decoding="async"><span class="thumb-zoom" aria-hidden="true"></span></button>`).join("")}</div>
         </aside>
       </div>`;
+    window.BPS_I18N?.applyPageLanguage?.();
     const modal = document.getElementById("galleryModal");
     modal.setAttribute("aria-labelledby", "galleryModalTitle");
     openModal(modal);
