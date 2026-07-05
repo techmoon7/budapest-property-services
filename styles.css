@@ -1564,6 +1564,88 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
   transform: translateX(2px);
 }
 
+.language-selector {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.language-toggle {
+  gap: 8px;
+}
+
+.language-toggle small {
+  display: inline-grid;
+  min-width: 28px;
+  min-height: 28px;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(155, 93, 52, 0.12);
+  color: var(--accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.language-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 80;
+  display: grid;
+  min-width: 230px;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid rgba(84, 75, 61, 0.14);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(155, 93, 52, 0.1), transparent 12rem),
+    var(--surface-strong);
+  box-shadow: 0 24px 70px rgba(25, 38, 31, 0.16);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  visibility: hidden;
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+}
+
+.language-selector.open .language-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.language-menu button {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--green2);
+  cursor: pointer;
+  font-weight: 850;
+  text-align: left;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.language-menu button small {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.language-menu button:hover,
+.language-menu button:focus-visible,
+.language-menu button[aria-checked="true"] {
+  background: rgba(155, 93, 52, 0.12);
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
 @media (max-width: 1120px) {
   .header[data-nav-enhanced="true"] {
     flex-wrap: wrap;
@@ -1670,6 +1752,16 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
     min-height: 44px;
     white-space: normal;
   }
+
+  .language-menu {
+    right: auto;
+    left: 50%;
+    transform: translate(-50%, 8px);
+  }
+
+  .language-selector.open .language-menu {
+    transform: translate(-50%, 0);
+  }
 }
 
 @media (max-width: 700px) {
@@ -1691,6 +1783,21 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
     min-width: 68px;
     min-height: 44px;
     padding-inline: 9px;
+  }
+
+  .language-toggle span:not([aria-hidden="true"]) {
+    display: none;
+  }
+
+  .language-menu {
+    right: 0;
+    left: auto;
+    min-width: min(230px, calc(100vw - 24px));
+    transform: translateY(8px);
+  }
+
+  .language-selector.open .language-menu {
+    transform: translateY(0);
   }
 }
 

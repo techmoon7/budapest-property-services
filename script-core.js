@@ -10,7 +10,7 @@
   const heroImage = "assets/budapest-apartment-wall-refresh.jpg";
 
   const state = {
-    lang: localStorage.getItem("bps-lang") || "hu",
+    lang: window.BPS_I18N?.currentLang?.() || localStorage.getItem("bps-lang") || "en",
     gallery: [],
     galleryIndex: 0,
     galleryZoom: 1,
@@ -20,9 +20,10 @@
     projectFilter: "all",
   };
 
-  const tx = (value) => value?.[state.lang] || value?.hu || "";
+  const tx = (value) => value?.[state.lang] || value?.en || value?.hu || "";
   const directCallViewport = () => window.matchMedia("(max-width: 820px)").matches;
   const phoneActionLabel = () => {
+    if (window.BPS_I18N?.t) return window.BPS_I18N.t(directCallViewport() ? "callNow" : "copyPhone", state.lang);
     if (state.lang === "hu") return directCallViewport() ? "Hívás indítása" : "Telefon másolása";
     return directCallViewport() ? "Call now" : "Copy phone";
   };
@@ -851,7 +852,7 @@
           <a href="#contact">${tx(content.nav.contact)}</a>
         </nav>
         <div class="actions">
-          <button class="lang" id="langBtn" type="button" aria-label="${state.lang === "hu" ? "Switch to English" : "Váltás magyar nyelvre"}">HU / EN</button>
+          <button class="lang" id="langBtn" type="button" aria-label="${window.BPS_I18N?.t?.("openLanguageMenu", state.lang) || "Choose language"}">${window.BPS_I18N?.t?.("languageLabel", state.lang) || "Language"}</button>
           <a class="btn primary phone" href="${tel}" data-phone-action aria-label="${phoneActionLabel()}">${phone}</a>
         </div>
       </header>
@@ -964,6 +965,7 @@
     bind();
     reveal();
     initCarousels(document);
+    window.BPS_I18N?.afterHomeRender?.();
   };
 
   const showToast = (message) => {
@@ -993,16 +995,15 @@
     }
     showToast(
       copied
-        ? state.lang === "hu" ? `Telefonszám másolva: ${phone}` : `Phone number copied: ${phone}`
-        : state.lang === "hu" ? `Telefonszám: ${phone}` : `Phone number: ${phone}`
+        ? window.BPS_I18N?.t?.("phoneCopied", state.lang) || (state.lang === "hu" ? `Telefonszám másolva: ${phone}` : `Phone number copied: ${phone}`)
+        : window.BPS_I18N?.t?.("phoneFallback", state.lang) || (state.lang === "hu" ? `Telefonszám: ${phone}` : `Phone number: ${phone}`)
     );
   };
 
   const bind = () => {
-    document.getElementById("langBtn").addEventListener("click", () => {
-      state.lang = state.lang === "hu" ? "en" : "hu";
-      localStorage.setItem("bps-lang", state.lang);
-      render();
+    document.getElementById("langBtn")?.addEventListener("click", (event) => {
+      if (!window.BPS_I18N?.setLanguage) return;
+      event.preventDefault();
     });
     document.querySelectorAll("[data-accordion-group]").forEach((group) => {
       group.querySelectorAll("details").forEach((detail) => {
@@ -1550,6 +1551,13 @@
     );
     items.forEach((item) => revealObserver.observe(item));
   };
+
+  window.addEventListener("bps:languagechange", (event) => {
+    const next = event.detail?.lang || window.BPS_I18N?.currentLang?.() || state.lang;
+    if (next === state.lang) return;
+    state.lang = next;
+    render();
+  });
 
   render();
 })();
