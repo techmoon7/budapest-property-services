@@ -12,9 +12,47 @@
   let cleaningGalleryIndex = 0;
   let cleaningGalleryOpener = null;
   let cleaningGalleryTouchStart = 0;
+  const serviceNavigationItems = [
+    {
+      key: "maintenance",
+      href: "property-maintenance-budapest.html",
+      hu: "Karbantartás",
+      en: "Maintenance",
+      dataset: "maintenanceLink",
+    },
+    {
+      key: "painting",
+      href: "painting-wall-repairs-budapest.html",
+      hu: "Festés és faljavítás",
+      en: "Painting & Wall Repairs",
+      dataset: "paintingLink",
+    },
+    {
+      key: "garden",
+      href: "garden-maintenance-budapest.html",
+      hu: "Kertfenntartás",
+      en: "Garden Maintenance",
+      dataset: "gardenLink",
+    },
+    {
+      key: "handyman",
+      href: "handyman-services-budapest.html",
+      hu: "Ezermester",
+      en: "Handyman",
+      dataset: "handymanLink",
+    },
+    {
+      key: "cleaning",
+      href: "cleaning-services-budapest.html",
+      hu: "Takarítás",
+      en: "Cleaning",
+      dataset: "cleaningLink",
+    },
+  ];
 
   const directCallViewport = () => window.matchMedia("(max-width: 820px)").matches;
   const currentLang = () => (localStorage.getItem(storageKey) === "en" ? "en" : "hu");
+  const documentLang = () => (document.documentElement.lang === "en" ? "en" : "hu");
   const phoneActionLabel = (lang = currentLang()) =>
     lang === "hu"
       ? directCallViewport()
@@ -23,6 +61,161 @@
       : directCallViewport()
         ? "Call now"
         : "Copy phone number";
+
+  const serviceItemForHref = (href = "") => {
+    const cleanHref = href.split("#")[0].replace(/^\.\//, "");
+    return serviceNavigationItems.find((item) => item.href === cleanHref);
+  };
+
+  const isServicesOverviewHref = (href = "") => href === "#services" || href === "index.html#services";
+
+  const closeHeaderNavigation = (header) => {
+    if (!header) return;
+    header.classList.remove("nav-open");
+    header.querySelector(".nav-toggle")?.setAttribute("aria-expanded", "false");
+  };
+
+  const closeServicesDropdown = (dropdown) => {
+    if (!dropdown) return;
+    dropdown.classList.remove("open");
+    dropdown.querySelector(".nav-dropdown-toggle")?.setAttribute("aria-expanded", "false");
+  };
+
+  const syncHeaderNavigationState = () => {
+    const isCompact = window.matchMedia("(max-width: 1120px)").matches;
+    document.querySelectorAll(".header[data-nav-enhanced='true']").forEach((header) => {
+      const dropdown = header.querySelector("[data-services-dropdown]");
+      dropdown
+        ?.querySelector(".nav-dropdown-toggle")
+        ?.setAttribute("aria-expanded", String(isCompact || dropdown.classList.contains("open")));
+      if (!isCompact) closeHeaderNavigation(header);
+      if (isCompact) dropdown?.classList.remove("open");
+    });
+  };
+
+  const enhanceHeaderNavigation = () => {
+    const header = document.querySelector(".header");
+    const nav = header?.querySelector(".nav");
+    if (!header || !nav) return;
+
+    const lang = documentLang();
+    const navId = nav.id || "primary-navigation";
+    nav.id = navId;
+    header.dataset.navEnhanced = "true";
+
+    let menuToggle = header.querySelector(".nav-toggle");
+    if (!menuToggle) {
+      menuToggle = document.createElement("button");
+      menuToggle.className = "nav-toggle";
+      menuToggle.type = "button";
+      menuToggle.setAttribute("aria-controls", navId);
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.innerHTML = '<span aria-hidden="true"></span><span class="sr-only">Menu</span>';
+      header.insertBefore(menuToggle, nav);
+    }
+    menuToggle.setAttribute("aria-label", lang === "hu" ? "Menü megnyitása" : "Open menu");
+
+    let dropdown = nav.querySelector("[data-services-dropdown]");
+    if (!dropdown) {
+      dropdown = document.createElement("div");
+      dropdown.className = "nav-dropdown";
+      dropdown.dataset.servicesDropdown = "true";
+      dropdown.innerHTML = `
+        <button class="nav-dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" data-text-hu="Szolgáltatások" data-text-en="Services"></button>
+        <div class="nav-dropdown-menu" role="menu"></div>
+      `;
+      nav.insertBefore(dropdown, nav.firstChild);
+    }
+
+    const dropdownToggle = dropdown.querySelector(".nav-dropdown-toggle");
+    const dropdownMenu = dropdown.querySelector(".nav-dropdown-menu");
+    dropdownToggle.textContent = lang === "hu" ? "Szolgáltatások" : "Services";
+
+    const topLevelLinks = [...nav.children].filter((node) => node.matches?.("a"));
+    const serviceLinks = new Map();
+    let overviewLink = null;
+
+    topLevelLinks.forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      const item = serviceItemForHref(href);
+      if (item) {
+        serviceLinks.set(item.key, link);
+        link.remove();
+      } else if (isServicesOverviewHref(href)) {
+        overviewLink = link;
+        link.remove();
+      }
+    });
+
+    dropdownMenu.textContent = "";
+
+    const overviewHref = document.body?.classList.contains("service-page") ? "index.html#services" : "#services";
+    const overview = overviewLink || document.createElement("a");
+    overview.href = overviewHref;
+    overview.dataset.textHu = "Szolgáltatások áttekintése";
+    overview.dataset.textEn = "Services overview";
+    overview.textContent = lang === "hu" ? "Szolgáltatások áttekintése" : "Services overview";
+    overview.setAttribute("role", "menuitem");
+    overview.removeAttribute("aria-current");
+    dropdownMenu.appendChild(overview);
+
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+    serviceNavigationItems.forEach((item) => {
+      const link =
+        serviceLinks.get(item.key) ||
+        dropdownMenu.querySelector(`[data-service-nav-item="${item.key}"]`) ||
+        document.createElement("a");
+      link.href = item.href;
+      link.dataset.serviceNavItem = item.key;
+      link.dataset.textHu = item.hu;
+      link.dataset.textEn = item.en;
+      link.dataset[item.dataset] = "true";
+      link.textContent = lang === "hu" ? item.hu : item.en;
+      link.setAttribute("role", "menuitem");
+      if (currentFile === item.href) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+      dropdownMenu.appendChild(link);
+    });
+
+    if (header.dataset.navEventsBound !== "true") {
+      header.dataset.navEventsBound = "true";
+
+      menuToggle.addEventListener("click", () => {
+        const isOpen = header.classList.toggle("nav-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      dropdownToggle.addEventListener("click", (event) => {
+        if (window.matchMedia("(max-width: 1120px)").matches) return;
+        event.preventDefault();
+        const isOpen = dropdown.classList.toggle("open");
+        dropdownToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      nav.addEventListener("click", (event) => {
+        if (!event.target.closest("a")) return;
+        closeHeaderNavigation(header);
+        closeServicesDropdown(dropdown);
+      });
+
+      document.addEventListener("click", (event) => {
+        if (header.contains(event.target)) return;
+        closeHeaderNavigation(header);
+        closeServicesDropdown(dropdown);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        closeHeaderNavigation(header);
+        closeServicesDropdown(dropdown);
+      });
+    }
+
+    syncHeaderNavigationState();
+  };
 
   const showToast = (message) => {
     let toast = document.querySelector("[data-toast]");
@@ -527,6 +720,7 @@
   const initStandalonePage = () => {
     ensureStandaloneCleaningLink();
     applyStandaloneLanguage();
+    enhanceHeaderNavigation();
     bindPhoneActions();
     if (document.body?.dataset.page === "garden-maintenance") {
       bindGardenImageGallery();
@@ -541,9 +735,13 @@
       const next = currentLang() === "hu" ? "en" : "hu";
       localStorage.setItem(storageKey, next);
       applyStandaloneLanguage();
+      enhanceHeaderNavigation();
     });
 
-    window.addEventListener("resize", () => syncTextNodes(currentLang()), { passive: true });
+    window.addEventListener("resize", () => {
+      syncTextNodes(currentLang());
+      syncHeaderNavigationState();
+    }, { passive: true });
   };
 
   if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services"].includes(document.body?.dataset.page)) {
@@ -771,6 +969,7 @@
     applyGardenLink();
     applyCleaningLink();
     applyHandymanLink();
+    enhanceHeaderNavigation();
     bindHeroLightbox();
   };
 
