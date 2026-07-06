@@ -26,6 +26,13 @@
       uk: "Доступно 5 мовами",
       "zh-CN": "支持 5 种语言",
     },
+    languageSelectorHint: {
+      hu: "5 nyelv",
+      en: "5 languages",
+      de: "5 Sprachen",
+      uk: "5 мов",
+      "zh-CN": "5 种语言",
+    },
     openLanguageMenu: {
       hu: "Nyelv kiválasztása",
       en: "Choose language",
@@ -3071,7 +3078,7 @@
       ${globeIcon}
       <span class="language-current">
         <span>${activeLanguage.label}</span>
-        <small>${t("languageLabel", lang)}</small>
+        <small>${t("languageSelectorHint", lang)}</small>
       </span>
       <span class="language-chevron" aria-hidden="true"></span>`;
     if (button.innerHTML !== buttonMarkup) button.innerHTML = buttonMarkup;

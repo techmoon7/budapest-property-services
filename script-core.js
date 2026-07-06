@@ -52,8 +52,9 @@
   const languageBadgeText = () => window.BPS_I18N?.t?.("languageBadge", state.lang) || languageBadgeFallback[state.lang] || languageBadgeFallback.en;
   const languageTrustBadge = () => `
     <div class="language-trust-badge" aria-label="${languageBadgeText()}: ${languageNames}">
-      <span class="language-badge-icon" aria-hidden="true">5</span>
+      <span class="language-badge-icon" aria-hidden="true"><span class="language-badge-globe"></span><span class="language-badge-count">5</span></span>
       <span class="language-badge-copy"><strong>${languageBadgeText()}</strong><small>${languageNames}</small></span>
+      <span class="language-badge-flags" aria-hidden="true"><span class="flag-icon flag-hu"></span><span class="flag-icon flag-en"></span><span class="flag-icon flag-de"></span><span class="flag-icon flag-uk"></span><span class="flag-icon flag-zh"></span></span>
     </div>`;
   const projectLightboxImages = (project) => {
     const pair = [

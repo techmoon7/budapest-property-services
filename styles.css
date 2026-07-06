@@ -144,18 +144,63 @@ summary:focus-visible {
 }
 
 .language-badge-icon {
-  display: inline-grid;
-  width: 34px;
-  height: 34px;
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 38px;
   flex: 0 0 auto;
-  place-items: center;
   border-radius: 999px;
   background:
-    linear-gradient(145deg, rgba(40, 86, 63, 0.95), rgba(16, 44, 33, 0.98));
+    radial-gradient(circle at 32% 26%, rgba(255, 250, 242, 0.34), transparent 32%),
+    linear-gradient(145deg, rgba(40, 86, 63, 0.96), rgba(16, 44, 33, 0.98));
   box-shadow: 0 10px 22px rgba(16, 44, 33, 0.22);
   color: #fffaf2;
-  font-size: 0.82rem;
+}
+
+.language-badge-globe {
+  position: absolute;
+  inset: 8px;
+  border: 1.6px solid rgba(255, 250, 242, 0.88);
+  border-radius: 999px;
+}
+
+.language-badge-globe::before,
+.language-badge-globe::after {
+  position: absolute;
+  content: "";
+}
+
+.language-badge-globe::before {
+  inset: 2px 7px;
+  border-right: 1.4px solid rgba(255, 250, 242, 0.72);
+  border-left: 1.4px solid rgba(255, 250, 242, 0.72);
+  border-radius: 999px;
+}
+
+.language-badge-globe::after {
+  top: 50%;
+  right: 3px;
+  left: 3px;
+  border-top: 1.4px solid rgba(255, 250, 242, 0.72);
+  transform: translateY(-50%);
+}
+
+.language-badge-count {
+  position: absolute;
+  right: -3px;
+  bottom: -2px;
+  display: inline-grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border: 1px solid rgba(155, 93, 52, 0.26);
+  border-radius: 999px;
+  background: #fffaf2;
+  box-shadow: 0 6px 14px rgba(25, 38, 31, 0.14);
+  color: var(--accent);
+  font-size: 0.66rem;
   font-weight: 950;
+  line-height: 1;
 }
 
 .language-badge-copy {
@@ -178,6 +223,24 @@ summary:focus-visible {
   font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.language-badge-flags {
+  display: inline-flex;
+  align-items: center;
+  padding-left: 2px;
+}
+
+.language-badge-flags .flag-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: -6px;
+  border-width: 1px;
+  box-shadow: 0 6px 14px rgba(25, 38, 31, 0.12);
+}
+
+.language-badge-flags .flag-icon:first-child {
+  margin-left: 0;
 }
 
 .stat summary:hover,
@@ -2015,6 +2078,10 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
 
   .language-badge-copy small {
     white-space: normal;
+  }
+
+  .language-badge-flags {
+    display: none;
   }
 }
 
