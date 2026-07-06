@@ -3,11 +3,11 @@
   const tel = "tel:+36206671832";
   const storageKey = "bps-lang";
   const supportedLanguages = [
-    { code: "hu", label: "Magyar", short: "HU", html: "hu" },
-    { code: "en", label: "English", short: "EN", html: "en" },
-    { code: "de", label: "Deutsch", short: "DE", html: "de" },
-    { code: "uk", label: "Українська", short: "UK", html: "uk" },
-    { code: "zh-CN", label: "中文", short: "中", html: "zh-CN" },
+    { code: "hu", label: "Magyar", short: "HU", html: "hu", flag: "hu", complete: "Teljes weboldal" },
+    { code: "en", label: "English", short: "EN", html: "en", flag: "en", complete: "Complete website" },
+    { code: "de", label: "Deutsch", short: "DE", html: "de", flag: "de", complete: "Komplette Website" },
+    { code: "uk", label: "Українська", short: "UK", html: "uk", flag: "uk", complete: "Повний сайт" },
+    { code: "zh-CN", label: "中文", short: "中", html: "zh-CN", flag: "zh", complete: "完整网站" },
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
@@ -18,6 +18,13 @@
       de: "Sprache",
       uk: "Мова",
       "zh-CN": "语言",
+    },
+    languageBadge: {
+      hu: "Elérhető 5 nyelven",
+      en: "Available in 5 languages",
+      de: "In 5 Sprachen verfügbar",
+      uk: "Доступно 5 мовами",
+      "zh-CN": "支持 5 种语言",
     },
     openLanguageMenu: {
       hu: "Nyelv kiválasztása",
@@ -250,6 +257,11 @@
   );
 
   const supplementalPhraseTranslations =   {
+      "Painting, wall and drywall repair, small maintenance jobs and garden care for foreign owners, Airbnb hosts, property managers, offices and representative properties. Hungarian and English communication, photo updates and an organised workflow in Budapest.": {
+          "de": "Malerarbeiten, Wand- und Trockenbaureparaturen, kleinere Instandhaltungsarbeiten und Gartenpflege für ausländische Eigentümer, Airbnb-Gastgeber, Immobilienverwalter, Büros und repräsentative Immobilien. Ungarische und englische Kommunikation, Foto-Updates und ein organisierter Ablauf in Budapest.",
+          "uk": "Фарбування, ремонт стін і гіпсокартону, дрібні роботи з обслуговування та догляд за садом для іноземних власників, Airbnb-господарів, керуючих нерухомістю, офісів і представницьких об'єктів. Комунікація угорською й англійською, фотозвіти та організований робочий процес у Будапешті.",
+          "zh-CN": "为外国业主、Airbnb 房东、物业管理者、办公室和代表性物业提供粉刷、墙面和石膏板维修、小型维护以及庭院养护。支持匈牙利语和英语沟通、照片更新，并在布达佩斯以有序流程推进。"
+      },
       "A reliable maintenance partner for owners living abroad, apartment investors, Airbnb hosts, offices and representative properties in Budapest. Minor repairs, painting, drywall work, garden care, photo updates and Hungarian-English coordination, handled through a clear workflow.": {
           "de": "Ein verlässlicher Wartungspartner für Eigentümer im Ausland, Wohnungsinvestoren, Airbnb-Gastgeber, Büros und repräsentative Immobilien in Budapest. Kleinere Reparaturen, Malerarbeiten, Trockenbau, Gartenpflege, Fotoberichte und ungarisch-englische Abstimmung in einem klaren Ablauf.",
           "uk": "Надійний партнер з обслуговування для власників за кордоном, інвесторів у квартири, Airbnb-господарів, офісів і представницьких об'єктів у Будапешті. Дрібні ремонти, фарбування, гіпсокартон, догляд за садом, фотозвіти та узгодження угорською й англійською в прозорому процесі.",
@@ -3021,6 +3033,7 @@
     if (!existingButton) return null;
 
     const lang = currentLang();
+    const activeLanguage = languageInfo(lang);
     let selector = existingButton.closest(".language-selector");
     if (!selector) {
       selector = document.createElement("div");
@@ -3045,14 +3058,31 @@
     button.type = "button";
     button.classList.add("lang", "language-toggle");
     button.setAttribute("aria-label", t("openLanguageMenu", lang));
-    const buttonMarkup = `<span aria-hidden="true">🌐</span><span>${t("languageLabel", lang)}</span><small>${languageInfo(lang).short}</small>`;
+    button.setAttribute("aria-expanded", selector.classList.contains("open") ? "true" : "false");
+    menu.setAttribute("aria-label", t("languageBadge", lang));
+    const globeIcon = `
+      <span class="language-globe" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false">
+          <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"></path>
+          <path d="M3.6 9h16.8M3.6 15h16.8M12 3c2.1 2.35 3.1 5.35 3.1 9s-1 6.65-3.1 9M12 3C9.9 5.35 8.9 8.35 8.9 12s1 6.65 3.1 9"></path>
+        </svg>
+      </span>`;
+    const buttonMarkup = `
+      ${globeIcon}
+      <span class="language-current">
+        <span>${activeLanguage.label}</span>
+        <small>${t("languageLabel", lang)}</small>
+      </span>
+      <span class="language-chevron" aria-hidden="true"></span>`;
     if (button.innerHTML !== buttonMarkup) button.innerHTML = buttonMarkup;
 
     const menuMarkup = supportedLanguages
       .map(
         (language) => `
-          <button type="button" role="menuitemradio" data-language-option="${language.code}" aria-checked="${String(language.code === lang)}">
-            <span>${language.label}</span><small>${language.short}</small>
+          <button type="button" role="menuitemradio" data-language-option="${language.code}" aria-checked="${String(language.code === lang)}" aria-label="${language.label} - ${language.complete}">
+            <span class="flag-icon flag-${language.flag}" aria-hidden="true"></span>
+            <span class="language-option-copy"><strong>${language.label}</strong><small>${language.complete}</small></span>
+            <span class="language-option-check" aria-hidden="true">✓</span>
           </button>`
       )
       .join("");
@@ -3064,6 +3094,15 @@
         option.setAttribute("aria-checked", String(option.dataset.languageOption === lang));
       });
     }
+
+    const focusLanguageOption = (direction = 1) => {
+      const options = [...menu.querySelectorAll("[data-language-option]")];
+      if (!options.length) return;
+      const focusedIndex = options.indexOf(document.activeElement);
+      const activeIndex = options.findIndex((option) => option.dataset.languageOption === currentLang());
+      const baseIndex = focusedIndex >= 0 ? focusedIndex : Math.max(activeIndex, 0);
+      options[(baseIndex + direction + options.length) % options.length].focus();
+    };
 
     if (selector.dataset.languageEventsBound !== "true") {
       selector.dataset.languageEventsBound = "true";
@@ -3078,6 +3117,13 @@
         }
       });
 
+      button.addEventListener("keydown", (event) => {
+        if (!["ArrowDown", "ArrowUp"].includes(event.key)) return;
+        event.preventDefault();
+        openLanguageSelector(selector);
+        focusLanguageOption(event.key === "ArrowDown" ? 1 : -1);
+      });
+
       menu.addEventListener("click", (event) => {
         const option = event.target.closest("[data-language-option]");
         if (!option) return;
@@ -3089,6 +3135,19 @@
         if (event.key === "Escape") {
           closeLanguageSelector();
           button.focus();
+          return;
+        }
+
+        if (!selector.classList.contains("open")) return;
+        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+          event.preventDefault();
+          focusLanguageOption(event.key === "ArrowDown" ? 1 : -1);
+        } else if (event.key === "Home") {
+          event.preventDefault();
+          menu.querySelector("[data-language-option]")?.focus();
+        } else if (event.key === "End") {
+          event.preventDefault();
+          [...menu.querySelectorAll("[data-language-option]")].pop()?.focus();
         }
       });
     }

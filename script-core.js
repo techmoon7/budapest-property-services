@@ -41,6 +41,20 @@
 
   const phaseText = (phase) => tx(phaseLabel[phase] || phaseLabel.process);
   const photoCaption = (photo) => tx(photo?.[2]) || phaseText(photo?.[1]);
+  const languageNames = "Magyar · English · Deutsch · Українська · 中文";
+  const languageBadgeFallback = {
+    hu: "Elérhető 5 nyelven",
+    en: "Available in 5 languages",
+    de: "In 5 Sprachen verfügbar",
+    uk: "Доступно 5 мовами",
+    "zh-CN": "支持 5 种语言",
+  };
+  const languageBadgeText = () => window.BPS_I18N?.t?.("languageBadge", state.lang) || languageBadgeFallback[state.lang] || languageBadgeFallback.en;
+  const languageTrustBadge = () => `
+    <div class="language-trust-badge" aria-label="${languageBadgeText()}: ${languageNames}">
+      <span class="language-badge-icon" aria-hidden="true">5</span>
+      <span class="language-badge-copy"><strong>${languageBadgeText()}</strong><small>${languageNames}</small></span>
+    </div>`;
   const projectLightboxImages = (project) => {
     const pair = [
       [project.before, "before", { hu: `${tx(project.title)} - kiinduló állapot`, en: `${tx(project.title)} - starting condition` }],
@@ -866,6 +880,7 @@
         <section class="hero wrap" aria-labelledby="hero-title">
           <div class="hero-copy" data-reveal>
             <div class="eyebrow">${tx(content.hero.label)}</div>
+            ${languageTrustBadge()}
             <h1 id="hero-title">${tx(content.hero.title)}</h1>
             <p class="lead">${tx(content.hero.text)}</p>
             <div class="hero-ctas">
