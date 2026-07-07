@@ -54,7 +54,7 @@
     <div class="language-trust-badge" aria-label="${languageBadgeText()}: ${languageNames}">
       <span class="language-badge-icon" aria-hidden="true"><span class="language-badge-globe"></span><span class="language-badge-count">5</span></span>
       <span class="language-badge-copy"><strong>${languageBadgeText()}</strong><small>${languageNames}</small></span>
-      <span class="language-badge-flags" aria-hidden="true"><span class="flag-icon flag-hu"></span><span class="flag-icon flag-en"></span><span class="flag-icon flag-de"></span><span class="flag-icon flag-uk"></span><span class="flag-icon flag-zh"></span></span>
+      <span class="language-badge-flags" aria-hidden="true"><span class="flag-icon flag-hu" aria-hidden="true"></span><span class="flag-icon flag-en" aria-hidden="true"></span><span class="flag-icon flag-de" aria-hidden="true"></span><span class="flag-icon flag-uk" aria-hidden="true"></span><span class="flag-icon flag-zh" aria-hidden="true"></span></span>
     </div>`;
   const projectLightboxImages = (project) => {
     const pair = [
