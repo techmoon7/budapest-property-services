@@ -26,38 +26,87 @@
     <meta name="theme-color" content="#275c43">
     <link rel="stylesheet" href="styles.css">
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": "https://budapestpropertyservices.hu/#localbusiness",
+  "name": "Budapest Property Services",
+  "url": "https://budapestpropertyservices.hu/",
+  "telephone": "+36206671832",
+  "image": "https://budapestpropertyservices.hu/assets/budapest-apartment-wall-refresh.jpg",
+  "logo": "https://budapestpropertyservices.hu/assets/favicon.svg",
+  "areaServed": {
+    "@type": "City",
+    "name": "Budapest"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+36206671832",
+    "contactType": "customer service",
+    "areaServed": "Budapest",
+    "availableLanguage": [
+      "Hungarian",
+      "English"
+    ]
+  },
+  "availableLanguage": [
+    "Hungarian",
+    "English"
+  ],
+  "description": "Budapest property maintenance with Hungarian and English communication for apartments, Airbnb rentals, offices, diplomatic properties and foreign owners.",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Budapest property maintenance services",
+    "itemListElement": [
       {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "Budapest Property Services",
-        "url": "https://budapestpropertyservices.hu/",
-        "telephone": "+36206671832",
-        "image": "https://budapestpropertyservices.hu/assets/budapest-apartment-wall-refresh.jpg",
-        "logo": "https://budapestpropertyservices.hu/assets/favicon.svg",
-        "areaServed": { "@type": "City", "name": "Budapest" },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+36206671832",
-          "contactType": "customer service",
-          "areaServed": "Budapest",
-          "availableLanguage": ["Hungarian", "English"]
-        },
-        "availableLanguage": ["Hungarian", "English"],
-        "description": "Budapest property maintenance with Hungarian and English communication for apartments, Airbnb rentals, offices, diplomatic properties and foreign owners.",
-        "hasOfferCatalog": {
-          "@type": "OfferCatalog",
-          "name": "Budapest property maintenance services",
-          "itemListElement": [
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Apartment maintenance in Budapest" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Airbnb property support" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Interior painting and wall refresh" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Drywall repair" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Garden and courtyard maintenance" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Small handyman jobs" } }
-          ]
+        "@type": "Offer",
+        "url": "https://budapestpropertyservices.hu/property-maintenance-budapest.html",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Property Maintenance Budapest",
+          "url": "https://budapestpropertyservices.hu/property-maintenance-budapest.html"
+        }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://budapestpropertyservices.hu/handyman-services-budapest.html",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Handyman Services Budapest",
+          "url": "https://budapestpropertyservices.hu/handyman-services-budapest.html"
+        }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://budapestpropertyservices.hu/painting-wall-repairs-budapest.html",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Painting & Wall Repairs Budapest",
+          "url": "https://budapestpropertyservices.hu/painting-wall-repairs-budapest.html"
+        }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://budapestpropertyservices.hu/garden-maintenance-budapest.html",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Garden Maintenance Budapest",
+          "url": "https://budapestpropertyservices.hu/garden-maintenance-budapest.html"
+        }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://budapestpropertyservices.hu/cleaning-services-budapest.html",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Cleaning Services Budapest",
+          "url": "https://budapestpropertyservices.hu/cleaning-services-budapest.html"
         }
       }
-    </script>
+    ]
+  }
+}
+</script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -170,7 +219,7 @@
       </section>
     </main>
 
-    <footer class="footer"><span>Budapest Property Services</span><span>Ingatlankarbantartás Budapesten, magyar és angol kommunikációval.</span></footer>
+    <footer class="footer"><span>Budapest Property Services</span><span>Ingatlankarbantart&aacute;s Budapesten, magyar &eacute;s angol kommunik&aacute;ci&oacute;val.</span><span><a class="text-btn" href="property-maintenance-budapest.html">Ingatlankarbantart&aacute;s</a> <a class="text-btn" href="painting-wall-repairs-budapest.html">Fest&eacute;s &eacute;s faljav&iacute;t&aacute;s</a> <a class="text-btn" href="handyman-services-budapest.html">Ezermester</a> <a class="text-btn" href="garden-maintenance-budapest.html">Kertfenntart&aacute;s</a> <a class="text-btn" href="cleaning-services-budapest.html">Takar&iacute;t&aacute;s</a></span></footer>
     <div class="mobile-cta"><a href="tel:+36206671832" data-phone-action>Hívás</a><a href="https://wa.me/36206671832" aria-label="WhatsApp">WhatsApp</a></div>
     <div class="toast" id="phoneToast" role="status" aria-live="polite" aria-atomic="true"></div>
     <div id="projectModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="Ablak bezárása"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="Ablak bezárása">×</button><div id="projectInner"></div></div></div>
