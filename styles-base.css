@@ -310,11 +310,56 @@ details > summary::-webkit-details-marker {
   line-height: 1.62;
 }
 
+.hero-trust-list {
+  display: grid;
+  max-width: 680px;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 0;
+  color: var(--ink);
+  font-size: clamp(15px, 1.1vw, 17px);
+  font-weight: 850;
+  list-style: none;
+}
+
+.hero-trust-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.35;
+}
+
+.hero-trust-list span {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(36, 86, 63, 0.1);
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 950;
+}
+
 .hero-ctas,
 .section-cta {
   align-items: center;
   margin-top: 32px;
   gap: 14px;
+}
+
+.hero .hero-ctas {
+  margin-top: 28px;
+}
+
+.hero-helper {
+  max-width: 560px;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.5;
 }
 
 .hero-media {

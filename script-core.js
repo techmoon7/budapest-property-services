@@ -75,14 +75,25 @@
     hero: {
       label: { hu: "Budapesti ingatlankarbantartás", en: "Property services in Budapest" },
       title: {
-        hu: "Megbízható ingatlankarbantartás Budapesten, távolról is követhetően.",
-        en: "Reliable Budapest property maintenance you can follow from anywhere.",
+        hu: "Professzionális ingatlankarbantartás Budapesten",
+        en: "Professional Property Maintenance in Budapest",
       },
       text: {
         hu:
-          "Festés, fal- és gipszkartonjavítás, kisebb szerelések és kertgondozás külföldi tulajdonosoknak, Airbnb-házigazdáknak, ingatlankezelőknek, irodáknak és képviseleti ingatlanoknak. Magyar és angol kommunikáció, fotós állapotfrissítések és szervezett munkamenet Budapesten.",
+          "Gyors, megbízható karbantartás, javítás és ingatlankezelési támogatás lakástulajdonosoknak, bérbeadóknak, Airbnb-házigazdáknak és külföldi ingatlantulajdonosoknak.",
         en:
-          "Painting, wall and drywall repair, small maintenance jobs and garden care for foreign owners, Airbnb hosts, property managers, offices and representative properties. Hungarian and English communication, photo updates and an organised workflow in Budapest.",
+          "Fast, reliable maintenance, repairs and property management for homeowners, landlords, Airbnb hosts and international property owners.",
+      },
+      bullets: [
+        { hu: "Angol nyelvű egyeztetés", en: "English-speaking service" },
+        { hu: "Fotós visszajelzés minden munkánál", en: "Photo updates during every job" },
+        { hu: "Gyors válasz WhatsAppon", en: "Fast response via WhatsApp" },
+      ],
+      primary: { hu: "Ingyenes ajánlatkérés", en: "Get a Free Quote" },
+      whatsapp: { hu: "WhatsApp üzenet", en: "Chat on WhatsApp" },
+      helper: {
+        hu: "Küldjön néhány fotót, és megmondjuk, mi lehet a legjobb megoldás.",
+        en: "Send us a few photos and we'll tell you the best solution.",
       },
       secondary: { hu: "Példák és folyamat", en: "Examples and process" },
       noteTitle: { hu: "Egy kapcsolattartó, követhető munkamenet", en: "One contact, a workflow you can follow" },
@@ -884,11 +895,14 @@
             ${languageTrustBadge()}
             <h1 id="hero-title">${tx(content.hero.title)}</h1>
             <p class="lead">${tx(content.hero.text)}</p>
+            <ul class="hero-trust-list" aria-label="${state.lang === "hu" ? "Fő bizalmi előnyök" : "Key trust points"}">
+              ${content.hero.bullets.map((item) => `<li><span aria-hidden="true">✓</span>${tx(item)}</li>`).join("")}
+            </ul>
             <div class="hero-ctas">
-              <a class="btn primary" href="${tel}" data-phone-action>${phoneActionLabel()}</a>
-              <a class="btn" href="#projects">${tx(content.hero.secondary)}</a>
-              <a class="btn text-btn" href="${wa}">${state.lang === "hu" ? "Fotók küldése WhatsAppon" : "Send photos on WhatsApp"} <span aria-hidden="true">↗</span></a>
+              <a class="btn primary" href="#contact" aria-label="${tx(content.hero.primary)}">${tx(content.hero.primary)}</a>
+              <a class="btn" href="${wa}" aria-label="${tx(content.hero.whatsapp)}">${tx(content.hero.whatsapp)} <span aria-hidden="true">↗</span></a>
             </div>
+            <p class="hero-helper">${tx(content.hero.helper)}</p>
           </div>
           <figure class="hero-media" data-reveal>
             <div class="hero-image-shell"><img src="${img(heroImage)}" width="1600" height="800" fetchpriority="high" alt="${state.lang === "hu" ? "Falfrissítésre előkészített budapesti polgári lakás" : "Budapest apartment prepared for a careful wall refresh"}"></div>
