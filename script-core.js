@@ -7,7 +7,7 @@
       ? id
       : `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
 
-  const heroImage = "assets/budapest-apartment-wall-refresh.jpg";
+  const heroImage = "assets/budapest-finished-room-1.jpg";
 
   const state = {
     lang: window.BPS_I18N?.currentLang?.() || localStorage.getItem("bps-lang") || "en",
@@ -40,6 +40,73 @@
   };
 
   const phaseText = (phase) => tx(phaseLabel[phase] || phaseLabel.process);
+  const compareFallback = {
+    compareBefore: { hu: "Előtte", en: "Before", de: "Vorher", uk: "До", "zh-CN": "之前" },
+    compareAfter: { hu: "Utána", en: "After", de: "Nachher", uk: "Після", "zh-CN": "之后" },
+    compareSliderName: {
+      hu: "Előtte-utána összehasonlító csúszka",
+      en: "Before and after comparison slider",
+      de: "Vorher-Nachher-Vergleichsschieber",
+      uk: "Повзунок порівняння до і після",
+      "zh-CN": "前后对比滑块",
+    },
+    viewFullComparison: {
+      hu: "Teljes összehasonlítás megnyitása",
+      en: "View full comparison",
+      de: "Vollständigen Vergleich ansehen",
+      uk: "Переглянути повне порівняння",
+      "zh-CN": "查看完整对比",
+    },
+    fullComparisonTitle: {
+      hu: "Teljes előtte-utána összehasonlítás",
+      en: "Full before and after comparison",
+      de: "Vollständiger Vorher-Nachher-Vergleich",
+      uk: "Повне порівняння до і після",
+      "zh-CN": "完整前后对比",
+    },
+    fullComparisonDescription: {
+      hu: "Húzza a választóvonalat, vagy használja a nyílbillentyűket. A képek illusztratív példák, a konkrét feladatot mindig a helyszín állapota alapján egyeztetjük.",
+      en: "Drag the divider or use the arrow keys. Images are illustrative examples; the actual task is always agreed from the condition of the property.",
+      de: "Ziehen Sie die Trennlinie oder verwenden Sie die Pfeiltasten. Die Bilder sind illustrative Beispiele; die konkrete Aufgabe wird immer anhand des Zustands der Immobilie abgestimmt.",
+      uk: "Перетягніть розділювач або використовуйте клавіші зі стрілками. Зображення є ілюстративними прикладами; конкретне завдання завжди узгоджується за фактичним станом об’єкта.",
+      "zh-CN": "拖动分隔线或使用方向键。图片为示意示例；具体工作始终根据物业实际状况确认。",
+    },
+  };
+  const compareText = (key) =>
+    window.BPS_I18N?.t?.(key, state.lang) ||
+    compareFallback[key]?.[state.lang] ||
+    compareFallback[key]?.en ||
+    "";
+  const compareValueText = (value) => {
+    const rounded = Math.round(value);
+    const values = {
+      hu: `${rounded}% előtte kép látható`,
+      en: `${rounded}% before image visible`,
+      de: `${rounded}% Vorher-Bild sichtbar`,
+      uk: `${rounded}% зображення “до” видиме`,
+      "zh-CN": `${rounded}% 显示之前图片`,
+    };
+    return values[state.lang] || values.en;
+  };
+  const compareHintText = () =>
+    state.lang === "hu"
+      ? "Azonos helyszínt közel azonos nézőpontból bemutató, illusztratív állapotpár. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket az összehasonlításhoz."
+      : "A matched illustrative condition pair showing the same location from nearly the same viewpoint. Click or focus the slider first, then drag the handle or use the arrow keys to compare.";
+  const compareMarkup = (item, options = {}) => {
+    const id = options.id || "compare";
+    const hintId = options.hintId || `${id}-hint`;
+    const className = options.className || "";
+    const initial = 50;
+    return `
+      <div class="compare ${className}" id="${id}" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${initial}" aria-valuetext="${compareValueText(initial)}" aria-label="${compareText("compareSliderName")}" aria-describedby="${hintId}">
+        <img class="after" src="${img(item.after, 1600)}" alt="${tx(item.title)} - ${compareText("compareAfter")}" draggable="false">
+        <img class="before" src="${img(item.before, 1600)}" alt="${tx(item.title)} - ${compareText("compareBefore")}" draggable="false">
+        <span class="label compare-label left">${compareText("compareBefore")}</span>
+        <span class="label compare-label right">${compareText("compareAfter")}</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="${hintId}">${compareHintText()}</p>`;
+  };
   const photoCaption = (photo) => tx(photo?.[2]) || phaseText(photo?.[1]);
   const languageNames = "Magyar · English · Deutsch · Українська · 中文";
   const languageBadgeFallback = {
@@ -139,6 +206,32 @@
         "Olyan célzott javításokra és karbantartási feladatokra fókuszálunk, ahol a tiszta egyeztetés, a rendezett kivitelezés és az átadás előtti állapot számít. Ez különösen hasznos tulajdonosoknak, kezelőknek és vendégfogadásra készülő ingatlanoknál.",
       en:
         "We focus on practical repairs and maintenance where clear scope, orderly execution and a presentable handover matter. This is especially useful for owners, managers and properties being prepared for guests, tenants or office use.",
+    },
+    transformationTitle: {
+      hu: "A különbség az első pillanatban látszik",
+      en: "The difference should be visible at first glance",
+      de: "Der Unterschied sollte sofort sichtbar sein",
+      uk: "Різницю має бути видно з першого погляду",
+      "zh-CN": "变化应该一眼就看得出来",
+    },
+    transformationText: {
+      hu:
+        "A legtöbb érdeklődő néhány másodperc alatt dönt arról, hogy egy ingatlan gondozottnak tűnik-e. A célunk a tiszta, rendezett, bemutatható állapot, nem a túlzó látvány.",
+      en:
+        "Most visitors decide within seconds whether a property feels cared for. Our focus is a clean, orderly, presentable condition, not exaggerated visual tricks.",
+      de:
+        "Die meisten Besucher entscheiden in wenigen Sekunden, ob eine Immobilie gepflegt wirkt. Unser Fokus liegt auf einem sauberen, geordneten und präsentablen Zustand.",
+      uk:
+        "Більшість відвідувачів за кілька секунд вирішує, чи виглядає нерухомість доглянутою. Наш фокус — чистий, охайний і презентабельний стан.",
+      "zh-CN":
+        "大多数访客会在几秒内判断房产是否维护得当。我们的重点是干净、有序、适合展示的状态，而不是夸张效果。",
+    },
+    transformationCta: {
+      hu: "Példa megnyitása",
+      en: "Open example",
+      de: "Beispiel öffnen",
+      uk: "Відкрити приклад",
+      "zh-CN": "打开示例",
     },
     problemsTitle: { hu: "Tipikus helyzetek, gyakorlati segítség", en: "Typical situations, practical support" },
     projectsTitle: { hu: "Illusztratív munkapéldák", en: "Illustrative work examples" },
@@ -769,6 +862,129 @@
     project.videos = [];
   });
 
+  const heroTrustSignals = [
+    {
+      label: { hu: "Fotós frissítések", en: "Photo updates", de: "Foto-Updates", uk: "Фотооновлення", "zh-CN": "照片更新" },
+      text: {
+        hu: "A kiinduló állapot és a kész eredmény követhető marad.",
+        en: "The starting condition and finished result stay easy to follow.",
+        de: "Ausgangszustand und Ergebnis bleiben nachvollziehbar.",
+        uk: "Початковий стан і результат легко відстежити.",
+        "zh-CN": "初始状态和完成结果都清晰可跟进。",
+      },
+    },
+    {
+      label: { hu: "Angol kommunikáció", en: "English-speaking service", de: "Englische Kommunikation", uk: "Англійська комунікація", "zh-CN": "英文沟通" },
+      text: {
+        hu: "Külföldi tulajdonosoknak is érthető, rendezett egyeztetés.",
+        en: "Clear coordination for international owners and local contacts.",
+        de: "Klare Abstimmung für internationale Eigentümer und lokale Kontakte.",
+        uk: "Зрозуміла координація для іноземних власників і місцевих контактів.",
+        "zh-CN": "为国际业主和本地联系人提供清晰协调。",
+      },
+    },
+    {
+      label: { hu: "Gyors WhatsApp válasz", en: "Fast WhatsApp response", de: "Schnelle WhatsApp-Antwort", uk: "Швидка відповідь у WhatsApp", "zh-CN": "WhatsApp 快速回复" },
+      text: {
+        hu: "Küldjön fotókat, címet és időzítést; innen tisztázzuk a következő lépést.",
+        en: "Send photos, location and timing; we clarify the next step from there.",
+        de: "Senden Sie Fotos, Standort und Timing; daraus klären wir den nächsten Schritt.",
+        uk: "Надішліть фото, адресу й терміни; далі уточнимо наступний крок.",
+        "zh-CN": "发送照片、地点和时间安排；我们再确认下一步。",
+      },
+    },
+    {
+      label: { hu: "Egy kapcsolattartó", en: "One contact person", de: "Eine Kontaktperson", uk: "Одна контактна особа", "zh-CN": "一位对接人" },
+      text: {
+        hu: "Kevesebb szervezés, átláthatóbb döntések és rendezettebb átadás.",
+        en: "Less coordination, clearer decisions and a more orderly handover.",
+        de: "Weniger Abstimmung, klarere Entscheidungen und geordnete Übergabe.",
+        uk: "Менше координації, чіткіші рішення й охайніша передача.",
+        "zh-CN": "减少协调，更清晰决策，更有序交付。",
+      },
+    },
+  ];
+
+  const heroTrustSignalCards = () =>
+    heroTrustSignals
+      .map(
+        (item) => `
+          <li>
+            <span class="hero-proof-mark" aria-hidden="true">✓</span>
+            <span><strong>${tx(item.label)}</strong><small>${tx(item.text)}</small></span>
+          </li>`
+      )
+      .join("");
+
+  const transformationHighlights = [
+    {
+      projectIndex: 0,
+      before: "assets/budapest-painting-before-matched.jpg",
+      after: "assets/budapest-finished-room-1.jpg",
+      tag: { hu: "Falfrissítés", en: "Wall refresh", de: "Wandauffrischung", uk: "Оновлення стін", "zh-CN": "墙面焕新" },
+      title: { hu: "Kopott falból bemutatható lakótér", en: "From tired walls to a presentable room", de: "Von müden Wänden zu einem präsentablen Raum", uk: "Від зношених стін до презентабельної кімнати", "zh-CN": "从疲旧墙面到适合展示的房间" },
+      text: {
+        hu: "Jól látható, hiteles állapotváltás: foltok és kopások helyett egységesebb, tisztább felület.",
+        en: "A clear, believable change: marks and wear replaced by a cleaner, more consistent surface.",
+        de: "Eine klare, glaubwürdige Veränderung: statt Flecken und Abnutzung eine sauberere, einheitlichere Fläche.",
+        uk: "Чітка й правдоподібна зміна: замість слідів і зносу чистіша, рівніша поверхня.",
+        "zh-CN": "清晰可信的变化：用更干净、更统一的表面替代污迹和磨损。",
+      },
+    },
+    {
+      projectIndex: 3,
+      before: "assets/budapest-airbnb-before-turnover-matched.jpg",
+      after: "assets/budapest-airbnb-living-room.jpg",
+      tag: { hu: "Airbnb előkészítés", en: "Airbnb preparation", de: "Airbnb-Vorbereitung", uk: "Підготовка Airbnb", "zh-CN": "Airbnb 准备" },
+      title: { hu: "Vendégérkezés előtt rendezett összkép", en: "A guest-ready impression before arrival", de: "Ein gastbereiter Eindruck vor der Ankunft", uk: "Готове до гостей враження перед заїздом", "zh-CN": "客人抵达前的整洁印象" },
+      text: {
+        hu: "Apró hibák, falnyomok és rendezetlenség helyett olyan tér, amelyet könnyebb jó szívvel átadni.",
+        en: "Small defects, wall marks and disorder replaced by a space that is easier to hand over confidently.",
+        de: "Kleine Mängel, Wandspuren und Unordnung werden durch einen Raum ersetzt, der sich sicherer übergeben lässt.",
+        uk: "Замість дрібних дефектів, слідів на стінах і безладу — простір, який легше впевнено передати.",
+        "zh-CN": "将小缺陷、墙面痕迹和杂乱，转变为更容易放心交付的空间。",
+      },
+    },
+    {
+      projectIndex: 2,
+      before: "assets/budapest-garden-before-matched.jpg",
+      after: "assets/budapest-courtyard-garden-1.jpg",
+      tag: { hu: "Udvar és kert", en: "Courtyard and garden", de: "Hof und Garten", uk: "Двір і сад", "zh-CN": "庭院与花园" },
+      title: { hu: "Elhanyagolt érkezésből gondozott első benyomás", en: "From neglected arrival to a cared-for first impression", de: "Vom vernachlässigten Eingang zum gepflegten ersten Eindruck", uk: "Від занедбаного входу до доглянутого першого враження", "zh-CN": "从被忽视的入口到维护良好的第一印象" },
+      text: {
+        hu: "A külső rend sokszor még az ajtó előtt bizalmat épít, különösen bérleményeknél és vendégfogadásnál.",
+        en: "Outdoor order often builds trust before the door is opened, especially for rentals and guest stays.",
+        de: "Ein gepflegter Außenbereich schafft oft Vertrauen, noch bevor die Tür geöffnet wird.",
+        uk: "Охайна зовнішня зона часто формує довіру ще до відкриття дверей.",
+        "zh-CN": "整洁的户外环境常常在开门前就建立信任，尤其适合出租和接待客人。",
+      },
+    },
+  ];
+
+  const transformationCards = () =>
+    transformationHighlights
+      .map(
+        (item, index) => `
+        <article class="transformation-card${index === 0 ? " featured" : ""}" data-reveal>
+          <button type="button" data-project="${item.projectIndex}" aria-label="${tx(item.title)}">
+            <span class="transformation-visual" aria-hidden="true">
+              <span class="transformation-frame before"><img src="${img(item.before, 1400)}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async"></span>
+              <span class="transformation-frame after"><img src="${img(item.after, 1400)}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async"></span>
+              <span class="transformation-divider"></span>
+              <span class="transformation-label before">${compareText("compareBefore")}</span>
+              <span class="transformation-label after">${compareText("compareAfter")}</span>
+            </span>
+            <span class="transformation-copy">
+              <small>${tx(item.tag)}</small>
+              <strong>${tx(item.title)}</strong>
+              <span>${tx(item.text)}</span>
+              <em>${tx(content.transformationCta)}</em>
+            </span>
+          </button>
+        </article>`
+      )
+      .join("");
+
   const serviceCards = () =>
     services
       .map(
@@ -949,7 +1165,7 @@
           const images = item.images || [];
           const counts = phaseCounts(images);
           return `
-        <article class="project project-card rich" data-reveal>
+        <article class="project project-card rich${index === 0 ? " featured" : ""}" data-reveal>
           <button class="case-preview" type="button" data-project-gallery="${index}" aria-label="${state.lang === "hu" ? `${tx(item.title)} képgalériájának megnyitása` : `Open image gallery for ${tx(item.title)}`}">
               <img src="${img(item.before)}" alt="${tx(phaseLabel.before)}" loading="lazy" decoding="async">
               <img src="${img(item.after)}" alt="${tx(phaseLabel.after)}" loading="lazy" decoding="async">
@@ -1016,17 +1232,32 @@
             ${languageTrustBadge()}
             <h1 id="hero-title">${tx(content.hero.title)}</h1>
             <p class="lead">${tx(content.hero.text)}</p>
-            <ul class="hero-trust-list" aria-label="${state.lang === "hu" ? "Fő bizalmi előnyök" : "Key trust points"}">
-              ${content.hero.bullets.map((item) => `<li><span aria-hidden="true">✓</span>${tx(item)}</li>`).join("")}
+            <ul class="hero-proof-grid" aria-label="${state.lang === "hu" ? "Fő bizalmi előnyök" : "Key trust points"}">
+              ${heroTrustSignalCards()}
             </ul>
-            <div class="hero-ctas">
-              <a class="btn primary" href="#contact" aria-label="${tx(content.hero.primary)}">${tx(content.hero.primary)}</a>
-              <a class="btn" href="${wa}" target="_blank" rel="noopener" aria-label="${tx(content.hero.whatsapp)}">${tx(content.hero.whatsapp)} <span aria-hidden="true">↗</span></a>
+            <div class="hero-action-panel">
+              <div class="hero-ctas">
+                <a class="btn primary" href="#contact" aria-label="${tx(content.hero.primary)}">${tx(content.hero.primary)}</a>
+                <a class="btn whatsapp" href="${wa}" target="_blank" rel="noopener" aria-label="${tx(content.hero.whatsapp)}">${tx(content.hero.whatsapp)} <span aria-hidden="true">↗</span></a>
+              </div>
+              <p class="hero-helper">${tx(content.hero.helper)}</p>
             </div>
-            <p class="hero-helper">${tx(content.hero.helper)}</p>
           </div>
-          <figure class="hero-media" data-reveal>
-            <div class="hero-image-shell"><img src="${img(heroImage)}" width="1600" height="800" fetchpriority="high" alt="${state.lang === "hu" ? "Falfrissítésre előkészített budapesti polgári lakás" : "Budapest apartment prepared for a careful wall refresh"}"></div>
+          <figure class="hero-media hero-media-premium" data-reveal>
+            <div class="hero-visual-frame">
+              <div class="hero-image-shell hero-main-image"><img src="${img(heroImage)}" width="1600" height="1200" fetchpriority="high" alt="${state.lang === "hu" ? "Frissen rendezett budapesti lakásbelső tiszta falakkal és parkettával" : "Freshly prepared Budapest apartment interior with clean walls and parquet flooring"}"></div>
+              <div class="hero-before-after-card" aria-label="${compareText("compareSliderName")}">
+                <span class="hero-ba-title">${tx({ hu: "Látható átalakulás", en: "Visible transformation", de: "Sichtbare Veränderung", uk: "Помітна зміна", "zh-CN": "清晰变化" })}</span>
+                <span class="hero-mini-compare">
+                  <span><img src="${img("assets/budapest-painting-before-matched.jpg", 900)}" width="450" height="300" alt="${compareText("compareBefore")}" loading="eager" decoding="async"><b>${compareText("compareBefore")}</b></span>
+                  <span><img src="${img("assets/budapest-finished-room-1.jpg", 900)}" width="450" height="300" alt="${compareText("compareAfter")}" loading="eager" decoding="async"><b>${compareText("compareAfter")}</b></span>
+                </span>
+              </div>
+              <div class="hero-visual-note">
+                <strong>WhatsApp</strong>
+                <span>${tx({ hu: "Fotók alapján gyorsabb első egyeztetés", en: "Photos make the first check faster", de: "Fotos beschleunigen die erste Abstimmung", uk: "Фото пришвидшують першу оцінку", "zh-CN": "照片让首次沟通更快" })}</span>
+              </div>
+            </div>
             <figcaption class="note"><span class="note-mark" aria-hidden="true">01</span><span><strong>${tx(content.hero.noteTitle)}</strong><p>${tx(content.hero.noteText)}</p></span></figcaption>
           </figure>
           <div class="stats" data-accordion-group="hero-stats">${statCards()}</div>
@@ -1037,21 +1268,30 @@
           <p>${state.lang === "hu" ? "Az oldalon szereplő képek illusztrációk, amelyek tipikus munkafolyamatokat és várható eredményeket mutatnak." : "The images on this website are illustrative examples showing typical work processes and expected results."}</p>
         </aside>
 
+        <section class="section wrap transformation-showcase" aria-labelledby="transformation-title">
+          <div class="section-head transformation-head" data-reveal>
+            <span class="section-index">01</span>
+            <h2 id="transformation-title">${tx(content.transformationTitle)}</h2>
+            <p>${tx(content.transformationText)}</p>
+          </div>
+          <div class="transformation-grid">${transformationCards()}</div>
+        </section>
+
         <section id="services" class="section section-band">
           <div class="wrap">
-            <div class="section-head" data-reveal><span class="section-index">01</span><h2>${tx(content.servicesTitle)}</h2><p>${tx(content.servicesText)}</p></div>
+            <div class="section-head" data-reveal><span class="section-index">02</span><h2>${tx(content.servicesTitle)}</h2><p>${tx(content.servicesText)}</p></div>
             <div class="grid four service-grid">${serviceCards()}</div>
           </div>
         </section>
 
         <section class="section wrap situations-section">
-          <div class="section-head" data-reveal><span class="section-index">02</span><h2>${tx(content.problemsTitle)}</h2><p>${state.lang === "hu" ? "Nem minden ingatlannak ugyanarra van szüksége. Nyissa meg azt a helyzetet, amelyik legközelebb áll az Önéhez." : "Every property situation is different. Open the scenario that most closely matches yours."}</p></div>
+          <div class="section-head" data-reveal><span class="section-index">03</span><h2>${tx(content.problemsTitle)}</h2><p>${state.lang === "hu" ? "Nem minden ingatlannak ugyanarra van szüksége. Nyissa meg azt a helyzetet, amelyik legközelebb áll az Önéhez." : "Every property situation is different. Open the scenario that most closely matches yours."}</p></div>
           <div class="situation-grid" data-accordion-group="situations">${problemCards()}</div>
         </section>
 
         <section id="projects" class="section section-band projects-section">
           <div class="wrap">
-            <div class="section-head" data-reveal><span class="section-index">03</span><h2>${tx(content.projectsTitle)}</h2><p>${state.lang === "hu" ? "A példák tipikus kiinduló állapotokat, munkafázisokat és várható eredményeket mutatnak. Nem saját referenciaprojektek; egy konkrét ingatlan feladatát mindig külön egyeztetjük." : "These examples show typical starting conditions, work stages and expected outcomes. They are not presented as completed client projects; every real scope is agreed separately."}</p></div>
+            <div class="section-head" data-reveal><span class="section-index">04</span><h2>${tx(content.projectsTitle)}</h2><p>${state.lang === "hu" ? "A példák tipikus kiinduló állapotokat, munkafázisokat és várható eredményeket mutatnak. Nem saját referenciaprojektek; egy konkrét ingatlan feladatát mindig külön egyeztetjük." : "These examples show typical starting conditions, work stages and expected outcomes. They are not presented as completed client projects; every real scope is agreed separately."}</p></div>
             <div class="reference-panel" data-reveal>
               <div>
                 <span class="eyebrow">${state.lang === "hu" ? "Távolról is követhető" : "Clear from a distance"}</span>
@@ -1066,13 +1306,13 @@
         </section>
 
         <section id="media" class="section wrap">
-          <div class="section-head" data-reveal><span class="section-index">04</span><h2>${state.lang === "hu" ? "Képes munkafolyamatok" : "Visual work processes"}</h2><p>${state.lang === "hu" ? "Nézze meg a szolgáltatástípusonként rendezett képsorozatokat. A részletes galéria és az előtte-utána összehasonlítás egyetlen nézetben nyílik meg." : "Browse image sequences organised by service type. Each opens a focused view with the full gallery and before-and-after comparison."}</p></div>
+          <div class="section-head" data-reveal><span class="section-index">05</span><h2>${state.lang === "hu" ? "Képes munkafolyamatok" : "Visual work processes"}</h2><p>${state.lang === "hu" ? "Nézze meg a szolgáltatástípusonként rendezett képsorozatokat. A részletes galéria és az előtte-utána összehasonlítás egyetlen nézetben nyílik meg." : "Browse image sequences organised by service type. Each opens a focused view with the full gallery and before-and-after comparison."}</p></div>
           <div class="video-grid">${mediaReferenceCards()}</div>
         </section>
 
         <section id="clients" class="section section-band clients-section">
           <div class="wrap audience-layout">
-            <div class="section-head" data-reveal><span class="section-index">05</span><h2>${tx(content.audienceTitle)}</h2><p>${state.lang === "hu" ? "A szolgáltatás azoknak készült, akik Budapesten megbízható egyeztetést, fotós visszajelzést és rendezett munkavégzést várnak el: tulajdonosoknak, kezelőknek, Airbnb-házigazdáknak, irodáknak és képviseleti ingatlanoknak." : "The service is for clients who need reliable coordination, photo updates and orderly work in Budapest: owners, property managers, Airbnb hosts, offices and representative properties."}</p></div>
+            <div class="section-head" data-reveal><span class="section-index">06</span><h2>${tx(content.audienceTitle)}</h2><p>${state.lang === "hu" ? "A szolgáltatás azoknak készült, akik Budapesten megbízható egyeztetést, fotós visszajelzést és rendezett munkavégzést várnak el: tulajdonosoknak, kezelőknek, Airbnb-házigazdáknak, irodáknak és képviseleti ingatlanoknak." : "The service is for clients who need reliable coordination, photo updates and orderly work in Budapest: owners, property managers, Airbnb hosts, offices and representative properties."}</p></div>
             <div class="audience-list" data-accordion-group="audiences">${audienceCards()}</div>
           </div>
         </section>
@@ -1080,7 +1320,7 @@
         <section class="section wrap process-section">
           <div class="process-layout">
             <div>
-              <div class="section-head" data-reveal><span class="section-index">06</span><h2>${tx(content.processTitle)}</h2><p>${state.lang === "hu" ? "A cél az, hogy a munka már az első üzenettől átlátható legyen: mit kell javítani, hogyan lehet bejutni, mikor szükséges döntés, és milyen visszajelzés várható." : "The aim is for the work to stay clear from the first message: what needs fixing, how access works, when a decision is needed and what updates to expect."}</p></div>
+              <div class="section-head" data-reveal><span class="section-index">07</span><h2>${tx(content.processTitle)}</h2><p>${state.lang === "hu" ? "A cél az, hogy a munka már az első üzenettől átlátható legyen: mit kell javítani, hogyan lehet bejutni, mikor szükséges döntés, és milyen visszajelzés várható." : "The aim is for the work to stay clear from the first message: what needs fixing, how access works, when a decision is needed and what updates to expect."}</p></div>
               <div class="steps">${process.map((p, i) => `<article class="step" data-reveal><span class="num">${String(i + 1).padStart(2, "0")}</span><div><h3>${state.lang === "hu" ? p[0] : p[1]}</h3><p>${state.lang === "hu" ? p[2] : p[3]}</p></div></article>`).join("")}</div>
             </div>
             <aside class="trust-panel" data-reveal>
@@ -1099,7 +1339,7 @@
 
         <section class="section section-band faq-section">
           <div class="wrap faq-layout">
-            <div class="section-head" data-reveal><span class="section-index">07</span><h2>${tx(content.faqTitle)}</h2><p>${state.lang === "hu" ? "Gyakorlati válaszok a felmérésről, árazásról, határidőkről és távoli egyeztetésről." : "Practical answers about assessment, pricing, timing and remote coordination."}</p></div>
+            <div class="section-head" data-reveal><span class="section-index">08</span><h2>${tx(content.faqTitle)}</h2><p>${state.lang === "hu" ? "Gyakorlati válaszok a felmérésről, árazásról, határidőkről és távoli egyeztetésről." : "Practical answers about assessment, pricing, timing and remote coordination."}</p></div>
             <div class="faq-list" data-accordion-group="faq">${faqAccordion()}</div>
           </div>
         </section>
@@ -1271,22 +1511,23 @@
       });
       document.addEventListener("keydown", (event) => {
         const modal = activeModal();
+        const comparisonMode = modal?.id === "galleryModal" && modal.dataset.galleryMode === "comparison";
         if (event.key === "Escape" && modal) {
           event.preventDefault();
           closeModal(modal);
         } else if (event.key === "Tab" && modal) {
           trapFocus(event, modal);
-        } else if (modal?.id === "galleryModal" && event.key === "ArrowLeft") {
+        } else if (modal?.id === "galleryModal" && !comparisonMode && event.key === "ArrowLeft") {
           showGallery(state.galleryIndex - 1);
-        } else if (modal?.id === "galleryModal" && event.key === "ArrowRight") {
+        } else if (modal?.id === "galleryModal" && !comparisonMode && event.key === "ArrowRight") {
           showGallery(state.galleryIndex + 1);
-        } else if (modal?.id === "galleryModal" && ["+", "="].includes(event.key)) {
+        } else if (modal?.id === "galleryModal" && !comparisonMode && ["+", "="].includes(event.key)) {
           event.preventDefault();
           changeGalleryZoom("in");
-        } else if (modal?.id === "galleryModal" && event.key === "-") {
+        } else if (modal?.id === "galleryModal" && !comparisonMode && event.key === "-") {
           event.preventDefault();
           changeGalleryZoom("out");
-        } else if (modal?.id === "galleryModal" && event.key === "0") {
+        } else if (modal?.id === "galleryModal" && !comparisonMode && event.key === "0") {
           event.preventDefault();
           changeGalleryZoom("reset");
         }
@@ -1302,14 +1543,8 @@
     document.getElementById("projectInner").innerHTML = `
       <div class="project-layout" data-project-index="${index}">
         <div>
-          <div class="compare" id="compare" role="slider" tabindex="0" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" aria-label="${state.lang === "hu" ? "Előtte-utána összehasonlító csúszka" : "Before and after comparison slider"}" aria-describedby="compareHint">
-            <img class="after" src="${img(item.after, 1200)}" alt="${tx(item.title)} - ${tx(phaseLabel.after)}">
-            <img class="before" src="${img(item.before, 1200)}" alt="${tx(item.title)} - ${tx(phaseLabel.before)}">
-            <span class="label left">${tx(phaseLabel.before)}</span>
-            <span class="label right">${tx(phaseLabel.after)}</span>
-            <span class="handle" aria-hidden="true"></span>
-          </div>
-          <p class="compare-hint" id="compareHint">${state.lang === "hu" ? "Azonos helyszínt közel azonos nézőpontból bemutató, illusztratív állapotpár. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket az összehasonlításhoz." : "A matched illustrative condition pair showing the same location from nearly the same viewpoint. Click or focus the slider first, then drag the handle or use the arrow keys to compare."}</p>
+          ${compareMarkup(item, { id: "compare", hintId: "compareHint" })}
+          <button class="btn compare-fullscreen-btn" type="button" data-full-comparison="${index}">${compareText("viewFullComparison")}</button>
           <div class="phase-filter">
             <button class="active" data-phase-filter="all">${state.lang === "hu" ? "Összes kép" : "All photos"}</button>
             <button data-phase-filter="before">${tx(phaseLabel.before)} (${counts.before})</button>
@@ -1351,6 +1586,7 @@
     openModal(modal);
     const compare = document.getElementById("compare");
     initCompare(compare);
+    document.querySelector("[data-full-comparison]")?.addEventListener("click", () => openFullComparison(index));
     document.querySelectorAll("[data-phase-filter]").forEach((btn) => {
       btn.addEventListener("click", () => {
         document.querySelectorAll("[data-phase-filter]").forEach((item) => item.classList.remove("active"));
@@ -1362,14 +1598,39 @@
     initCarousels(document.getElementById("projectModal"));
   };
 
+  const openFullComparison = (index) => {
+    const item = projects[index];
+    state.projectIndex = index;
+    document.getElementById("galleryInner").innerHTML = `
+      <div class="gallery-layout comparison-lightbox-layout">
+        <div class="gallery-main comparison-main">
+          ${compareMarkup(item, { id: "fullCompare", hintId: "fullCompareHint", className: "compare-large" })}
+        </div>
+        <aside class="gallery-info comparison-info">
+          <small class="eyebrow">${tx(item.title)}</small>
+          <h2 id="galleryModalTitle">${compareText("fullComparisonTitle")}</h2>
+          <p>${compareText("fullComparisonDescription")}</p>
+          <div class="comparison-key">
+            <span><b>${compareText("compareBefore")}</b>${photoCaption([item.before, "before", { hu: `${tx(item.title)} - kiinduló állapot`, en: `${tx(item.title)} - starting condition` }])}</span>
+            <span><b>${compareText("compareAfter")}</b>${photoCaption([item.after, "after", { hu: `${tx(item.title)} - kész állapot`, en: `${tx(item.title)} - finished condition` }])}</span>
+          </div>
+        </aside>
+      </div>`;
+    window.BPS_I18N?.applyPageLanguage?.();
+    const modal = document.getElementById("galleryModal");
+    modal.dataset.galleryMode = "comparison";
+    modal.setAttribute("aria-labelledby", "galleryModalTitle");
+    openModal(modal);
+    const compare = document.getElementById("fullCompare");
+    initCompare(compare);
+    compare?.focus({ preventScroll: true });
+  };
+
   const setComparePosition = (compare, value) => {
-    const next = Math.max(5, Math.min(95, Number(value)));
+    const next = Math.max(0, Math.min(100, Number(value)));
     compare.style.setProperty("--split", `${next}%`);
     compare.setAttribute("aria-valuenow", String(Math.round(next)));
-    compare.setAttribute(
-      "aria-valuetext",
-      `${Math.round(next)}% ${ui("before image", "előtte kép")}`
-    );
+    compare.setAttribute("aria-valuetext", compareValueText(next));
   };
 
   const initCompare = (compare) => {
@@ -1378,12 +1639,13 @@
     let dragging = false;
     let animationFrame = 0;
     let pendingClientX = 0;
+    let activeRect = null;
     const updateFromClientX = (clientX) => {
       pendingClientX = clientX;
       if (animationFrame) return;
       animationFrame = requestAnimationFrame(() => {
         animationFrame = 0;
-        const rect = compare.getBoundingClientRect();
+        const rect = activeRect || compare.getBoundingClientRect();
         if (!rect.width) return;
         setComparePosition(compare, ((pendingClientX - rect.left) / rect.width) * 100);
       });
@@ -1394,6 +1656,7 @@
     compare.addEventListener("pointerdown", (event) => {
       if (event.pointerType === "mouse" && event.button !== 0) return;
       dragging = true;
+      activeRect = compare.getBoundingClientRect();
       compare.classList.add("is-dragging");
       compare.focus({ preventScroll: true });
       if (event.pointerType === "mouse") event.preventDefault();
@@ -1405,10 +1668,13 @@
       updateFromPointer(event);
     });
     compare.addEventListener("pointermove", (event) => {
-      if (dragging) updateFromPointer(event);
+      if (!dragging) return;
+      if (event.cancelable) event.preventDefault();
+      updateFromPointer(event);
     });
     const stop = (event) => {
       dragging = false;
+      activeRect = null;
       compare.classList.remove("is-dragging");
       try {
         if (event?.pointerId !== undefined && compare.hasPointerCapture?.(event.pointerId)) {
@@ -1431,14 +1697,15 @@
         ArrowUp: current + step,
         PageDown: current - 10,
         PageUp: current + 10,
-        Home: 5,
-        End: 95
+        Home: 0,
+        End: 100
       };
       if (!(event.key in values)) return;
       event.preventDefault();
       setComparePosition(compare, values[event.key]);
     });
     setComparePosition(compare, 50);
+    requestAnimationFrame(() => compare.classList.add("is-ready"));
   };
 
   const initCarousels = (root = document) => {
@@ -1564,6 +1831,7 @@
       </div>`;
     window.BPS_I18N?.applyPageLanguage?.();
     const modal = document.getElementById("galleryModal");
+    modal.dataset.galleryMode = "gallery";
     modal.setAttribute("aria-labelledby", "galleryModalTitle");
     openModal(modal);
     document.getElementById("prev").addEventListener("click", () => showGallery(state.galleryIndex - 1));
