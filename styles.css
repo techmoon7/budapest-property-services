@@ -263,6 +263,31 @@ details[open] .disclosure-link {
   color: var(--accent);
 }
 
+.disclosure-link [hidden],
+.disclosure-icon [hidden] {
+  display: none !important;
+}
+
+.disclosure-icon[data-disclosure-label] {
+  width: auto;
+  min-width: 88px;
+  height: auto;
+  min-height: 34px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.stat summary:focus-visible,
+.audience summary:focus-visible,
+.faq summary:focus-visible {
+  outline: 3px solid var(--accent2);
+  outline-offset: 5px;
+}
+
 .illustration-note {
   border-color: rgba(155, 93, 52, 0.28);
   background: rgba(255, 247, 235, 0.82);
@@ -2113,6 +2138,12 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
   .nav-mobile-tools .language-selector {
     display: grid;
     width: 100%;
+    min-width: 0;
+    order: 2;
+  }
+
+  .nav-mobile-tools .nav-contact-btn {
+    order: 1;
   }
 
   .nav-mobile-tools .language-toggle,
@@ -2126,6 +2157,9 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
     position: static;
     width: 100%;
     min-width: 0;
+    max-height: min(42vh, 310px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     margin-top: 8px;
     opacity: 0;
     pointer-events: none;
@@ -2138,6 +2172,10 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
     pointer-events: auto;
     transform: translateY(0);
     visibility: visible;
+  }
+
+  .nav-mobile-tools .language-menu button {
+    min-height: 54px;
   }
 }
 
@@ -2185,5 +2223,321 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
   .header[data-nav-enhanced="true"] .nav-toggle {
     width: 44px;
     min-height: 44px;
+  }
+}
+
+/* Focused homepage interaction repair */
+.header {
+  min-height: 72px;
+  gap: clamp(12px, 2vw, 22px);
+  box-shadow: 0 8px 24px rgba(25, 38, 31, 0.045);
+}
+
+.header.header-scrolled {
+  box-shadow: 0 14px 36px rgba(25, 38, 31, 0.09);
+}
+
+.header .btn,
+.header .lang,
+.header .language-toggle,
+.header .nav-toggle,
+.nav-dropdown-toggle {
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.header .btn.primary.phone,
+.header .nav-contact-btn {
+  min-height: 44px;
+  padding-inline: 16px;
+  box-shadow: 0 12px 28px rgba(40, 86, 63, 0.2);
+  font-size: 0.92rem;
+}
+
+.language-toggle {
+  min-width: 0;
+  min-height: 44px;
+  gap: 9px;
+  padding: 0 13px 0 15px;
+  background: rgba(255, 252, 246, 0.94);
+  box-shadow: none;
+}
+
+.language-toggle:hover,
+.language-toggle:focus-visible,
+.language-selector.open .language-toggle {
+  background: rgba(255, 252, 246, 0.99);
+  box-shadow: 0 10px 26px rgba(25, 38, 31, 0.1);
+  transform: none;
+}
+
+.language-current > span {
+  max-width: 130px;
+  font-size: 0.88rem;
+}
+
+.language-current small {
+  display: none;
+}
+
+.language-menu {
+  min-width: 320px;
+  border-radius: 22px;
+  box-shadow: 0 22px 58px rgba(25, 38, 31, 0.16);
+}
+
+.language-menu button {
+  min-height: 60px;
+  border-radius: 16px;
+}
+
+.language-menu button:hover,
+.language-menu button:focus-visible,
+.language-menu button[aria-checked="true"] {
+  transform: none;
+}
+
+body:not(.service-page) .hero-copy {
+  max-width: 700px;
+}
+
+body:not(.service-page) .hero h1 {
+  max-width: 700px;
+  font-size: clamp(44px, 4.35vw, 70px);
+  line-height: 1.02;
+}
+
+body:not(.service-page) .hero .lead {
+  max-width: 650px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service,
+  .project-card.rich,
+  .video-card,
+  .problem {
+    transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease, background 220ms ease;
+  }
+
+  .service:hover,
+  .project-card.rich:hover,
+  .video-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .problem:hover,
+  .problem[open] {
+    border-color: rgba(155, 93, 52, 0.2);
+    background: rgba(255, 253, 248, 0.68);
+    box-shadow: 0 16px 36px rgba(25, 38, 31, 0.08);
+  }
+}
+
+.btn:active,
+.lang:active,
+.filterbar button:active,
+.service button:active,
+.project-card.rich button:active,
+.video-card button:active,
+.problem summary:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.problem {
+  border: 1px solid transparent;
+  border-top-color: var(--line);
+  border-radius: 22px;
+}
+
+.problem summary {
+  min-height: 176px;
+  grid-template-columns: 132px minmax(0, 1fr);
+  padding: 0 18px 0 0;
+  border-radius: 22px;
+  outline-offset: 6px;
+}
+
+.problem summary:hover {
+  padding-left: 0;
+  background: transparent;
+}
+
+.problem summary:focus-visible {
+  outline: 3px solid var(--accent2);
+}
+
+.problem .media {
+  overflow: hidden;
+  border: 1px solid rgba(84, 75, 61, 0.12);
+  background: #e4dbcd;
+}
+
+.problem .media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 260ms ease;
+}
+
+.problem:hover .media img,
+.problem[open] .media img {
+  transform: scale(1.025);
+}
+
+.problem .open-label {
+  display: none;
+}
+
+.problem[open] .closed-label {
+  display: none;
+}
+
+.problem[open] .open-label {
+  display: inline;
+}
+
+.problem-detail {
+  padding: 0 24px 30px 172px;
+  animation: situation-panel-in 240ms ease both;
+}
+
+@keyframes situation-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.problem-next-step {
+  margin: 16px 0 0;
+  padding: 16px 18px;
+  border: 1px solid rgba(84, 75, 61, 0.13);
+  border-radius: 18px;
+  background: rgba(255, 250, 242, 0.72);
+}
+
+.problem-next-step strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--green2);
+}
+
+.problem-next-step p {
+  margin: 0;
+}
+
+.problem-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.problem-actions .btn,
+.problem-actions .text-btn {
+  min-height: 42px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+}
+
+.problem-service-link {
+  padding: 9px 0;
+  font-weight: 900;
+}
+
+.problem-gallery-btn {
+  background: rgba(255, 253, 248, 0.92);
+}
+
+@media (max-width: 1120px) {
+  body:not(.service-page) .hero h1 {
+    font-size: clamp(42px, 5.8vw, 66px);
+  }
+}
+
+@media (max-width: 820px) {
+  body:not(.service-page) .hero h1 {
+    font-size: clamp(38px, 9.2vw, 54px);
+  }
+
+  .problem-detail {
+    padding: 0 18px 26px;
+  }
+}
+
+@media (max-width: 620px) {
+  .language-toggle {
+    min-height: 42px;
+    padding-inline: 12px;
+  }
+
+  .language-current > span {
+    max-width: 92px;
+  }
+
+  body:not(.service-page) .hero h1 {
+    font-size: clamp(36px, 10.5vw, 48px);
+  }
+
+  .problem summary {
+    min-height: 0;
+    grid-template-columns: 92px minmax(0, 1fr);
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .problem .media {
+    height: 96px;
+    margin: 0;
+  }
+
+  .problem .body {
+    padding: 0;
+  }
+
+  .problem .body strong {
+    font-size: 18px;
+  }
+
+  .problem-actions {
+    display: grid;
+  }
+
+  .problem-actions .btn,
+  .problem-actions .text-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service,
+  .project-card.rich,
+  .video-card,
+  .problem,
+  .problem .media img,
+  .problem-detail,
+  .btn,
+  .lang,
+  .filterbar button {
+    animation: none;
+    transition: none;
+  }
+
+  .service:hover,
+  .project-card.rich:hover,
+  .video-card:hover,
+  .problem:hover .media img,
+  .problem[open] .media img,
+  .btn:active,
+  .lang:active,
+  .filterbar button:active {
+    transform: none;
   }
 }

@@ -629,6 +629,24 @@
 
   const filteredProjects = () =>
     state.projectFilter === "all" ? projects : projects.filter((project) => project.category === state.projectFilter);
+  const homepageHashTargets = new Set(["services", "clients", "projects", "media", "contact"]);
+  let hashScrollFrame = 0;
+  const scrollToCurrentHashTarget = () => {
+    const id = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+    if (!homepageHashTargets.has(id)) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    const headerHeight = Math.ceil(document.querySelector(".header")?.getBoundingClientRect().height || 76);
+    const targetTop = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 18;
+    window.scrollTo({ top: Math.max(0, targetTop), behavior: "auto" });
+  };
+  const scheduleHashScroll = () => {
+    if (!window.location.hash) return;
+    window.cancelAnimationFrame(hashScrollFrame);
+    hashScrollFrame = window.requestAnimationFrame(() => {
+      hashScrollFrame = window.requestAnimationFrame(scrollToCurrentHashTarget);
+    });
+  };
 
   const problems = [
     ["Külföldön élő tulajdonos", "Foreign owner", "A feladat fotókkal és rövid leírással is elindítható, így a tulajdonos akkor is átlátja a helyzetet, ha nincs Budapesten.", "The job can begin with photos and a short brief, so the owner can understand the situation even when they are not in Budapest."],
@@ -637,6 +655,83 @@
     ["Ingatlankezelői feladatlista", "Property manager task list", "Több apró karbantartási pont egy egyeztetésben kezelhető, így kevesebb külön kör és kevesebb félreértés marad.", "Several small maintenance items can be handled in one coordination flow, reducing separate follow-ups and misunderstandings."],
     ["Elhanyagolt udvar vagy kert", "Neglected yard or garden", "Fűnyírással, metszéssel és a járófelületek rendezésével a külső tér ismét gondozott, bemutatható képet mutathat.", "Mowing, pruning and tidying paths can restore an orderly, presentable outdoor area."],
     ["Iroda vagy képviseleti tér látogatás előtt", "Office or representative space before a visit", "Kisebb faljavítások, festés és szerelések úgy ütemezhetők, hogy a napi működést és a belépési szabályokat is figyelembe vegyük.", "Minor wall repairs, painting and fittings can be scheduled around daily operations and access requirements."],
+  ];
+
+  const problemUi = {
+    details: { hu: "Részletek +", en: "Details +", de: "Mehr erfahren +", uk: "Детальніше +", "zh-CN": "详情 +" },
+    close: { hu: "Bezárás −", en: "Close −", de: "Schließen −", uk: "Закрити −", "zh-CN": "关闭 −" },
+    nextStep: { hu: "Javasolt következő lépés", en: "Recommended next step", de: "Empfohlener nächster Schritt", uk: "Рекомендований наступний крок", "zh-CN": "建议的下一步" },
+    relatedService: { hu: "Kapcsolódó szolgáltatás", en: "Related service", de: "Passende Leistung", uk: "Пов’язана послуга", "zh-CN": "相关服务" },
+    viewPhotos: { hu: "Példaképek megnyitása", en: "View example photos", de: "Beispielfotos ansehen", uk: "Переглянути приклади фото", "zh-CN": "查看示例照片" },
+    sendPhotos: { hu: "Fotók küldése WhatsAppon", en: "Send photos on WhatsApp", de: "Fotos per WhatsApp senden", uk: "Надіслати фото у WhatsApp", "zh-CN": "通过 WhatsApp 发送照片" },
+    typical: { hu: "Tipikus helyzet", en: "Typical situation", de: "Typische Situation", uk: "Типова ситуація", "zh-CN": "典型情况" },
+  };
+
+  const situationLabel = (key) => problemUi[key]?.[state.lang] || problemUi[key]?.en || "";
+  const disclosureLabel = (key) =>
+    window.BPS_I18N?.t?.(key === "close" ? "closeLabel" : "detailsLabel", state.lang) ||
+    situationLabel(key);
+  const disclosureMarkup = (className = "disclosure-link") => `
+    <span class="${className}" data-disclosure-label>
+      <span class="closed-label">${disclosureLabel("details")}</span>
+      <span class="open-label" hidden aria-hidden="true">${disclosureLabel("close")}</span>
+    </span>`;
+
+  const problemDetails = [
+    {
+      service: { hu: "Ingatlankarbantartás", en: "Property maintenance" },
+      href: "property-maintenance-budapest.html",
+      projectIndex: 0,
+      next: {
+        hu: "Küldjön néhány áttekintő fotót, a budapesti kerületet és azt, hogyan lehet bejutni az ingatlanba. Így gyorsan látható, hogy fotók alapján elindítható-e a feladat.",
+        en: "Send a few overview photos, the Budapest district and access details. This makes it clear whether the task can start from photos or needs an on-site check.",
+      },
+    },
+    {
+      service: { hu: "Takarítás és karbantartás", en: "Cleaning and maintenance" },
+      href: "cleaning-services-budapest.html",
+      projectIndex: 3,
+      next: {
+        hu: "Írja meg a következő vendég érkezési idejét, küldjön fotókat a látható hibákról, és jelölje meg, mi számít sürgősnek.",
+        en: "Share the next guest arrival time, send photos of visible issues and mark what is urgent.",
+      },
+    },
+    {
+      service: { hu: "Festés és faljavítás", en: "Painting and wall repairs" },
+      href: "painting-wall-repairs-budapest.html",
+      projectIndex: 0,
+      next: {
+        hu: "Küldjön képeket a falhibákról, a helyiségről és az átadási határidőről. Ebből eldönthető, javítófestés vagy nagyobb frissítés indokolt-e.",
+        en: "Send photos of the wall defects, the room and the handover deadline. From there we can clarify whether touch-up painting or a fuller refresh makes sense.",
+      },
+    },
+    {
+      service: { hu: "Ezermester és ingatlankarbantartás", en: "Handyman and property maintenance" },
+      href: "handyman-services-budapest.html",
+      projectIndex: 5,
+      next: {
+        hu: "Készítsen rövid listát a hibákról, mellékeljen fotókat, és írja le, ki tudja jóváhagyni az esetleges változásokat.",
+        en: "Prepare a short task list, attach photos and note who can approve any scope changes.",
+      },
+    },
+    {
+      service: { hu: "Kertfenntartás", en: "Garden maintenance" },
+      href: "garden-maintenance-budapest.html",
+      projectIndex: 2,
+      next: {
+        hu: "Küldjön kültéri fotókat, jelölje meg a hozzáférést és az időjárástól függő határidőt. Így reális ütemezést lehet adni.",
+        en: "Send outdoor photos, access details and any weather-sensitive deadline. This helps set a realistic schedule.",
+      },
+    },
+    {
+      service: { hu: "Festés, faljavítás és szerelés", en: "Painting, wall repairs and fittings" },
+      href: "painting-wall-repairs-budapest.html",
+      projectIndex: 4,
+      next: {
+        hu: "Küldjön fotókat a látogatás előtt zavaró részletekről, a működési időről és a belépési szabályokról. Így diszkréten ütemezhető a munka.",
+        en: "Send photos of the details that matter before the visit, plus operating hours and access rules. The work can then be scheduled discreetly.",
+      },
+    },
   ];
 
   const process = [
@@ -691,66 +786,92 @@
       )
       .join("");
 
-  const disclosureHint = () => ui("Details", "Részletek");
-
   const statCards = () =>
     content.stats
       .map(
-        (item) => `
+        (item, index) => {
+          const panelId = `hero-stat-detail-${index}`;
+          return `
         <details class="stat" name="hero-facts" data-reveal>
-          <summary>
+          <summary aria-expanded="false" aria-controls="${panelId}">
             <span><b>${state.lang === "hu" ? item.huN : item.enN}</b><small>${state.lang === "hu" ? item.hu : item.en}</small></span>
-            <span class="disclosure-icon" aria-hidden="true">+</span>
+            ${disclosureMarkup("disclosure-icon")}
           </summary>
-          <p>${state.lang === "hu" ? item.huDetail : item.enDetail}</p>
-        </details>`
+          <p id="${panelId}">${state.lang === "hu" ? item.huDetail : item.enDetail}</p>
+        </details>`;
+        }
       )
       .join("");
 
   const problemCards = () =>
     problems
       .map(
-        (item, index) => `
-        <details class="problem" name="situations" data-reveal>
-          <summary>
-            <span class="media"><img src="${img(services[index % services.length].cover)}" alt="${state.lang === "hu" ? item[0] : item[1]}" loading="lazy" decoding="async"></span>
+        (item, index) => {
+          const detail = problemDetails[index];
+          const panelId = `situation-detail-${index}`;
+          const title = tx({ hu: item[0], en: item[1] });
+          const description = tx({ hu: item[2], en: item[3] });
+          const relatedService = tx(detail.service);
+          const galleryProject = projects[detail.projectIndex];
+          return `
+        <details class="problem" name="situations" data-situation-card data-reveal>
+          <summary aria-expanded="false" aria-controls="${panelId}">
+            <span class="media"><img src="${img(services[index % services.length].cover)}" alt="${title}" loading="lazy" decoding="async"></span>
             <span class="body">
-              <span class="eyebrow">${state.lang === "hu" ? "Tipikus helyzet" : "Typical situation"}</span>
-              <strong>${state.lang === "hu" ? item[0] : item[1]}</strong>
-              <span class="disclosure-link">${disclosureHint()} <span aria-hidden="true">+</span></span>
+              <span class="eyebrow">${situationLabel("typical")}</span>
+              <strong>${title}</strong>
+              ${disclosureMarkup()}
             </span>
           </summary>
-          <div class="problem-detail">
-            <p>${state.lang === "hu" ? item[2] : item[3]}</p>
-            <p><strong>${state.lang === "hu" ? "A jó kiindulópont:" : "A useful first step:"}</strong> ${state.lang === "hu" ? "néhány fotó, a helyszín és a kívánt határidő." : "a few photos, the location and the preferred timing."}</p>
+          <div class="problem-detail" id="${panelId}" role="region" aria-label="${title}">
+            <p>${description}</p>
+            <div class="problem-next-step">
+              <strong>${situationLabel("nextStep")}</strong>
+              <p>${tx(detail.next)}</p>
+            </div>
+            <div class="problem-actions">
+              <a class="text-btn problem-service-link" href="${detail.href}">${situationLabel("relatedService")}: ${relatedService}</a>
+              <a class="btn primary" href="${wa}" target="_blank" rel="noopener">${situationLabel("sendPhotos")}</a>
+              ${
+                galleryProject
+                  ? `<button class="btn problem-gallery-btn" type="button" data-situation-gallery="${index}" aria-label="${situationLabel("viewPhotos")}: ${tx(galleryProject.title)}">${situationLabel("viewPhotos")}</button>`
+                  : ""
+              }
+            </div>
           </div>
-        </details>`
+        </details>`;
+        }
       )
       .join("");
 
   const audienceCards = () =>
     audience
       .map(
-        (item, index) => `
+        (item, index) => {
+          const panelId = `audience-detail-${index}`;
+          return `
         <details class="audience" name="audiences" data-reveal>
-          <summary>
+          <summary aria-expanded="false" aria-controls="${panelId}">
             <span class="audience-number">0${index + 1}</span>
-            <span><strong>${state.lang === "hu" ? item[0] : item[1]}</strong><small>${disclosureHint()}</small></span>
-            <span class="disclosure-icon" aria-hidden="true">+</span>
+            <span><strong>${tx({ hu: item[0], en: item[1] })}</strong>${disclosureMarkup("small disclosure-link")}</span>
           </summary>
-          <p>${state.lang === "hu" ? item[2] : item[3]}</p>
-        </details>`
+          <p id="${panelId}">${tx({ hu: item[2], en: item[3] })}</p>
+        </details>`;
+        }
       )
       .join("");
 
   const faqAccordion = () =>
     faq
       .map(
-        (item, index) => `
+        (item, index) => {
+          const panelId = `faq-answer-${index}`;
+          return `
         <details class="faq" name="faq" data-reveal>
-          <summary><span>${state.lang === "hu" ? item[0] : item[1]}</span><span class="disclosure-icon" aria-hidden="true">+</span></summary>
-          <div class="faq-answer"><p>${state.lang === "hu" ? item[2] : item[3]}</p></div>
-        </details>`
+          <summary aria-expanded="false" aria-controls="${panelId}"><span>${tx({ hu: item[0], en: item[1] })}</span>${disclosureMarkup("disclosure-icon")}</summary>
+          <div class="faq-answer" id="${panelId}"><p>${tx({ hu: item[2], en: item[3] })}</p></div>
+        </details>`;
+        }
       )
       .join("");
 
@@ -900,7 +1021,7 @@
             </ul>
             <div class="hero-ctas">
               <a class="btn primary" href="#contact" aria-label="${tx(content.hero.primary)}">${tx(content.hero.primary)}</a>
-              <a class="btn" href="${wa}" aria-label="${tx(content.hero.whatsapp)}">${tx(content.hero.whatsapp)} <span aria-hidden="true">↗</span></a>
+              <a class="btn" href="${wa}" target="_blank" rel="noopener" aria-label="${tx(content.hero.whatsapp)}">${tx(content.hero.whatsapp)} <span aria-hidden="true">↗</span></a>
             </div>
             <p class="hero-helper">${tx(content.hero.helper)}</p>
           </div>
@@ -986,13 +1107,13 @@
         <section id="contact" class="section wrap">
           <div class="contact" data-reveal>
             <div class="contact-copy"><span class="eyebrow">${state.lang === "hu" ? "Első lépés" : "First step"}</span><h2>${tx(content.contactTitle)}</h2><p>${tx(content.contactText)}</p><div class="contact-points"><span>${state.lang === "hu" ? "2-3 fotó" : "2-3 photos"}</span><span>${state.lang === "hu" ? "Budapesti cím vagy kerület" : "Budapest address or district"}</span><span>${state.lang === "hu" ? "Hozzáférés" : "Access"}</span><span>${state.lang === "hu" ? "Időzítés" : "Timing"}</span></div></div>
-            <div class="contact-card"><span class="contact-number">${phone}</span><a class="btn primary" href="${wa}">${ui("Send a WhatsApp message", "WhatsApp üzenet küldése")}</a><a class="btn" href="${tel}" data-phone-action>${phoneActionLabel()}</a><small>${state.lang === "hu" ? "Rövid üzenet is elég: fotók, helyszín, határidő. Elsődleges terület: Budapest és közvetlen környéke." : "A short message is enough: photos, location and timing. Primary service area: Budapest and nearby locations."}</small></div>
+            <div class="contact-card"><span class="contact-number">${phone}</span><a class="btn primary" href="${wa}" target="_blank" rel="noopener">${ui("Send a WhatsApp message", "WhatsApp üzenet küldése")}</a><a class="btn" href="${tel}" data-phone-action data-phone-label>${phoneActionLabel()}</a><small>${state.lang === "hu" ? "Rövid üzenet is elég: fotók, helyszín, határidő. Elsődleges terület: Budapest és közvetlen környéke." : "A short message is enough: photos, location and timing. Primary service area: Budapest and nearby locations."}</small></div>
           </div>
         </section>
       </main>
 
       <footer class="footer"><span>Budapest Property Services</span><span>${state.lang === "hu" ? "Ingatlankarbantartás Budapesten, magyar és angol kommunikációval." : "Property maintenance in Budapest, with Hungarian and English communication."}</span></footer>
-      <div class="mobile-cta"><a href="${tel}" data-phone-action>${state.lang === "hu" ? "Hívás" : "Call"}</a><a href="${wa}" aria-label="WhatsApp">${state.lang === "hu" ? "WhatsApp fotókkal" : "WhatsApp photos"}</a></div>
+      <div class="mobile-cta"><a href="${tel}" data-phone-action>${state.lang === "hu" ? "Hívás" : "Call"}</a><a href="${wa}" target="_blank" rel="noopener" aria-label="WhatsApp">${state.lang === "hu" ? "WhatsApp fotókkal" : "WhatsApp photos"}</a></div>
       <div class="toast" id="phoneToast" role="status" aria-live="polite" aria-atomic="true"></div>
       <div id="projectModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}">×</button><div id="projectInner"></div></div></div>
       <div id="galleryModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Galéria bezárása" : "Close gallery"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Galéria bezárása" : "Close gallery"}">×</button><div id="galleryInner"></div></div></div>
@@ -1001,6 +1122,7 @@
     reveal();
     initCarousels(document);
     window.BPS_I18N?.afterHomeRender?.();
+    scheduleHashScroll();
   };
 
   const showToast = (message) => {
@@ -1012,22 +1134,49 @@
     showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2600);
   };
 
-  const copyPhoneToClipboard = async () => {
-    let copied = false;
+  const writePhoneToClipboard = async () => {
+    if (!navigator.clipboard?.writeText) return false;
+    let timeoutId;
     try {
-      await navigator.clipboard.writeText(phone);
-      copied = true;
-    } catch {
-      const input = document.createElement("textarea");
+      return await Promise.race([
+        navigator.clipboard.writeText(phone).then(
+          () => true,
+          () => false
+        ),
+        new Promise((resolve) => {
+          timeoutId = window.setTimeout(() => resolve(false), 450);
+        }),
+      ]);
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  };
+
+  const copyPhoneUsingSelection = () => {
+    let input;
+    try {
+      input = document.createElement("textarea");
       input.value = phone;
       input.setAttribute("readonly", "");
       input.style.position = "fixed";
+      input.style.left = "-9999px";
+      input.style.top = "0";
       input.style.opacity = "0";
       document.body.appendChild(input);
+      input.focus({ preventScroll: true });
       input.select();
-      copied = document.execCommand("copy");
-      input.remove();
+      input.setSelectionRange(0, input.value.length);
+      return document.execCommand("copy");
+    } catch {
+      return false;
+    } finally {
+      input?.remove();
     }
+  };
+
+  const copyPhoneToClipboard = async () => {
+    let copied = copyPhoneUsingSelection();
+    if (!copied) copied = await writePhoneToClipboard();
     showToast(
       copied
         ? window.BPS_I18N?.t?.("phoneCopied", state.lang) || (state.lang === "hu" ? `Telefonszám másolva: ${phone}` : `Phone number copied: ${phone}`)
@@ -1040,6 +1189,33 @@
       if (!window.BPS_I18N?.setLanguage) return;
       event.preventDefault();
     });
+    const syncDisclosure = (detail) => {
+      const summary = detail.querySelector("summary");
+      const isOpen = detail.open;
+      summary?.setAttribute("aria-expanded", String(isOpen));
+      summary?.querySelectorAll(".closed-label").forEach((label) => {
+        label.hidden = isOpen;
+        label.setAttribute("aria-hidden", String(isOpen));
+      });
+      summary?.querySelectorAll(".open-label").forEach((label) => {
+        label.hidden = !isOpen;
+        label.setAttribute("aria-hidden", String(!isOpen));
+      });
+    };
+    const bindDisclosure = (detail) => {
+      if (detail.dataset.disclosureBound === "true") return;
+      detail.dataset.disclosureBound = "true";
+      const summary = detail.querySelector("summary");
+      syncDisclosure(detail);
+      detail.addEventListener("toggle", () => syncDisclosure(detail));
+      summary?.addEventListener("keydown", (event) => {
+        if (!["Enter", " "].includes(event.key)) return;
+        event.preventDefault();
+        detail.open = !detail.open;
+        syncDisclosure(detail);
+      });
+    };
+    document.querySelectorAll("details.stat, details.problem, details.audience, details.faq").forEach(bindDisclosure);
     document.querySelectorAll("[data-accordion-group]").forEach((group) => {
       group.querySelectorAll("details").forEach((detail) => {
         detail.addEventListener("toggle", () => {
@@ -1048,6 +1224,16 @@
             if (other !== detail) other.open = false;
           });
         });
+      });
+    });
+    document.querySelectorAll("[data-situation-gallery]").forEach((btn) => {
+      btn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const detail = problemDetails[Number(btn.dataset.situationGallery)];
+        const galleryProject = detail ? projects[detail.projectIndex] : null;
+        if (!galleryProject) return;
+        openGallery(projectLightboxImages(galleryProject), 0, tx(galleryProject.title));
       });
     });
     document.querySelectorAll("[data-project-filter]").forEach((btn) => {
@@ -1123,7 +1309,7 @@
             <span class="label right">${tx(phaseLabel.after)}</span>
             <span class="handle" aria-hidden="true"></span>
           </div>
-          <p class="compare-hint" id="compareHint">${state.lang === "hu" ? "Azonos helyszínt közel azonos nézőpontból bemutató, illusztratív állapotpár. Húzza a fogantyút, vagy használja a nyílbillentyűket az összehasonlításhoz." : "A matched illustrative condition pair showing the same location from nearly the same viewpoint. Drag the handle or use the arrow keys to compare."}</p>
+          <p class="compare-hint" id="compareHint">${state.lang === "hu" ? "Azonos helyszínt közel azonos nézőpontból bemutató, illusztratív állapotpár. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket az összehasonlításhoz." : "A matched illustrative condition pair showing the same location from nearly the same viewpoint. Click or focus the slider first, then drag the handle or use the arrow keys to compare."}</p>
           <div class="phase-filter">
             <button class="active" data-phase-filter="all">${state.lang === "hu" ? "Összes kép" : "All photos"}</button>
             <button data-phase-filter="before">${tx(phaseLabel.before)} (${counts.before})</button>
@@ -1595,6 +1781,7 @@
     state.lang = next;
     render();
   });
+  window.addEventListener("hashchange", scheduleHashScroll);
 
   render();
 })();

@@ -96,6 +96,20 @@
       uk: `Телефон: ${phone}`,
       "zh-CN": `电话：${phone}`,
     },
+    detailsLabel: {
+      hu: "Részletek +",
+      en: "Details +",
+      de: "Mehr erfahren +",
+      uk: "Детальніше +",
+      "zh-CN": "详情 +",
+    },
+    closeLabel: {
+      hu: "Bezárás −",
+      en: "Close −",
+      de: "Schließen −",
+      uk: "Закрити −",
+      "zh-CN": "关闭 −",
+    },
     closeImage: {
       hu: "Kép bezárása",
       en: "Close image",
@@ -137,6 +151,34 @@
     ["Garden Maintenance", "Gartenpflege", "Догляд за садом", "园艺维护"],
     ["Handyman", "Hausmeisterservice", "Майстер на дрібні роботи", "维修服务"],
     ["Cleaning", "Reinigung", "Прибирання", "清洁"],
+    ["Details +", "Mehr erfahren +", "Детальніше +", "详情 +"],
+    ["Close −", "Schließen −", "Закрити −", "关闭 −"],
+    ["Typical situation", "Typische Situation", "Типова ситуація", "典型情况"],
+    ["Recommended next step", "Empfohlener nächster Schritt", "Рекомендований наступний крок", "建议的下一步"],
+    ["Related service", "Passende Leistung", "Пов’язана послуга", "相关服务"],
+    ["View example photos", "Beispielfotos ansehen", "Переглянути приклади фото", "查看示例照片"],
+    ["Foreign owner", "Eigentümer im Ausland", "Власник за кордоном", "海外业主"],
+    ["Airbnb turnover", "Airbnb-Gästewechsel", "Зміна гостей Airbnb", "Airbnb 换客"],
+    ["After a tenant moves out", "Nach dem Auszug eines Mieters", "Після виїзду орендаря", "租客搬出后"],
+    ["Property manager task list", "Aufgabenliste für die Immobilienverwaltung", "Список завдань для управителя нерухомості", "物业经理任务清单"],
+    ["Neglected yard or garden", "Vernachlässigter Hof oder Garten", "Занедбаний двір або сад", "疏于维护的院子或花园"],
+    ["Office or representative space before a visit", "Büro oder repräsentativer Bereich vor einem Besuch", "Офіс або представницький простір перед візитом", "访客到来前的办公室或接待空间"],
+    ["The job can begin with photos and a short brief, so the owner can understand the situation even when they are not in Budapest.", "Der Auftrag kann mit Fotos und einer kurzen Beschreibung beginnen, damit der Eigentümer die Situation auch außerhalb von Budapest nachvollziehen kann.", "Роботу можна розпочати з фото та короткого опису, щоб власник розумів ситуацію навіть тоді, коли він не в Будапешті.", "工作可以从照片和简短说明开始，因此即使业主不在布达佩斯，也能了解情况。"],
+    ["Visible defects, wall marks and small repairs can be prioritised around the next arrival.", "Sichtbare Mängel, Wandspuren und kleine Reparaturen können passend zur nächsten Ankunft priorisiert werden.", "Помітні дефекти, сліди на стінах і дрібні ремонти можна пріоритезувати з урахуванням наступного приїзду.", "可根据下一次入住时间优先处理明显瑕疵、墙面痕迹和小修。"],
+    ["Wall marks, minor damage, fittings and pre-handover touch-ups can be organised into one trackable scope.", "Wandspuren, kleinere Schäden, Montagen und Ausbesserungen vor der Übergabe können in einem nachvollziehbaren Umfang gebündelt werden.", "Сліди на стінах, дрібні пошкодження, кріплення та підготовчі виправлення перед передачею можна об’єднати в один зрозумілий обсяг.", "墙面痕迹、轻微损坏、安装事项和交付前修补可整理为一个可跟进的范围。"],
+    ["Several small maintenance items can be handled in one coordination flow, reducing separate follow-ups and misunderstandings.", "Mehrere kleine Instandhaltungspunkte können in einem Abstimmungsablauf bearbeitet werden, wodurch Rückfragen und Missverständnisse reduziert werden.", "Кілька дрібних пунктів обслуговування можна вести в одному процесі координації, зменшуючи кількість окремих уточнень і непорозумінь.", "多个小型维护事项可在一个协调流程中处理，减少反复跟进和误解。"],
+    ["Mowing, pruning and tidying paths can restore an orderly, presentable outdoor area.", "Mähen, Rückschnitt und das Ordnen von Wegen können den Außenbereich wieder gepflegt und präsentabel wirken lassen.", "Косіння, обрізка та впорядкування доріжок допомагають повернути зовнішній території доглянутий і презентабельний вигляд.", "割草、修剪和整理步道可以恢复户外区域整洁、可展示的状态。"],
+    ["Minor wall repairs, painting and fittings can be scheduled around daily operations and access requirements.", "Kleinere Wandreparaturen, Malerarbeiten und Montagen können rund um den laufenden Betrieb und die Zugangsregeln geplant werden.", "Дрібний ремонт стін, фарбування та монтаж можна запланувати з урахуванням щоденної роботи й правил доступу.", "小型墙面维修、粉刷和安装可根据日常运营和进入要求安排。"],
+    ["Cleaning and maintenance", "Reinigung und Instandhaltung", "Прибирання та обслуговування", "清洁与维护"],
+    ["Handyman and property maintenance", "Hausmeisterservice und Immobilieninstandhaltung", "Майстер і обслуговування нерухомості", "维修服务与物业维护"],
+    ["Painting, wall repairs and fittings", "Malerarbeiten, Wandreparaturen und Montagen", "Фарбування, ремонт стін і монтаж", "粉刷、墙面维修和安装"],
+    ["Send a few overview photos, the Budapest district and access details. This makes it clear whether the task can start from photos or needs an on-site check.", "Senden Sie ein paar Übersichtsaufnahmen, den Budapester Bezirk und die Zugangsinformationen. So wird klar, ob die Aufgabe anhand von Fotos starten kann oder eine Besichtigung vor Ort braucht.", "Надішліть кілька загальних фото, район Будапешта та деталі доступу. Так буде зрозуміло, чи можна почати за фото, чи потрібна перевірка на місці.", "请发送几张整体照片、布达佩斯所在区和进入方式。这样可以判断任务能否从照片开始，或是否需要现场查看。"],
+    ["Share the next guest arrival time, send photos of visible issues and mark what is urgent.", "Teilen Sie die nächste Gästeankunft mit, senden Sie Fotos der sichtbaren Punkte und markieren Sie, was dringend ist.", "Повідомте час наступного прибуття гостя, надішліть фото видимих проблем і позначте термінові пункти.", "请告知下一位客人的到达时间，发送可见问题照片，并标明紧急事项。"],
+    ["Send photos of the wall defects, the room and the handover deadline. From there we can clarify whether touch-up painting or a fuller refresh makes sense.", "Senden Sie Fotos der Wandmängel, des Raums und der Übergabefrist. Danach lässt sich klären, ob Ausbesserungsanstrich oder eine umfassendere Auffrischung sinnvoll ist.", "Надішліть фото дефектів стін, кімнати та строку передачі. Після цього можна уточнити, чи достатньо локального підфарбування, чи потрібне повніше оновлення.", "请发送墙面问题、房间和交付期限的照片。之后我们可以明确局部修补还是更完整翻新更合适。"],
+    ["Prepare a short task list, attach photos and note who can approve any scope changes.", "Erstellen Sie eine kurze Aufgabenliste, fügen Sie Fotos hinzu und nennen Sie, wer Änderungen am Umfang freigeben kann.", "Підготуйте короткий список завдань, додайте фото й зазначте, хто може погоджувати зміни в обсязі.", "请准备简短任务清单、附上照片，并注明谁可以批准范围变化。"],
+    ["Send outdoor photos, access details and any weather-sensitive deadline. This helps set a realistic schedule.", "Senden Sie Außenfotos, Zugangsinformationen und wetterabhängige Fristen. So lässt sich ein realistischer Zeitplan festlegen.", "Надішліть фото зовнішньої зони, деталі доступу та строки, які залежать від погоди. Це допоможе скласти реалістичний графік.", "请发送户外照片、进入方式和任何受天气影响的期限。这有助于制定现实的时间安排。"],
+    ["Send photos of the details that matter before the visit, plus operating hours and access rules. The work can then be scheduled discreetly.", "Senden Sie Fotos der Details, die vor dem Besuch wichtig sind, sowie Betriebszeiten und Zugangsregeln. Die Arbeit kann dann diskret eingeplant werden.", "Надішліть фото важливих деталей перед візитом, а також робочий час і правила доступу. Тоді роботу можна запланувати непомітно.", "请发送访客到来前需要处理的细节照片，以及运营时间和进入规则。随后可低调安排工作。"],
+    ["A matched illustrative condition pair showing the same location from nearly the same viewpoint. Click or focus the slider first, then drag the handle or use the arrow keys to compare.", "Ein passendes illustratives Zustandspaar zeigt denselben Ort aus nahezu derselben Perspektive. Klicken oder fokussieren Sie zuerst den Schieberegler, ziehen Sie dann den Griff oder verwenden Sie die Pfeiltasten zum Vergleichen.", "Ілюстративна пара станів показує те саме місце майже з того самого ракурсу. Спочатку клацніть або сфокусуйте повзунок, потім перетягніть ручку чи використовуйте клавіші зі стрілками для порівняння.", "这组匹配的示意状态图从几乎相同视角展示同一位置。请先点击或聚焦滑块，然后拖动手柄或使用方向键比较。"],
     ["What we do", "Leistungen", "Що ми робимо", "服务内容"],
     ["Process", "Ablauf", "Процес", "流程"],
     ["FAQ", "FAQ", "Поширені запитання", "常见问题"],
@@ -2860,8 +2902,12 @@
       const languageHome = header.querySelector("[data-language-home]");
       const mobilePhone = mobileTools?.querySelector("[data-nav-mobile-phone]");
 
-      if (isCompact && mobileTools && languageSelector && !mobileTools.contains(languageSelector)) {
-        mobileTools.insertBefore(languageSelector, mobileTools.firstChild);
+      if (isCompact && mobileTools && languageSelector) {
+        if (mobilePhone) {
+          mobilePhone.insertAdjacentElement("afterend", languageSelector);
+        } else if (!mobileTools.contains(languageSelector)) {
+          mobileTools.insertBefore(languageSelector, mobileTools.firstChild);
+        }
       } else if (!isCompact && languageSelector && languageHome && !actions?.contains(languageSelector)) {
         actions?.insertBefore(languageSelector, languageHome);
       }
@@ -3075,18 +3121,9 @@
     button.setAttribute("aria-label", t("openLanguageMenu", lang));
     button.setAttribute("aria-expanded", selector.classList.contains("open") ? "true" : "false");
     menu.setAttribute("aria-label", t("languageBadge", lang));
-    const globeIcon = `
-      <span class="language-globe" aria-hidden="true">
-        <svg viewBox="0 0 24 24" focusable="false">
-          <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"></path>
-          <path d="M3.6 9h16.8M3.6 15h16.8M12 3c2.1 2.35 3.1 5.35 3.1 9s-1 6.65-3.1 9M12 3C9.9 5.35 8.9 8.35 8.9 12s1 6.65 3.1 9"></path>
-        </svg>
-      </span>`;
     const buttonMarkup = `
-      ${globeIcon}
       <span class="language-current">
         <span>${activeLanguage.label}</span>
-        <small>${t("languageSelectorHint", lang)}</small>
       </span>
       <span class="language-chevron" aria-hidden="true"></span>`;
     if (button.innerHTML !== buttonMarkup) button.innerHTML = buttonMarkup;
@@ -3693,20 +3730,47 @@
     closeLanguageSelector();
   });
 
+  const copyPhoneUsingSelection = () => {
+    let input;
+    try {
+      input = document.createElement("textarea");
+      input.value = phone;
+      input.setAttribute("readonly", "");
+      input.style.position = "fixed";
+      input.style.left = "-9999px";
+      input.style.top = "0";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.focus({ preventScroll: true });
+      input.select();
+      input.setSelectionRange(0, input.value.length);
+      return document.execCommand("copy");
+    } catch {
+      return false;
+    } finally {
+      input?.remove();
+    }
+  };
+
+  const copyPhoneWithClipboard = async () => {
+    try {
+      if (!navigator.clipboard?.writeText) return false;
+      await navigator.clipboard.writeText(phone);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const copyPhoneToClipboard = async (lang = currentLang()) => {
     const success = t("phoneCopied", lang);
     const fallback = t("phoneFallback", lang);
+    let copied = false;
 
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(phone);
-        showToast(success);
-      } else {
-        showToast(fallback);
-      }
-    } catch {
-      showToast(fallback);
-    }
+    copied = copyPhoneUsingSelection();
+    if (!copied) copied = await copyPhoneWithClipboard();
+
+    showToast(copied ? success : fallback);
   };
 
   const bindPhoneActions = () => {
