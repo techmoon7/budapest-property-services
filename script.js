@@ -193,6 +193,8 @@
     ["Garden Maintenance", "Gartenpflege", "Догляд за садом", "园艺维护"],
     ["Handyman", "Hausmeisterservice", "Майстер на дрібні роботи", "维修服务"],
     ["Cleaning", "Reinigung", "Прибирання", "清洁"],
+    ["Airbnb Maintenance", "Airbnb-Instandhaltung", "Обслуговування Airbnb", "Airbnb 维护"],
+    ["Airbnb property maintenance", "Airbnb-Immobilieninstandhaltung", "Обслуговування нерухомості Airbnb", "Airbnb 物业维护"],
     ["Details +", "Mehr erfahren +", "Детальніше +", "详情 +"],
     ["Close −", "Schließen −", "Закрити −", "关闭 −"],
     ["Typical situation", "Typische Situation", "Типова ситуація", "典型情况"],
@@ -2857,6 +2859,13 @@
       en: "Cleaning",
       dataset: "cleaningLink",
     },
+    {
+      key: "airbnb",
+      href: "airbnb-property-maintenance-budapest.html",
+      hu: "Airbnb karbantartás",
+      en: "Airbnb Maintenance",
+      dataset: "airbnbLink",
+    },
   ];
 
   const normalizeLanguage = (lang = "") => {
@@ -3287,7 +3296,8 @@
     document.querySelectorAll("[data-lang-panel]").forEach((panel) => {
       if (panel.dataset.i18nOriginalText === undefined) panel.dataset.i18nOriginalText = panel.textContent;
       const panelLang = panel.dataset.langPanel;
-      const showPanel = lang === panelLang || (!["hu", "en"].includes(lang) && panelLang === "en");
+      const hasExactPanel = !!panel.parentElement?.querySelector(`[data-lang-panel="${lang}"]`);
+      const showPanel = lang === panelLang || (!["hu", "en"].includes(lang) && panelLang === "en" && !hasExactPanel);
       panel.hidden = !showPanel;
       panel.setAttribute("aria-hidden", String(!showPanel));
       if (showPanel) {
@@ -3887,7 +3897,7 @@
     t,
   };
 
-  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services"].includes(document.body?.dataset.page)) {
+  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services", "airbnb-property-maintenance"].includes(document.body?.dataset.page)) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initStandalonePage, { once: true });
     } else {
