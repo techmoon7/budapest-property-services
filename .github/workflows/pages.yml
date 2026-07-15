@@ -36,6 +36,7 @@ jobs:
             garden-maintenance-budapest.html \
             cleaning-services-budapest.html \
             airbnb-property-maintenance-budapest.html \
+            property-management-for-foreign-owners-budapest.html \
             styles.css \
             styles-base.css \
             script.js \
@@ -57,6 +58,7 @@ jobs:
           test -s _site/garden-maintenance-budapest.html
           test -s _site/cleaning-services-budapest.html
           test -s _site/airbnb-property-maintenance-budapest.html
+          test -s _site/property-management-for-foreign-owners-budapest.html
           test -s _site/styles.css
           test -s _site/styles-base.css
           test -s _site/script.js

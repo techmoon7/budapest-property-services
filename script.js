@@ -194,6 +194,8 @@
     ["Handyman", "Hausmeisterservice", "Майстер на дрібні роботи", "维修服务"],
     ["Cleaning", "Reinigung", "Прибирання", "清洁"],
     ["Airbnb Maintenance", "Airbnb-Instandhaltung", "Обслуговування Airbnb", "Airbnb 维护"],
+    ["Owner Support", "Eigentümerbetreuung", "Підтримка власників", "业主支持"],
+    ["Foreign owner property support", "Immobilienbetreuung für ausländische Eigentümer", "Підтримка нерухомості для іноземних власників", "海外业主物业支持"],
     ["Airbnb property maintenance", "Airbnb-Immobilieninstandhaltung", "Обслуговування нерухомості Airbnb", "Airbnb 物业维护"],
     ["Details +", "Mehr erfahren +", "Детальніше +", "详情 +"],
     ["Close −", "Schließen −", "Закрити −", "关闭 −"],
@@ -2866,6 +2868,13 @@
       en: "Airbnb Maintenance",
       dataset: "airbnbLink",
     },
+    {
+      key: "foreignOwners",
+      href: "property-management-for-foreign-owners-budapest.html",
+      hu: "Külföldi tulajdonosok",
+      en: "Owner Support",
+      dataset: "foreignOwnersLink",
+    },
   ];
 
   const normalizeLanguage = (lang = "") => {
@@ -3897,7 +3906,7 @@
     t,
   };
 
-  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services", "airbnb-property-maintenance"].includes(document.body?.dataset.page)) {
+  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services", "airbnb-property-maintenance", "property-management-foreign-owners"].includes(document.body?.dataset.page)) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initStandalonePage, { once: true });
     } else {
