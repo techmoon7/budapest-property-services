@@ -3706,6 +3706,7 @@
       let demoIndicator = null;
       let demoHideTimer = 0;
       let paintMaterialReady = false;
+      let autoPreviewStarted = false;
       const activationThreshold = 5;
       const dragThreshold = 5;
       const scrollDecisionDistance = 10;
@@ -4130,18 +4131,16 @@
         demoIndicator.style.transform = `translate(${Math.round(canvasLeft + point.x)}px, ${Math.round(canvasTop + point.y)}px)`;
       };
 
+      const shouldAutoPreview = () =>
+        activePalette.preview || root.matches(".hero-visual-frame, .hero-media, .service-hero-visual");
+
       const startPreview = () => {
-        if (reducedMotion || !paintMaterialReady || root.classList.contains("paint-reveal-used") || !activePalette.preview) return;
+        if (reducedMotion || autoPreviewStarted || root.classList.contains("paint-reveal-used") || !shouldAutoPreview()) return;
         if (!root.matches(".hero-visual-frame, .hero-media, .service-hero-visual")) return;
-        const previewKey = `bps-paint-preview-${paintMode}`;
-        try {
-          if (window.sessionStorage?.getItem(previewKey) === "true") return;
-          window.sessionStorage?.setItem(previewKey, "true");
-        } catch {
-          // Storage is a nicety; the preview can still run once for this instance.
-        }
         const { from, to } = previewPath();
         if (!pointInsideWall(from) || !pointInsideWall(to)) return;
+        autoPreviewStarted = true;
+        if (!paintMaterialReady) buildPaintMaterial();
         root.classList.add("paint-reveal-preview");
         moveDemoIndicator(from);
         previewFrame = window.requestAnimationFrame(() => {
@@ -4158,7 +4157,7 @@
       };
 
       const schedulePreview = () => {
-        if (reducedMotion || !paintMaterialReady || previewTimer || previewFrame) return;
+        if (reducedMotion || previewTimer || previewFrame || !shouldAutoPreview()) return;
         window.setTimeout(startPreview, 450);
       };
 
