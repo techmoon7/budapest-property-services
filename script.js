@@ -3710,6 +3710,10 @@
       const dragThreshold = 5;
       const scrollDecisionDistance = 10;
       const wallEntryGrace = 18;
+      let activeInputFamily = null;
+
+      const inputGestureActive = () => activePointer !== null || pending !== null;
+      const canUseInputFamily = (family) => !inputGestureActive() || activeInputFamily === family;
 
       const debugPaint = (eventName, details = {}) => {
         if (!paintDebugEnabled) return;
@@ -4292,7 +4296,7 @@
       };
 
       const beginRootGesture = (event) => {
-        if (useTouchFallback && event.pointerType === "touch") return;
+        if (activeInputFamily && activeInputFamily !== "pointer") return;
         if (event.button !== undefined && event.button !== 0) return;
         rootGesture = {
           pointerId: event.pointerId,
@@ -4303,7 +4307,7 @@
       };
 
       const updateRootGesture = (event) => {
-        if (useTouchFallback && event.pointerType === "touch") return;
+        if (activeInputFamily && activeInputFamily !== "pointer") return;
         if (!rootGesture || event.pointerId !== rootGesture.pointerId || rootGesture.moved) return;
         const distance = Math.hypot(event.clientX - rootGesture.startX, event.clientY - rootGesture.startY);
         if (distance < 7) return;
@@ -4312,7 +4316,7 @@
       };
 
       const endRootGesture = (event) => {
-        if (useTouchFallback && event.pointerType === "touch") return;
+        if (activeInputFamily && activeInputFamily !== "pointer") return;
         if (!rootGesture || event.pointerId !== rootGesture.pointerId) return;
         rootGesture = null;
       };
@@ -4349,6 +4353,7 @@
         flushQueuedStroke();
         markDragClick();
         activePointer = null;
+        activeInputFamily = null;
         lastPoint = null;
         pointerCaptureActive = false;
         unbindPointerDocumentFallback();
@@ -4366,6 +4371,7 @@
         cancelStrokeFrame();
         pending = null;
         activePointer = null;
+        activeInputFamily = null;
         lastPoint = null;
         queuedPoint = null;
         pointerCaptureActive = false;
@@ -4385,6 +4391,7 @@
         cancelPreview(true);
         const point = input.point;
         const insideWall = pointInsideWall(point);
+        activeInputFamily = input.mode;
         root.classList.toggle("paint-reveal-hit", insideWall);
 
         pending = {
@@ -4469,8 +4476,8 @@
       };
 
       const handlePointerDown = (event) => {
-        if (useTouchFallback && event.pointerType === "touch") return;
         if (event.button !== undefined && event.button !== 0) return;
+        if (!canUseInputFamily("pointer")) return;
         startPendingInput({
           id: event.pointerId,
           mode: "pointer",
@@ -4480,7 +4487,7 @@
       };
 
       const handlePointerMove = (event) => {
-        if (useTouchFallback && event.pointerType === "touch") return;
+        if (activeInputFamily && activeInputFamily !== "pointer") return;
         continueInput(
           {
             id: event.pointerId,
@@ -4493,11 +4500,11 @@
       };
 
       const handlePointerUp = (event) => {
-        if (useTouchFallback && event.pointerType === "touch") return;
+        if (activeInputFamily && activeInputFamily !== "pointer") return;
         finishInput(event.pointerId, event);
       };
       const handlePointerCancel = (event) => {
-        if (useTouchFallback && event.pointerType === "touch") return;
+        if (activeInputFamily && activeInputFamily !== "pointer") return;
         if (event.pointerId === activePointer || event.pointerId === pending?.id) cancelPending();
       };
 
@@ -4545,6 +4552,7 @@
       });
 
       const handleTouchStart = (event) => {
+        if (!canUseInputFamily("touch")) return;
         if (event.touches.length !== 1 || activePointer !== null) {
           cancelPending();
           return;
@@ -4553,6 +4561,7 @@
       };
 
       const handleTouchMove = (event) => {
+        if (activeInputFamily && activeInputFamily !== "touch") return;
         const id = activePointer || pending?.id;
         if (!id) return;
         const touch = touchById(event.touches, id) || touchById(event.changedTouches, id);
@@ -4561,12 +4570,14 @@
       };
 
       const handleTouchEnd = (event) => {
+        if (activeInputFamily && activeInputFamily !== "touch") return;
         const id = activePointer || pending?.id;
         if (!id) return;
         if (touchById(event.changedTouches, id)) finishInput(id, null, false);
       };
 
       const handleTouchCancel = (event) => {
+        if (activeInputFamily && activeInputFamily !== "touch") return;
         const id = activePointer || pending?.id;
         if (!id || touchById(event.changedTouches, id)) cancelPending();
       };
