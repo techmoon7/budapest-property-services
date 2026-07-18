@@ -3657,7 +3657,7 @@
       const layerCanvas = document.createElement("canvas");
       const maskCanvas = document.createElement("canvas");
       const wallMaskCanvas = document.createElement("canvas");
-      const layerCtx = layerCanvas.getContext("2d", { alpha: true, willReadFrequently: true });
+      const layerCtx = layerCanvas.getContext("2d", { alpha: true });
       const maskCtx = maskCanvas.getContext("2d", { alpha: true });
       const wallMaskCtx = wallMaskCanvas.getContext("2d", { alpha: true });
       if (!layerCtx || !maskCtx || !wallMaskCtx) {
@@ -3671,7 +3671,6 @@
       const activePalette = paintModes[paintMode] || paintModes.paint;
       const paintColor = root.dataset.paintColor || activePalette.color;
       const paintOpacity = Number(root.dataset.paintOpacity) || activePalette.opacity;
-      const paintShadowColor = root.dataset.paintShadowColor || activePalette.shadow;
       const paintHighlightColor = root.dataset.paintHighlightColor || activePalette.highlight;
       const baseBrushSize = Math.max(40, Number(root.dataset.paintBrush) || 122);
       const fadeDelay = Number(root.dataset.paintFadeDelay) || 4000;
@@ -3706,6 +3705,7 @@
       let previewFrame = 0;
       let demoIndicator = null;
       let demoHideTimer = 0;
+      let paintMaterialReady = false;
       const activationThreshold = 5;
       const dragThreshold = 5;
       const scrollDecisionDistance = 10;
@@ -3854,68 +3854,9 @@
 
       const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-      const colorToRgb = (value, fallback = activePalette.color) => {
-        const source = String(value || fallback || "#c86436").trim();
-        const hex = source.match(/^#?([0-9a-f]{6})$/i)?.[1];
-        if (hex) {
-          return {
-            r: Number.parseInt(hex.slice(0, 2), 16),
-            g: Number.parseInt(hex.slice(2, 4), 16),
-            b: Number.parseInt(hex.slice(4, 6), 16),
-          };
-        }
-        const rgb = source.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-        if (rgb) {
-          return {
-            r: clamp(Number(rgb[1]), 0, 255),
-            g: clamp(Number(rgb[2]), 0, 255),
-            b: clamp(Number(rgb[3]), 0, 255),
-          };
-        }
-        return { r: 200, g: 100, b: 54 };
-      };
-
       const drawImageTo = (context) => {
         const cover = getImagePaintRect();
         context.drawImage(image, cover.x, cover.y, cover.width, cover.height);
-      };
-
-      const applyPaintMaterialPixels = () => {
-        const paintRgb = colorToRgb(paintColor);
-        const strength = clamp(paintOpacity, activePalette.effect === "color" ? 0.99 : 0.72, 1);
-        let imageData;
-        try {
-          imageData = layerCtx.getImageData(0, 0, layerCanvas.width, layerCanvas.height);
-        } catch {
-          layerCtx.globalCompositeOperation = "source-over";
-          layerCtx.globalAlpha = 1;
-          return;
-        }
-
-        const data = imageData.data;
-        for (let index = 0; index < data.length; index += 4) {
-          const alpha = data[index + 3];
-          if (!alpha) continue;
-
-          const sourceR = data[index];
-          const sourceG = data[index + 1];
-          const sourceB = data[index + 2];
-          const luminance = (sourceR * 0.2126 + sourceG * 0.7152 + sourceB * 0.0722) / 255;
-          const contrastLum = clamp((luminance - 0.5) * 0.24 + 0.5, 0, 1);
-          const shade = clamp(0.98 + (contrastLum - 0.5) * 0.08, 0.94, 1.04);
-          const fineTexture = clamp((sourceR - sourceB) / 255, -0.06, 0.06);
-          const textureLift = fineTexture * 2;
-
-          const paintedR = clamp(paintRgb.r * shade + textureLift, 0, 255);
-          const paintedG = clamp(paintRgb.g * shade + textureLift * 0.42, 0, 255);
-          const paintedB = clamp(paintRgb.b * shade - textureLift * 0.16, 0, 255);
-
-          data[index] = paintedR * strength + sourceR * (1 - strength);
-          data[index + 1] = paintedG * strength + sourceG * (1 - strength);
-          data[index + 2] = paintedB * strength + sourceB * (1 - strength);
-          data[index + 3] = alpha;
-        }
-        layerCtx.putImageData(imageData, 0, 0);
       };
 
       const buildWallMask = () => {
@@ -3936,23 +3877,37 @@
       const buildPaintMaterial = () => {
         layerCtx.clearRect(0, 0, cssWidth, cssHeight);
         drawImageTo(layerCtx);
+
+        const strength = clamp(paintOpacity, activePalette.effect === "color" ? 0.92 : 0.58, 0.98);
+        layerCtx.save();
+        layerCtx.globalCompositeOperation = "source-atop";
+        layerCtx.globalAlpha = strength;
+        layerCtx.fillStyle = paintColor;
+        layerCtx.fillRect(0, 0, cssWidth, cssHeight);
+
         if (activePalette.effect === "color") {
-          applyPaintMaterialPixels();
-        } else if (activePalette.effect === "clean") {
-          applyPaintMaterialPixels();
-        } else if (activePalette.effect === "repair") {
-          applyPaintMaterialPixels();
-        } else if (activePalette.effect === "garden") {
-          applyPaintMaterialPixels();
-        } else if (activePalette.effect === "airbnb") {
-          applyPaintMaterialPixels();
+          layerCtx.globalCompositeOperation = "multiply";
+          layerCtx.globalAlpha = 0.16;
+          drawImageTo(layerCtx);
+          layerCtx.globalCompositeOperation = "screen";
+          layerCtx.globalAlpha = 0.06;
+          layerCtx.fillStyle = paintHighlightColor;
+          layerCtx.fillRect(0, 0, cssWidth, cssHeight);
+        } else {
+          layerCtx.globalCompositeOperation = "source-atop";
+          layerCtx.globalAlpha = 0.12;
+          layerCtx.fillStyle = paintHighlightColor;
+          layerCtx.fillRect(0, 0, cssWidth, cssHeight);
         }
+        layerCtx.restore();
         layerCtx.globalCompositeOperation = "source-over";
         layerCtx.globalAlpha = 1;
+        paintMaterialReady = true;
       };
 
       const renderPaintedWall = () => {
         renderFrame = 0;
+        if (!paintMaterialReady) return;
         clearCanvas();
         ctx.save();
         ctx.drawImage(layerCanvas, 0, 0, cssWidth, cssHeight);
@@ -4082,7 +4037,17 @@
         const imageRect = image.getBoundingClientRect();
         const nextWidth = Math.max(1, Math.round(imageRect.width));
         const nextHeight = Math.max(1, Math.round(imageRect.height));
-        ratio = Math.min(Math.max(window.devicePixelRatio || 1, 1), 2);
+        if (nextWidth < 2 || nextHeight < 2) {
+          root.classList.remove("paint-reveal-ready");
+          debugPaint("image-not-laid-out");
+          return;
+        }
+        const mobile = nextWidth < 560 || window.matchMedia?.("(pointer: coarse)")?.matches;
+        const rawRatio = Math.max(window.devicePixelRatio || 1, 1);
+        const maxRatio = mobile ? 1.5 : 2;
+        const maxPixels = mobile ? 420000 : 1200000;
+        const areaRatio = Math.sqrt(maxPixels / Math.max(1, nextWidth * nextHeight));
+        ratio = Math.max(1, Math.min(rawRatio, maxRatio, areaRatio));
 
         cssWidth = nextWidth;
         cssHeight = nextHeight;
@@ -4099,7 +4064,6 @@
           context.setTransform(ratio, 0, 0, ratio, 0, 0);
           context.clearRect(0, 0, cssWidth, cssHeight);
         });
-        const mobile = cssWidth < 520;
         const isRoller = activePalette.effect === "color";
         const minBrush = isRoller ? (mobile ? 136 : 168) : mobile ? 72 : 112;
         const maxBrush = isRoller ? (mobile ? 188 : 230) : mobile ? 118 : 172;
@@ -4108,8 +4072,8 @@
           clamp(baseBrushSize, minBrush, maxBrush),
           Math.max(minBrush, Math.min(cssWidth, cssHeight) * coverageLimit)
         );
+        paintMaterialReady = false;
         buildWallMask();
-        buildPaintMaterial();
         root.classList.remove("paint-reveal-active", "paint-reveal-fading");
         root.classList.add("paint-reveal-ready");
         debugPaint("resize");
@@ -4167,7 +4131,7 @@
       };
 
       const startPreview = () => {
-        if (reducedMotion || root.classList.contains("paint-reveal-used") || !activePalette.preview) return;
+        if (reducedMotion || !paintMaterialReady || root.classList.contains("paint-reveal-used") || !activePalette.preview) return;
         if (!root.matches(".hero-visual-frame, .hero-media, .service-hero-visual")) return;
         const previewKey = `bps-paint-preview-${paintMode}`;
         try {
@@ -4194,7 +4158,7 @@
       };
 
       const schedulePreview = () => {
-        if (reducedMotion || previewTimer || previewFrame) return;
+        if (reducedMotion || !paintMaterialReady || previewTimer || previewFrame) return;
         window.setTimeout(startPreview, 450);
       };
 
@@ -4325,6 +4289,7 @@
       let unbindPointerDocumentFallback = () => {};
 
       const beginPainting = (input, point) => {
+        if (!paintMaterialReady) buildPaintMaterial();
         activePointer = input.id;
         pending = null;
         lastPoint = point;
@@ -4552,6 +4517,13 @@
       });
 
       const handleTouchStart = (event) => {
+        if (activeInputFamily === "pointer" && pending?.pointerType === "touch" && activePointer === null) {
+          pending = null;
+          activeInputFamily = null;
+          rootGesture = null;
+          root.dataset.paintGesture = "";
+          root.classList.remove("paint-reveal-hit", "paint-reveal-rolling");
+        }
         if (!canUseInputFamily("touch")) return;
         if (event.touches.length !== 1 || activePointer !== null) {
           cancelPending();
@@ -4659,11 +4631,20 @@
         root.addEventListener("pointercancel", endRootGesture, true);
       }
 
+      const scheduleDecodedCanvasReset = () => {
+        if (!image.complete || !image.naturalWidth) {
+          root.classList.remove("paint-reveal-ready");
+          return;
+        }
+        const decoded = typeof image.decode === "function" ? image.decode().catch(() => {}) : Promise.resolve();
+        decoded.then(scheduleCanvasReset);
+      };
+
       if (image.complete && image.naturalWidth) {
-        resetCanvasSize();
+        scheduleDecodedCanvasReset();
       } else {
         root.classList.remove("paint-reveal-ready");
-        image.addEventListener("load", scheduleCanvasReset, { once: true });
+        image.addEventListener("load", scheduleDecodedCanvasReset, { once: true });
         image.addEventListener(
           "error",
           () => {
