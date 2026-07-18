@@ -3469,17 +3469,12 @@
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     const supportsPointerEvents = "PointerEvent" in window;
     const supportsTouchEvents = "ontouchstart" in window || (typeof TouchEvent !== "undefined" && navigator.maxTouchPoints > 0);
-    const touchActionSupported = window.CSS?.supports?.("touch-action", "pan-y") === true;
-    const coarseTouchInput = (navigator.maxTouchPoints || 0) > 0 || window.matchMedia?.("(pointer: coarse)")?.matches;
-    const webkitTouchCallout = window.CSS?.supports?.("-webkit-touch-callout", "none") === true;
-    const appleTouchVendor = supportsTouchEvents && /Apple/i.test(navigator.vendor || "");
-    const preferNativeTouch = supportsTouchEvents && coarseTouchInput && (webkitTouchCallout || appleTouchVendor);
     const localDebugHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
     const forceTouchInput = localDebugHost && /(?:^|[?&])paintInput=touch(?:&|$)/.test(window.location.search);
     const forceMouseInput = localDebugHost && /(?:^|[?&])paintInput=mouse(?:&|$)/.test(window.location.search);
     const canUseTouchFallback = supportsTouchEvents || (localDebugHost && typeof TouchEvent !== "undefined");
-    const usePointerInput = !forceTouchInput && !forceMouseInput && supportsPointerEvents && !preferNativeTouch && (!supportsTouchEvents || touchActionSupported);
-    const useTouchFallback = !forceMouseInput && canUseTouchFallback && (!usePointerInput || forceTouchInput);
+    const usePointerInput = !forceTouchInput && !forceMouseInput && supportsPointerEvents;
+    const useTouchFallback = !forceMouseInput && canUseTouchFallback;
     const useMouseFallback = forceMouseInput || (!usePointerInput && !useTouchFallback);
     const paintDebugEnabled =
       localDebugHost && /(?:^|[?&])paintDebug=1(?:&|$)/.test(window.location.search);
@@ -3608,7 +3603,14 @@
     activeRoots.slice(0, interactiveLimit).forEach((root) => {
       if (root.dataset.paintRevealBound === "true") return;
       root.dataset.paintRevealBound = "true";
-      root.dataset.paintInputMode = usePointerInput ? "pointer" : useTouchFallback ? "touch" : "mouse";
+      root.dataset.paintInputMode =
+        [
+          usePointerInput && "pointer",
+          useTouchFallback && "touch",
+          useMouseFallback && "mouse",
+        ]
+          .filter(Boolean)
+          .join("+") || "none";
       if (reducedMotion) root.dataset.paintReducedMotion = "true";
 
       const image = root.dataset.paintImageSelector
@@ -4290,6 +4292,7 @@
       };
 
       const beginRootGesture = (event) => {
+        if (useTouchFallback && event.pointerType === "touch") return;
         if (event.button !== undefined && event.button !== 0) return;
         rootGesture = {
           pointerId: event.pointerId,
@@ -4300,6 +4303,7 @@
       };
 
       const updateRootGesture = (event) => {
+        if (useTouchFallback && event.pointerType === "touch") return;
         if (!rootGesture || event.pointerId !== rootGesture.pointerId || rootGesture.moved) return;
         const distance = Math.hypot(event.clientX - rootGesture.startX, event.clientY - rootGesture.startY);
         if (distance < 7) return;
@@ -4308,6 +4312,7 @@
       };
 
       const endRootGesture = (event) => {
+        if (useTouchFallback && event.pointerType === "touch") return;
         if (!rootGesture || event.pointerId !== rootGesture.pointerId) return;
         rootGesture = null;
       };
@@ -4439,7 +4444,8 @@
           return;
         }
 
-        if (distance < activationThreshold) return;
+        const activeThreshold = pending.pointerType === "touch" ? Math.min(activationThreshold, 3) : activationThreshold;
+        if (distance < activeThreshold) return;
 
         if (pending.pointerType === "touch" && Math.abs(dy) > Math.abs(dx) * 1.45) {
           cancelPending();
@@ -4463,6 +4469,7 @@
       };
 
       const handlePointerDown = (event) => {
+        if (useTouchFallback && event.pointerType === "touch") return;
         if (event.button !== undefined && event.button !== 0) return;
         startPendingInput({
           id: event.pointerId,
@@ -4473,6 +4480,7 @@
       };
 
       const handlePointerMove = (event) => {
+        if (useTouchFallback && event.pointerType === "touch") return;
         continueInput(
           {
             id: event.pointerId,
@@ -4484,8 +4492,12 @@
         );
       };
 
-      const handlePointerUp = (event) => finishInput(event.pointerId, event);
+      const handlePointerUp = (event) => {
+        if (useTouchFallback && event.pointerType === "touch") return;
+        finishInput(event.pointerId, event);
+      };
       const handlePointerCancel = (event) => {
+        if (useTouchFallback && event.pointerType === "touch") return;
         if (event.pointerId === activePointer || event.pointerId === pending?.id) cancelPending();
       };
 
@@ -4602,19 +4614,18 @@
         canvas.addEventListener("pointerup", handlePointerUp);
         canvas.addEventListener("pointercancel", handlePointerCancel);
         canvas.addEventListener("lostpointercapture", finishPainting);
-      } else {
-        if (useTouchFallback) {
-          canvas.addEventListener("touchstart", handleTouchStart, { passive: true });
-          canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
-          canvas.addEventListener("touchend", handleTouchEnd, { passive: true });
-          canvas.addEventListener("touchcancel", handleTouchCancel, { passive: true });
-        }
-        if (useMouseFallback) {
-          canvas.addEventListener("mousedown", handleMouseDown);
-          canvas.addEventListener("mousemove", handleMouseMove);
-          document.addEventListener("mousemove", handleMouseMoveFallback);
-          document.addEventListener("mouseup", handleMouseUp);
-        }
+      }
+      if (useTouchFallback) {
+        canvas.addEventListener("touchstart", handleTouchStart, { passive: true });
+        canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+        canvas.addEventListener("touchend", handleTouchEnd, { passive: true });
+        canvas.addEventListener("touchcancel", handleTouchCancel, { passive: true });
+      }
+      if (useMouseFallback) {
+        canvas.addEventListener("mousedown", handleMouseDown);
+        canvas.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mousemove", handleMouseMoveFallback);
+        document.addEventListener("mouseup", handleMouseUp);
       }
 
       canvas.addEventListener("pointerleave", () => {
