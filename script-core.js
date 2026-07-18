@@ -123,6 +123,14 @@
       <span class="language-badge-copy"><strong>${languageBadgeText()}</strong><small>${languageNames}</small></span>
       <span class="language-badge-flags" aria-hidden="true"><span class="flag-icon flag-hu" aria-hidden="true"></span><span class="flag-icon flag-en" aria-hidden="true"></span><span class="flag-icon flag-de" aria-hidden="true"></span><span class="flag-icon flag-uk" aria-hidden="true"></span><span class="flag-icon flag-zh" aria-hidden="true"></span></span>
     </div>`;
+  const paintHintMarkup = () => `
+    <span class="paint-reveal-hint" aria-hidden="true">
+      <span data-lang-panel="hu">Fesd át a falat az ujjaddal</span>
+      <span data-lang-panel="en" hidden>Paint the wall with your finger</span>
+      <span data-lang-panel="de" hidden>Streichen Sie die Wand mit dem Finger</span>
+      <span data-lang-panel="uk" hidden>Пофарбуйте стіну пальцем</span>
+      <span data-lang-panel="zh-CN" hidden>用手指粉刷墙面</span>
+    </span>`;
   const projectLightboxImages = (project) => {
     const pair = [
       [project.before, "before", { hu: `${tx(project.title)} - kiinduló állapot`, en: `${tx(project.title)} - starting condition` }],
@@ -964,11 +972,16 @@
   const transformationCards = () =>
     transformationHighlights
       .map(
-        (item, index) => `
+        (item, index) => {
+          const beforePaintAttrs =
+            index === 0
+              ? ` data-paint-reveal data-paint-mode="sage" data-paint-region="0.252,0.038 0.565,0.095 0.606,0.155 0.603,0.62 0.565,0.66 0.535,0.695 0.355,0.745 0.285,0.69 0.248,0.56 0.248,0.19" data-paint-brush="124" data-paint-fade-delay="4000" data-paint-color="#9fae8c" data-paint-opacity="0.68" data-paint-accent="#7f936a"`
+              : "";
+          return `
         <article class="transformation-card${index === 0 ? " featured" : ""}" data-reveal>
           <button type="button" data-project="${item.projectIndex}" aria-label="${tx(item.title)}">
             <span class="transformation-visual" aria-hidden="true">
-              <span class="transformation-frame before"><img src="${img(item.before, 1400)}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async"></span>
+              <span class="transformation-frame before"${beforePaintAttrs}><img src="${img(item.before, 1400)}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async">${index === 0 ? paintHintMarkup() : ""}</span>
               <span class="transformation-frame after"><img src="${img(item.after, 1400)}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async"></span>
               <span class="transformation-divider"></span>
               <span class="transformation-label before">${compareText("compareBefore")}</span>
@@ -981,7 +994,8 @@
               <em>${tx(content.transformationCta)}</em>
             </span>
           </button>
-        </article>`
+        </article>`;
+        }
       )
       .join("");
 
@@ -1244,8 +1258,20 @@
             </div>
           </div>
           <figure class="hero-media hero-media-premium" data-reveal>
-            <div class="hero-visual-frame">
+            <div
+              class="hero-visual-frame"
+              data-paint-reveal
+              data-paint-mode="paint"
+              data-paint-hint="above"
+              data-paint-region="0.305,0.035 0.565,0.095 0.606,0.155 0.603,0.69 0.565,0.725 0.535,0.765 0.315,0.84 0.302,0.71 0.302,0.18"
+              data-paint-brush="138"
+              data-paint-fade-delay="4000"
+              data-paint-color="#b9653d"
+              data-paint-opacity="0.74"
+              data-paint-accent="#b85c2a"
+            >
               <div class="hero-image-shell hero-main-image"><img src="${img(heroImage)}" width="1600" height="1200" fetchpriority="high" alt="${state.lang === "hu" ? "Frissen rendezett budapesti lakásbelső tiszta falakkal és parkettával" : "Freshly prepared Budapest apartment interior with clean walls and parquet flooring"}"></div>
+              ${paintHintMarkup()}
               <div class="hero-before-after-card" aria-label="${compareText("compareSliderName")}">
                 <span class="hero-ba-title">${tx({ hu: "Látható átalakulás", en: "Visible transformation", de: "Sichtbare Veränderung", uk: "Помітна зміна", "zh-CN": "清晰变化" })}</span>
                 <span class="hero-mini-compare">

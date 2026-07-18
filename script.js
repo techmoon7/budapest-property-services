@@ -3455,6 +3455,562 @@
     });
   };
 
+  const bindPaintReveal = () => {
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    document.querySelectorAll("[data-paint-reveal]").forEach((root) => {
+      if (root.dataset.paintRevealBound === "true") return;
+      root.dataset.paintRevealBound = "true";
+
+      if (reducedMotion) {
+        root.dataset.paintRevealDisabled = "true";
+        return;
+      }
+
+      const image = root.dataset.paintImageSelector
+        ? root.querySelector(root.dataset.paintImageSelector)
+        : root.querySelector("img");
+      if (!image) return;
+
+      const parsePolygons = (value = "") =>
+        value
+          .split(";")
+          .map((group) =>
+            group
+              .trim()
+              .split(/\s+/)
+              .map((pair) => {
+                const [x, y] = pair.split(",").map(Number);
+                return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null;
+              })
+              .filter(Boolean)
+          )
+          .filter((polygon) => polygon.length >= 3);
+
+      const includePolygons = parsePolygons(root.dataset.paintRegions || root.dataset.paintRegion || "");
+      const excludePolygons = parsePolygons(root.dataset.paintExclude || "");
+
+      if (!includePolygons.length) {
+        root.dataset.paintRevealDisabled = "true";
+        return;
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.className = "paint-reveal-canvas";
+      canvas.setAttribute("aria-hidden", "true");
+      root.appendChild(canvas);
+
+      const ctx = canvas.getContext("2d", { alpha: true });
+      if (!ctx) {
+        canvas.remove();
+        root.dataset.paintRevealDisabled = "true";
+        return;
+      }
+
+      const layerCanvas = document.createElement("canvas");
+      const maskCanvas = document.createElement("canvas");
+      const layerCtx = layerCanvas.getContext("2d", { alpha: true });
+      const maskCtx = maskCanvas.getContext("2d", { alpha: true });
+      if (!layerCtx || !maskCtx) {
+        canvas.remove();
+        root.dataset.paintRevealDisabled = "true";
+        return;
+      }
+
+      const paintMode = root.dataset.paintMode || "paint";
+      const palette = {
+        paint: {
+          color: "#b9653d",
+          opacity: 0.74,
+          shadow: "rgba(105, 56, 34, 0.16)",
+          highlight: "rgba(255, 244, 226, 0.1)",
+          accent: "#b85c2a",
+        },
+        blue: {
+          color: "#4f8495",
+          opacity: 0.76,
+          shadow: "rgba(27, 72, 84, 0.18)",
+          highlight: "rgba(235, 250, 252, 0.1)",
+          accent: "#4f8495",
+        },
+        sage: {
+          color: "#9aab86",
+          opacity: 0.68,
+          shadow: "rgba(64, 77, 54, 0.14)",
+          highlight: "rgba(251, 246, 226, 0.09)",
+          accent: "#7f936a",
+        },
+        plaster: {
+          color: "#d7ccb8",
+          opacity: 0.54,
+          shadow: "rgba(139, 121, 94, 0.1)",
+          highlight: "rgba(255, 255, 255, 0.1)",
+          accent: "#a99174",
+        },
+        surface: {
+          color: "#bba686",
+          opacity: 0.48,
+          shadow: "rgba(91, 76, 60, 0.1)",
+          highlight: "rgba(255, 248, 230, 0.08)",
+          accent: "#9b7a52",
+        },
+      };
+      const activePalette = palette[paintMode] || palette.paint;
+      const paintColor = root.dataset.paintColor || activePalette.color;
+      const paintOpacity = Number(root.dataset.paintOpacity) || activePalette.opacity;
+      const paintShadowColor = root.dataset.paintShadowColor || activePalette.shadow;
+      const paintHighlightColor = root.dataset.paintHighlightColor || activePalette.highlight;
+      const baseBrushSize = Math.max(40, Number(root.dataset.paintBrush) || 122);
+      const fadeDelay = Number(root.dataset.paintFadeDelay) || 4000;
+      root.style.setProperty("--paint-reveal-accent", root.dataset.paintAccent || activePalette.accent);
+      let cssWidth = 1;
+      let cssHeight = 1;
+      let brushSize = baseBrushSize;
+      let ratio = 1;
+      let pending = null;
+      let activePointer = null;
+      let lastPoint = null;
+      let queuedPoint = null;
+      let strokeFrame = 0;
+      let renderFrame = 0;
+      let fadeTimer = 0;
+      let clearTimer = 0;
+      let blockNextClick = false;
+      let unblockClickTimer = 0;
+      let rootGesture = null;
+
+      const getImagePaintRect = () => {
+        const naturalWidth = image.naturalWidth || 1;
+        const naturalHeight = image.naturalHeight || 1;
+        const objectFit = window.getComputedStyle(image).objectFit;
+        const useContain = objectFit === "contain" || objectFit === "scale-down";
+        const useCover = objectFit === "cover";
+        if (!useContain && !useCover) {
+          return {
+            x: 0,
+            y: 0,
+            width: cssWidth,
+            height: cssHeight,
+          };
+        }
+
+        const scale = useCover
+          ? Math.max(cssWidth / naturalWidth, cssHeight / naturalHeight)
+          : Math.min(cssWidth / naturalWidth, cssHeight / naturalHeight);
+        const width = naturalWidth * scale;
+        const height = naturalHeight * scale;
+        return {
+          x: (cssWidth - width) / 2,
+          y: (cssHeight - height) / 2,
+          width,
+          height,
+        };
+      };
+
+      const normalToCanvas = (point) => {
+        const cover = getImagePaintRect();
+        return {
+          x: cover.x + point.x * cover.width,
+          y: cover.y + point.y * cover.height,
+        };
+      };
+
+      const canvasToNormal = (point) => {
+        const cover = getImagePaintRect();
+        return {
+          x: (point.x - cover.x) / cover.width,
+          y: (point.y - cover.y) / cover.height,
+        };
+      };
+
+      const pointInPolygon = (point, polygon) => {
+        let inside = false;
+        for (let index = 0, previous = polygon.length - 1; index < polygon.length; previous = index++) {
+          const currentPoint = polygon[index];
+          const previousPoint = polygon[previous];
+          const intersects =
+            currentPoint.y > point.y !== previousPoint.y > point.y &&
+            point.x <
+              ((previousPoint.x - currentPoint.x) * (point.y - currentPoint.y)) /
+                (previousPoint.y - currentPoint.y) +
+                currentPoint.x;
+          if (intersects) inside = !inside;
+        }
+        return inside;
+      };
+
+      const pointInsideWall = (point) => {
+        const normal = canvasToNormal(point);
+        if (normal.x < 0 || normal.x > 1 || normal.y < 0 || normal.y > 1) return false;
+        const included = includePolygons.some((polygon) => pointInPolygon(normal, polygon));
+        const excluded = excludePolygons.some((polygon) => pointInPolygon(normal, polygon));
+        return included && !excluded;
+      };
+
+      const localPoint = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: event.clientX - rect.left,
+          y: event.clientY - rect.top,
+        };
+      };
+
+      const addPolygonPath = (context, polygon) => {
+        polygon.forEach((point, index) => {
+          const canvasPoint = normalToCanvas(point);
+          if (index === 0) {
+            context.moveTo(canvasPoint.x, canvasPoint.y);
+          } else {
+            context.lineTo(canvasPoint.x, canvasPoint.y);
+          }
+        });
+        context.closePath();
+      };
+
+      const clipWallRegion = (context) => {
+        context.beginPath();
+        includePolygons.forEach((polygon) => addPolygonPath(context, polygon));
+        excludePolygons.forEach((polygon) => addPolygonPath(context, polygon));
+        try {
+          context.clip("evenodd");
+        } catch {
+          context.clip();
+        }
+      };
+
+      const clearCanvas = () => {
+        ctx.clearRect(0, 0, cssWidth, cssHeight);
+      };
+
+      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+      const drawImageTo = (context) => {
+        const cover = getImagePaintRect();
+        context.drawImage(image, cover.x, cover.y, cover.width, cover.height);
+      };
+
+      const buildPaintedLayer = () => {
+        layerCtx.clearRect(0, 0, cssWidth, cssHeight);
+        layerCtx.save();
+        clipWallRegion(layerCtx);
+        drawImageTo(layerCtx);
+        layerCtx.globalCompositeOperation = "color";
+        layerCtx.globalAlpha = clamp(paintOpacity, 0.1, 1);
+        layerCtx.fillStyle = paintColor;
+        layerCtx.fillRect(0, 0, cssWidth, cssHeight);
+        layerCtx.globalCompositeOperation = "multiply";
+        layerCtx.globalAlpha = 0.16;
+        layerCtx.fillStyle = paintShadowColor;
+        layerCtx.fillRect(0, 0, cssWidth, cssHeight);
+        layerCtx.globalCompositeOperation = "screen";
+        layerCtx.globalAlpha = 0.12;
+        layerCtx.fillStyle = paintHighlightColor;
+        layerCtx.fillRect(0, 0, cssWidth, cssHeight);
+        layerCtx.restore();
+        layerCtx.globalCompositeOperation = "source-over";
+        layerCtx.globalAlpha = 1;
+      };
+
+      const renderPaintedWall = () => {
+        renderFrame = 0;
+        clearCanvas();
+        ctx.save();
+        ctx.drawImage(layerCanvas, 0, 0, cssWidth, cssHeight);
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.drawImage(maskCanvas, 0, 0, cssWidth, cssHeight);
+        ctx.restore();
+        ctx.globalCompositeOperation = "source-over";
+      };
+
+      const requestRender = () => {
+        if (renderFrame) return;
+        renderFrame = window.requestAnimationFrame(renderPaintedWall);
+      };
+
+      const drawMaskLine = (from, to) => {
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance < 1) return;
+        const step = Math.max(10, brushSize * 0.42);
+        const steps = Math.max(1, Math.ceil(distance / step));
+        maskCtx.save();
+        clipWallRegion(maskCtx);
+        maskCtx.lineCap = "round";
+        maskCtx.lineJoin = "round";
+        maskCtx.strokeStyle = "#fff";
+        for (let index = 1; index <= steps; index += 1) {
+          const segmentFrom = {
+            x: from.x + dx * ((index - 1) / steps),
+            y: from.y + dy * ((index - 1) / steps),
+          };
+          const segmentTo = {
+            x: from.x + dx * (index / steps),
+            y: from.y + dy * (index / steps),
+          };
+          [
+            [brushSize * 1.34, 0.18],
+            [brushSize * 1.04, 0.42],
+            [brushSize * 0.78, 1],
+          ].forEach(([lineWidth, alpha]) => {
+            maskCtx.globalAlpha = alpha;
+            maskCtx.lineWidth = lineWidth;
+            maskCtx.beginPath();
+            maskCtx.moveTo(segmentFrom.x, segmentFrom.y);
+            maskCtx.lineTo(segmentTo.x, segmentTo.y);
+            maskCtx.stroke();
+          });
+        }
+        maskCtx.restore();
+        requestRender();
+      };
+
+      const resetCanvasSize = () => {
+        const rootRect = root.getBoundingClientRect();
+        const imageRect = image.getBoundingClientRect();
+        const nextWidth = Math.max(1, Math.round(imageRect.width));
+        const nextHeight = Math.max(1, Math.round(imageRect.height));
+        ratio = Math.min(window.devicePixelRatio || 1, 2);
+
+        cssWidth = nextWidth;
+        cssHeight = nextHeight;
+        canvas.style.left = `${imageRect.left - rootRect.left}px`;
+        canvas.style.top = `${imageRect.top - rootRect.top}px`;
+        canvas.style.width = `${imageRect.width}px`;
+        canvas.style.height = `${imageRect.height}px`;
+        canvas.style.borderRadius = window.getComputedStyle(image.parentElement || image).borderRadius;
+        [canvas, layerCanvas, maskCanvas].forEach((target) => {
+          target.width = Math.round(nextWidth * ratio);
+          target.height = Math.round(nextHeight * ratio);
+        });
+        [ctx, layerCtx, maskCtx].forEach((context) => {
+          context.setTransform(ratio, 0, 0, ratio, 0, 0);
+          context.clearRect(0, 0, cssWidth, cssHeight);
+        });
+        const mobile = cssWidth < 520;
+        const minBrush = mobile ? 58 : 94;
+        const maxBrush = mobile ? 92 : 146;
+        brushSize = Math.min(clamp(baseBrushSize, minBrush, maxBrush), Math.max(minBrush, Math.min(cssWidth, cssHeight) * 0.42));
+        if (image.complete && image.naturalWidth) {
+          buildPaintedLayer();
+        }
+        root.classList.remove("paint-reveal-active", "paint-reveal-fading");
+      };
+
+      const cancelStrokeFrame = () => {
+        if (!strokeFrame) return;
+        window.cancelAnimationFrame(strokeFrame);
+        strokeFrame = 0;
+      };
+
+      const flushQueuedStroke = () => {
+        cancelStrokeFrame();
+        if (queuedPoint && lastPoint) {
+          drawMaskLine(lastPoint, queuedPoint);
+          lastPoint = queuedPoint;
+        }
+        queuedPoint = null;
+      };
+
+      const scheduleStroke = (point) => {
+        queuedPoint = point;
+        if (strokeFrame) return;
+        strokeFrame = window.requestAnimationFrame(() => {
+          strokeFrame = 0;
+          if (!queuedPoint || !lastPoint) return;
+          const nextPoint = queuedPoint;
+          queuedPoint = null;
+          drawMaskLine(lastPoint, nextPoint);
+          lastPoint = nextPoint;
+        });
+      };
+
+      const cancelFade = () => {
+        window.clearTimeout(fadeTimer);
+        window.clearTimeout(clearTimer);
+        root.classList.remove("paint-reveal-fading");
+      };
+
+      const scheduleFade = () => {
+        window.clearTimeout(fadeTimer);
+        window.clearTimeout(clearTimer);
+        fadeTimer = window.setTimeout(() => {
+          root.classList.add("paint-reveal-fading");
+          clearTimer = window.setTimeout(() => {
+            maskCtx.clearRect(0, 0, cssWidth, cssHeight);
+            clearCanvas();
+            root.classList.remove("paint-reveal-active", "paint-reveal-fading");
+          }, 950);
+        }, fadeDelay);
+      };
+
+      const markDragClick = () => {
+        blockNextClick = true;
+        window.clearTimeout(unblockClickTimer);
+        unblockClickTimer = window.setTimeout(() => {
+          blockNextClick = false;
+        }, 700);
+      };
+
+      const beginRootGesture = (event) => {
+        if (event.button !== undefined && event.button !== 0) return;
+        rootGesture = {
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          moved: false,
+        };
+      };
+
+      const updateRootGesture = (event) => {
+        if (!rootGesture || event.pointerId !== rootGesture.pointerId || rootGesture.moved) return;
+        const distance = Math.hypot(event.clientX - rootGesture.startX, event.clientY - rootGesture.startY);
+        if (distance < 7) return;
+        rootGesture.moved = true;
+        markDragClick();
+      };
+
+      const endRootGesture = (event) => {
+        if (!rootGesture || event.pointerId !== rootGesture.pointerId) return;
+        rootGesture = null;
+      };
+
+      const beginPainting = (event, point) => {
+        activePointer = event.pointerId;
+        pending = null;
+        lastPoint = point;
+        queuedPoint = null;
+        cancelFade();
+        root.classList.add("paint-reveal-ready", "paint-reveal-active", "paint-reveal-used");
+        markDragClick();
+        try {
+          canvas.setPointerCapture(event.pointerId);
+        } catch {
+          /* Pointer capture is an enhancement, not a requirement. */
+        }
+      };
+
+      const finishPainting = () => {
+        if (activePointer === null) return;
+        flushQueuedStroke();
+        activePointer = null;
+        lastPoint = null;
+        scheduleFade();
+      };
+
+      const cancelPending = () => {
+        cancelStrokeFrame();
+        pending = null;
+        activePointer = null;
+        lastPoint = null;
+        queuedPoint = null;
+        root.classList.remove("paint-reveal-active", "paint-reveal-hit");
+      };
+
+      const updateHitState = (event) => {
+        if (activePointer !== null || pending) return;
+        root.classList.toggle("paint-reveal-hit", pointInsideWall(localPoint(event)));
+      };
+
+      canvas.addEventListener("pointerdown", (event) => {
+        if (event.button !== undefined && event.button !== 0) return;
+        const point = localPoint(event);
+        const insideWall = pointInsideWall(point);
+        root.classList.toggle("paint-reveal-hit", insideWall);
+
+        pending = {
+          pointerId: event.pointerId,
+          pointerType: event.pointerType,
+          start: point,
+          insideWall,
+        };
+      });
+
+      canvas.addEventListener("pointermove", (event) => {
+        if (activePointer !== null) {
+          if (event.pointerId !== activePointer || !lastPoint) return;
+          event.preventDefault();
+          const point = localPoint(event);
+          scheduleStroke(point);
+          return;
+        }
+
+        updateHitState(event);
+        if (!pending || event.pointerId !== pending.pointerId) return;
+
+        const point = localPoint(event);
+        const dx = point.x - pending.start.x;
+        const dy = point.y - pending.start.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance < 7) return;
+
+        if (!pending.insideWall) {
+          markDragClick();
+          cancelPending();
+          return;
+        }
+
+        if (pending.pointerType === "touch" && Math.abs(dy) > Math.abs(dx) * 1.25) {
+          markDragClick();
+          cancelPending();
+          return;
+        }
+
+        const startPoint = pending.start;
+        event.preventDefault();
+        beginPainting(event, startPoint);
+        drawMaskLine(startPoint, point);
+        lastPoint = point;
+      });
+
+      canvas.addEventListener("pointerup", (event) => {
+        if (event.pointerId === activePointer) {
+          event.preventDefault();
+          finishPainting();
+          return;
+        }
+        if (pending?.pointerId === event.pointerId) pending = null;
+      });
+
+      canvas.addEventListener("pointercancel", cancelPending);
+      canvas.addEventListener("lostpointercapture", finishPainting);
+      canvas.addEventListener("pointerleave", () => {
+        if (activePointer === null && !pending) root.classList.remove("paint-reveal-hit");
+      });
+
+      root.addEventListener(
+        "click",
+        (event) => {
+          if (!blockNextClick) return;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          blockNextClick = false;
+          window.clearTimeout(unblockClickTimer);
+        },
+        true
+      );
+      root.addEventListener("pointerdown", beginRootGesture, true);
+      root.addEventListener("pointermove", updateRootGesture, true);
+      root.addEventListener("pointerup", endRootGesture, true);
+      root.addEventListener("pointercancel", endRootGesture, true);
+
+      root.classList.add("paint-reveal-ready");
+      resetCanvasSize();
+
+      if (image.complete) {
+        resetCanvasSize();
+      } else {
+        image.addEventListener("load", resetCanvasSize, { once: true });
+      }
+
+      if ("ResizeObserver" in window) {
+        new ResizeObserver(resetCanvasSize).observe(root);
+      } else {
+        window.addEventListener("resize", resetCanvasSize, { passive: true });
+      }
+    });
+  };
+
   const getGardenGalleryItems = () =>
     [...document.querySelectorAll(".service-hero-visual, .garden-gallery .showcase-photo")].filter((target) =>
       target.querySelector("img")
@@ -3890,6 +4446,7 @@
     } else {
       bindHeroLightbox();
     }
+    bindPaintReveal();
     initStandaloneReveals();
 
     window.addEventListener("resize", () => {
@@ -4133,6 +4690,7 @@
     applyHandymanLink();
     applyPageLanguage();
     bindHeroLightbox();
+    bindPaintReveal();
   };
 
   const scheduleHomeEnhancements = () => {
