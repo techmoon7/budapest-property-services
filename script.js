@@ -3457,15 +3457,24 @@
 
   const bindPaintReveal = () => {
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    const supportsPointerEvents = "PointerEvent" in window;
+    const supportsTouchEvents = "ontouchstart" in window || (typeof TouchEvent !== "undefined" && navigator.maxTouchPoints > 0);
+    const touchActionSupported = window.CSS?.supports?.("touch-action", "pan-y") === true;
+    const localDebugHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
+    const forceTouchInput = localDebugHost && /(?:^|[?&])paintInput=touch(?:&|$)/.test(window.location.search);
+    const forceMouseInput = localDebugHost && /(?:^|[?&])paintInput=mouse(?:&|$)/.test(window.location.search);
+    const canUseTouchFallback = supportsTouchEvents || (localDebugHost && typeof TouchEvent !== "undefined");
+    const usePointerInput = !forceTouchInput && !forceMouseInput && supportsPointerEvents && (!supportsTouchEvents || touchActionSupported);
+    const useTouchFallback = !forceMouseInput && canUseTouchFallback && (!usePointerInput || forceTouchInput);
+    const useMouseFallback = forceMouseInput || (!usePointerInput && !useTouchFallback);
+    const paintDebugEnabled =
+      localDebugHost && /(?:^|[?&])paintDebug=1(?:&|$)/.test(window.location.search);
 
     document.querySelectorAll("[data-paint-reveal]").forEach((root) => {
       if (root.dataset.paintRevealBound === "true") return;
       root.dataset.paintRevealBound = "true";
-
-      if (reducedMotion) {
-        root.dataset.paintRevealDisabled = "true";
-        return;
-      }
+      root.dataset.paintInputMode = usePointerInput ? "pointer" : useTouchFallback ? "touch" : "mouse";
+      if (reducedMotion) root.dataset.paintReducedMotion = "true";
 
       const image = root.dataset.paintImageSelector
         ? root.querySelector(root.dataset.paintImageSelector)
@@ -3578,6 +3587,28 @@
       let blockNextClick = false;
       let unblockClickTimer = 0;
       let rootGesture = null;
+      let resizeFrame = 0;
+      let pointerCaptureActive = false;
+      let pointerFallbackBound = false;
+      let mouseIsDown = false;
+
+      const debugPaint = (eventName, details = {}) => {
+        if (!paintDebugEnabled) return;
+        const imageRect = image.getBoundingClientRect();
+        console.info("[paint-reveal]", eventName, {
+          inputMode: root.dataset.paintInputMode,
+          css: { width: cssWidth, height: cssHeight },
+          backing: { width: canvas.width, height: canvas.height },
+          ratio,
+          imageLoaded: image.complete && !!image.naturalWidth,
+          imageRect: {
+            width: Math.round(imageRect.width),
+            height: Math.round(imageRect.height),
+          },
+          ready: root.classList.contains("paint-reveal-ready"),
+          ...details,
+        });
+      };
 
       const getImagePaintRect = () => {
         const naturalWidth = image.naturalWidth || 1;
@@ -3647,13 +3678,15 @@
         return included && !excluded;
       };
 
-      const localPoint = (event) => {
+      const localPointFromClient = (clientX, clientY) => {
         const rect = canvas.getBoundingClientRect();
         return {
-          x: event.clientX - rect.left,
-          y: event.clientY - rect.top,
+          x: clientX - rect.left,
+          y: clientY - rect.top,
         };
       };
+
+      const localPoint = (event) => localPointFromClient(event.clientX, event.clientY);
 
       const addPolygonPath = (context, polygon) => {
         polygon.forEach((point, index) => {
@@ -3766,11 +3799,16 @@
       };
 
       const resetCanvasSize = () => {
+        if (!image.complete || !image.naturalWidth || !image.naturalHeight) {
+          root.classList.remove("paint-reveal-ready");
+          debugPaint("image-not-ready");
+          return;
+        }
         const rootRect = root.getBoundingClientRect();
         const imageRect = image.getBoundingClientRect();
         const nextWidth = Math.max(1, Math.round(imageRect.width));
         const nextHeight = Math.max(1, Math.round(imageRect.height));
-        ratio = Math.min(window.devicePixelRatio || 1, 2);
+        ratio = Math.min(Math.max(window.devicePixelRatio || 1, 1), 2);
 
         cssWidth = nextWidth;
         cssHeight = nextHeight;
@@ -3791,10 +3829,20 @@
         const minBrush = mobile ? 58 : 94;
         const maxBrush = mobile ? 92 : 146;
         brushSize = Math.min(clamp(baseBrushSize, minBrush, maxBrush), Math.max(minBrush, Math.min(cssWidth, cssHeight) * 0.42));
-        if (image.complete && image.naturalWidth) {
-          buildPaintedLayer();
-        }
+        buildPaintedLayer();
         root.classList.remove("paint-reveal-active", "paint-reveal-fading");
+        root.classList.add("paint-reveal-ready");
+        debugPaint("resize");
+      };
+
+      const scheduleCanvasReset = () => {
+        if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
+        resizeFrame = window.requestAnimationFrame(() => {
+          resizeFrame = window.requestAnimationFrame(() => {
+            resizeFrame = 0;
+            resetCanvasSize();
+          });
+        });
       };
 
       const cancelStrokeFrame = () => {
@@ -3875,19 +3923,28 @@
         rootGesture = null;
       };
 
-      const beginPainting = (event, point) => {
-        activePointer = event.pointerId;
+      let bindPointerDocumentFallback = () => {};
+      let unbindPointerDocumentFallback = () => {};
+
+      const beginPainting = (input, point) => {
+        activePointer = input.id;
         pending = null;
         lastPoint = point;
         queuedPoint = null;
         cancelFade();
         root.classList.add("paint-reveal-ready", "paint-reveal-active", "paint-reveal-used");
         markDragClick();
-        try {
-          canvas.setPointerCapture(event.pointerId);
-        } catch {
-          /* Pointer capture is an enhancement, not a requirement. */
+        pointerCaptureActive = false;
+        if (input.event?.pointerId !== undefined && canvas.setPointerCapture) {
+          try {
+            canvas.setPointerCapture(input.event.pointerId);
+            pointerCaptureActive = true;
+          } catch {
+            pointerCaptureActive = false;
+          }
         }
+        if (input.mode === "pointer" && !pointerCaptureActive) bindPointerDocumentFallback();
+        debugPaint("paint-start", { inputMode: input.mode, point, pointerCaptureActive });
       };
 
       const finishPainting = () => {
@@ -3895,7 +3952,10 @@
         flushQueuedStroke();
         activePointer = null;
         lastPoint = null;
+        pointerCaptureActive = false;
+        unbindPointerDocumentFallback();
         scheduleFade();
+        debugPaint("paint-finish");
       };
 
       const cancelPending = () => {
@@ -3904,48 +3964,50 @@
         activePointer = null;
         lastPoint = null;
         queuedPoint = null;
+        pointerCaptureActive = false;
+        unbindPointerDocumentFallback();
         root.classList.remove("paint-reveal-active", "paint-reveal-hit");
+        debugPaint("paint-cancel");
       };
 
-      const updateHitState = (event) => {
+      const updateHitState = (point) => {
         if (activePointer !== null || pending) return;
-        root.classList.toggle("paint-reveal-hit", pointInsideWall(localPoint(event)));
+        root.classList.toggle("paint-reveal-hit", pointInsideWall(point));
       };
 
-      canvas.addEventListener("pointerdown", (event) => {
-        if (event.button !== undefined && event.button !== 0) return;
-        const point = localPoint(event);
+      const startPendingInput = (input) => {
+        const point = input.point;
         const insideWall = pointInsideWall(point);
         root.classList.toggle("paint-reveal-hit", insideWall);
 
         pending = {
-          pointerId: event.pointerId,
-          pointerType: event.pointerType,
+          id: input.id,
+          mode: input.mode,
+          pointerType: input.pointerType,
           start: point,
           insideWall,
         };
-      });
+        debugPaint(`${input.mode}-start`, { insideWall, point });
+      };
 
-      canvas.addEventListener("pointermove", (event) => {
+      const continueInput = (input, event) => {
         if (activePointer !== null) {
-          if (event.pointerId !== activePointer || !lastPoint) return;
-          event.preventDefault();
-          const point = localPoint(event);
-          scheduleStroke(point);
+          if (input.id !== activePointer || !lastPoint) return;
+          if (event?.cancelable) event.preventDefault();
+          scheduleStroke(input.point);
           return;
         }
 
-        updateHitState(event);
-        if (!pending || event.pointerId !== pending.pointerId) return;
+        updateHitState(input.point);
+        if (!pending || input.id !== pending.id) return;
 
-        const point = localPoint(event);
+        const point = input.point;
         const dx = point.x - pending.start.x;
         const dy = point.y - pending.start.y;
         const distance = Math.hypot(dx, dy);
         if (distance < 7) return;
 
         if (!pending.insideWall) {
-          markDragClick();
           cancelPending();
           return;
         }
@@ -3957,23 +4019,176 @@
         }
 
         const startPoint = pending.start;
-        event.preventDefault();
-        beginPainting(event, startPoint);
+        if (event?.cancelable) event.preventDefault();
+        beginPainting({ id: pending.id, mode: pending.mode, event }, startPoint);
         drawMaskLine(startPoint, point);
         lastPoint = point;
-      });
+      };
 
-      canvas.addEventListener("pointerup", (event) => {
-        if (event.pointerId === activePointer) {
-          event.preventDefault();
+      const finishInput = (id, event, prevent = true) => {
+        if (id === activePointer) {
+          if (prevent && event?.cancelable) event.preventDefault();
           finishPainting();
           return;
         }
-        if (pending?.pointerId === event.pointerId) pending = null;
+        if (pending?.id === id) pending = null;
+      };
+
+      const handlePointerDown = (event) => {
+        if (event.button !== undefined && event.button !== 0) return;
+        startPendingInput({
+          id: event.pointerId,
+          mode: "pointer",
+          pointerType: event.pointerType || "mouse",
+          point: localPoint(event),
+        });
+      };
+
+      const handlePointerMove = (event) => {
+        continueInput(
+          {
+            id: event.pointerId,
+            mode: "pointer",
+            pointerType: event.pointerType || "mouse",
+            point: localPoint(event),
+          },
+          event
+        );
+      };
+
+      const handlePointerUp = (event) => finishInput(event.pointerId, event);
+      const handlePointerCancel = (event) => {
+        if (event.pointerId === activePointer || event.pointerId === pending?.id) cancelPending();
+      };
+
+      const handlePointerMoveFallback = (event) => {
+        if (event.target === canvas) return;
+        handlePointerMove(event);
+      };
+      const handlePointerUpFallback = (event) => {
+        if (event.target === canvas) return;
+        handlePointerUp(event);
+      };
+      const handlePointerCancelFallback = (event) => {
+        if (event.target === canvas) return;
+        handlePointerCancel(event);
+      };
+
+      bindPointerDocumentFallback = () => {
+        if (pointerFallbackBound) return;
+        pointerFallbackBound = true;
+        document.addEventListener("pointermove", handlePointerMoveFallback, true);
+        document.addEventListener("pointerup", handlePointerUpFallback, true);
+        document.addEventListener("pointercancel", handlePointerCancelFallback, true);
+      };
+
+      unbindPointerDocumentFallback = () => {
+        if (!pointerFallbackBound) return;
+        pointerFallbackBound = false;
+        document.removeEventListener("pointermove", handlePointerMoveFallback, true);
+        document.removeEventListener("pointerup", handlePointerUpFallback, true);
+        document.removeEventListener("pointercancel", handlePointerCancelFallback, true);
+      };
+
+      const touchById = (touches, id) => {
+        for (let index = 0; index < touches.length; index += 1) {
+          if (`touch:${touches[index].identifier}` === id) return touches[index];
+        }
+        return null;
+      };
+
+      const touchInput = (touch) => ({
+        id: `touch:${touch.identifier}`,
+        mode: "touch",
+        pointerType: "touch",
+        point: localPointFromClient(touch.clientX, touch.clientY),
       });
 
-      canvas.addEventListener("pointercancel", cancelPending);
-      canvas.addEventListener("lostpointercapture", finishPainting);
+      const handleTouchStart = (event) => {
+        if (event.touches.length !== 1 || activePointer !== null) {
+          cancelPending();
+          return;
+        }
+        startPendingInput(touchInput(event.changedTouches[0]));
+      };
+
+      const handleTouchMove = (event) => {
+        const id = activePointer || pending?.id;
+        if (!id) return;
+        const touch = touchById(event.touches, id) || touchById(event.changedTouches, id);
+        if (!touch) return;
+        continueInput(touchInput(touch), event);
+      };
+
+      const handleTouchEnd = (event) => {
+        const id = activePointer || pending?.id;
+        if (!id) return;
+        if (touchById(event.changedTouches, id)) finishInput(id, null, false);
+      };
+
+      const handleTouchCancel = (event) => {
+        const id = activePointer || pending?.id;
+        if (!id || touchById(event.changedTouches, id)) cancelPending();
+      };
+
+      const handleMouseDown = (event) => {
+        if (event.button !== 0) return;
+        mouseIsDown = true;
+        startPendingInput({
+          id: "mouse",
+          mode: "mouse",
+          pointerType: "mouse",
+          point: localPoint(event),
+        });
+      };
+
+      const handleMouseMove = (event) => {
+        if (!mouseIsDown && !pending && activePointer === null) {
+          updateHitState(localPoint(event));
+          return;
+        }
+        continueInput(
+          {
+            id: "mouse",
+            mode: "mouse",
+            pointerType: "mouse",
+            point: localPoint(event),
+          },
+          event
+        );
+      };
+
+      const handleMouseMoveFallback = (event) => {
+        if (event.target === canvas || (!mouseIsDown && !pending && activePointer === null)) return;
+        handleMouseMove(event);
+      };
+
+      const handleMouseUp = (event) => {
+        mouseIsDown = false;
+        finishInput("mouse", event);
+      };
+
+      if (usePointerInput) {
+        canvas.addEventListener("pointerdown", handlePointerDown);
+        canvas.addEventListener("pointermove", handlePointerMove);
+        canvas.addEventListener("pointerup", handlePointerUp);
+        canvas.addEventListener("pointercancel", handlePointerCancel);
+        canvas.addEventListener("lostpointercapture", finishPainting);
+      } else {
+        if (useTouchFallback) {
+          canvas.addEventListener("touchstart", handleTouchStart, { passive: true });
+          canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+          canvas.addEventListener("touchend", handleTouchEnd, { passive: true });
+          canvas.addEventListener("touchcancel", handleTouchCancel, { passive: true });
+        }
+        if (useMouseFallback) {
+          canvas.addEventListener("mousedown", handleMouseDown);
+          canvas.addEventListener("mousemove", handleMouseMove);
+          document.addEventListener("mousemove", handleMouseMoveFallback);
+          document.addEventListener("mouseup", handleMouseUp);
+        }
+      }
+
       canvas.addEventListener("pointerleave", () => {
         if (activePointer === null && !pending) root.classList.remove("paint-reveal-hit");
       });
@@ -3989,25 +4204,37 @@
         },
         true
       );
-      root.addEventListener("pointerdown", beginRootGesture, true);
-      root.addEventListener("pointermove", updateRootGesture, true);
-      root.addEventListener("pointerup", endRootGesture, true);
-      root.addEventListener("pointercancel", endRootGesture, true);
+      if (usePointerInput) {
+        root.addEventListener("pointerdown", beginRootGesture, true);
+        root.addEventListener("pointermove", updateRootGesture, true);
+        root.addEventListener("pointerup", endRootGesture, true);
+        root.addEventListener("pointercancel", endRootGesture, true);
+      }
 
-      root.classList.add("paint-reveal-ready");
-      resetCanvasSize();
-
-      if (image.complete) {
+      if (image.complete && image.naturalWidth) {
         resetCanvasSize();
       } else {
-        image.addEventListener("load", resetCanvasSize, { once: true });
+        root.classList.remove("paint-reveal-ready");
+        image.addEventListener("load", scheduleCanvasReset, { once: true });
+        image.addEventListener(
+          "error",
+          () => {
+            root.dataset.paintRevealDisabled = "true";
+            debugPaint("image-error");
+          },
+          { once: true }
+        );
       }
 
       if ("ResizeObserver" in window) {
-        new ResizeObserver(resetCanvasSize).observe(root);
+        new ResizeObserver(scheduleCanvasReset).observe(root);
       } else {
-        window.addEventListener("resize", resetCanvasSize, { passive: true });
+        window.addEventListener("resize", scheduleCanvasReset, { passive: true });
       }
+      window.addEventListener("resize", scheduleCanvasReset, { passive: true });
+      window.addEventListener("orientationchange", scheduleCanvasReset, { passive: true });
+      window.addEventListener("pageshow", scheduleCanvasReset, { passive: true });
+      window.visualViewport?.addEventListener("resize", scheduleCanvasReset, { passive: true });
     });
   };
 
