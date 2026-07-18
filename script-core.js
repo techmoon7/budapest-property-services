@@ -973,15 +973,11 @@
     transformationHighlights
       .map(
         (item, index) => {
-          const beforePaintAttrs =
-            index === 0
-              ? ` data-paint-reveal data-paint-mode="sage" data-paint-region="0.252,0.038 0.565,0.095 0.606,0.155 0.603,0.62 0.565,0.66 0.535,0.695 0.355,0.745 0.285,0.69 0.248,0.56 0.248,0.19" data-paint-brush="124" data-paint-fade-delay="4000" data-paint-color="#9fae8c" data-paint-opacity="0.68" data-paint-accent="#7f936a"`
-              : "";
           return `
         <article class="transformation-card${index === 0 ? " featured" : ""}" data-reveal>
           <button type="button" data-project="${item.projectIndex}" aria-label="${tx(item.title)}">
             <span class="transformation-visual" aria-hidden="true">
-              <span class="transformation-frame before"${beforePaintAttrs}><img src="${img(item.before, 1400)}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async">${index === 0 ? paintHintMarkup() : ""}</span>
+              <span class="transformation-frame before"><img src="${img(item.before, 1400)}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async"></span>
               <span class="transformation-frame after"><img src="${img(item.after, 1400)}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async"></span>
               <span class="transformation-divider"></span>
               <span class="transformation-label before">${compareText("compareBefore")}</span>
@@ -1263,12 +1259,13 @@
               data-paint-reveal
               data-paint-mode="paint"
               data-paint-hint="above"
-              data-paint-region="0.305,0.035 0.565,0.095 0.606,0.155 0.603,0.69 0.565,0.725 0.535,0.765 0.315,0.84 0.302,0.71 0.302,0.18"
-              data-paint-brush="138"
+              data-paint-region="0.285,0.075 0.615,0.075 0.615,0.695 0.565,0.755 0.330,0.755 0.285,0.685"
+              data-paint-exclude=""
+              data-paint-brush="220"
               data-paint-fade-delay="4000"
-              data-paint-color="#b9653d"
-              data-paint-opacity="0.74"
-              data-paint-accent="#b85c2a"
+              data-paint-color="#c86436"
+              data-paint-opacity="1"
+              data-paint-accent="#a84b2a"
             >
               <div class="hero-image-shell hero-main-image"><img src="${img(heroImage)}" width="1600" height="1200" fetchpriority="high" alt="${state.lang === "hu" ? "Frissen rendezett budapesti lakásbelső tiszta falakkal és parkettával" : "Freshly prepared Budapest apartment interior with clean walls and parquet flooring"}"></div>
               ${paintHintMarkup()}

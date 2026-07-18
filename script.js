@@ -3434,7 +3434,7 @@
   };
 
   const bindHeroLightbox = () => {
-    document.querySelectorAll(".hero-media, .service-hero-visual").forEach((target) => {
+    document.querySelectorAll(".hero-media, .service-hero-visual, .showcase-photo[data-paint-reveal]").forEach((target) => {
       if (target.dataset.heroLightboxBound === "true") return;
 
       const image = target.querySelector("img");
@@ -3446,7 +3446,17 @@
       target.setAttribute("tabindex", "0");
       target.setAttribute("aria-label", "Open hero image");
 
-      target.addEventListener("click", () => openHeroLightbox(image, target));
+      target.addEventListener("click", (event) => {
+        if (
+          target.dataset.paintSuppressClick === "true" ||
+          target.querySelector('[data-paint-reveal][data-paint-suppress-click="true"]')
+        ) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+        openHeroLightbox(image, target);
+      });
       target.addEventListener("keydown", (event) => {
         if (!["Enter", " "].includes(event.key)) return;
         event.preventDefault();
@@ -3460,17 +3470,142 @@
     const supportsPointerEvents = "PointerEvent" in window;
     const supportsTouchEvents = "ontouchstart" in window || (typeof TouchEvent !== "undefined" && navigator.maxTouchPoints > 0);
     const touchActionSupported = window.CSS?.supports?.("touch-action", "pan-y") === true;
+    const coarseTouchInput = (navigator.maxTouchPoints || 0) > 0 || window.matchMedia?.("(pointer: coarse)")?.matches;
+    const webkitTouchCallout = window.CSS?.supports?.("-webkit-touch-callout", "none") === true;
+    const appleTouchVendor = supportsTouchEvents && /Apple/i.test(navigator.vendor || "");
+    const preferNativeTouch = supportsTouchEvents && coarseTouchInput && (webkitTouchCallout || appleTouchVendor);
     const localDebugHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
     const forceTouchInput = localDebugHost && /(?:^|[?&])paintInput=touch(?:&|$)/.test(window.location.search);
     const forceMouseInput = localDebugHost && /(?:^|[?&])paintInput=mouse(?:&|$)/.test(window.location.search);
     const canUseTouchFallback = supportsTouchEvents || (localDebugHost && typeof TouchEvent !== "undefined");
-    const usePointerInput = !forceTouchInput && !forceMouseInput && supportsPointerEvents && (!supportsTouchEvents || touchActionSupported);
+    const usePointerInput = !forceTouchInput && !forceMouseInput && supportsPointerEvents && !preferNativeTouch && (!supportsTouchEvents || touchActionSupported);
     const useTouchFallback = !forceMouseInput && canUseTouchFallback && (!usePointerInput || forceTouchInput);
     const useMouseFallback = forceMouseInput || (!usePointerInput && !useTouchFallback);
     const paintDebugEnabled =
       localDebugHost && /(?:^|[?&])paintDebug=1(?:&|$)/.test(window.location.search);
+    const interactiveLimit = 6;
+    const activeRoots = [...document.querySelectorAll("[data-paint-reveal]")].filter((root) => {
+      const insideComparison = root.closest(
+        "[data-compare], .compare, .hero-mini-compare, .hero-before-after-card, .transformation-visual, .case-preview"
+      );
+      const ownsComparison = root.matches("[data-compare], .compare") || root.querySelector("[data-compare], .compare");
+      return !insideComparison && !ownsComparison;
+    });
 
-    document.querySelectorAll("[data-paint-reveal]").forEach((root) => {
+    const modeAliases = {
+      blue: "paintBlue",
+      plaster: "repair",
+      surface: "repair",
+      sage: "garden",
+      airbnb: "airbnb",
+    };
+
+    const paintModes = {
+      paint: {
+        color: "#c86436",
+        opacity: 1,
+        shadow: "rgba(92, 34, 15, 0.16)",
+        highlight: "rgba(255, 216, 184, 0.1)",
+        accent: "#a84b2a",
+        effect: "color",
+        icon: "roller",
+        preview: false,
+        hint: {
+          hu: "Fesd át a falat az ujjaddal",
+          en: "Paint the wall with your finger",
+          de: "Streichen Sie die Wand mit dem Finger",
+          uk: "Пофарбуйте стіну пальцем",
+          "zh-CN": "用手指粉刷墙面",
+        },
+      },
+      paintBlue: {
+        color: "#c86436",
+        opacity: 1,
+        shadow: "rgba(92, 34, 15, 0.16)",
+        highlight: "rgba(255, 216, 184, 0.1)",
+        accent: "#a84b2a",
+        effect: "color",
+        icon: "roller",
+        preview: false,
+        hint: {
+          hu: "Fesd át a falat az ujjaddal",
+          en: "Paint the wall with your finger",
+          de: "Streichen Sie die Wand mit dem Finger",
+          uk: "Пофарбуйте стіну пальцем",
+          "zh-CN": "用手指粉刷墙面",
+        },
+      },
+      clean: {
+        color: "#f7fbf7",
+        opacity: 0.72,
+        shadow: "rgba(32, 74, 68, 0.08)",
+        highlight: "rgba(255, 255, 255, 0.24)",
+        accent: "#4c8b86",
+        effect: "clean",
+        icon: "wipe",
+        preview: true,
+        hint: {
+          hu: "Töröld tisztára a felületet",
+          en: "Wipe the surface clean",
+          de: "Wischen Sie die Fläche sauber",
+          uk: "Витріть поверхню начисто",
+          "zh-CN": "擦净表面",
+        },
+      },
+      repair: {
+        color: "#ddd2c1",
+        opacity: 0.88,
+        shadow: "rgba(111, 91, 68, 0.1)",
+        highlight: "rgba(255, 255, 255, 0.16)",
+        accent: "#a99174",
+        effect: "repair",
+        icon: "trowel",
+        preview: false,
+        hint: {
+          hu: "Simítsd el a hibákat",
+          en: "Smooth out the damage",
+          de: "Glätten Sie die Schäden",
+          uk: "Вирівняйте пошкодження",
+          "zh-CN": "抹平损伤",
+        },
+      },
+      garden: {
+        color: "#6f935d",
+        opacity: 0.68,
+        shadow: "rgba(44, 80, 43, 0.13)",
+        highlight: "rgba(233, 246, 214, 0.12)",
+        accent: "#5f8b4e",
+        effect: "garden",
+        icon: "leaf",
+        preview: true,
+        hint: {
+          hu: "Frissítsd fel a kertet",
+          en: "Refresh the garden",
+          de: "Frischen Sie den Garten auf",
+          uk: "Оновіть сад",
+          "zh-CN": "刷新花园",
+        },
+      },
+      airbnb: {
+        color: "#d9a46f",
+        opacity: 0.58,
+        shadow: "rgba(102, 70, 43, 0.08)",
+        highlight: "rgba(255, 241, 216, 0.18)",
+        accent: "#c78955",
+        effect: "airbnb",
+        icon: "spark",
+        preview: true,
+        hint: {
+          hu: "Tedd vendégfogadásra késszé",
+          en: "Make it guest-ready",
+          de: "Machen Sie es gastbereit",
+          uk: "Підготуйте до гостей",
+          "zh-CN": "让它适合待客",
+        },
+      },
+    };
+
+    activeRoots.slice(0, interactiveLimit).forEach((root) => {
       if (root.dataset.paintRevealBound === "true") return;
       root.dataset.paintRevealBound = "true";
       root.dataset.paintInputMode = usePointerInput ? "pointer" : useTouchFallback ? "touch" : "mouse";
@@ -3480,6 +3615,7 @@
         ? root.querySelector(root.dataset.paintImageSelector)
         : root.querySelector("img");
       if (!image) return;
+      image.draggable = false;
 
       const parsePolygons = (value = "") =>
         value
@@ -3518,53 +3654,19 @@
 
       const layerCanvas = document.createElement("canvas");
       const maskCanvas = document.createElement("canvas");
-      const layerCtx = layerCanvas.getContext("2d", { alpha: true });
+      const wallMaskCanvas = document.createElement("canvas");
+      const layerCtx = layerCanvas.getContext("2d", { alpha: true, willReadFrequently: true });
       const maskCtx = maskCanvas.getContext("2d", { alpha: true });
-      if (!layerCtx || !maskCtx) {
+      const wallMaskCtx = wallMaskCanvas.getContext("2d", { alpha: true });
+      if (!layerCtx || !maskCtx || !wallMaskCtx) {
         canvas.remove();
         root.dataset.paintRevealDisabled = "true";
         return;
       }
 
-      const paintMode = root.dataset.paintMode || "paint";
-      const palette = {
-        paint: {
-          color: "#b9653d",
-          opacity: 0.74,
-          shadow: "rgba(105, 56, 34, 0.16)",
-          highlight: "rgba(255, 244, 226, 0.1)",
-          accent: "#b85c2a",
-        },
-        blue: {
-          color: "#4f8495",
-          opacity: 0.76,
-          shadow: "rgba(27, 72, 84, 0.18)",
-          highlight: "rgba(235, 250, 252, 0.1)",
-          accent: "#4f8495",
-        },
-        sage: {
-          color: "#9aab86",
-          opacity: 0.68,
-          shadow: "rgba(64, 77, 54, 0.14)",
-          highlight: "rgba(251, 246, 226, 0.09)",
-          accent: "#7f936a",
-        },
-        plaster: {
-          color: "#d7ccb8",
-          opacity: 0.54,
-          shadow: "rgba(139, 121, 94, 0.1)",
-          highlight: "rgba(255, 255, 255, 0.1)",
-          accent: "#a99174",
-        },
-        surface: {
-          color: "#bba686",
-          opacity: 0.48,
-          shadow: "rgba(91, 76, 60, 0.1)",
-          highlight: "rgba(255, 248, 230, 0.08)",
-          accent: "#9b7a52",
-        },
-      };
-      const activePalette = palette[paintMode] || palette.paint;
+      const rawPaintMode = root.dataset.paintMode || "paint";
+      const paintMode = modeAliases[rawPaintMode] || rawPaintMode;
+      const activePalette = paintModes[paintMode] || paintModes.paint;
       const paintColor = root.dataset.paintColor || activePalette.color;
       const paintOpacity = Number(root.dataset.paintOpacity) || activePalette.opacity;
       const paintShadowColor = root.dataset.paintShadowColor || activePalette.shadow;
@@ -3572,6 +3674,12 @@
       const baseBrushSize = Math.max(40, Number(root.dataset.paintBrush) || 122);
       const fadeDelay = Number(root.dataset.paintFadeDelay) || 4000;
       root.style.setProperty("--paint-reveal-accent", root.dataset.paintAccent || activePalette.accent);
+      root.dataset.paintMode = paintMode;
+      root.dataset.paintIcon = activePalette.icon;
+      const clickSuppressionTargets = [
+        root,
+        root.closest("[data-hero-lightbox]"),
+      ].filter(Boolean);
       let cssWidth = 1;
       let cssHeight = 1;
       let brushSize = baseBrushSize;
@@ -3591,12 +3699,23 @@
       let pointerCaptureActive = false;
       let pointerFallbackBound = false;
       let mouseIsDown = false;
+      let suppressClickUntil = 0;
+      let previewTimer = 0;
+      let previewFrame = 0;
+      let demoIndicator = null;
+      let demoHideTimer = 0;
+      const activationThreshold = 5;
+      const dragThreshold = 5;
+      const scrollDecisionDistance = 10;
+      const wallEntryGrace = 18;
 
       const debugPaint = (eventName, details = {}) => {
         if (!paintDebugEnabled) return;
         const imageRect = image.getBoundingClientRect();
         console.info("[paint-reveal]", eventName, {
           inputMode: root.dataset.paintInputMode,
+          mode: paintMode,
+          gesture: root.dataset.paintGesture || "",
           css: { width: cssWidth, height: cssHeight },
           backing: { width: canvas.width, height: canvas.height },
           ratio,
@@ -3609,6 +3728,29 @@
           ...details,
         });
       };
+
+      const ensurePaintHint = () => {
+        let hint = root.querySelector(".paint-reveal-hint");
+        if (!hint) {
+          hint = document.createElement("div");
+          hint.className = "paint-reveal-hint";
+          hint.setAttribute("aria-hidden", "true");
+          root.appendChild(hint);
+        }
+        hint.dataset.paintHintMode = paintMode;
+        const markup = Object.entries(activePalette.hint)
+          .map(
+            ([lang, text]) =>
+              `<span data-lang-panel="${lang}"${lang === currentLang() ? "" : " hidden"}>${text}</span>`
+          )
+          .join("");
+        if (hint.dataset.paintHintRendered !== paintMode) {
+          hint.innerHTML = markup;
+          hint.dataset.paintHintRendered = paintMode;
+        }
+      };
+
+      ensurePaintHint();
 
       const getImagePaintRect = () => {
         const naturalWidth = image.naturalWidth || 1;
@@ -3700,46 +3842,105 @@
         context.closePath();
       };
 
-      const clipWallRegion = (context) => {
-        context.beginPath();
-        includePolygons.forEach((polygon) => addPolygonPath(context, polygon));
-        excludePolygons.forEach((polygon) => addPolygonPath(context, polygon));
-        try {
-          context.clip("evenodd");
-        } catch {
-          context.clip();
-        }
-      };
-
       const clearCanvas = () => {
         ctx.clearRect(0, 0, cssWidth, cssHeight);
       };
 
       const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
+      const colorToRgb = (value, fallback = activePalette.color) => {
+        const source = String(value || fallback || "#c86436").trim();
+        const hex = source.match(/^#?([0-9a-f]{6})$/i)?.[1];
+        if (hex) {
+          return {
+            r: Number.parseInt(hex.slice(0, 2), 16),
+            g: Number.parseInt(hex.slice(2, 4), 16),
+            b: Number.parseInt(hex.slice(4, 6), 16),
+          };
+        }
+        const rgb = source.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+        if (rgb) {
+          return {
+            r: clamp(Number(rgb[1]), 0, 255),
+            g: clamp(Number(rgb[2]), 0, 255),
+            b: clamp(Number(rgb[3]), 0, 255),
+          };
+        }
+        return { r: 200, g: 100, b: 54 };
+      };
+
       const drawImageTo = (context) => {
         const cover = getImagePaintRect();
         context.drawImage(image, cover.x, cover.y, cover.width, cover.height);
       };
 
-      const buildPaintedLayer = () => {
+      const applyPaintMaterialPixels = () => {
+        const paintRgb = colorToRgb(paintColor);
+        const strength = clamp(paintOpacity, activePalette.effect === "color" ? 0.99 : 0.72, 1);
+        let imageData;
+        try {
+          imageData = layerCtx.getImageData(0, 0, layerCanvas.width, layerCanvas.height);
+        } catch {
+          layerCtx.globalCompositeOperation = "source-over";
+          layerCtx.globalAlpha = 1;
+          return;
+        }
+
+        const data = imageData.data;
+        for (let index = 0; index < data.length; index += 4) {
+          const alpha = data[index + 3];
+          if (!alpha) continue;
+
+          const sourceR = data[index];
+          const sourceG = data[index + 1];
+          const sourceB = data[index + 2];
+          const luminance = (sourceR * 0.2126 + sourceG * 0.7152 + sourceB * 0.0722) / 255;
+          const contrastLum = clamp((luminance - 0.5) * 0.24 + 0.5, 0, 1);
+          const shade = clamp(0.98 + (contrastLum - 0.5) * 0.08, 0.94, 1.04);
+          const fineTexture = clamp((sourceR - sourceB) / 255, -0.06, 0.06);
+          const textureLift = fineTexture * 2;
+
+          const paintedR = clamp(paintRgb.r * shade + textureLift, 0, 255);
+          const paintedG = clamp(paintRgb.g * shade + textureLift * 0.42, 0, 255);
+          const paintedB = clamp(paintRgb.b * shade - textureLift * 0.16, 0, 255);
+
+          data[index] = paintedR * strength + sourceR * (1 - strength);
+          data[index + 1] = paintedG * strength + sourceG * (1 - strength);
+          data[index + 2] = paintedB * strength + sourceB * (1 - strength);
+          data[index + 3] = alpha;
+        }
+        layerCtx.putImageData(imageData, 0, 0);
+      };
+
+      const buildWallMask = () => {
+        wallMaskCtx.clearRect(0, 0, cssWidth, cssHeight);
+        wallMaskCtx.save();
+        wallMaskCtx.fillStyle = "#fff";
+        wallMaskCtx.beginPath();
+        includePolygons.forEach((polygon) => addPolygonPath(wallMaskCtx, polygon));
+        excludePolygons.forEach((polygon) => addPolygonPath(wallMaskCtx, polygon));
+        try {
+          wallMaskCtx.fill("evenodd");
+        } catch {
+          wallMaskCtx.fill();
+        }
+        wallMaskCtx.restore();
+      };
+
+      const buildPaintMaterial = () => {
         layerCtx.clearRect(0, 0, cssWidth, cssHeight);
-        layerCtx.save();
-        clipWallRegion(layerCtx);
         drawImageTo(layerCtx);
-        layerCtx.globalCompositeOperation = "color";
-        layerCtx.globalAlpha = clamp(paintOpacity, 0.1, 1);
-        layerCtx.fillStyle = paintColor;
-        layerCtx.fillRect(0, 0, cssWidth, cssHeight);
-        layerCtx.globalCompositeOperation = "multiply";
-        layerCtx.globalAlpha = 0.16;
-        layerCtx.fillStyle = paintShadowColor;
-        layerCtx.fillRect(0, 0, cssWidth, cssHeight);
-        layerCtx.globalCompositeOperation = "screen";
-        layerCtx.globalAlpha = 0.12;
-        layerCtx.fillStyle = paintHighlightColor;
-        layerCtx.fillRect(0, 0, cssWidth, cssHeight);
-        layerCtx.restore();
+        if (activePalette.effect === "color") {
+          applyPaintMaterialPixels();
+        } else if (activePalette.effect === "clean") {
+          applyPaintMaterialPixels();
+        } else if (activePalette.effect === "repair") {
+          applyPaintMaterialPixels();
+        } else if (activePalette.effect === "garden") {
+          applyPaintMaterialPixels();
+        } else if (activePalette.effect === "airbnb") {
+          applyPaintMaterialPixels();
+        }
         layerCtx.globalCompositeOperation = "source-over";
         layerCtx.globalAlpha = 1;
       };
@@ -3751,6 +3952,8 @@
         ctx.drawImage(layerCanvas, 0, 0, cssWidth, cssHeight);
         ctx.globalCompositeOperation = "destination-in";
         ctx.drawImage(maskCanvas, 0, 0, cssWidth, cssHeight);
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.drawImage(wallMaskCanvas, 0, 0, cssWidth, cssHeight);
         ctx.restore();
         ctx.globalCompositeOperation = "source-over";
       };
@@ -3760,40 +3963,105 @@
         renderFrame = window.requestAnimationFrame(renderPaintedWall);
       };
 
-      const drawMaskLine = (from, to) => {
+      const randomUnit = (seed) => {
+        const value = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+        return value - Math.floor(value);
+      };
+
+      const paintRollerSegment = (from, to) => {
         const dx = to.x - from.x;
         const dy = to.y - from.y;
         const distance = Math.hypot(dx, dy);
         if (distance < 1) return;
-        const step = Math.max(10, brushSize * 0.42);
-        const steps = Math.max(1, Math.ceil(distance / step));
+        const angle = Math.atan2(dy, dx);
+        const tangent = { x: Math.cos(angle), y: Math.sin(angle) };
+        const normal = { x: -Math.sin(angle), y: Math.cos(angle) };
+        const isRoller = activePalette.effect === "color";
+        const rollerWidth = brushSize * (isRoller ? 1.05 : 0.7);
+        const laneCount = isRoller ? 34 : 18;
+        const baseSeed = from.x * 0.17 + from.y * 0.23 + to.x * 0.31 + to.y * 0.29;
+        const segmentCount = Math.max(3, Math.ceil(distance / Math.max(8, brushSize * 0.16)));
+
         maskCtx.save();
-        clipWallRegion(maskCtx);
+        maskCtx.globalCompositeOperation = "source-over";
         maskCtx.lineCap = "round";
         maskCtx.lineJoin = "round";
-        maskCtx.strokeStyle = "#fff";
-        for (let index = 1; index <= steps; index += 1) {
-          const segmentFrom = {
-            x: from.x + dx * ((index - 1) / steps),
-            y: from.y + dy * ((index - 1) / steps),
-          };
-          const segmentTo = {
-            x: from.x + dx * (index / steps),
-            y: from.y + dy * (index / steps),
-          };
-          [
-            [brushSize * 1.34, 0.18],
-            [brushSize * 1.04, 0.42],
-            [brushSize * 0.78, 1],
-          ].forEach(([lineWidth, alpha]) => {
-            maskCtx.globalAlpha = alpha;
-            maskCtx.lineWidth = lineWidth;
-            maskCtx.beginPath();
-            maskCtx.moveTo(segmentFrom.x, segmentFrom.y);
-            maskCtx.lineTo(segmentTo.x, segmentTo.y);
-            maskCtx.stroke();
-          });
+
+        const strokeOrganicLane = (offset, width, alpha, seed, waveAmount = 0.012) => {
+          const startRunout = (randomUnit(seed + 13.9) - 0.5) * brushSize * 0.1;
+          const endRunout = (randomUnit(seed + 17.2) - 0.5) * brushSize * 0.1;
+          const frequency = 1.1 + randomUnit(seed + 0.37) * 1.05;
+          const phase = randomUnit(seed + 19.7) * Math.PI;
+
+          maskCtx.strokeStyle = `rgba(255,255,255,${alpha})`;
+          maskCtx.lineWidth = Math.max(2.5, width);
+          maskCtx.beginPath();
+
+          for (let segment = 0; segment <= segmentCount; segment += 1) {
+            const t = segment / segmentCount;
+            const along = startRunout * (1 - t) + endRunout * t;
+            const wave =
+              Math.sin(t * Math.PI * 2 * frequency + phase) *
+              brushSize *
+              waveAmount *
+              (0.68 + randomUnit(seed + segment * 4.11) * 0.42);
+            const x = from.x + dx * t + tangent.x * along + normal.x * (offset + wave);
+            const y = from.y + dy * t + tangent.y * along + normal.y * (offset + wave);
+            if (segment === 0) {
+              maskCtx.moveTo(x, y);
+            } else {
+              maskCtx.lineTo(x, y);
+            }
+          }
+          maskCtx.stroke();
+        };
+
+        if (isRoller) {
+          for (let pass = 0; pass < 6; pass += 1) {
+            const passSeed = baseSeed + 120 + pass * 9.7;
+            const offset = (pass - 2.5) * rollerWidth * 0.09 + (randomUnit(passSeed) - 0.5) * rollerWidth * 0.03;
+            const width = rollerWidth * (0.31 + randomUnit(passSeed + 1.4) * 0.1);
+            const alpha = 0.58 + randomUnit(passSeed + 2.8) * 0.1;
+            strokeOrganicLane(offset, width, alpha, passSeed, 0.009);
+          }
         }
+
+        for (let lane = 0; lane < laneCount; lane += 1) {
+          const laneT = laneCount === 1 ? 0.5 : lane / (laneCount - 1);
+          const edge = Math.abs(laneT - 0.5) * 2;
+          const edgeNoise = randomUnit(baseSeed + lane * 2.73);
+          if (edge > 0.82 && edgeNoise < 0.2) continue;
+          const offset =
+            (laneT - 0.5) * rollerWidth +
+            (randomUnit(baseSeed + lane * 3.91) - 0.5) * rollerWidth * (isRoller ? 0.035 : 0.025);
+          const pressure = isRoller ? 0.88 + randomUnit(baseSeed + lane * 5.17) * 0.18 : 0.62;
+          const edgeFalloff = isRoller ? 1 - Math.pow(edge, 1.45) * 0.46 : 1 - edge * 0.42;
+          const dryVariation = isRoller ? 0.78 + randomUnit(baseSeed + lane * 7.61) * 0.34 : 0.78;
+          const alpha = clamp(
+            (isRoller ? 0.7 : 0.26) * pressure * edgeFalloff * dryVariation,
+            isRoller ? 0.22 : 0.08,
+            isRoller ? 0.86 : 0.34
+          );
+          const width = (rollerWidth / laneCount) * (isRoller ? 2.15 : 1.85) * (0.78 + randomUnit(baseSeed + lane * 11.3) * 0.58);
+          strokeOrganicLane(offset, width, alpha, baseSeed + lane * 19.7, isRoller ? 0.016 : 0.008);
+        }
+
+        for (let edgeMark = 0; edgeMark < (isRoller ? 18 : 8); edgeMark += 1) {
+          const t = randomUnit(baseSeed + 40 + edgeMark * 4.1);
+          const side = randomUnit(baseSeed + 60 + edgeMark) > 0.5 ? 1 : -1;
+          const edgeOffset = side * rollerWidth * (0.39 + randomUnit(baseSeed + 70 + edgeMark) * 0.13);
+          const along = (randomUnit(baseSeed + 80 + edgeMark) - 0.5) * Math.max(distance, brushSize * 0.25);
+          const center = {
+            x: from.x + dx * t + tangent.x * along + normal.x * edgeOffset,
+            y: from.y + dy * t + tangent.y * along + normal.y * edgeOffset,
+          };
+          const radius = brushSize * (0.012 + randomUnit(baseSeed + 90 + edgeMark) * 0.025);
+          maskCtx.fillStyle = `rgba(255,255,255,${0.12 + randomUnit(baseSeed + 100 + edgeMark) * 0.2})`;
+          maskCtx.beginPath();
+          maskCtx.ellipse(center.x, center.y, radius * 1.9, radius, angle, 0, Math.PI * 2);
+          maskCtx.fill();
+        }
+
         maskCtx.restore();
         requestRender();
       };
@@ -3817,22 +4085,29 @@
         canvas.style.width = `${imageRect.width}px`;
         canvas.style.height = `${imageRect.height}px`;
         canvas.style.borderRadius = window.getComputedStyle(image.parentElement || image).borderRadius;
-        [canvas, layerCanvas, maskCanvas].forEach((target) => {
+        [canvas, layerCanvas, maskCanvas, wallMaskCanvas].forEach((target) => {
           target.width = Math.round(nextWidth * ratio);
           target.height = Math.round(nextHeight * ratio);
         });
-        [ctx, layerCtx, maskCtx].forEach((context) => {
+        [ctx, layerCtx, maskCtx, wallMaskCtx].forEach((context) => {
           context.setTransform(ratio, 0, 0, ratio, 0, 0);
           context.clearRect(0, 0, cssWidth, cssHeight);
         });
         const mobile = cssWidth < 520;
-        const minBrush = mobile ? 58 : 94;
-        const maxBrush = mobile ? 92 : 146;
-        brushSize = Math.min(clamp(baseBrushSize, minBrush, maxBrush), Math.max(minBrush, Math.min(cssWidth, cssHeight) * 0.42));
-        buildPaintedLayer();
+        const isRoller = activePalette.effect === "color";
+        const minBrush = isRoller ? (mobile ? 136 : 168) : mobile ? 72 : 112;
+        const maxBrush = isRoller ? (mobile ? 188 : 230) : mobile ? 118 : 172;
+        const coverageLimit = isRoller ? 0.62 : 0.42;
+        brushSize = Math.min(
+          clamp(baseBrushSize, minBrush, maxBrush),
+          Math.max(minBrush, Math.min(cssWidth, cssHeight) * coverageLimit)
+        );
+        buildWallMask();
+        buildPaintMaterial();
         root.classList.remove("paint-reveal-active", "paint-reveal-fading");
         root.classList.add("paint-reveal-ready");
         debugPaint("resize");
+        schedulePreview();
       };
 
       const scheduleCanvasReset = () => {
@@ -3845,6 +4120,78 @@
         });
       };
 
+      const polygonBounds = () => {
+        const points = includePolygons.flat();
+        const xs = points.map((point) => point.x);
+        const ys = points.map((point) => point.y);
+        return {
+          minX: Math.min(...xs),
+          maxX: Math.max(...xs),
+          minY: Math.min(...ys),
+          maxY: Math.max(...ys),
+        };
+      };
+
+      const previewPath = () => {
+        const bounds = polygonBounds();
+        const y = bounds.minY + (bounds.maxY - bounds.minY) * 0.46;
+        const from = normalToCanvas({
+          x: bounds.minX + (bounds.maxX - bounds.minX) * 0.24,
+          y,
+        });
+        const to = normalToCanvas({
+          x: bounds.minX + (bounds.maxX - bounds.minX) * 0.48,
+          y: y + (bounds.maxY - bounds.minY) * 0.04,
+        });
+        return { from, to };
+      };
+
+      const moveDemoIndicator = (point) => {
+        window.clearTimeout(demoHideTimer);
+        root.classList.add("paint-reveal-rolling");
+        if (!demoIndicator) {
+          demoIndicator = document.createElement("span");
+          demoIndicator.className = "paint-reveal-demo";
+          demoIndicator.setAttribute("aria-hidden", "true");
+          root.appendChild(demoIndicator);
+        }
+        const canvasLeft = Number.parseFloat(canvas.style.left) || 0;
+        const canvasTop = Number.parseFloat(canvas.style.top) || 0;
+        demoIndicator.style.transform = `translate(${Math.round(canvasLeft + point.x)}px, ${Math.round(canvasTop + point.y)}px)`;
+      };
+
+      const startPreview = () => {
+        if (reducedMotion || root.classList.contains("paint-reveal-used") || !activePalette.preview) return;
+        if (!root.matches(".hero-visual-frame, .hero-media, .service-hero-visual")) return;
+        const previewKey = `bps-paint-preview-${paintMode}`;
+        try {
+          if (window.sessionStorage?.getItem(previewKey) === "true") return;
+          window.sessionStorage?.setItem(previewKey, "true");
+        } catch {
+          // Storage is a nicety; the preview can still run once for this instance.
+        }
+        const { from, to } = previewPath();
+        if (!pointInsideWall(from) || !pointInsideWall(to)) return;
+        root.classList.add("paint-reveal-preview");
+        moveDemoIndicator(from);
+        previewFrame = window.requestAnimationFrame(() => {
+          moveDemoIndicator(to);
+          paintRollerSegment(from, to);
+        });
+        previewTimer = window.setTimeout(() => {
+          root.classList.add("paint-reveal-fading");
+          previewTimer = window.setTimeout(() => {
+            cancelPreview(true);
+            root.classList.remove("paint-reveal-fading");
+          }, 420);
+        }, 1450);
+      };
+
+      const schedulePreview = () => {
+        if (reducedMotion || previewTimer || previewFrame) return;
+        window.setTimeout(startPreview, 450);
+      };
+
       const cancelStrokeFrame = () => {
         if (!strokeFrame) return;
         window.cancelAnimationFrame(strokeFrame);
@@ -3854,7 +4201,7 @@
       const flushQueuedStroke = () => {
         cancelStrokeFrame();
         if (queuedPoint && lastPoint) {
-          drawMaskLine(lastPoint, queuedPoint);
+          paintRollerSegment(lastPoint, queuedPoint);
           lastPoint = queuedPoint;
         }
         queuedPoint = null;
@@ -3868,7 +4215,7 @@
           if (!queuedPoint || !lastPoint) return;
           const nextPoint = queuedPoint;
           queuedPoint = null;
-          drawMaskLine(lastPoint, nextPoint);
+          paintRollerSegment(lastPoint, nextPoint);
           lastPoint = nextPoint;
         });
       };
@@ -3892,12 +4239,54 @@
         }, fadeDelay);
       };
 
+      const cancelPreview = (clear = true) => {
+        window.clearTimeout(previewTimer);
+        if (previewFrame) window.cancelAnimationFrame(previewFrame);
+        previewFrame = 0;
+        previewTimer = 0;
+        window.clearTimeout(demoHideTimer);
+        demoIndicator?.remove();
+        demoIndicator = null;
+        root.classList.remove("paint-reveal-preview", "paint-reveal-rolling");
+        if (clear) {
+          maskCtx.clearRect(0, 0, cssWidth, cssHeight);
+          clearCanvas();
+        }
+      };
+
       const markDragClick = () => {
         blockNextClick = true;
+        suppressClickUntil = performance.now() + 800;
+        clickSuppressionTargets.forEach((target) => {
+          target.dataset.paintSuppressClick = "true";
+        });
         window.clearTimeout(unblockClickTimer);
         unblockClickTimer = window.setTimeout(() => {
           blockNextClick = false;
-        }, 700);
+          clickSuppressionTargets.forEach((target) => {
+            delete target.dataset.paintSuppressClick;
+          });
+        }, 800);
+      };
+
+      const shouldSuppressActivation = () =>
+        blockNextClick || (suppressClickUntil > 0 && performance.now() <= suppressClickUntil);
+
+      const suppressActivation = (event) => {
+        if (!shouldSuppressActivation()) return;
+        event.preventDefault();
+        event.stopPropagation();
+        if (typeof event.stopImmediatePropagation === "function") event.stopImmediatePropagation();
+        blockNextClick = false;
+        clickSuppressionTargets.forEach((target) => {
+          delete target.dataset.paintSuppressClick;
+        });
+        window.clearTimeout(unblockClickTimer);
+      };
+
+      const preventNativeImageDrag = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
       };
 
       const beginRootGesture = (event) => {
@@ -3931,8 +4320,11 @@
         pending = null;
         lastPoint = point;
         queuedPoint = null;
+        root.dataset.paintGesture = "active";
+        cancelPreview(true);
         cancelFade();
         root.classList.add("paint-reveal-ready", "paint-reveal-active", "paint-reveal-used");
+        moveDemoIndicator(point);
         markDragClick();
         pointerCaptureActive = false;
         if (input.event?.pointerId !== undefined && canvas.setPointerCapture) {
@@ -3950,10 +4342,17 @@
       const finishPainting = () => {
         if (activePointer === null) return;
         flushQueuedStroke();
+        markDragClick();
         activePointer = null;
         lastPoint = null;
         pointerCaptureActive = false;
         unbindPointerDocumentFallback();
+        root.dataset.paintGesture = "";
+        demoHideTimer = window.setTimeout(() => {
+          demoIndicator?.remove();
+          demoIndicator = null;
+          root.classList.remove("paint-reveal-rolling");
+        }, 700);
         scheduleFade();
         debugPaint("paint-finish");
       };
@@ -3967,6 +4366,8 @@
         pointerCaptureActive = false;
         unbindPointerDocumentFallback();
         root.classList.remove("paint-reveal-active", "paint-reveal-hit");
+        root.classList.remove("paint-reveal-rolling");
+        root.dataset.paintGesture = "";
         debugPaint("paint-cancel");
       };
 
@@ -3976,6 +4377,7 @@
       };
 
       const startPendingInput = (input) => {
+        cancelPreview(true);
         const point = input.point;
         const insideWall = pointInsideWall(point);
         root.classList.toggle("paint-reveal-hit", insideWall);
@@ -3985,8 +4387,11 @@
           mode: input.mode,
           pointerType: input.pointerType,
           start: point,
+          last: point,
           insideWall,
+          dragged: false,
         };
+        root.dataset.paintGesture = insideWall ? "pending" : "searching";
         debugPaint(`${input.mode}-start`, { insideWall, point });
       };
 
@@ -3994,6 +4399,7 @@
         if (activePointer !== null) {
           if (input.id !== activePointer || !lastPoint) return;
           if (event?.cancelable) event.preventDefault();
+          moveDemoIndicator(input.point);
           scheduleStroke(input.point);
           return;
         }
@@ -4005,15 +4411,37 @@
         const dx = point.x - pending.start.x;
         const dy = point.y - pending.start.y;
         const distance = Math.hypot(dx, dy);
-        if (distance < 7) return;
+        if (distance >= dragThreshold) {
+          pending.dragged = true;
+          markDragClick();
+        }
 
         if (!pending.insideWall) {
+          if (distance <= wallEntryGrace && pointInsideWall(point)) {
+            pending.insideWall = true;
+            pending.start = point;
+            pending.last = point;
+            root.dataset.paintGesture = "pending";
+            root.classList.add("paint-reveal-hit");
+            return;
+          }
+          if (distance < wallEntryGrace) return;
           cancelPending();
           return;
         }
 
-        if (pending.pointerType === "touch" && Math.abs(dy) > Math.abs(dx) * 1.25) {
-          markDragClick();
+        if (
+          pending.pointerType === "touch" &&
+          distance <= scrollDecisionDistance &&
+          Math.abs(dy) > Math.abs(dx) * 1.2
+        ) {
+          cancelPending();
+          return;
+        }
+
+        if (distance < activationThreshold) return;
+
+        if (pending.pointerType === "touch" && Math.abs(dy) > Math.abs(dx) * 1.45) {
           cancelPending();
           return;
         }
@@ -4021,7 +4449,7 @@
         const startPoint = pending.start;
         if (event?.cancelable) event.preventDefault();
         beginPainting({ id: pending.id, mode: pending.mode, event }, startPoint);
-        drawMaskLine(startPoint, point);
+        paintRollerSegment(startPoint, point);
         lastPoint = point;
       };
 
@@ -4031,7 +4459,7 @@
           finishPainting();
           return;
         }
-        if (pending?.id === id) pending = null;
+        if (pending?.id === id) cancelPending();
       };
 
       const handlePointerDown = (event) => {
@@ -4195,15 +4623,13 @@
 
       root.addEventListener(
         "click",
-        (event) => {
-          if (!blockNextClick) return;
-          event.preventDefault();
-          event.stopImmediatePropagation();
-          blockNextClick = false;
-          window.clearTimeout(unblockClickTimer);
-        },
+        suppressActivation,
         true
       );
+      canvas.addEventListener("click", suppressActivation, true);
+      image.addEventListener("click", suppressActivation, true);
+      root.addEventListener("dragstart", preventNativeImageDrag, true);
+      image.addEventListener("dragstart", preventNativeImageDrag);
       if (usePointerInput) {
         root.addEventListener("pointerdown", beginRootGesture, true);
         root.addEventListener("pointermove", updateRootGesture, true);
