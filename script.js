@@ -11,7 +11,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const paintDebugBuild = "paint-diagnostics-2026-07-19-01";
+  const paintDebugBuild = "paint-diagnostics-2026-07-19-02";
 
   const paintDebugError = (error) => ({
     name: error?.name || "Error",
@@ -121,6 +121,7 @@
     const latestInput = latestPaintDebugEvent(debug, (event) =>
       /(?:pointer|touch|mouse)(?:down|move|up|cancel|start|end)|lostpointercapture/.test(event.event)
     );
+    const latestProbe = latestPaintDebugEvent(debug, (event) => event.event.startsWith("input-probe-"));
     const latestException = latestPaintDebugEvent(debug, (event) => event.event === "caught-exception");
     const decodeEvent = latestPaintDebugEvent(debug, (event) => event.event.startsWith("image-decode-"));
 
@@ -136,6 +137,8 @@
       ready: snapshot.gesture?.ready ?? latest.ready,
       "active input": snapshot.gesture?.activeInputFamily,
       "latest input": latestInput ? `${latestInput.event} ${formatPaintDebugValue(latestInput.pointerType || latestInput.touchIdentifier || "")}` : "none",
+      "hit target": latestProbe?.elementFromPoint?.summary || latestProbe?.target?.summary || "none",
+      "probe scope": latestProbe?.scope || "none",
       "latest function": latest.event,
       exception: latestException?.error?.message || latestException?.source || "none",
     };
@@ -208,6 +211,136 @@
     maxTouchPoints: navigator.maxTouchPoints || 0,
     pointerCoarse: window.matchMedia?.("(pointer: coarse)")?.matches === true,
   });
+
+  const describeGlobalPaintDebugNode = (node) => {
+    if (!node) return { summary: "none" };
+    if (node === window) return { summary: "window" };
+    if (node === document) return { summary: "document" };
+    if (node === document.documentElement) return { summary: "html", tag: "HTML" };
+    if (node === document.body) return { summary: "body", tag: "BODY" };
+    const tag = node.tagName || node.nodeName || "node";
+    const id = node.id ? `#${node.id}` : "";
+    const className =
+      typeof node.className === "string"
+        ? node.className.trim()
+        : typeof node.getAttribute === "function"
+          ? node.getAttribute("class") || ""
+          : "";
+    const classes = className
+      ? `.${className
+          .split(/\s+/)
+          .filter(Boolean)
+          .slice(0, 5)
+          .join(".")}`
+      : "";
+    const paintRoot = typeof node.closest === "function" ? node.closest("[data-paint-reveal]") : null;
+    return {
+      summary: `${String(tag).toLowerCase()}${id}${classes}`,
+      tag,
+      id: node.id || "",
+      className,
+      role: typeof node.getAttribute === "function" ? node.getAttribute("role") || "" : "",
+      href: typeof node.getAttribute === "function" ? node.getAttribute("href") || "" : "",
+      dataPaintReveal: typeof node.hasAttribute === "function" ? node.hasAttribute("data-paint-reveal") : false,
+      dataHeroLightbox: typeof node.hasAttribute === "function" ? node.hasAttribute("data-hero-lightbox") : false,
+      dataPaintDebugId: paintRoot?.dataset.paintDebugId || "",
+      insidePaintRoot: !!paintRoot,
+    };
+  };
+
+  const globalPaintDebugPoint = (event) => {
+    if (event.changedTouches?.length) {
+      const touch = event.changedTouches[0];
+      return { clientX: Math.round(touch.clientX), clientY: Math.round(touch.clientY) };
+    }
+    if (event.touches?.length) {
+      const touch = event.touches[0];
+      return { clientX: Math.round(touch.clientX), clientY: Math.round(touch.clientY) };
+    }
+    if (typeof event.clientX === "number" && typeof event.clientY === "number") {
+      return { clientX: Math.round(event.clientX), clientY: Math.round(event.clientY) };
+    }
+    return { clientX: null, clientY: null };
+  };
+
+  const globalPaintDebugComputed = (node) => {
+    if (!node || node === window || node === document || node.nodeType !== 1) return null;
+    const rect = node.getBoundingClientRect();
+    const styles = window.getComputedStyle(node);
+    return {
+      rect: {
+        left: Math.round(rect.left),
+        top: Math.round(rect.top),
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+      },
+      position: styles.position,
+      zIndex: styles.zIndex,
+      pointerEvents: styles.pointerEvents,
+      touchAction: styles.touchAction,
+      display: styles.display,
+      visibility: styles.visibility,
+      opacity: styles.opacity,
+    };
+  };
+
+  const installGlobalPaintInputProbe = () => {
+    if (!paintDebugPanelEnabled() || window.__paintGlobalInputProbeBound === true) return;
+    window.__paintGlobalInputProbeBound = true;
+    const logProbe = (scope) => (event) => {
+      const point = globalPaintDebugPoint(event);
+      const hit =
+        point.clientX === null || point.clientY === null
+          ? null
+          : document.elementFromPoint(point.clientX, point.clientY);
+      const hitStack =
+        point.clientX === null || point.clientY === null || typeof document.elementsFromPoint !== "function"
+          ? []
+          : document.elementsFromPoint(point.clientX, point.clientY)
+              .slice(0, 14)
+              .map(describeGlobalPaintDebugNode);
+      const paintRoot =
+        hit && typeof hit.closest === "function"
+          ? hit.closest("[data-paint-reveal]")
+          : event.target && typeof event.target.closest === "function"
+            ? event.target.closest("[data-paint-reveal]")
+            : null;
+      const canvas = paintRoot?.querySelector(".paint-reveal-canvas") || null;
+      paintDebug.log(`input-probe-${scope}-${event.type}`, {
+        scope,
+        componentId: paintRoot?.dataset.paintDebugId || "",
+        eventType: event.type,
+        pointerId: event.pointerId,
+        pointerType: event.pointerType || (event.type.startsWith("touch") ? "touch" : ""),
+        clientX: point.clientX,
+        clientY: point.clientY,
+        cancelable: event.cancelable,
+        defaultPrevented: event.defaultPrevented,
+        target: describeGlobalPaintDebugNode(event.target),
+        currentTarget: scope,
+        currentTargetNode: describeGlobalPaintDebugNode(event.currentTarget),
+        elementFromPoint: describeGlobalPaintDebugNode(hit),
+        elementsFromPoint: hitStack,
+        paintRoot: describeGlobalPaintDebugNode(paintRoot),
+        canvas: describeGlobalPaintDebugNode(canvas),
+        hitComputed: globalPaintDebugComputed(hit),
+        paintRootComputed: globalPaintDebugComputed(paintRoot),
+        canvasComputed: globalPaintDebugComputed(canvas),
+        ready: paintRoot?.classList.contains("paint-reveal-ready") ?? false,
+      });
+    };
+    const options = { capture: true, passive: true };
+    window.addEventListener("pointerdown", logProbe("window"), options);
+    document.addEventListener("pointerdown", logProbe("document"), options);
+    window.addEventListener("touchstart", logProbe("window"), options);
+    document.addEventListener("touchstart", logProbe("document"), options);
+    paintDebug.log("global-input-probe-installed", {
+      scopes: ["window", "document"],
+      events: ["pointerdown", "touchstart"],
+    });
+  };
+
+  installGlobalPaintInputProbe();
   const uiText = {
     languageLabel: {
       hu: "Nyelv",
@@ -4062,6 +4195,141 @@
         };
       };
 
+      const describeProbeNode = (node) => {
+        if (!node) return { summary: "none" };
+        if (node === window) return { summary: "window" };
+        if (node === document) return { summary: "document" };
+        if (node === document.documentElement) return { summary: "html", tag: "HTML" };
+        if (node === document.body) return { summary: "body", tag: "BODY" };
+        const tag = node.tagName || node.nodeName || "node";
+        const id = node.id ? `#${node.id}` : "";
+        const className =
+          typeof node.className === "string"
+            ? node.className.trim()
+            : typeof node.getAttribute === "function"
+              ? node.getAttribute("class") || ""
+              : "";
+        const classes = className
+          ? `.${className
+              .split(/\s+/)
+              .filter(Boolean)
+              .slice(0, 5)
+              .join(".")}`
+          : "";
+        const closestPaintRoot =
+          typeof node.closest === "function" ? node.closest("[data-paint-reveal]") : null;
+        return {
+          summary: `${String(tag).toLowerCase()}${id}${classes}`,
+          tag,
+          id: node.id || "",
+          className,
+          role: typeof node.getAttribute === "function" ? node.getAttribute("role") || "" : "",
+          href: typeof node.getAttribute === "function" ? node.getAttribute("href") || "" : "",
+          dataPaintReveal: typeof node.hasAttribute === "function" ? node.hasAttribute("data-paint-reveal") : false,
+          dataHeroLightbox: typeof node.hasAttribute === "function" ? node.hasAttribute("data-hero-lightbox") : false,
+          dataPaintDebugId: closestPaintRoot?.dataset.paintDebugId || "",
+          isRoot: node === root,
+          isCanvas: node === canvas,
+          isImage: node === image,
+        };
+      };
+
+      const probePointFromEvent = (event) => {
+        if (event.changedTouches?.length) {
+          const touch = event.changedTouches[0];
+          return { clientX: Math.round(touch.clientX), clientY: Math.round(touch.clientY) };
+        }
+        if (event.touches?.length) {
+          const touch = event.touches[0];
+          return { clientX: Math.round(touch.clientX), clientY: Math.round(touch.clientY) };
+        }
+        if (typeof event.clientX === "number" && typeof event.clientY === "number") {
+          return { clientX: Math.round(event.clientX), clientY: Math.round(event.clientY) };
+        }
+        return { clientX: null, clientY: null };
+      };
+
+      const computedProbeSnapshot = (node) => {
+        if (!node || node === window || node === document || node.nodeType !== 1) return null;
+        const rect = node.getBoundingClientRect();
+        const styles = window.getComputedStyle(node);
+        return {
+          rect: {
+            left: Math.round(rect.left),
+            top: Math.round(rect.top),
+            width: Math.round(rect.width),
+            height: Math.round(rect.height),
+          },
+          position: styles.position,
+          zIndex: styles.zIndex,
+          pointerEvents: styles.pointerEvents,
+          touchAction: styles.touchAction,
+          display: styles.display,
+          visibility: styles.visibility,
+          opacity: styles.opacity,
+        };
+      };
+
+      const installInputProbe = () => {
+        if (!paintDebugPanelEnabled() || root.dataset.paintInputProbeBound === "true") return;
+        root.dataset.paintInputProbeBound = "true";
+
+        const logProbe = (scope) => (event) => {
+          const point = probePointFromEvent(event);
+          const hit =
+            point.clientX === null || point.clientY === null
+              ? null
+              : document.elementFromPoint(point.clientX, point.clientY);
+          const hitStack =
+            point.clientX === null || point.clientY === null || typeof document.elementsFromPoint !== "function"
+              ? []
+              : document.elementsFromPoint(point.clientX, point.clientY)
+                  .slice(0, 12)
+                  .map(describeProbeNode);
+
+          paintLog(`input-probe-${scope}-${event.type}`, {
+            scope,
+            eventType: event.type,
+            pointerId: event.pointerId,
+            pointerType: event.pointerType || (event.type.startsWith("touch") ? "touch" : ""),
+            clientX: point.clientX,
+            clientY: point.clientY,
+            cancelable: event.cancelable,
+            defaultPrevented: event.defaultPrevented,
+            target: describeProbeNode(event.target),
+            currentTarget: scope,
+            currentTargetNode: describeProbeNode(event.currentTarget),
+            elementFromPoint: describeProbeNode(hit),
+            elementsFromPoint: hitStack,
+            canvasComputed: computedProbeSnapshot(canvas),
+            rootComputed: computedProbeSnapshot(root),
+            canvas: canvasSnapshot(),
+            image: imageSnapshot("input-probe"),
+            gesture: gestureSnapshot(),
+            ready: root.classList.contains("paint-reveal-ready"),
+          });
+        };
+
+        const pointerOptions = { capture: true, passive: true };
+        const touchOptions = { capture: true, passive: true };
+        [
+          [window, "window"],
+          [document, "document"],
+          [root, "paint-root"],
+          [canvas, "canvas"],
+        ].forEach(([target, scope]) => {
+          target.addEventListener("pointerdown", logProbe(scope), pointerOptions);
+          target.addEventListener("touchstart", logProbe(scope), touchOptions);
+        });
+
+        paintLog("input-probe-installed", {
+          scopes: ["window", "document", "paint-root", "canvas"],
+          events: ["pointerdown", "touchstart"],
+          canvasComputed: computedProbeSnapshot(canvas),
+          rootComputed: computedProbeSnapshot(root),
+        });
+      };
+
       const runPaintEvent = (eventName, event, details, callback) => {
         const before = gestureSnapshot();
         paintLog(`${eventName}-received`, {
@@ -5085,6 +5353,7 @@
       if (useTouchFallback) {
         root.addEventListener("touchstart", logRootTouchStart, { capture: true, passive: true });
       }
+      installInputProbe();
 
       const scheduleDecodedCanvasReset = () => {
         paintLog("image-readiness-check", {
