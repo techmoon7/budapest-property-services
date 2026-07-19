@@ -3799,12 +3799,13 @@
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     const supportsPointerEvents = "PointerEvent" in window;
     const supportsTouchEvents = "ontouchstart" in window || (typeof TouchEvent !== "undefined" && navigator.maxTouchPoints > 0);
+    const coarsePointer = window.matchMedia?.("(pointer: coarse)")?.matches === true;
     const localDebugHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
     const forceTouchInput = localDebugHost && /(?:^|[?&])paintInput=touch(?:&|$)/.test(window.location.search);
     const forceMouseInput = localDebugHost && /(?:^|[?&])paintInput=mouse(?:&|$)/.test(window.location.search);
     const canUseTouchFallback = supportsTouchEvents || (localDebugHost && typeof TouchEvent !== "undefined");
-    const usePointerInput = !forceMouseInput && supportsPointerEvents;
-    const useTouchFallback = !forceMouseInput && !usePointerInput && canUseTouchFallback;
+    const useTouchFallback = !forceMouseInput && canUseTouchFallback && (forceTouchInput || coarsePointer);
+    const usePointerInput = !forceMouseInput && !useTouchFallback && supportsPointerEvents;
     const useMouseFallback = forceMouseInput || (!usePointerInput && !useTouchFallback);
     const paintDebugEnabled =
       localDebugHost && /(?:^|[?&])paintDebug=1(?:&|$)/.test(window.location.search);
@@ -3820,6 +3821,7 @@
       activeRootCount: activeRoots.length,
       supportsPointerEvents,
       supportsTouchEvents,
+      coarsePointer,
       usePointerInput,
       useTouchFallback,
       useMouseFallback,
@@ -4076,7 +4078,6 @@
       let clearTimer = 0;
       let blockNextClick = false;
       let unblockClickTimer = 0;
-      let rootGesture = null;
       let resizeFrame = 0;
       let pointerCaptureActive = false;
       let pointerFallbackBound = false;
@@ -4091,8 +4092,6 @@
       let imageReadyResetQueued = false;
       const activationThreshold = 5;
       const dragThreshold = 5;
-      const scrollDecisionDistance = 10;
-      const wallEntryGrace = 18;
       let activeInputFamily = null;
 
       const inputGestureActive = () => activePointer !== null || pending !== null;
@@ -4147,14 +4146,6 @@
           : null,
         lastPoint: roundedPoint(lastPoint),
         queuedPoint: roundedPoint(queuedPoint),
-        rootGesture: rootGesture
-          ? {
-              pointerId: rootGesture.pointerId,
-              startX: Math.round(rootGesture.startX),
-              startY: Math.round(rootGesture.startY),
-              moved: rootGesture.moved,
-            }
-          : null,
         pointerCaptureActive,
         mouseIsDown,
         paintGesture: root.dataset.paintGesture || "",
@@ -4708,6 +4699,12 @@
         canvas.style.width = `${imageRect.width}px`;
         canvas.style.height = `${imageRect.height}px`;
         canvas.style.borderRadius = window.getComputedStyle(image.parentElement || image).borderRadius;
+        const hint = root.querySelector(".paint-reveal-hint");
+        if (hint) {
+          hint.style.top = `${Math.max(10, Math.round(imageRect.top - rootRect.top + 12))}px`;
+          hint.style.right = `${Math.max(12, Math.round(rootRect.right - imageRect.right + 12))}px`;
+          hint.style.maxWidth = `${Math.max(160, Math.round(imageRect.width - 24))}px`;
+        }
         [canvas, layerCanvas, maskCanvas, wallMaskCanvas].forEach((target) => {
           target.width = Math.round(nextWidth * ratio);
           target.height = Math.round(nextHeight * ratio);
@@ -4916,40 +4913,10 @@
         event.stopPropagation();
       };
 
-      const beginRootGesture = (event) => {
-        runPaintEvent(`root-${event.type}`, event, pointerEventDetails(event), () => {
-          if (activeInputFamily && activeInputFamily !== "pointer") return;
-          if (event.button !== undefined && event.button !== 0) return;
-          rootGesture = {
-            pointerId: event.pointerId,
-            startX: event.clientX,
-            startY: event.clientY,
-            moved: false,
-          };
-        });
-      };
-
-      const updateRootGesture = (event) => {
-        runPaintEvent(`root-${event.type}`, event, pointerEventDetails(event), () => {
-          if (activeInputFamily && activeInputFamily !== "pointer") return;
-          if (!rootGesture || event.pointerId !== rootGesture.pointerId || rootGesture.moved) return;
-          const distance = Math.hypot(event.clientX - rootGesture.startX, event.clientY - rootGesture.startY);
-          if (distance < 7) return;
-          rootGesture.moved = true;
-          markDragClick();
-        });
-      };
-
-      const endRootGesture = (event) => {
-        runPaintEvent(`root-${event.type}`, event, pointerEventDetails(event), () => {
-          if (activeInputFamily && activeInputFamily !== "pointer") return;
-          if (!rootGesture || event.pointerId !== rootGesture.pointerId) return;
-          rootGesture = null;
-        });
-      };
-
       let bindPointerDocumentFallback = () => {};
       let unbindPointerDocumentFallback = () => {};
+      let bindTouchDocumentFallback = () => {};
+      let unbindTouchDocumentFallback = () => {};
 
       const beginPainting = (input, point) => {
         if (!paintMaterialReady) buildPaintMaterial();
@@ -4978,19 +4945,33 @@
             });
           }
         }
-        if (input.mode === "pointer" && !pointerCaptureActive) bindPointerDocumentFallback();
         debugPaint("paint-start", { inputMode: input.mode, point, pointerCaptureActive });
       };
 
       const finishPainting = () => {
         if (activePointer === null) return;
+        const pointerId = activePointer;
         flushQueuedStroke();
         markDragClick();
         activePointer = null;
         activeInputFamily = null;
         lastPoint = null;
+        queuedPoint = null;
+        mouseIsDown = false;
+        if (pointerCaptureActive && canvas.releasePointerCapture && typeof pointerId === "number") {
+          try {
+            canvas.releasePointerCapture(pointerId);
+          } catch (error) {
+            paintLog("caught-exception", {
+              source: "releasePointerCapture",
+              pointerId,
+              error: paintDebugError(error),
+            });
+          }
+        }
         pointerCaptureActive = false;
         unbindPointerDocumentFallback();
+        unbindTouchDocumentFallback();
         root.dataset.paintGesture = "";
         demoHideTimer = window.setTimeout(() => {
           demoIndicator?.remove();
@@ -5008,8 +4989,10 @@
         activeInputFamily = null;
         lastPoint = null;
         queuedPoint = null;
+        mouseIsDown = false;
         pointerCaptureActive = false;
         unbindPointerDocumentFallback();
+        unbindTouchDocumentFallback();
         root.classList.remove("paint-reveal-active", "paint-reveal-hit");
         root.classList.remove("paint-reveal-rolling");
         root.dataset.paintGesture = "";
@@ -5022,8 +5005,20 @@
       };
 
       const startPendingInput = (input) => {
+        if (!root.classList.contains("paint-reveal-ready")) {
+          if (image.complete && image.naturalWidth) resetCanvasSize();
+          if (!root.classList.contains("paint-reveal-ready")) {
+            scheduleCanvasReset();
+            debugPaint(`${input.mode}-start-deferred-not-ready`, { point: input.point });
+            return;
+          }
+        }
         cancelPreview(true);
         const point = input.point;
+        if (point.x < 0 || point.y < 0 || point.x > cssWidth || point.y > cssHeight) {
+          debugPaint(`${input.mode}-start-ignored-outside-image`, { point });
+          return;
+        }
         const insideWall = pointInsideWall(point);
         activeInputFamily = input.mode;
         root.classList.toggle("paint-reveal-hit", insideWall);
@@ -5038,6 +5033,8 @@
           dragged: false,
         };
         root.dataset.paintGesture = insideWall ? "pending" : "searching";
+        if (input.mode === "pointer") bindPointerDocumentFallback();
+        if (input.mode === "touch") bindTouchDocumentFallback();
         debugPaint(`${input.mode}-start`, { insideWall, point });
       };
 
@@ -5063,35 +5060,22 @@
         }
 
         if (!pending.insideWall) {
-          if (distance <= wallEntryGrace && pointInsideWall(point)) {
+          if (pointInsideWall(point)) {
             pending.insideWall = true;
             pending.start = point;
             pending.last = point;
             root.dataset.paintGesture = "pending";
             root.classList.add("paint-reveal-hit");
+            if (pending.pointerType === "touch" && event?.cancelable) event.preventDefault();
             return;
           }
-          if (distance < wallEntryGrace) return;
-          cancelPending();
           return;
         }
 
-        if (
-          pending.pointerType === "touch" &&
-          distance <= scrollDecisionDistance &&
-          Math.abs(dy) > Math.abs(dx) * 1.2
-        ) {
-          cancelPending();
-          return;
-        }
+        if (pending.pointerType === "touch" && event?.cancelable) event.preventDefault();
 
-        const activeThreshold = pending.pointerType === "touch" ? Math.min(activationThreshold, 3) : activationThreshold;
+        const activeThreshold = pending.pointerType === "touch" ? Math.min(activationThreshold, 2) : activationThreshold;
         if (distance < activeThreshold) return;
-
-        if (pending.pointerType === "touch" && Math.abs(dy) > Math.abs(dx) * 1.45) {
-          cancelPending();
-          return;
-        }
 
         const startPoint = pending.start;
         if (event?.cancelable) event.preventDefault();
@@ -5112,6 +5096,7 @@
       const handlePointerDown = (event) => {
         runPaintEvent("pointerdown", event, pointerEventDetails(event), () => {
           if (event.button !== undefined && event.button !== 0) return;
+          if (event.isPrimary === false) return;
           if (!canUseInputFamily("pointer")) return;
           startPendingInput({
             id: event.pointerId,
@@ -5124,6 +5109,7 @@
 
       const handlePointerMove = (event) => {
         runPaintEvent("pointermove", event, pointerEventDetails(event), () => {
+          if (event.isPrimary === false) return;
           if (activeInputFamily && activeInputFamily !== "pointer") return;
           continueInput(
             {
@@ -5139,27 +5125,29 @@
 
       const handlePointerUp = (event) => {
         runPaintEvent("pointerup", event, pointerEventDetails(event), () => {
+          if (event.isPrimary === false) return;
           if (activeInputFamily && activeInputFamily !== "pointer") return;
           finishInput(event.pointerId, event);
         });
       };
       const handlePointerCancel = (event) => {
         runPaintEvent("pointercancel", event, pointerEventDetails(event), () => {
+          if (event.isPrimary === false) return;
           if (activeInputFamily && activeInputFamily !== "pointer") return;
-          if (event.pointerId === activePointer || event.pointerId === pending?.id) cancelPending();
+          if (event.pointerId === activePointer || event.pointerId === pending?.id) finishInput(event.pointerId, event, false);
         });
       };
 
       const handlePointerMoveFallback = (event) => {
-        if (event.target === canvas) return;
+        if (root.contains(event.target)) return;
         handlePointerMove(event);
       };
       const handlePointerUpFallback = (event) => {
-        if (event.target === canvas) return;
+        if (root.contains(event.target)) return;
         handlePointerUp(event);
       };
       const handlePointerCancelFallback = (event) => {
-        if (event.target === canvas) return;
+        if (root.contains(event.target)) return;
         handlePointerCancel(event);
       };
 
@@ -5179,6 +5167,36 @@
         document.removeEventListener("pointercancel", handlePointerCancelFallback, true);
       };
 
+      let touchFallbackBound = false;
+      const handleTouchMoveFallback = (event) => {
+        if (root.contains(event.target)) return;
+        handleTouchMove(event);
+      };
+      const handleTouchEndFallback = (event) => {
+        if (root.contains(event.target)) return;
+        handleTouchEnd(event);
+      };
+      const handleTouchCancelFallback = (event) => {
+        if (root.contains(event.target)) return;
+        handleTouchCancel(event);
+      };
+
+      bindTouchDocumentFallback = () => {
+        if (touchFallbackBound) return;
+        touchFallbackBound = true;
+        document.addEventListener("touchmove", handleTouchMoveFallback, { capture: true, passive: false });
+        document.addEventListener("touchend", handleTouchEndFallback, { capture: true, passive: true });
+        document.addEventListener("touchcancel", handleTouchCancelFallback, { capture: true, passive: true });
+      };
+
+      unbindTouchDocumentFallback = () => {
+        if (!touchFallbackBound) return;
+        touchFallbackBound = false;
+        document.removeEventListener("touchmove", handleTouchMoveFallback, { capture: true });
+        document.removeEventListener("touchend", handleTouchEndFallback, { capture: true });
+        document.removeEventListener("touchcancel", handleTouchCancelFallback, { capture: true });
+      };
+
       const touchById = (touches, id) => {
         for (let index = 0; index < touches.length; index += 1) {
           if (`touch:${touches[index].identifier}` === id) return touches[index];
@@ -5195,16 +5213,13 @@
 
       const handleTouchStart = (event) => {
         runPaintEvent("touchstart", event, touchEventDetails(event), () => {
-          if (activeInputFamily === "pointer" && pending?.pointerType === "touch" && activePointer === null) {
-            pending = null;
-            activeInputFamily = null;
-            rootGesture = null;
-            root.dataset.paintGesture = "";
-            root.classList.remove("paint-reveal-hit", "paint-reveal-rolling");
-          }
           if (!canUseInputFamily("touch")) return;
-          if (event.touches.length !== 1 || activePointer !== null) {
-            cancelPending();
+          if (event.touches.length !== 1 || !event.changedTouches.length || activePointer !== null) {
+            if (activePointer !== null) {
+              finishPainting();
+            } else {
+              cancelPending();
+            }
             return;
           }
           startPendingInput(touchInput(event.changedTouches[0]));
@@ -5235,7 +5250,11 @@
         runPaintEvent("touchcancel", event, touchEventDetails(event), () => {
           if (activeInputFamily && activeInputFamily !== "touch") return;
           const id = activePointer || pending?.id;
-          if (!id || touchById(event.changedTouches, id)) cancelPending();
+          if (!id) {
+            cancelPending();
+            return;
+          }
+          if (touchById(event.changedTouches, id)) finishInput(id, event, false);
         });
       };
 
@@ -5303,26 +5322,40 @@
 
       const handleLostPointerCapture = (event) => {
         runPaintEvent("lostpointercapture", event, pointerEventDetails(event), () => {
-          finishPainting();
+          finishInput(event.pointerId, event, false);
         });
       };
 
-      const logRootTouchStart = (event) => {
-        runPaintEvent("root-touchstart", event, touchEventDetails(event), () => {});
+      const cancelCurrentGesture = () => {
+        if (activePointer !== null) {
+          finishPainting();
+          return;
+        }
+        if (pending) {
+          cancelPending();
+          return;
+        }
+        activeInputFamily = null;
+        pointerCaptureActive = false;
+        mouseIsDown = false;
+        unbindPointerDocumentFallback();
+        unbindTouchDocumentFallback();
+        root.classList.remove("paint-reveal-hit", "paint-reveal-rolling");
+        root.dataset.paintGesture = "";
       };
 
       if (usePointerInput) {
-        canvas.addEventListener("pointerdown", handlePointerDown);
-        canvas.addEventListener("pointermove", handlePointerMove);
-        canvas.addEventListener("pointerup", handlePointerUp);
-        canvas.addEventListener("pointercancel", handlePointerCancel);
+        root.addEventListener("pointerdown", handlePointerDown, true);
+        root.addEventListener("pointermove", handlePointerMove, true);
+        root.addEventListener("pointerup", handlePointerUp, true);
+        root.addEventListener("pointercancel", handlePointerCancel, true);
         canvas.addEventListener("lostpointercapture", handleLostPointerCapture);
       }
       if (useTouchFallback) {
-        canvas.addEventListener("touchstart", handleTouchStart, { passive: true });
-        canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
-        canvas.addEventListener("touchend", handleTouchEnd, { passive: true });
-        canvas.addEventListener("touchcancel", handleTouchCancel, { passive: true });
+        root.addEventListener("touchstart", handleTouchStart, { capture: true, passive: true });
+        root.addEventListener("touchmove", handleTouchMove, { capture: true, passive: false });
+        root.addEventListener("touchend", handleTouchEnd, { capture: true, passive: true });
+        root.addEventListener("touchcancel", handleTouchCancel, { capture: true, passive: true });
       }
       if (useMouseFallback) {
         canvas.addEventListener("mousedown", handleMouseDown);
@@ -5331,7 +5364,7 @@
         document.addEventListener("mouseup", handleMouseUp);
       }
 
-      canvas.addEventListener("pointerleave", () => {
+      root.addEventListener("pointerleave", () => {
         if (activePointer === null && !pending) root.classList.remove("paint-reveal-hit");
       });
 
@@ -5344,16 +5377,11 @@
       image.addEventListener("click", suppressActivation, true);
       root.addEventListener("dragstart", preventNativeImageDrag, true);
       image.addEventListener("dragstart", preventNativeImageDrag);
-      if (usePointerInput) {
-        root.addEventListener("pointerdown", beginRootGesture, true);
-        root.addEventListener("pointermove", updateRootGesture, true);
-          root.addEventListener("pointerup", endRootGesture, true);
-          root.addEventListener("pointercancel", endRootGesture, true);
-      }
-      if (useTouchFallback) {
-        root.addEventListener("touchstart", logRootTouchStart, { capture: true, passive: true });
-      }
       installInputProbe();
+      window.addEventListener("blur", cancelCurrentGesture);
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") cancelCurrentGesture();
+      });
 
       const scheduleDecodedCanvasReset = () => {
         paintLog("image-readiness-check", {
