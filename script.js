@@ -11,7 +11,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const paintDebugBuild = "paint-input-trace-2026-07-19-01";
+  const paintDebugBuild = "paint-gesture-start-2026-07-19-01";
 
   const paintDebugError = (error) => ({
     name: error?.name || "Error",
@@ -5726,7 +5726,7 @@
             point: roundedPoint(localPoint(event)),
             ready: root.classList.contains("paint-reveal-ready"),
           });
-          if (event.button !== undefined && event.button !== 0) {
+          if (event.pointerType === "mouse" && event.button !== undefined && event.button !== 0) {
             logPaintStartPipeline("pointerdown-exit", {
               reason: "non-primary-button",
               pointerId: event.pointerId,
