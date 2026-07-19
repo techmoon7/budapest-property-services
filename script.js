@@ -3823,6 +3823,7 @@
       let demoHideTimer = 0;
       let paintMaterialReady = false;
       let autoPreviewStarted = false;
+      let imageReadyResetQueued = false;
       const activationThreshold = 5;
       const dragThreshold = 5;
       const scrollDecisionDistance = 10;
@@ -4964,28 +4965,30 @@
           });
           return;
         }
-        const decoded =
-          typeof image.decode === "function"
-            ? image
-                .decode()
-                .then(() => {
-                  paintLog("image-decode-success", {
-                    image: imageSnapshot("decode-success"),
-                  });
-                })
-                .catch((error) => {
-                  paintLog("image-decode-failure", {
-                    image: imageSnapshot("decode-failure"),
-                    error: paintDebugError(error),
-                  });
-                })
-            : Promise.resolve().then(() => {
-                paintLog("image-decode-skipped", {
-                  reason: "decode-api-unavailable",
-                  image: imageSnapshot("decode-skipped"),
-                });
+        if (!imageReadyResetQueued) {
+          imageReadyResetQueued = true;
+          scheduleCanvasReset();
+        }
+        if (typeof image.decode === "function") {
+          image
+            .decode()
+            .then(() => {
+              paintLog("image-decode-success", {
+                image: imageSnapshot("decode-success"),
               });
-        decoded.then(scheduleCanvasReset);
+            })
+            .catch((error) => {
+              paintLog("image-decode-failure", {
+                image: imageSnapshot("decode-failure"),
+                error: paintDebugError(error),
+              });
+            });
+        } else {
+          paintLog("image-decode-skipped", {
+            reason: "decode-api-unavailable",
+            image: imageSnapshot("decode-skipped"),
+          });
+        }
       };
 
       if (image.complete && image.naturalWidth) {
