@@ -3803,9 +3803,9 @@
     const localDebugHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
     const forceTouchInput = localDebugHost && /(?:^|[?&])paintInput=touch(?:&|$)/.test(window.location.search);
     const forceMouseInput = localDebugHost && /(?:^|[?&])paintInput=mouse(?:&|$)/.test(window.location.search);
-    const canUseTouchFallback = supportsTouchEvents || (localDebugHost && typeof TouchEvent !== "undefined");
-    const useTouchFallback = !forceMouseInput && canUseTouchFallback && (forceTouchInput || coarsePointer);
-    const usePointerInput = !forceMouseInput && !useTouchFallback && supportsPointerEvents;
+    const canUseTouchFallback = !supportsPointerEvents && (supportsTouchEvents || (localDebugHost && typeof TouchEvent !== "undefined"));
+    const usePointerInput = !forceMouseInput && supportsPointerEvents;
+    const useTouchFallback = !forceMouseInput && !usePointerInput && canUseTouchFallback && (forceTouchInput || coarsePointer || supportsTouchEvents);
     const useMouseFallback = forceMouseInput || (!usePointerInput && !useTouchFallback);
     const paintDebugEnabled =
       localDebugHost && /(?:^|[?&])paintDebug=1(?:&|$)/.test(window.location.search);
