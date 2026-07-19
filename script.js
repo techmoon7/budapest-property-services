@@ -3538,8 +3538,8 @@
     const forceTouchInput = localDebugHost && /(?:^|[?&])paintInput=touch(?:&|$)/.test(window.location.search);
     const forceMouseInput = localDebugHost && /(?:^|[?&])paintInput=mouse(?:&|$)/.test(window.location.search);
     const canUseTouchFallback = supportsTouchEvents || (localDebugHost && typeof TouchEvent !== "undefined");
-    const usePointerInput = !forceTouchInput && !forceMouseInput && supportsPointerEvents;
-    const useTouchFallback = !forceMouseInput && canUseTouchFallback;
+    const usePointerInput = !forceMouseInput && supportsPointerEvents;
+    const useTouchFallback = !forceMouseInput && !usePointerInput && canUseTouchFallback;
     const useMouseFallback = forceMouseInput || (!usePointerInput && !useTouchFallback);
     const paintDebugEnabled =
       localDebugHost && /(?:^|[?&])paintDebug=1(?:&|$)/.test(window.location.search);
@@ -4336,7 +4336,7 @@
           canvas: canvasSnapshot(),
         });
         debugPaint("resize");
-        schedulePreview();
+        debugPaint("auto-preview-disabled");
       };
 
       const scheduleCanvasReset = () => {
@@ -4415,8 +4415,7 @@
       };
 
       const schedulePreview = () => {
-        if (reducedMotion || previewTimer || previewFrame || !shouldAutoPreview()) return;
-        window.setTimeout(startPreview, 450);
+        debugPaint("auto-preview-disabled");
       };
 
       const cancelStrokeFrame = () => {
@@ -4950,7 +4949,9 @@
           root.addEventListener("pointerup", endRootGesture, true);
           root.addEventListener("pointercancel", endRootGesture, true);
       }
-      root.addEventListener("touchstart", logRootTouchStart, { capture: true, passive: true });
+      if (useTouchFallback) {
+        root.addEventListener("touchstart", logRootTouchStart, { capture: true, passive: true });
+      }
 
       const scheduleDecodedCanvasReset = () => {
         paintLog("image-readiness-check", {
