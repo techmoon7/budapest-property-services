@@ -11,7 +11,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const paintDebugBuild = "paint-diagnostics-2026-07-19-02";
+  const paintDebugBuild = "paint-input-trace-2026-07-19-01";
 
   const paintDebugError = (error) => ({
     name: error?.name || "Error",
@@ -42,6 +42,127 @@
     return null;
   };
 
+  const paintInputEventNames = [
+    "pointerdown",
+    "pointermove",
+    "pointerup",
+    "pointercancel",
+    "touchstart",
+    "touchmove",
+    "touchend",
+    "touchcancel",
+  ];
+
+  const createPaintInputCounts = () =>
+    paintInputEventNames.reduce((counts, eventName) => {
+      counts[eventName] = 0;
+      return counts;
+    }, {});
+
+  const normalizePaintInputTrace = (trace = {}) => ({
+    selectedInputMode: trace.selectedInputMode || "n/a",
+    counts: {
+      ...createPaintInputCounts(),
+      ...(trace.counts || {}),
+    },
+    probeCounts: {
+      window: {
+        ...createPaintInputCounts(),
+        ...(trace.probeCounts?.window || {}),
+      },
+      document: {
+        ...createPaintInputCounts(),
+        ...(trace.probeCounts?.document || {}),
+      },
+      "paint-root": {
+        ...createPaintInputCounts(),
+        ...(trace.probeCounts?.["paint-root"] || {}),
+      },
+      canvas: {
+        ...createPaintInputCounts(),
+        ...(trace.probeCounts?.canvas || {}),
+      },
+    },
+    latestInput: trace.latestInput || null,
+    latestProbe: trace.latestProbe || null,
+    initialContact: trace.initialContact || null,
+    latestEarlyReturn: trace.latestEarlyReturn || null,
+    latestFunction: trace.latestFunction || "n/a",
+    activeGestureCreated: trace.activeGestureCreated || false,
+    beginPaintingEntered: trace.beginPaintingEntered || false,
+    revealAtCalled: trace.revealAtCalled || false,
+    canvasPixelsModified: trace.canvasPixelsModified || false,
+  });
+
+  const formatPaintDebugNodeSummary = (node) => node?.summary || node?.target?.summary || "none";
+
+  const formatPaintDebugStyle = (styles) => {
+    if (!styles) return "n/a";
+    return `pe:${formatPaintDebugValue(styles.pointerEvents)} ta:${formatPaintDebugValue(styles.touchAction)} z:${formatPaintDebugValue(styles.zIndex)} pos:${formatPaintDebugValue(styles.position)}`;
+  };
+
+  const serializePaintDebug = (debug) =>
+    JSON.stringify(
+      debug,
+      (key, value) => {
+        if (key === "panel") return undefined;
+        if (typeof value === "function") return undefined;
+        return value;
+      },
+      2
+    );
+
+  const paintDebugPlainText = (debug) =>
+    [
+      "Budapest Property Services paint diagnostics",
+      `build: ${debug?.build || "n/a"}`,
+      `url: ${window.location.href}`,
+      `created: ${new Date().toISOString()}`,
+      "",
+      serializePaintDebug(debug),
+    ].join("\n");
+
+  const updatePaintInputTrace = (debug, entry) => {
+    const trace = normalizePaintInputTrace(debug.inputTrace);
+    const traceRelevantEvent =
+      /^(pointer|touch|mouse|beginPainting|buildPaintMaterial|revealAt|canvas-pixels|active-gesture|finishInput|paint-start|paint-finish|paint-cancel|renderPaintedWall)/.test(
+        entry.event || ""
+      ) || entry.event?.endsWith("-early-return");
+    if (traceRelevantEvent) trace.latestFunction = entry.event || "n/a";
+    if (entry.inputMode) trace.selectedInputMode = entry.inputMode;
+
+    const actualInput = entry.event?.match(
+      /^(pointerdown|pointermove|pointerup|pointercancel|touchstart|touchmove|touchend|touchcancel)-received$/
+    );
+    if (actualInput) {
+      trace.counts[actualInput[1]] = (trace.counts[actualInput[1]] || 0) + 1;
+      trace.latestInput = entry;
+      if ((actualInput[1] === "pointerdown" || actualInput[1] === "touchstart") && !trace.initialContact) {
+        trace.initialContact = entry;
+      }
+    }
+
+    const probeInput = entry.event?.match(
+      /^input-probe-(window|document|paint-root|canvas)-(pointerdown|pointermove|pointerup|pointercancel|touchstart|touchmove|touchend|touchcancel)$/
+    );
+    if (probeInput) {
+      const [, scope, eventName] = probeInput;
+      trace.probeCounts[scope][eventName] = (trace.probeCounts[scope][eventName] || 0) + 1;
+      trace.latestProbe = entry;
+      if ((eventName === "pointerdown" || eventName === "touchstart") && !trace.initialContact) {
+        trace.initialContact = entry;
+      }
+    }
+
+    if (entry.event?.endsWith("-early-return")) trace.latestEarlyReturn = entry;
+    if (entry.event === "active-gesture-state-created") trace.activeGestureCreated = true;
+    if (entry.event === "beginPainting-entered" || entry.event === "paint-start") trace.beginPaintingEntered = true;
+    if (entry.event === "revealAt-called") trace.revealAtCalled = true;
+    if (entry.event === "canvas-pixels-modified") trace.canvasPixelsModified = true;
+
+    debug.inputTrace = trace;
+  };
+
   const createPaintDebugPanel = (debug) => {
     if (!paintDebugPanelEnabled() || debug.panel?.isConnected) return;
 
@@ -57,6 +178,7 @@
       "max-height:min(56vh, 460px)",
       "overflow:auto",
       "padding:10px",
+      "pointer-events:none",
       "border:1px solid rgba(255,255,255,.22)",
       "border-radius:14px",
       "background:rgba(10,24,18,.92)",
@@ -69,7 +191,7 @@
     panel.innerHTML = `
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
         <strong style="font:700 12px/1.2 system-ui,sans-serif;">Paint diagnostics</strong>
-        <button type="button" data-paint-debug-copy style="appearance:none;border:0;border-radius:999px;background:#fffaf2;color:#102c21;padding:6px 9px;font:700 11px/1 system-ui,sans-serif;">Copy diagnostics</button>
+        <button type="button" data-paint-debug-copy style="appearance:none;border:0;border-radius:999px;background:#fffaf2;color:#102c21;padding:6px 9px;font:700 11px/1 system-ui,sans-serif;pointer-events:auto;">Copy diagnostics</button>
       </div>
       <dl data-paint-debug-fields style="display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 8px;margin:0;"></dl>
       <div data-paint-debug-copy-state style="margin-top:7px;color:#d8f3dc;font:700 11px/1.25 system-ui,sans-serif;" aria-live="polite"></div>
@@ -78,7 +200,7 @@
     const copyButton = panel.querySelector("[data-paint-debug-copy]");
     const copyState = panel.querySelector("[data-paint-debug-copy-state]");
     copyButton?.addEventListener("click", async () => {
-      const payload = JSON.stringify(window.__paintDebug, null, 2);
+      const payload = paintDebugPlainText(window.__paintDebug);
       try {
         await navigator.clipboard.writeText(payload);
         copyState.textContent = "Diagnostics copied";
@@ -117,17 +239,103 @@
       latest.componentId && debug.components?.[latest.componentId]
         ? debug.components[latest.componentId]
         : Object.values(debug.components || {}).find(Boolean);
-    const snapshot = latest.snapshot || component?.snapshot || {};
-    const latestInput = latestPaintDebugEvent(debug, (event) =>
-      /(?:pointer|touch|mouse)(?:down|move|up|cancel|start|end)|lostpointercapture/.test(event.event)
-    );
+    const currentRoot =
+      [...document.querySelectorAll("[data-paint-reveal]")].find(
+        (root) => latest.componentId && root.dataset.paintDebugId === latest.componentId
+      ) || document.querySelector("[data-paint-reveal]");
+    const currentCanvas = currentRoot?.querySelector("canvas.paint-reveal-canvas");
+    const currentImage = currentRoot?.querySelector("img");
+    const currentCanvasRect = currentCanvas?.getBoundingClientRect();
+    const currentImageRect = currentImage?.getBoundingClientRect();
+    const liveSnapshot = {
+      image: currentImage
+        ? {
+            complete: currentImage.complete,
+            naturalWidth: currentImage.naturalWidth || 0,
+            naturalHeight: currentImage.naturalHeight || 0,
+            currentSrc: currentImage.currentSrc || currentImage.src || "",
+            rect: currentImageRect
+              ? {
+                  width: Math.round(currentImageRect.width),
+                  height: Math.round(currentImageRect.height),
+                }
+              : null,
+          }
+        : null,
+      canvas: currentCanvas
+        ? {
+            cssWidth: Math.round(currentCanvasRect?.width || 0),
+            cssHeight: Math.round(currentCanvasRect?.height || 0),
+            backingWidth: currentCanvas.width,
+            backingHeight: currentCanvas.height,
+            ratio: currentCanvasRect?.width ? currentCanvas.width / currentCanvasRect.width : null,
+            rect: currentCanvasRect
+              ? {
+                  left: Math.round(currentCanvasRect.left),
+                  top: Math.round(currentCanvasRect.top),
+                  width: Math.round(currentCanvasRect.width),
+                  height: Math.round(currentCanvasRect.height),
+                }
+              : null,
+          }
+        : null,
+      gesture: currentRoot
+        ? {
+            ready: currentRoot.classList.contains("paint-reveal-ready"),
+            active: currentRoot.classList.contains("paint-reveal-active"),
+            hit: currentRoot.classList.contains("paint-reveal-hit"),
+            paintGesture: currentRoot.dataset.paintGesture || "",
+          }
+        : null,
+    };
+    const snapshot = {
+      ...(latest.snapshot || component?.snapshot || {}),
+      ...(liveSnapshot.image ? { image: { ...((latest.snapshot || component?.snapshot || {}).image || {}), ...liveSnapshot.image } } : {}),
+      ...(liveSnapshot.canvas ? { canvas: { ...((latest.snapshot || component?.snapshot || {}).canvas || {}), ...liveSnapshot.canvas } } : {}),
+      ...(liveSnapshot.gesture ? { gesture: { ...((latest.snapshot || component?.snapshot || {}).gesture || {}), ...liveSnapshot.gesture } } : {}),
+    };
     const latestProbe = latestPaintDebugEvent(debug, (event) => event.event.startsWith("input-probe-"));
     const latestException = latestPaintDebugEvent(debug, (event) => event.event === "caught-exception");
     const decodeEvent = latestPaintDebugEvent(debug, (event) => event.event.startsWith("image-decode-"));
+    const trace = normalizePaintInputTrace(debug.inputTrace);
+    const latestInput = trace.latestInput || latestPaintDebugEvent(debug, (event) =>
+      /^(?:pointerdown|pointermove|pointerup|pointercancel|touchstart|touchmove|touchend|touchcancel)-received$/.test(event.event)
+    );
+    const initialContact = trace.initialContact || latestInput || latestProbe;
+    const latestSurface = latestInput?.surface || latestProbe || {};
+    const latestPoint = latestInput || latestProbe || {};
+    const probeCounts = trace.probeCounts || {};
+    const actualCounts = trace.counts || {};
+    const pointerCounts = `${formatPaintDebugValue(actualCounts.pointerdown)} / ${formatPaintDebugValue(actualCounts.pointermove)} / ${formatPaintDebugValue(actualCounts.pointerup)}`;
+    const touchCounts = `${formatPaintDebugValue(actualCounts.touchstart)} / ${formatPaintDebugValue(actualCounts.touchmove)} / ${formatPaintDebugValue(actualCounts.touchend)}`;
+    const documentPointerCounts = `${formatPaintDebugValue(probeCounts.document?.pointerdown)} / ${formatPaintDebugValue(probeCounts.document?.pointermove)} / ${formatPaintDebugValue(probeCounts.document?.pointerup)}`;
+    const documentTouchCounts = `${formatPaintDebugValue(probeCounts.document?.touchstart)} / ${formatPaintDebugValue(probeCounts.document?.touchmove)} / ${formatPaintDebugValue(probeCounts.document?.touchend)}`;
+    const overlayStack = latestSurface.elementsFromPoint || latestProbe?.elementsFromPoint || [];
+    const topOverlay = overlayStack.find((item) => !item.isCanvas && !item.isImage && !item.isRoot) || overlayStack[0];
 
     const rows = {
       build: debug.build,
       stage: latest.event,
+      "selected input": trace.selectedInputMode || currentRoot?.dataset.paintInputMode || component?.latest?.inputMode || component?.snapshot?.gesture?.activeInputFamily || "n/a",
+      "handler ptr d/m/u": pointerCounts,
+      "handler touch s/m/e": touchCounts,
+      "doc ptr d/m/u": documentPointerCounts,
+      "doc touch s/m/e": documentTouchCounts,
+      "event target": formatPaintDebugNodeSummary(latestPoint.target),
+      "initial hit": formatPaintDebugNodeSummary(initialContact?.elementFromPoint || initialContact?.target),
+      "latest hit": formatPaintDebugNodeSummary(latestSurface.elementFromPoint || latestProbe?.elementFromPoint),
+      pointerId: latestPoint.pointerId,
+      pointerType: latestPoint.pointerType,
+      isPrimary: latestPoint.isPrimary,
+      buttons: latestPoint.buttons,
+      "client x/y": `${formatPaintDebugValue(latestPoint.clientX)} / ${formatPaintDebugValue(latestPoint.clientY)}`,
+      "beginPainting": trace.beginPaintingEntered,
+      "early return": trace.latestEarlyReturn
+        ? `${trace.latestEarlyReturn.stage || trace.latestEarlyReturn.event}: ${trace.latestEarlyReturn.reason || "n/a"}`
+        : "none",
+      "gesture created": trace.activeGestureCreated,
+      "revealAt called": trace.revealAtCalled,
+      "pixels modified": trace.canvasPixelsModified,
       "image.complete": snapshot.image?.complete,
       "image natural": `${formatPaintDebugValue(snapshot.image?.naturalWidth)} / ${formatPaintDebugValue(snapshot.image?.naturalHeight)}`,
       decode: decodeEvent?.event?.replace("image-decode-", "") || "pending",
@@ -139,7 +347,11 @@
       "latest input": latestInput ? `${latestInput.event} ${formatPaintDebugValue(latestInput.pointerType || latestInput.touchIdentifier || "")}` : "none",
       "hit target": latestProbe?.elementFromPoint?.summary || latestProbe?.target?.summary || "none",
       "probe scope": latestProbe?.scope || "none",
-      "latest function": latest.event,
+      "image style": formatPaintDebugStyle(latestSurface.imageComputed),
+      "canvas style": formatPaintDebugStyle(latestSurface.canvasComputed || latestProbe?.canvasComputed),
+      "wrapper style": formatPaintDebugStyle(latestSurface.wrapperComputed || latestSurface.rootComputed || latestProbe?.rootComputed || latestProbe?.paintRootComputed),
+      "top overlay": `${formatPaintDebugNodeSummary(topOverlay)} ${formatPaintDebugStyle(topOverlay?.computed)}`,
+      "latest function": trace.latestFunction || latest.event,
       exception: latestException?.error?.message || latestException?.source || "none",
     };
 
@@ -166,6 +378,7 @@
       latest: existing.latest || null,
       events,
       components,
+      inputTrace: normalizePaintInputTrace(existing.inputTrace),
       maxEvents: existing.maxEvents || 500,
     };
 
@@ -181,6 +394,7 @@
       events.push(entry);
       while (events.length > debug.maxEvents) events.shift();
       debug.latest = entry;
+      updatePaintInputTrace(debug, entry);
       if (entry.componentId) {
         components[entry.componentId] = {
           ...(components[entry.componentId] || {}),
@@ -298,7 +512,10 @@
           ? []
           : document.elementsFromPoint(point.clientX, point.clientY)
               .slice(0, 14)
-              .map(describeGlobalPaintDebugNode);
+              .map((node) => ({
+                ...describeGlobalPaintDebugNode(node),
+                computed: globalPaintDebugComputed(node),
+              }));
       const paintRoot =
         hit && typeof hit.closest === "function"
           ? hit.closest("[data-paint-reveal]")
@@ -330,13 +547,17 @@
       });
     };
     const options = { capture: true, passive: true };
-    window.addEventListener("pointerdown", logProbe("window"), options);
-    document.addEventListener("pointerdown", logProbe("document"), options);
-    window.addEventListener("touchstart", logProbe("window"), options);
-    document.addEventListener("touchstart", logProbe("document"), options);
+    ["pointerdown", "pointermove", "pointerup", "pointercancel"].forEach((eventName) => {
+      window.addEventListener(eventName, logProbe("window"), options);
+      document.addEventListener(eventName, logProbe("document"), options);
+    });
+    ["touchstart", "touchmove", "touchend", "touchcancel"].forEach((eventName) => {
+      window.addEventListener(eventName, logProbe("window"), options);
+      document.addEventListener(eventName, logProbe("document"), options);
+    });
     paintDebug.log("global-input-probe-installed", {
       scopes: ["window", "document"],
-      events: ["pointerdown", "touchstart"],
+      events: paintInputEventNames,
     });
   };
 
@@ -4170,6 +4391,7 @@
       const pointerEventDetails = (event) => ({
         pointerId: event.pointerId,
         pointerType: event.pointerType || "",
+        isPrimary: event.isPrimary,
         button: event.button,
         buttons: event.buttons,
         cancelable: event.cancelable,
@@ -4266,6 +4488,33 @@
         };
       };
 
+      const inputSurfaceSnapshot = (clientX, clientY) => {
+        if (!paintDebugPanelEnabled() || clientX === null || clientY === null) return null;
+        const pointX = Number(clientX);
+        const pointY = Number(clientY);
+        const hit =
+          Number.isFinite(pointX) && Number.isFinite(pointY)
+            ? document.elementFromPoint(pointX, pointY)
+            : null;
+        const hitStack =
+          Number.isFinite(pointX) && Number.isFinite(pointY) && typeof document.elementsFromPoint === "function"
+            ? document.elementsFromPoint(pointX, pointY)
+                .slice(0, 12)
+                .map((node) => ({
+                  ...describeProbeNode(node),
+                  computed: computedProbeSnapshot(node),
+                }))
+            : [];
+        return {
+          elementFromPoint: describeProbeNode(hit),
+          elementsFromPoint: hitStack,
+          imageComputed: computedProbeSnapshot(image),
+          canvasComputed: computedProbeSnapshot(canvas),
+          rootComputed: computedProbeSnapshot(root),
+          wrapperComputed: computedProbeSnapshot(image.parentElement || root),
+        };
+      };
+
       const installInputProbe = () => {
         if (!paintDebugPanelEnabled() || root.dataset.paintInputProbeBound === "true") return;
         root.dataset.paintInputProbeBound = "true";
@@ -4281,7 +4530,10 @@
               ? []
               : document.elementsFromPoint(point.clientX, point.clientY)
                   .slice(0, 12)
-                  .map(describeProbeNode);
+                  .map((node) => ({
+                    ...describeProbeNode(node),
+                    computed: computedProbeSnapshot(node),
+                  }));
 
           paintLog(`input-probe-${scope}-${event.type}`, {
             scope,
@@ -4314,13 +4566,17 @@
           [root, "paint-root"],
           [canvas, "canvas"],
         ].forEach(([target, scope]) => {
-          target.addEventListener("pointerdown", logProbe(scope), pointerOptions);
-          target.addEventListener("touchstart", logProbe(scope), touchOptions);
+          ["pointerdown", "pointermove", "pointerup", "pointercancel"].forEach((eventName) => {
+            target.addEventListener(eventName, logProbe(scope), pointerOptions);
+          });
+          ["touchstart", "touchmove", "touchend", "touchcancel"].forEach((eventName) => {
+            target.addEventListener(eventName, logProbe(scope), touchOptions);
+          });
         });
 
         paintLog("input-probe-installed", {
           scopes: ["window", "document", "paint-root", "canvas"],
-          events: ["pointerdown", "touchstart"],
+          events: paintInputEventNames,
           canvasComputed: computedProbeSnapshot(canvas),
           rootComputed: computedProbeSnapshot(root),
         });
@@ -4328,8 +4584,10 @@
 
       const runPaintEvent = (eventName, event, details, callback) => {
         const before = gestureSnapshot();
+        const surface = inputSurfaceSnapshot(details.clientX, details.clientY);
         paintLog(`${eventName}-received`, {
           ...details,
+          ...(surface ? { surface } : {}),
           before,
         });
         try {
@@ -4345,6 +4603,7 @@
         } finally {
           paintLog(`${eventName}-completed`, {
             ...details,
+            ...(surface ? { surface } : {}),
             before,
             after: gestureSnapshot(),
           });
@@ -4558,6 +4817,11 @@
       };
 
       const buildPaintMaterial = () => {
+        if (paintDebugPanelEnabled()) {
+          debugPaint("buildPaintMaterial-entered", {
+            paintMaterialReady,
+          });
+        }
         layerCtx.clearRect(0, 0, cssWidth, cssHeight);
         drawImageTo(layerCtx);
 
@@ -4586,11 +4850,21 @@
         layerCtx.globalCompositeOperation = "source-over";
         layerCtx.globalAlpha = 1;
         paintMaterialReady = true;
+        if (paintDebugPanelEnabled()) {
+          debugPaint("buildPaintMaterial-completed", {
+            paintMaterialReady,
+          });
+        }
       };
 
       const renderPaintedWall = () => {
         renderFrame = 0;
-        if (!paintMaterialReady) return;
+        if (!paintMaterialReady) {
+          if (paintDebugPanelEnabled()) {
+            logInputEarlyReturn("renderPaintedWall", "paint-material-not-ready");
+          }
+          return;
+        }
         clearCanvas();
         ctx.save();
         ctx.drawImage(layerCanvas, 0, 0, cssWidth, cssHeight);
@@ -4600,6 +4874,11 @@
         ctx.drawImage(wallMaskCanvas, 0, 0, cssWidth, cssHeight);
         ctx.restore();
         ctx.globalCompositeOperation = "source-over";
+        if (paintDebugPanelEnabled()) {
+          debugPaint("canvas-pixels-modified", {
+            paintMaterialReady,
+          });
+        }
       };
 
       const requestRender = () => {
@@ -4616,7 +4895,23 @@
         const dx = to.x - from.x;
         const dy = to.y - from.y;
         const distance = Math.hypot(dx, dy);
-        if (distance < 1) return;
+        if (distance < 1) {
+          if (paintDebugPanelEnabled()) {
+            logInputEarlyReturn("paintRollerSegment", "distance-below-one-pixel", {
+              from: roundedPoint(from),
+              to: roundedPoint(to),
+              distance,
+            });
+          }
+          return;
+        }
+        if (paintDebugPanelEnabled()) {
+          debugPaint("revealAt-called", {
+            from: roundedPoint(from),
+            to: roundedPoint(to),
+            distance,
+          });
+        }
         const angle = Math.atan2(dy, dx);
         const tangent = { x: Math.cos(angle), y: Math.sin(angle) };
         const normal = { x: -Math.sin(angle), y: Math.cos(angle) };
@@ -5043,7 +5338,21 @@
       let bindTouchDocumentFallback = () => {};
       let unbindTouchDocumentFallback = () => {};
 
+      const logInputEarlyReturn = (stage, reason, details = {}) => {
+        debugPaint(`${stage}-early-return`, {
+          stage,
+          reason,
+          ...details,
+        });
+      };
+
       const beginPainting = (input, point) => {
+        debugPaint("beginPainting-entered", {
+          inputMode: input.mode,
+          pointerType: input.pointerType,
+          point: roundedPoint(point),
+          paintMaterialReady,
+        });
         if (!paintMaterialReady) buildPaintMaterial();
         activePointer = input.id;
         pending = null;
@@ -5134,6 +5443,7 @@
           if (image.complete && image.naturalWidth) resetCanvasSize();
           if (!root.classList.contains("paint-reveal-ready")) {
             scheduleCanvasReset();
+            logInputEarlyReturn(`${input.mode}-start`, "component-not-ready", { point: roundedPoint(input.point) });
             debugPaint(`${input.mode}-start-deferred-not-ready`, { point: input.point });
             return;
           }
@@ -5141,6 +5451,11 @@
         cancelPreview(true);
         const point = input.point;
         if (point.x < 0 || point.y < 0 || point.x > cssWidth || point.y > cssHeight) {
+          logInputEarlyReturn(`${input.mode}-start`, "outside-canvas-bounds", {
+            point: roundedPoint(point),
+            cssWidth,
+            cssHeight,
+          });
           debugPaint(`${input.mode}-start-ignored-outside-image`, { point });
           return;
         }
@@ -5160,12 +5475,26 @@
         root.dataset.paintGesture = insideWall ? "pending" : "searching";
         if (input.mode === "pointer") bindPointerDocumentFallback();
         if (input.mode === "touch") bindTouchDocumentFallback();
+        debugPaint("active-gesture-state-created", {
+          inputMode: input.mode,
+          pointerType: input.pointerType,
+          insideWall,
+          point: roundedPoint(point),
+        });
         debugPaint(`${input.mode}-start`, { insideWall, point });
       };
 
       const continueInput = (input, event) => {
         if (activePointer !== null) {
-          if (input.id !== activePointer || !lastPoint) return;
+          if (input.id !== activePointer || !lastPoint) {
+            logInputEarlyReturn(`${input.mode}-move`, "active-pointer-mismatch-or-missing-last-point", {
+              inputId: input.id,
+              activePointer,
+              hasLastPoint: !!lastPoint,
+              point: roundedPoint(input.point),
+            });
+            return;
+          }
           if (event?.cancelable) event.preventDefault();
           moveDemoIndicator(input.point);
           scheduleStroke(input.point);
@@ -5173,7 +5502,15 @@
         }
 
         updateHitState(input.point);
-        if (!pending || input.id !== pending.id) return;
+        if (!pending || input.id !== pending.id) {
+          logInputEarlyReturn(`${input.mode}-move`, "no-matching-pending-gesture", {
+            inputId: input.id,
+            pendingId: pending?.id || null,
+            hasPending: !!pending,
+            point: roundedPoint(input.point),
+          });
+          return;
+        }
 
         const point = input.point;
         const dx = point.x - pending.start.x;
@@ -5194,13 +5531,26 @@
             if (pending.pointerType === "touch" && event?.cancelable) event.preventDefault();
             return;
           }
+          logInputEarlyReturn(`${input.mode}-move`, "searching-outside-wall-mask", {
+            point: roundedPoint(point),
+            dx: Math.round(dx),
+            dy: Math.round(dy),
+            distance: Math.round(distance),
+          });
           return;
         }
 
         if (pending.pointerType === "touch" && event?.cancelable) event.preventDefault();
 
         const activeThreshold = pending.pointerType === "touch" ? Math.min(activationThreshold, 2) : activationThreshold;
-        if (distance < activeThreshold) return;
+        if (distance < activeThreshold) {
+          logInputEarlyReturn(`${input.mode}-move`, "movement-below-activation-threshold", {
+            distance,
+            activeThreshold,
+            point: roundedPoint(point),
+          });
+          return;
+        }
 
         const startPoint = pending.start;
         if (event?.cancelable) event.preventDefault();
@@ -5215,14 +5565,36 @@
           finishPainting();
           return;
         }
-        if (pending?.id === id) cancelPending();
+        if (pending?.id === id) {
+          cancelPending();
+          return;
+        }
+        logInputEarlyReturn("finishInput", "no-matching-active-or-pending-id", {
+          id,
+          activePointer,
+          pendingId: pending?.id || null,
+        });
       };
 
       const handlePointerDown = (event) => {
         runPaintEvent("pointerdown", event, pointerEventDetails(event), () => {
-          if (event.button !== undefined && event.button !== 0) return;
-          if (event.isPrimary === false) return;
-          if (!canUseInputFamily("pointer")) return;
+          if (event.button !== undefined && event.button !== 0) {
+            logInputEarlyReturn("pointerdown", "non-primary-button", pointerEventDetails(event));
+            return;
+          }
+          if (event.isPrimary === false) {
+            logInputEarlyReturn("pointerdown", "non-primary-pointer", pointerEventDetails(event));
+            return;
+          }
+          if (!canUseInputFamily("pointer")) {
+            logInputEarlyReturn("pointerdown", "input-family-busy", {
+              requestedFamily: "pointer",
+              activeInputFamily,
+              activePointer,
+              pendingId: pending?.id || null,
+            });
+            return;
+          }
           startPendingInput({
             id: event.pointerId,
             mode: "pointer",
@@ -5234,8 +5606,19 @@
 
       const handlePointerMove = (event) => {
         runPaintEvent("pointermove", event, pointerEventDetails(event), () => {
-          if (event.isPrimary === false) return;
-          if (activeInputFamily && activeInputFamily !== "pointer") return;
+          if (event.isPrimary === false) {
+            logInputEarlyReturn("pointermove", "non-primary-pointer", pointerEventDetails(event));
+            return;
+          }
+          if (activeInputFamily && activeInputFamily !== "pointer") {
+            logInputEarlyReturn("pointermove", "active-input-family-mismatch", {
+              activeInputFamily,
+              expected: "pointer",
+              pointerId: event.pointerId,
+              pointerType: event.pointerType || "",
+            });
+            return;
+          }
           continueInput(
             {
               id: event.pointerId,
@@ -5250,16 +5633,46 @@
 
       const handlePointerUp = (event) => {
         runPaintEvent("pointerup", event, pointerEventDetails(event), () => {
-          if (event.isPrimary === false) return;
-          if (activeInputFamily && activeInputFamily !== "pointer") return;
+          if (event.isPrimary === false) {
+            logInputEarlyReturn("pointerup", "non-primary-pointer", pointerEventDetails(event));
+            return;
+          }
+          if (activeInputFamily && activeInputFamily !== "pointer") {
+            logInputEarlyReturn("pointerup", "active-input-family-mismatch", {
+              activeInputFamily,
+              expected: "pointer",
+              pointerId: event.pointerId,
+              pointerType: event.pointerType || "",
+            });
+            return;
+          }
           finishInput(event.pointerId, event);
         });
       };
       const handlePointerCancel = (event) => {
         runPaintEvent("pointercancel", event, pointerEventDetails(event), () => {
-          if (event.isPrimary === false) return;
-          if (activeInputFamily && activeInputFamily !== "pointer") return;
-          if (event.pointerId === activePointer || event.pointerId === pending?.id) finishInput(event.pointerId, event, false);
+          if (event.isPrimary === false) {
+            logInputEarlyReturn("pointercancel", "non-primary-pointer", pointerEventDetails(event));
+            return;
+          }
+          if (activeInputFamily && activeInputFamily !== "pointer") {
+            logInputEarlyReturn("pointercancel", "active-input-family-mismatch", {
+              activeInputFamily,
+              expected: "pointer",
+              pointerId: event.pointerId,
+              pointerType: event.pointerType || "",
+            });
+            return;
+          }
+          if (event.pointerId === activePointer || event.pointerId === pending?.id) {
+            finishInput(event.pointerId, event, false);
+            return;
+          }
+          logInputEarlyReturn("pointercancel", "no-matching-pointer-to-cancel", {
+            pointerId: event.pointerId,
+            activePointer,
+            pendingId: pending?.id || null,
+          });
         });
       };
 
@@ -5338,8 +5751,21 @@
 
       const handleTouchStart = (event) => {
         runPaintEvent("touchstart", event, touchEventDetails(event), () => {
-          if (!canUseInputFamily("touch")) return;
+          if (!canUseInputFamily("touch")) {
+            logInputEarlyReturn("touchstart", "input-family-busy", {
+              requestedFamily: "touch",
+              activeInputFamily,
+              activePointer,
+              pendingId: pending?.id || null,
+            });
+            return;
+          }
           if (event.touches.length !== 1 || !event.changedTouches.length || activePointer !== null) {
+            logInputEarlyReturn("touchstart", "invalid-touch-start-state", {
+              touches: event.touches.length,
+              changedTouches: event.changedTouches.length,
+              activePointer,
+            });
             if (activePointer !== null) {
               finishPainting();
             } else {
@@ -5353,33 +5779,79 @@
 
       const handleTouchMove = (event) => {
         runPaintEvent("touchmove", event, touchEventDetails(event), () => {
-          if (activeInputFamily && activeInputFamily !== "touch") return;
+          if (activeInputFamily && activeInputFamily !== "touch") {
+            logInputEarlyReturn("touchmove", "active-input-family-mismatch", {
+              activeInputFamily,
+              expected: "touch",
+            });
+            return;
+          }
           const id = activePointer || pending?.id;
-          if (!id) return;
+          if (!id) {
+            logInputEarlyReturn("touchmove", "no-active-or-pending-touch-id");
+            return;
+          }
           const touch = touchById(event.touches, id) || touchById(event.changedTouches, id);
-          if (!touch) return;
+          if (!touch) {
+            logInputEarlyReturn("touchmove", "matching-touch-not-found", {
+              id,
+              touches: event.touches.length,
+              changedTouches: event.changedTouches.length,
+            });
+            return;
+          }
           continueInput(touchInput(touch), event);
         });
       };
 
       const handleTouchEnd = (event) => {
         runPaintEvent("touchend", event, touchEventDetails(event), () => {
-          if (activeInputFamily && activeInputFamily !== "touch") return;
+          if (activeInputFamily && activeInputFamily !== "touch") {
+            logInputEarlyReturn("touchend", "active-input-family-mismatch", {
+              activeInputFamily,
+              expected: "touch",
+            });
+            return;
+          }
           const id = activePointer || pending?.id;
-          if (!id) return;
-          if (touchById(event.changedTouches, id)) finishInput(id, null, false);
+          if (!id) {
+            logInputEarlyReturn("touchend", "no-active-or-pending-touch-id");
+            return;
+          }
+          if (touchById(event.changedTouches, id)) {
+            finishInput(id, null, false);
+            return;
+          }
+          logInputEarlyReturn("touchend", "matching-touch-not-ended", {
+            id,
+            changedTouches: event.changedTouches.length,
+          });
         });
       };
 
       const handleTouchCancel = (event) => {
         runPaintEvent("touchcancel", event, touchEventDetails(event), () => {
-          if (activeInputFamily && activeInputFamily !== "touch") return;
+          if (activeInputFamily && activeInputFamily !== "touch") {
+            logInputEarlyReturn("touchcancel", "active-input-family-mismatch", {
+              activeInputFamily,
+              expected: "touch",
+            });
+            return;
+          }
           const id = activePointer || pending?.id;
           if (!id) {
+            logInputEarlyReturn("touchcancel", "no-active-or-pending-touch-id");
             cancelPending();
             return;
           }
-          if (touchById(event.changedTouches, id)) finishInput(id, event, false);
+          if (touchById(event.changedTouches, id)) {
+            finishInput(id, event, false);
+            return;
+          }
+          logInputEarlyReturn("touchcancel", "matching-touch-not-cancelled", {
+            id,
+            changedTouches: event.changedTouches.length,
+          });
         });
       };
 
@@ -5395,7 +5867,10 @@
             clientY: Math.round(event.clientY || 0),
           },
           () => {
-            if (event.button !== 0) return;
+            if (event.button !== 0) {
+              logInputEarlyReturn("mousedown", "non-primary-button", mouseEventDetails(event));
+              return;
+            }
             mouseIsDown = true;
             startPendingInput({
               id: "mouse",
