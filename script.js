@@ -4090,6 +4090,11 @@
       let paintMaterialReady = false;
       let autoPreviewStarted = false;
       let imageReadyResetQueued = false;
+      let canvasResetAttempts = 0;
+      let lastCanvasResetAttempts = 0;
+      let canvasResetStartedAt = 0;
+      const maxCanvasResetAttempts = 18;
+      const maxCanvasResetDuration = 2800;
       const activationThreshold = 5;
       const dragThreshold = 5;
       let activeInputFamily = null;
@@ -4372,6 +4377,41 @@
           },
         });
         if (paintDebugEnabled) console.info("[paint-reveal]", eventName, payload);
+      };
+
+      const readinessSnapshot = () => {
+        const imageRect = image.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+        const imageLoaded = image.complete && image.naturalWidth > 0 && image.naturalHeight > 0;
+        return {
+          imageLoaded,
+          naturalWidth: image.naturalWidth || 0,
+          naturalHeight: image.naturalHeight || 0,
+          imageRectWidth: Math.round(imageRect.width),
+          imageRectHeight: Math.round(imageRect.height),
+          canvasCssWidth: Math.round(canvasRect.width),
+          canvasCssHeight: Math.round(canvasRect.height),
+          canvasBackingWidth: canvas.width,
+          canvasBackingHeight: canvas.height,
+          ready: root.classList.contains("paint-reveal-ready"),
+          resetAttemptCount: lastCanvasResetAttempts || canvasResetAttempts,
+          resetQueued: imageReadyResetQueued,
+        };
+      };
+
+      const reportReadinessStatus = (eventName, details = {}) => {
+        const readiness = readinessSnapshot();
+        root.dataset.paintImageLoaded = readiness.imageLoaded ? "true" : "false";
+        root.dataset.paintImageNatural = `${readiness.naturalWidth}x${readiness.naturalHeight}`;
+        root.dataset.paintImageRect = `${readiness.imageRectWidth}x${readiness.imageRectHeight}`;
+        root.dataset.paintCanvasCss = `${readiness.canvasCssWidth}x${readiness.canvasCssHeight}`;
+        root.dataset.paintCanvasBacking = `${readiness.canvasBackingWidth}x${readiness.canvasBackingHeight}`;
+        root.dataset.paintReady = readiness.ready ? "true" : "false";
+        root.dataset.paintResetAttempts = String(readiness.resetAttemptCount);
+        debugPaint(eventName, {
+          readiness,
+          ...details,
+        });
       };
 
       const ensurePaintHint = () => {
@@ -4670,20 +4710,51 @@
         requestRender();
       };
 
-      const resetCanvasSize = () => {
-        if (!image.complete || !image.naturalWidth || !image.naturalHeight) {
+      const canRetryCanvasReset = () =>
+        canvasResetAttempts < maxCanvasResetAttempts &&
+        (!canvasResetStartedAt || performance.now() - canvasResetStartedAt < maxCanvasResetDuration);
+
+      const resetCanvasSize = (reason = "scheduled") => {
+        canvasResetAttempts += 1;
+        lastCanvasResetAttempts = canvasResetAttempts;
+        const retryCanvasReset = (eventName, details = {}) => {
           root.classList.remove("paint-reveal-ready");
-          debugPaint("image-not-ready");
-          return;
+          const canRetry = eventName !== "image-not-ready" && canRetryCanvasReset();
+          reportReadinessStatus(eventName, {
+            reason,
+            canRetry,
+            maxCanvasResetAttempts,
+            maxCanvasResetDuration,
+            ...details,
+          });
+          if (!canRetry) {
+            reportReadinessStatus("canvas-reset-gave-up", {
+              reason,
+              maxCanvasResetAttempts,
+              maxCanvasResetDuration,
+            });
+          }
+          return canRetry;
+        };
+
+        if (!image.complete || !image.naturalWidth || !image.naturalHeight) {
+          return retryCanvasReset("image-not-ready");
         }
         const rootRect = root.getBoundingClientRect();
         const imageRect = image.getBoundingClientRect();
-        const nextWidth = Math.max(1, Math.round(imageRect.width));
-        const nextHeight = Math.max(1, Math.round(imageRect.height));
-        if (nextWidth < 2 || nextHeight < 2) {
-          root.classList.remove("paint-reveal-ready");
-          debugPaint("image-not-laid-out");
-          return;
+        if (imageRect.width <= 0 || imageRect.height <= 0) {
+          return retryCanvasReset("image-not-laid-out", {
+            imageRectWidth: imageRect.width,
+            imageRectHeight: imageRect.height,
+          });
+        }
+        const nextWidth = Math.round(imageRect.width);
+        const nextHeight = Math.round(imageRect.height);
+        if (nextWidth <= 0 || nextHeight <= 0) {
+          return retryCanvasReset("canvas-size-invalid", {
+            nextWidth,
+            nextHeight,
+          });
         }
         const mobile = nextWidth < 560 || window.matchMedia?.("(pointer: coarse)")?.matches;
         const rawRatio = Math.max(window.devicePixelRatio || 1, 1);
@@ -4691,6 +4762,17 @@
         const maxPixels = mobile ? 420000 : 1200000;
         const areaRatio = Math.sqrt(maxPixels / Math.max(1, nextWidth * nextHeight));
         ratio = Math.max(1, Math.min(rawRatio, maxRatio, areaRatio));
+        const backingWidth = Math.round(nextWidth * ratio);
+        const backingHeight = Math.round(nextHeight * ratio);
+        if (backingWidth <= 0 || backingHeight <= 0) {
+          return retryCanvasReset("canvas-backing-invalid", {
+            nextWidth,
+            nextHeight,
+            ratio,
+            backingWidth,
+            backingHeight,
+          });
+        }
 
         cssWidth = nextWidth;
         cssHeight = nextHeight;
@@ -4706,9 +4788,18 @@
           hint.style.maxWidth = `${Math.max(160, Math.round(imageRect.width - 24))}px`;
         }
         [canvas, layerCanvas, maskCanvas, wallMaskCanvas].forEach((target) => {
-          target.width = Math.round(nextWidth * ratio);
-          target.height = Math.round(nextHeight * ratio);
+          target.width = backingWidth;
+          target.height = backingHeight;
         });
+        const backingAssigned = [canvas, layerCanvas, maskCanvas, wallMaskCanvas].every(
+          (target) => target.width === backingWidth && target.height === backingHeight
+        );
+        if (!backingAssigned) {
+          return retryCanvasReset("canvas-backing-assignment-failed", {
+            backingWidth,
+            backingHeight,
+          });
+        }
         [ctx, layerCtx, maskCtx, wallMaskCtx].forEach((context) => {
           context.setTransform(ratio, 0, 0, ratio, 0, 0);
           context.clearRect(0, 0, cssWidth, cssHeight);
@@ -4725,24 +4816,58 @@
         buildWallMask();
         root.classList.remove("paint-reveal-active", "paint-reveal-fading");
         root.classList.add("paint-reveal-ready");
-        debugPaint("canvas-sized", {
+        reportReadinessStatus("canvas-sized", {
+          reason,
           mobile,
           rawRatio,
           maxRatio,
           maxPixels,
+          backingWidth,
+          backingHeight,
           image: imageSnapshot("canvas-sized"),
           canvas: canvasSnapshot(),
         });
         debugPaint("resize");
         debugPaint("auto-preview-disabled");
+        canvasResetAttempts = 0;
+        canvasResetStartedAt = 0;
+        return false;
       };
 
-      const scheduleCanvasReset = () => {
+      const scheduleCanvasReset = (reason = "scheduled", options = {}) => {
+        if (imageReadyResetQueued) {
+          reportReadinessStatus("canvas-reset-already-queued", { reason });
+          return;
+        }
+        if (!options.retry) {
+          canvasResetAttempts = 0;
+          canvasResetStartedAt = 0;
+        }
+        imageReadyResetQueued = true;
+        if (!canvasResetStartedAt) canvasResetStartedAt = performance.now();
         if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
         resizeFrame = window.requestAnimationFrame(() => {
           resizeFrame = window.requestAnimationFrame(() => {
             resizeFrame = 0;
-            resetCanvasSize();
+            let shouldRetry = false;
+            try {
+              shouldRetry = resetCanvasSize(reason);
+            } catch (error) {
+              reportReadinessStatus("canvas-reset-exception", {
+                reason,
+                error: paintDebugError(error),
+              });
+              shouldRetry = canRetryCanvasReset();
+              if (!shouldRetry) {
+                reportReadinessStatus("canvas-reset-gave-up", {
+                  reason,
+                  error: paintDebugError(error),
+                });
+              }
+            } finally {
+              imageReadyResetQueued = false;
+            }
+            if (shouldRetry) scheduleCanvasReset(`${reason}:retry`, { retry: true });
           });
         });
       };
@@ -5380,24 +5505,25 @@
       installInputProbe();
       window.addEventListener("blur", cancelCurrentGesture);
       document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") cancelCurrentGesture();
+        if (document.visibilityState === "hidden") {
+          cancelCurrentGesture();
+        } else {
+          scheduleCanvasReset("visibility-visible");
+        }
       });
 
       const scheduleDecodedCanvasReset = () => {
         paintLog("image-readiness-check", {
           image: imageSnapshot("readiness-check"),
         });
-        if (!image.complete || !image.naturalWidth) {
+        if (!image.complete || !image.naturalWidth || !image.naturalHeight) {
           root.classList.remove("paint-reveal-ready");
           paintLog("image-readiness-waiting", {
             image: imageSnapshot("readiness-waiting"),
           });
           return;
         }
-        if (!imageReadyResetQueued) {
-          imageReadyResetQueued = true;
-          scheduleCanvasReset();
-        }
+        scheduleCanvasReset("image-ready");
         if (typeof image.decode === "function") {
           image
             .decode()
@@ -5405,12 +5531,14 @@
               paintLog("image-decode-success", {
                 image: imageSnapshot("decode-success"),
               });
+              scheduleCanvasReset("image-decode-success");
             })
             .catch((error) => {
               paintLog("image-decode-failure", {
                 image: imageSnapshot("decode-failure"),
                 error: paintDebugError(error),
               });
+              scheduleCanvasReset("image-decode-failure");
             });
         } else {
           paintLog("image-decode-skipped", {
@@ -5440,6 +5568,11 @@
           { once: true }
         );
       }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => scheduleCanvasReset("domcontentloaded"), { once: true });
+      } else {
+        scheduleCanvasReset("content-render-complete");
+      }
 
       paintLog("component-init-completed", {
         image: imageSnapshot("init-completed"),
@@ -5452,14 +5585,14 @@
       });
 
       if ("ResizeObserver" in window) {
-        new ResizeObserver(scheduleCanvasReset).observe(root);
+        new ResizeObserver(() => scheduleCanvasReset("resize-observer")).observe(root);
       } else {
-        window.addEventListener("resize", scheduleCanvasReset, { passive: true });
+        window.addEventListener("resize", () => scheduleCanvasReset("resize"), { passive: true });
       }
-      window.addEventListener("resize", scheduleCanvasReset, { passive: true });
-      window.addEventListener("orientationchange", scheduleCanvasReset, { passive: true });
-      window.addEventListener("pageshow", scheduleCanvasReset, { passive: true });
-      window.visualViewport?.addEventListener("resize", scheduleCanvasReset, { passive: true });
+      window.addEventListener("resize", () => scheduleCanvasReset("resize"), { passive: true });
+      window.addEventListener("orientationchange", () => scheduleCanvasReset("orientationchange"), { passive: true });
+      window.addEventListener("pageshow", () => scheduleCanvasReset("pageshow"), { passive: true });
+      window.visualViewport?.addEventListener("resize", () => scheduleCanvasReset("visualviewport-resize"), { passive: true });
     });
     paintDebug.log("paint-bind-completed", {
       activeRootCount: activeRoots.length,
