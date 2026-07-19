@@ -92,6 +92,7 @@
     beginPaintingEntered: trace.beginPaintingEntered || false,
     revealAtCalled: trace.revealAtCalled || false,
     canvasPixelsModified: trace.canvasPixelsModified || false,
+    paintStartPipeline: trace.paintStartPipeline || null,
   });
 
   const formatPaintDebugNodeSummary = (node) => node?.summary || node?.target?.summary || "none";
@@ -159,6 +160,7 @@
     if (entry.event === "beginPainting-entered" || entry.event === "paint-start") trace.beginPaintingEntered = true;
     if (entry.event === "revealAt-called") trace.revealAtCalled = true;
     if (entry.event === "canvas-pixels-modified") trace.canvasPixelsModified = true;
+    if (entry.event === "paint-start-pipeline") trace.paintStartPipeline = entry;
 
     debug.inputTrace = trace;
   };
@@ -330,6 +332,9 @@
       buttons: latestPoint.buttons,
       "client x/y": `${formatPaintDebugValue(latestPoint.clientX)} / ${formatPaintDebugValue(latestPoint.clientY)}`,
       "beginPainting": trace.beginPaintingEntered,
+      pipeline: trace.paintStartPipeline
+        ? `${trace.paintStartPipeline.stage || trace.paintStartPipeline.pipelineStage || trace.paintStartPipeline.event}: ${trace.paintStartPipeline.reason || "ok"}`
+        : "none",
       "early return": trace.latestEarlyReturn
         ? `${trace.latestEarlyReturn.stage || trace.latestEarlyReturn.event}: ${trace.latestEarlyReturn.reason || "n/a"}`
         : "none",
@@ -4319,6 +4324,8 @@
       const activationThreshold = 5;
       const dragThreshold = 5;
       let activeInputFamily = null;
+      let paintStartPipelineSequence = 0;
+      let firstPointerMoveTraced = false;
 
       const inputGestureActive = () => activePointer !== null || pending !== null;
       const canUseInputFamily = (family) => !inputGestureActive() || activeInputFamily === family;
@@ -4879,6 +4886,11 @@
             paintMaterialReady,
           });
         }
+        logPaintStartPipeline("first-draw-operation-executed", {
+          firstDrawExecuted: true,
+          revealAtCalled: true,
+          paintMaterialReady,
+        });
       };
 
       const requestRender = () => {
@@ -4912,6 +4924,12 @@
             distance,
           });
         }
+        logPaintStartPipeline("revealAt-called", {
+          revealAtCalled: true,
+          from: roundedPoint(from),
+          to: roundedPoint(to),
+          distance,
+        });
         const angle = Math.atan2(dy, dx);
         const tangent = { x: Math.cos(angle), y: Math.sin(angle) };
         const normal = { x: -Math.sin(angle), y: Math.cos(angle) };
@@ -5346,7 +5364,32 @@
         });
       };
 
+      const logPaintStartPipeline = (pipelineStage, details = {}) => {
+        if (!paintDebugPanelEnabled()) return;
+        debugPaint("paint-start-pipeline", {
+          pipelineStage,
+          stage: pipelineStage,
+          sequence: paintStartPipelineSequence,
+          pendingExists: !!pending,
+          pendingId: pending?.id || null,
+          pendingInsideWall: pending?.insideWall ?? null,
+          activePointerId: activePointer,
+          activeInputFamily,
+          beginPaintingEntered: root.classList.contains("paint-reveal-active"),
+          revealAtCalled: false,
+          firstDrawExecuted: false,
+          ...details,
+        });
+      };
+
       const beginPainting = (input, point) => {
+        logPaintStartPipeline("beginPainting-entered", {
+          inputId: input.id,
+          inputMode: input.mode,
+          pointerType: input.pointerType,
+          point: roundedPoint(point),
+          paintMaterialReady,
+        });
         debugPaint("beginPainting-entered", {
           inputMode: input.mode,
           pointerType: input.pointerType,
@@ -5379,6 +5422,13 @@
             });
           }
         }
+        logPaintStartPipeline("activePointerId-assigned", {
+          activePointerId: activePointer,
+          inputMode: input.mode,
+          pointerType: input.pointerType,
+          point: roundedPoint(point),
+          pointerCaptureActive,
+        });
         debugPaint("paint-start", { inputMode: input.mode, point, pointerCaptureActive });
       };
 
@@ -5439,10 +5489,20 @@
       };
 
       const startPendingInput = (input) => {
+        logPaintStartPipeline(`${input.mode}-startPendingInput-entered`, {
+          inputId: input.id,
+          pointerType: input.pointerType,
+          point: roundedPoint(input.point),
+          ready: root.classList.contains("paint-reveal-ready"),
+        });
         if (!root.classList.contains("paint-reveal-ready")) {
           if (image.complete && image.naturalWidth) resetCanvasSize();
           if (!root.classList.contains("paint-reveal-ready")) {
             scheduleCanvasReset();
+            logPaintStartPipeline(`${input.mode}-startPendingInput-exit`, {
+              reason: "component-not-ready",
+              point: roundedPoint(input.point),
+            });
             logInputEarlyReturn(`${input.mode}-start`, "component-not-ready", { point: roundedPoint(input.point) });
             debugPaint(`${input.mode}-start-deferred-not-ready`, { point: input.point });
             return;
@@ -5451,6 +5511,12 @@
         cancelPreview(true);
         const point = input.point;
         if (point.x < 0 || point.y < 0 || point.x > cssWidth || point.y > cssHeight) {
+          logPaintStartPipeline(`${input.mode}-startPendingInput-exit`, {
+            reason: "outside-canvas-bounds",
+            point: roundedPoint(point),
+            cssWidth,
+            cssHeight,
+          });
           logInputEarlyReturn(`${input.mode}-start`, "outside-canvas-bounds", {
             point: roundedPoint(point),
             cssWidth,
@@ -5472,9 +5538,17 @@
           insideWall,
           dragged: false,
         };
+        firstPointerMoveTraced = false;
         root.dataset.paintGesture = insideWall ? "pending" : "searching";
         if (input.mode === "pointer") bindPointerDocumentFallback();
         if (input.mode === "touch") bindTouchDocumentFallback();
+        logPaintStartPipeline("gesture-object-created", {
+          inputId: input.id,
+          inputMode: input.mode,
+          pointerType: input.pointerType,
+          insideWall,
+          point: roundedPoint(point),
+        });
         debugPaint("active-gesture-state-created", {
           inputMode: input.mode,
           pointerType: input.pointerType,
@@ -5485,8 +5559,29 @@
       };
 
       const continueInput = (input, event) => {
+        const isFirstPointerMove = input.mode === "pointer" && !firstPointerMoveTraced;
+        if (isFirstPointerMove) {
+          firstPointerMoveTraced = true;
+          logPaintStartPipeline("first-pointermove-entered", {
+            inputId: input.id,
+            pointerType: input.pointerType,
+            point: roundedPoint(input.point),
+            hasPending: !!pending,
+            pendingId: pending?.id || null,
+            activePointer,
+          });
+        }
         if (activePointer !== null) {
           if (input.id !== activePointer || !lastPoint) {
+            if (isFirstPointerMove) {
+              logPaintStartPipeline("first-pointermove-exit", {
+                reason: "active-pointer-mismatch-or-missing-last-point",
+                inputId: input.id,
+                activePointer,
+                hasLastPoint: !!lastPoint,
+                point: roundedPoint(input.point),
+              });
+            }
             logInputEarlyReturn(`${input.mode}-move`, "active-pointer-mismatch-or-missing-last-point", {
               inputId: input.id,
               activePointer,
@@ -5503,6 +5598,15 @@
 
         updateHitState(input.point);
         if (!pending || input.id !== pending.id) {
+          if (isFirstPointerMove) {
+            logPaintStartPipeline("first-pointermove-exit", {
+              reason: "no-matching-pending-gesture",
+              inputId: input.id,
+              pendingId: pending?.id || null,
+              hasPending: !!pending,
+              point: roundedPoint(input.point),
+            });
+          }
           logInputEarlyReturn(`${input.mode}-move`, "no-matching-pending-gesture", {
             inputId: input.id,
             pendingId: pending?.id || null,
@@ -5529,7 +5633,22 @@
             root.dataset.paintGesture = "pending";
             root.classList.add("paint-reveal-hit");
             if (pending.pointerType === "touch" && event?.cancelable) event.preventDefault();
+            if (isFirstPointerMove) {
+              logPaintStartPipeline("first-pointermove-entered-wall-mask", {
+                reason: "entered-wall-mask-waiting-for-next-move",
+                point: roundedPoint(point),
+              });
+            }
             return;
+          }
+          if (isFirstPointerMove) {
+            logPaintStartPipeline("first-pointermove-exit", {
+              reason: "searching-outside-wall-mask",
+              point: roundedPoint(point),
+              dx: Math.round(dx),
+              dy: Math.round(dy),
+              distance: Math.round(distance),
+            });
           }
           logInputEarlyReturn(`${input.mode}-move`, "searching-outside-wall-mask", {
             point: roundedPoint(point),
@@ -5544,6 +5663,14 @@
 
         const activeThreshold = pending.pointerType === "touch" ? Math.min(activationThreshold, 2) : activationThreshold;
         if (distance < activeThreshold) {
+          if (isFirstPointerMove) {
+            logPaintStartPipeline("first-pointermove-exit", {
+              reason: "movement-below-activation-threshold",
+              distance,
+              activeThreshold,
+              point: roundedPoint(point),
+            });
+          }
           logInputEarlyReturn(`${input.mode}-move`, "movement-below-activation-threshold", {
             distance,
             activeThreshold,
@@ -5554,6 +5681,16 @@
 
         const startPoint = pending.start;
         if (event?.cancelable) event.preventDefault();
+        if (isFirstPointerMove) {
+          logPaintStartPipeline("first-pointermove-calling-beginPainting", {
+            inputId: pending.id,
+            pointerType: pending.pointerType,
+            startPoint: roundedPoint(startPoint),
+            point: roundedPoint(point),
+            distance,
+            activeThreshold,
+          });
+        }
         beginPainting({ id: pending.id, mode: pending.mode, event }, startPoint);
         paintRollerSegment(startPoint, point);
         lastPoint = point;
@@ -5578,15 +5715,43 @@
 
       const handlePointerDown = (event) => {
         runPaintEvent("pointerdown", event, pointerEventDetails(event), () => {
+          paintStartPipelineSequence += 1;
+          firstPointerMoveTraced = false;
+          logPaintStartPipeline("pointerdown-entered", {
+            pointerId: event.pointerId,
+            pointerType: event.pointerType || "",
+            isPrimary: event.isPrimary,
+            button: event.button,
+            buttons: event.buttons,
+            point: roundedPoint(localPoint(event)),
+            ready: root.classList.contains("paint-reveal-ready"),
+          });
           if (event.button !== undefined && event.button !== 0) {
+            logPaintStartPipeline("pointerdown-exit", {
+              reason: "non-primary-button",
+              pointerId: event.pointerId,
+              button: event.button,
+            });
             logInputEarlyReturn("pointerdown", "non-primary-button", pointerEventDetails(event));
             return;
           }
           if (event.isPrimary === false) {
+            logPaintStartPipeline("pointerdown-exit", {
+              reason: "non-primary-pointer",
+              pointerId: event.pointerId,
+              pointerType: event.pointerType || "",
+            });
             logInputEarlyReturn("pointerdown", "non-primary-pointer", pointerEventDetails(event));
             return;
           }
           if (!canUseInputFamily("pointer")) {
+            logPaintStartPipeline("pointerdown-exit", {
+              reason: "input-family-busy",
+              requestedFamily: "pointer",
+              activeInputFamily,
+              activePointer,
+              pendingId: pending?.id || null,
+            });
             logInputEarlyReturn("pointerdown", "input-family-busy", {
               requestedFamily: "pointer",
               activeInputFamily,
