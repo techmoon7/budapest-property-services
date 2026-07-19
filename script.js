@@ -19,6 +19,137 @@
     stack: error?.stack || null,
   });
 
+  const paintDebugPanelEnabled = () => /(?:^|[?&])paintDebug=1(?:&|$)/.test(window.location.search);
+
+  const formatPaintDebugValue = (value) => {
+    if (value === undefined || value === null || value === "") return "n/a";
+    if (typeof value === "boolean") return value ? "yes" : "no";
+    if (typeof value === "object") {
+      try {
+        return JSON.stringify(value);
+      } catch {
+        return String(value);
+      }
+    }
+    return String(value);
+  };
+
+  const latestPaintDebugEvent = (debug, matcher) => {
+    for (let index = debug.events.length - 1; index >= 0; index -= 1) {
+      const event = debug.events[index];
+      if (matcher(event)) return event;
+    }
+    return null;
+  };
+
+  const createPaintDebugPanel = (debug) => {
+    if (!paintDebugPanelEnabled() || debug.panel?.isConnected) return;
+
+    const panel = document.createElement("section");
+    panel.id = "paintDebugPanel";
+    panel.setAttribute("aria-label", "Paint diagnostics");
+    panel.style.cssText = [
+      "position:fixed",
+      "right:max(8px, env(safe-area-inset-right))",
+      "bottom:max(8px, env(safe-area-inset-bottom))",
+      "z-index:2147483647",
+      "width:min(360px, calc(100vw - 16px))",
+      "max-height:min(56vh, 460px)",
+      "overflow:auto",
+      "padding:10px",
+      "border:1px solid rgba(255,255,255,.22)",
+      "border-radius:14px",
+      "background:rgba(10,24,18,.92)",
+      "color:#fffaf2",
+      "box-shadow:0 18px 50px rgba(0,0,0,.28)",
+      "font:12px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+      "-webkit-backdrop-filter:blur(14px)",
+      "backdrop-filter:blur(14px)",
+    ].join(";");
+    panel.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+        <strong style="font:700 12px/1.2 system-ui,sans-serif;">Paint diagnostics</strong>
+        <button type="button" data-paint-debug-copy style="appearance:none;border:0;border-radius:999px;background:#fffaf2;color:#102c21;padding:6px 9px;font:700 11px/1 system-ui,sans-serif;">Copy diagnostics</button>
+      </div>
+      <dl data-paint-debug-fields style="display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 8px;margin:0;"></dl>
+      <div data-paint-debug-copy-state style="margin-top:7px;color:#d8f3dc;font:700 11px/1.25 system-ui,sans-serif;" aria-live="polite"></div>
+    `;
+
+    const copyButton = panel.querySelector("[data-paint-debug-copy]");
+    const copyState = panel.querySelector("[data-paint-debug-copy-state]");
+    copyButton?.addEventListener("click", async () => {
+      const payload = JSON.stringify(window.__paintDebug, null, 2);
+      try {
+        await navigator.clipboard.writeText(payload);
+        copyState.textContent = "Diagnostics copied";
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = payload;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand("copy");
+          copyState.textContent = "Diagnostics copied";
+        } catch {
+          copyState.textContent = "Copy failed";
+        } finally {
+          textarea.remove();
+        }
+      }
+    });
+
+    document.body.appendChild(panel);
+    debug.panel = panel;
+  };
+
+  const updatePaintDebugPanel = (debug) => {
+    if (!paintDebugPanelEnabled()) return;
+    if (!debug.panel?.isConnected) {
+      if (!document.body) return;
+      createPaintDebugPanel(debug);
+    }
+
+    const latest = debug.latest || {};
+    const component =
+      latest.componentId && debug.components?.[latest.componentId]
+        ? debug.components[latest.componentId]
+        : Object.values(debug.components || {}).find(Boolean);
+    const snapshot = latest.snapshot || component?.snapshot || {};
+    const latestInput = latestPaintDebugEvent(debug, (event) =>
+      /(?:pointer|touch|mouse)(?:down|move|up|cancel|start|end)|lostpointercapture/.test(event.event)
+    );
+    const latestException = latestPaintDebugEvent(debug, (event) => event.event === "caught-exception");
+    const decodeEvent = latestPaintDebugEvent(debug, (event) => event.event.startsWith("image-decode-"));
+
+    const rows = {
+      build: debug.build,
+      stage: latest.event,
+      "image.complete": snapshot.image?.complete,
+      "image natural": `${formatPaintDebugValue(snapshot.image?.naturalWidth)} / ${formatPaintDebugValue(snapshot.image?.naturalHeight)}`,
+      decode: decodeEvent?.event?.replace("image-decode-", "") || "pending",
+      "canvas CSS": `${formatPaintDebugValue(snapshot.canvas?.cssWidth)} x ${formatPaintDebugValue(snapshot.canvas?.cssHeight)}`,
+      "canvas backing": `${formatPaintDebugValue(snapshot.canvas?.backingWidth)} x ${formatPaintDebugValue(snapshot.canvas?.backingHeight)}`,
+      dpr: `${formatPaintDebugValue(window.devicePixelRatio)} (ratio ${formatPaintDebugValue(snapshot.canvas?.ratio)})`,
+      ready: snapshot.gesture?.ready ?? latest.ready,
+      "active input": snapshot.gesture?.activeInputFamily,
+      "latest input": latestInput ? `${latestInput.event} ${formatPaintDebugValue(latestInput.pointerType || latestInput.touchIdentifier || "")}` : "none",
+      "latest function": latest.event,
+      exception: latestException?.error?.message || latestException?.source || "none",
+    };
+
+    const fields = debug.panel?.querySelector("[data-paint-debug-fields]");
+    if (!fields) return;
+    fields.innerHTML = Object.entries(rows)
+      .map(
+        ([label, value]) =>
+          `<dt style="color:rgba(255,250,242,.72);font-weight:700;">${label}</dt><dd style="margin:0;min-width:0;overflow-wrap:anywhere;">${formatPaintDebugValue(value)}</dd>`
+      )
+      .join("");
+  };
+
   const ensurePaintDebug = () => {
     const existing =
       window.__paintDebug && typeof window.__paintDebug === "object" ? window.__paintDebug : {};
@@ -55,6 +186,7 @@
           ...(entry.snapshot ? { snapshot: entry.snapshot } : {}),
         };
       }
+      updatePaintDebugPanel(debug);
       return entry;
     };
 
