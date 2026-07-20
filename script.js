@@ -11,7 +11,8 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const paintDebugBuild = "paint-gesture-start-2026-07-19-01";
+  const assetBuildId = "paint-hit-20260720-02";
+  const paintDebugBuild = assetBuildId;
 
   const paintDebugError = (error) => ({
     name: error?.name || "Error",
@@ -6104,10 +6105,17 @@
       const pointInCanvasBounds = (point) =>
         point.x >= 0 && point.y >= 0 && point.x <= cssWidth && point.y <= cssHeight;
 
+      const pointInCanvasClientRect = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        if (!rect.width || !rect.height) return false;
+        return event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+      };
+
       const handleTouchPointerDown = (event) => {
-        if (event.pointerType !== "touch" || event.isPrimary === false || event.currentTarget !== canvas) return;
+        if (event.pointerType !== "touch" || event.isPrimary === false) return;
         runPaintEvent("pointerdown", event, pointerEventDetails(event), () => {
           if (!root.classList.contains("paint-reveal-ready")) return;
+          if (!pointInCanvasClientRect(event)) return;
           const point = localPoint(event);
           if (!pointInCanvasBounds(point)) return;
           if (event.cancelable) event.preventDefault();
@@ -6189,10 +6197,11 @@
         root.addEventListener("pointermove", handlePointerMove, true);
         root.addEventListener("pointerup", handlePointerUp, true);
         root.addEventListener("pointercancel", handlePointerCancel, true);
-        canvas.addEventListener("pointerdown", handleTouchPointerDown, true);
-        canvas.addEventListener("pointermove", handleTouchPointerMove, true);
-        canvas.addEventListener("pointerup", handleTouchPointerUp, true);
-        canvas.addEventListener("pointercancel", handleTouchPointerCancel, true);
+        const touchPointerOptions = { capture: true, passive: false };
+        document.addEventListener("pointerdown", handleTouchPointerDown, touchPointerOptions);
+        document.addEventListener("pointermove", handleTouchPointerMove, touchPointerOptions);
+        document.addEventListener("pointerup", handleTouchPointerUp, touchPointerOptions);
+        document.addEventListener("pointercancel", handleTouchPointerCancel, touchPointerOptions);
         canvas.addEventListener("lostpointercapture", handleLostPointerCapture);
       }
       if (useTouchFallback) {
@@ -7023,7 +7032,7 @@
 
   const loadCoreScript = () => {
     const script = document.createElement("script");
-    script.src = "script-core.js";
+    script.src = `script-core.js?v=${assetBuildId}`;
     script.async = false;
     script.onload = applyHomeEnhancements;
     script.onerror = () => {
