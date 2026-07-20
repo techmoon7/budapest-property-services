@@ -51,7 +51,7 @@ jobs:
           cp -R assets _site/assets
           test "$(head -n 1 _site/index.html)" = "<!DOCTYPE html>"
           grep -F '<link rel="stylesheet" href="styles.css">' _site/index.html
-          grep -F '<script src="script.js" defer></script>' _site/index.html
+          grep -F '<script src="script.js?v=paint-hit-20260720-02" defer></script>' _site/index.html
           test -s _site/property-maintenance-budapest.html
           test -s _site/handyman-services-budapest.html
           test -s _site/painting-wall-repairs-budapest.html
