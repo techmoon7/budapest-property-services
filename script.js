@@ -4252,6 +4252,7 @@
       const canvas = document.createElement("canvas");
       canvas.className = "paint-reveal-canvas";
       canvas.setAttribute("aria-hidden", "true");
+      canvas.style.touchAction = "none";
       root.appendChild(canvas);
 
       const ctx = canvas.getContext("2d", { alpha: true });
@@ -4324,6 +4325,7 @@
       const activationThreshold = 5;
       const dragThreshold = 5;
       let activeInputFamily = null;
+      let touchPaintPointerId = null;
       let paintStartPipelineSequence = 0;
       let firstPointerMoveTraced = false;
 
@@ -5466,11 +5468,16 @@
         debugPaint("paint-finish");
       };
 
+      const resetTouchPaintState = () => {
+        touchPaintPointerId = null;
+      };
+
       const cancelPending = () => {
         cancelStrokeFrame();
         pending = null;
         activePointer = null;
         activeInputFamily = null;
+        resetTouchPaintState();
         lastPoint = null;
         queuedPoint = null;
         mouseIsDown = false;
@@ -5714,6 +5721,7 @@
       };
 
       const handlePointerDown = (event) => {
+        if (event.pointerType === "touch") return;
         runPaintEvent("pointerdown", event, pointerEventDetails(event), () => {
           paintStartPipelineSequence += 1;
           firstPointerMoveTraced = false;
@@ -5770,6 +5778,7 @@
       };
 
       const handlePointerMove = (event) => {
+        if (event.pointerType === "touch") return;
         runPaintEvent("pointermove", event, pointerEventDetails(event), () => {
           if (event.isPrimary === false) {
             logInputEarlyReturn("pointermove", "non-primary-pointer", pointerEventDetails(event));
@@ -5797,6 +5806,7 @@
       };
 
       const handlePointerUp = (event) => {
+        if (event.pointerType === "touch") return;
         runPaintEvent("pointerup", event, pointerEventDetails(event), () => {
           if (event.isPrimary === false) {
             logInputEarlyReturn("pointerup", "non-primary-pointer", pointerEventDetails(event));
@@ -5815,6 +5825,7 @@
         });
       };
       const handlePointerCancel = (event) => {
+        if (event.pointerType === "touch") return;
         runPaintEvent("pointercancel", event, pointerEventDetails(event), () => {
           if (event.isPrimary === false) {
             logInputEarlyReturn("pointercancel", "non-primary-pointer", pointerEventDetails(event));
@@ -6085,7 +6096,70 @@
         });
       };
 
+      const clampPointToCanvas = (point) => ({
+        x: clamp(point.x, 0, cssWidth),
+        y: clamp(point.y, 0, cssHeight),
+      });
+
+      const pointInCanvasBounds = (point) =>
+        point.x >= 0 && point.y >= 0 && point.x <= cssWidth && point.y <= cssHeight;
+
+      const handleTouchPointerDown = (event) => {
+        if (event.pointerType !== "touch" || event.isPrimary === false || event.currentTarget !== canvas) return;
+        runPaintEvent("pointerdown", event, pointerEventDetails(event), () => {
+          if (!root.classList.contains("paint-reveal-ready")) return;
+          const point = localPoint(event);
+          if (!pointInCanvasBounds(point)) return;
+          if (event.cancelable) event.preventDefault();
+
+          cancelPending();
+          cancelFade();
+          touchPaintPointerId = event.pointerId;
+          activeInputFamily = "pointer";
+          beginPainting(
+            {
+              id: event.pointerId,
+              mode: "pointer",
+              pointerType: "touch",
+              event,
+            },
+            point
+          );
+          paintRollerSegment(point, {
+            x: clamp(point.x + Math.max(1.5, brushSize * 0.02), 0, cssWidth),
+            y: point.y,
+          });
+          lastPoint = point;
+        });
+      };
+
+      const handleTouchPointerMove = (event) => {
+        if (event.pointerType !== "touch" || event.pointerId !== touchPaintPointerId) return;
+        runPaintEvent("pointermove", event, pointerEventDetails(event), () => {
+          if (event.cancelable) event.preventDefault();
+          const point = clampPointToCanvas(localPoint(event));
+          moveDemoIndicator(point);
+          scheduleStroke(point);
+        });
+      };
+
+      const finishTouchPointerPainting = (event, prevent = true) => {
+        if (event.pointerId !== touchPaintPointerId) return;
+        runPaintEvent(event.type, event, pointerEventDetails(event), () => {
+          if (prevent && event.cancelable) event.preventDefault();
+          resetTouchPaintState();
+          finishPainting();
+        });
+      };
+
+      const handleTouchPointerUp = (event) => finishTouchPointerPainting(event);
+      const handleTouchPointerCancel = (event) => finishTouchPointerPainting(event, false);
+
       const handleLostPointerCapture = (event) => {
+        if (event.pointerId === touchPaintPointerId) {
+          finishTouchPointerPainting(event, false);
+          return;
+        }
         runPaintEvent("lostpointercapture", event, pointerEventDetails(event), () => {
           finishInput(event.pointerId, event, false);
         });
@@ -6093,6 +6167,7 @@
 
       const cancelCurrentGesture = () => {
         if (activePointer !== null) {
+          resetTouchPaintState();
           finishPainting();
           return;
         }
@@ -6114,6 +6189,10 @@
         root.addEventListener("pointermove", handlePointerMove, true);
         root.addEventListener("pointerup", handlePointerUp, true);
         root.addEventListener("pointercancel", handlePointerCancel, true);
+        canvas.addEventListener("pointerdown", handleTouchPointerDown, true);
+        canvas.addEventListener("pointermove", handleTouchPointerMove, true);
+        canvas.addEventListener("pointerup", handleTouchPointerUp, true);
+        canvas.addEventListener("pointercancel", handleTouchPointerCancel, true);
         canvas.addEventListener("lostpointercapture", handleLostPointerCapture);
       }
       if (useTouchFallback) {
