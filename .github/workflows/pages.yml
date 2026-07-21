@@ -49,9 +49,12 @@ jobs:
             test -s _site/CNAME
           fi
           cp -R assets _site/assets
+          cp -R hu _site/hu
           test "$(head -n 1 _site/index.html)" = "<!DOCTYPE html>"
-          grep -F '<link rel="stylesheet" href="styles.css">' _site/index.html
-          grep -F '<script src="script.js?v=paint-hit-20260720-02" defer></script>' _site/index.html
+          grep -F '<link rel="stylesheet" href="styles.css?v=seo-foundation-v1-2026-07-21-02">' _site/index.html
+          grep -F '<script src="script.js?v=seo-foundation-v1-2026-07-21-02" defer></script>' _site/index.html
+          grep -F '<link rel="stylesheet" href="../styles.css?v=seo-foundation-v1-2026-07-21-02">' _site/hu/index.html
+          grep -F '<script src="../script.js?v=seo-foundation-v1-2026-07-21-02" defer></script>' _site/hu/index.html
           test -s _site/property-maintenance-budapest.html
           test -s _site/handyman-services-budapest.html
           test -s _site/painting-wall-repairs-budapest.html
@@ -59,6 +62,14 @@ jobs:
           test -s _site/cleaning-services-budapest.html
           test -s _site/airbnb-property-maintenance-budapest.html
           test -s _site/property-management-for-foreign-owners-budapest.html
+          test -s _site/hu/index.html
+          test -s _site/hu/ingatlan-karbantartas-budapest.html
+          test -s _site/hu/ezermester-budapest.html
+          test -s _site/hu/szobafestes-faljavitas-budapest.html
+          test -s _site/hu/kertfenntartas-budapest.html
+          test -s _site/hu/takaritas-budapest.html
+          test -s _site/hu/airbnb-karbantartas-budapest.html
+          test -s _site/hu/ingatlankezeles-kulfoldi-tulajdonosoknak-budapest.html
           test -s _site/styles.css
           test -s _site/styles-base.css
           test -s _site/script.js

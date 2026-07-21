@@ -11,8 +11,28 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "paint-hit-20260720-02";
+  const assetBuildId = "seo-foundation-v1-2026-07-21-02";
   const paintDebugBuild = assetBuildId;
+  const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
+  const routePairs = {
+    home: { en: "/", hu: "/hu/" },
+    maintenance: { en: "/property-maintenance-budapest.html", hu: "/hu/ingatlan-karbantartas-budapest.html" },
+    painting: { en: "/painting-wall-repairs-budapest.html", hu: "/hu/szobafestes-faljavitas-budapest.html" },
+    garden: { en: "/garden-maintenance-budapest.html", hu: "/hu/kertfenntartas-budapest.html" },
+    handyman: { en: "/handyman-services-budapest.html", hu: "/hu/ezermester-budapest.html" },
+    cleaning: { en: "/cleaning-services-budapest.html", hu: "/hu/takaritas-budapest.html" },
+    airbnb: { en: "/airbnb-property-maintenance-budapest.html", hu: "/hu/airbnb-karbantartas-budapest.html" },
+    foreignOwners: {
+      en: "/property-management-for-foreign-owners-budapest.html",
+      hu: "/hu/ingatlankezeles-kulfoldi-tulajdonosoknak-budapest.html",
+    },
+  };
+  const routeLookup = new Map();
+  Object.entries(routePairs).forEach(([key, pair]) => {
+    Object.entries(pair).forEach(([lang, href]) => routeLookup.set(href, { key, lang }));
+  });
+  routeLookup.set("/index.html", { key: "home", lang: "en" });
+  routeLookup.set("/hu/index.html", { key: "home", lang: "hu" });
 
   const paintDebugError = (error) => ({
     name: error?.name || "Error",
@@ -3464,11 +3484,40 @@
       /* localStorage can be unavailable in hardened browser modes. */
     }
   };
-  if (!storedLanguage()) persistLanguage(browserLanguage());
+  const normalizePath = (pathname = window.location.pathname) => {
+    let path = pathname || "/";
+    if (path.startsWith("/budapest-property-services/")) {
+      path = path.slice("/budapest-property-services".length) || "/";
+    }
+    if (path === "/index.html") return "/";
+    if (path === "/hu/index.html") return "/hu/";
+    return path.endsWith("/") ? path : path;
+  };
+  const routeInfoForPath = (pathname = window.location.pathname) => routeLookup.get(normalizePath(pathname)) || null;
+  const routeLanguage = () => {
+    const pageLang = normalizeLanguage(document.documentElement.dataset.pageLanguage || document.body?.dataset.routeLang || "");
+    if (pageLang === "en" || pageLang === "hu") return pageLang;
+    const routeLang = routeInfoForPath()?.lang;
+    if (routeLang === "en" || routeLang === "hu") return routeLang;
+    const htmlLang = normalizeLanguage(document.documentElement.lang);
+    return htmlLang === "en" || htmlLang === "hu" ? htmlLang : "";
+  };
+  const currentRouteKey = () => routeInfoForPath()?.key || "home";
+  const routeHref = (key, lang = currentLang()) => {
+    const routeLang = lang === "hu" ? "hu" : "en";
+    const path = routePairs[key]?.[routeLang] || routePairs.home[routeLang];
+    const basePath = window.location.pathname.startsWith("/budapest-property-services/")
+      ? "/budapest-property-services"
+      : "";
+    return `${basePath}${path}`;
+  };
+  const navigationLanguage = () => (currentLang() === "hu" ? "hu" : routeLanguage() === "hu" ? "hu" : "en");
+  let activeLanguage = routeLanguage() || storedLanguage() || browserLanguage() || fallbackLanguage;
+  if (!storedLanguage()) persistLanguage(activeLanguage);
 
   const directCallViewport = () => window.matchMedia("(max-width: 820px)").matches;
-  const currentLang = () => storedLanguage() || fallbackLanguage;
-  const documentLang = () => normalizeLanguage(document.documentElement.lang) || currentLang();
+  const currentLang = () => activeLanguage || fallbackLanguage;
+  const documentLang = () => currentLang();
   const languageInfo = (lang = currentLang()) =>
     supportedLanguages.find((language) => language.code === lang) || supportedLanguages.find((language) => language.code === fallbackLanguage);
   const t = (key, lang = currentLang()) => uiText[key]?.[lang] || uiText[key]?.[fallbackLanguage] || "";
@@ -3488,12 +3537,29 @@
   const phoneActionLabel = (lang = currentLang()) =>
     directCallViewport() ? t("callNow", lang) : t("copyPhone", lang);
 
+  const pathForHref = (href = "") => {
+    try {
+      return normalizePath(new URL(href || ".", window.location.href).pathname);
+    } catch {
+      return normalizePath(`/${String(href).split("#")[0].replace(/^\.\//, "")}`);
+    }
+  };
   const serviceItemForHref = (href = "") => {
+    const path = pathForHref(href);
+    const routeKey = routeInfoForPath(path)?.key;
+    if (routeKey) return serviceNavigationItems.find((item) => item.key === routeKey);
     const cleanHref = href.split("#")[0].replace(/^\.\//, "");
     return serviceNavigationItems.find((item) => item.href === cleanHref);
   };
 
-  const isServicesOverviewHref = (href = "") => href === "#services" || href === "index.html#services";
+  const isServicesOverviewHref = (href = "") => {
+    try {
+      const url = new URL(href || ".", window.location.href);
+      return url.hash === "#services" && routeInfoForPath(url.pathname)?.key === "home";
+    } catch {
+      return href === "#services" || href === "index.html#services";
+    }
+  };
 
   const closeHeaderNavigation = (header) => {
     if (!header) return;
@@ -3551,6 +3617,8 @@
     const navId = nav.id || "primary-navigation";
     nav.id = navId;
     header.dataset.navEnhanced = "true";
+    const brand = header.querySelector(".brand");
+    if (brand) brand.setAttribute("href", `${routeHref("home", navigationLanguage())}#top`);
 
     let menuToggle = header.querySelector(".nav-toggle");
     if (!menuToggle) {
@@ -3623,7 +3691,7 @@
     if (shouldRenderDropdown) {
       dropdownMenu.textContent = "";
 
-      const overviewHref = document.body?.classList.contains("service-page") ? "index.html#services" : "#services";
+      const overviewHref = navigationLanguage() === "hu" ? "/hu/#services" : "/#services";
       const overview = overviewLink || document.createElement("a");
       overview.href = overviewHref;
       overview.dataset.textHu = uiText.servicesOverview.hu;
@@ -3633,20 +3701,20 @@
       overview.removeAttribute("aria-current");
       dropdownMenu.appendChild(overview);
 
-      const currentFile = window.location.pathname.split("/").pop() || "index.html";
+      const currentKey = currentRouteKey();
       serviceNavigationItems.forEach((item) => {
         const link =
           serviceLinks.get(item.key) ||
           dropdownMenu.querySelector(`[data-service-nav-item="${item.key}"]`) ||
           document.createElement("a");
-        link.href = item.href;
+        link.href = routeHref(item.key, navigationLanguage());
         link.dataset.serviceNavItem = item.key;
         link.dataset.textHu = item.hu;
         link.dataset.textEn = item.en;
         link.dataset[item.dataset] = "true";
         link.textContent = lang === "hu" ? item.hu : lang === "en" ? item.en : translatePhrase(item.en, lang);
         link.setAttribute("role", "menuitem");
-        if (currentFile === item.href) {
+        if (currentKey === item.key) {
           link.setAttribute("aria-current", "page");
         } else {
           link.removeAttribute("aria-current");
@@ -3918,6 +3986,16 @@
     const normalized = normalizeLanguage(lang) || fallbackLanguage;
     persistLanguage(normalized);
     closeLanguageSelector();
+    if (normalized === "en" || normalized === "hu") {
+      const targetHref = routeHref(currentRouteKey(), normalized);
+      const target = new URL(targetHref, window.location.origin);
+      target.hash = window.location.hash;
+      if (target.pathname !== window.location.pathname || target.hash !== window.location.hash) {
+        window.location.href = target.href;
+        return;
+      }
+    }
+    activeLanguage = normalized;
     window.dispatchEvent(new CustomEvent("bps:languagechange", { detail: { lang: normalized } }));
     applyPageLanguage();
   };
@@ -6780,6 +6858,8 @@
     applyPageLanguage,
     translatePhrase,
     t,
+    routeHref,
+    routeLanguage,
   };
 
   if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services", "airbnb-property-maintenance", "property-management-foreign-owners"].includes(document.body?.dataset.page)) {
@@ -7032,7 +7112,9 @@
 
   const loadCoreScript = () => {
     const script = document.createElement("script");
-    script.src = `script-core.js?v=${assetBuildId}`;
+    const coreSource = new URL("script-core.js", scriptBaseUrl);
+    coreSource.search = `?v=${assetBuildId}`;
+    script.src = coreSource.href;
     script.async = false;
     script.onload = applyHomeEnhancements;
     script.onerror = () => {

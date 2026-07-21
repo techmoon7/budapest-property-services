@@ -2,15 +2,16 @@
   const phone = "+36 20 667 1832";
   const tel = "tel:+36206671832";
   const wa = "https://wa.me/36206671832";
+  const scriptBaseUrl = document.currentScript?.src || new URL("script-core.js", document.baseURI).href;
   const img = (id, w = 1200) =>
     id.startsWith("assets/")
-      ? id
+      ? new URL(id, scriptBaseUrl).href
       : `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
 
   const heroImage = "assets/budapest-finished-room-1.jpg";
 
   const state = {
-    lang: window.BPS_I18N?.currentLang?.() || localStorage.getItem("bps-lang") || "en",
+    lang: window.BPS_I18N?.currentLang?.() || window.BPS_I18N?.routeLanguage?.() || "en",
     gallery: [],
     galleryIndex: 0,
     galleryZoom: 1,
@@ -31,6 +32,21 @@
     if (window.BPS_I18N?.t) return window.BPS_I18N.t(directCallViewport() ? "callNow" : "copyPhone", state.lang);
     if (state.lang === "hu") return directCallViewport() ? "Hívás indítása" : "Telefon másolása";
     return directCallViewport() ? "Call now" : "Copy phone";
+  };
+  const routeHref = (key, hash = "") => `${window.BPS_I18N?.routeHref?.(key, state.lang) || "/"}${hash}`;
+  const serviceHrefByEnglishHref = (href = "") => {
+    const serviceKeyByHref = {
+      "property-maintenance-budapest.html": "maintenance",
+      "painting-wall-repairs-budapest.html": "painting",
+      "garden-maintenance-budapest.html": "garden",
+      "handyman-services-budapest.html": "handyman",
+      "cleaning-services-budapest.html": "cleaning",
+      "airbnb-property-maintenance-budapest.html": "airbnb",
+      "property-management-for-foreign-owners-budapest.html": "foreignOwners",
+    };
+    const cleanHref = href.split("#")[0].replace(/^\.\//, "");
+    const key = serviceKeyByHref[cleanHref];
+    return key ? routeHref(key) : href;
   };
 
   const phaseLabel = {
@@ -1056,7 +1072,7 @@
               <p>${tx(detail.next)}</p>
             </div>
             <div class="problem-actions">
-              <a class="text-btn problem-service-link" href="${detail.href}">${situationLabel("relatedService")}: ${relatedService}</a>
+              <a class="text-btn problem-service-link" href="${serviceHrefByEnglishHref(detail.href)}">${situationLabel("relatedService")}: ${relatedService}</a>
               <a class="btn primary" href="${wa}" target="_blank" rel="noopener">${situationLabel("sendPhotos")}</a>
               ${
                 galleryProject
@@ -1375,7 +1391,7 @@
         </section>
       </main>
 
-      <footer class="footer"><span>Budapest Property Services</span><span>${state.lang === "hu" ? "Ingatlankarbantartás Budapesten, magyar és angol kommunikációval." : "Property maintenance in Budapest, with Hungarian and English communication."}</span><span><a class="text-btn" href="property-maintenance-budapest.html">${state.lang === "hu" ? "Ingatlankarbantartás" : "Property maintenance"}</a> <a class="text-btn" href="property-management-for-foreign-owners-budapest.html">${state.lang === "hu" ? "Külföldi tulajdonosok" : "Foreign owner support"}</a> <a class="text-btn" href="airbnb-property-maintenance-budapest.html">${state.lang === "hu" ? "Airbnb karbantartás" : "Airbnb maintenance"}</a> <a class="text-btn" href="cleaning-services-budapest.html">${state.lang === "hu" ? "Takarítás" : "Cleaning"}</a></span></footer>
+      <footer class="footer"><span>Budapest Property Services</span><span>${state.lang === "hu" ? "Ingatlankarbantartás Budapesten, magyar és angol kommunikációval." : "Property maintenance in Budapest, with Hungarian and English communication."}</span><span><a class="text-btn" href="${routeHref("maintenance")}">${state.lang === "hu" ? "Ingatlankarbantartás" : "Property maintenance"}</a> <a class="text-btn" href="${routeHref("foreignOwners")}">${state.lang === "hu" ? "Külföldi tulajdonosok" : "Foreign owner support"}</a> <a class="text-btn" href="${routeHref("airbnb")}">${state.lang === "hu" ? "Airbnb karbantartás" : "Airbnb maintenance"}</a> <a class="text-btn" href="${routeHref("cleaning")}">${state.lang === "hu" ? "Takarítás" : "Cleaning"}</a></span></footer>
       <div class="mobile-cta"><a href="${tel}" data-phone-action>${state.lang === "hu" ? "Hívás" : "Call"}</a><a href="${wa}" target="_blank" rel="noopener" aria-label="WhatsApp">${state.lang === "hu" ? "WhatsApp fotókkal" : "WhatsApp photos"}</a></div>
       <div class="toast" id="phoneToast" role="status" aria-live="polite" aria-atomic="true"></div>
       <div id="projectModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"><button class="backdrop" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}"></button><div class="panel" tabindex="-1"><button class="close" type="button" data-close aria-label="${state.lang === "hu" ? "Ablak bezárása" : "Close dialog"}">×</button><div id="projectInner"></div></div></div>
