@@ -11,9 +11,14 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "seo-foundation-v1-2026-07-21-02";
+  const assetBuildId = "whatsapp-quote-v1-2026-07-23-01";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
+  try {
+    window.dataLayer = window.dataLayer || [];
+  } catch {
+    /* Analytics is optional and must never block site interactions. */
+  }
   const routePairs = {
     home: { en: "/", hu: "/hu/" },
     maintenance: { en: "/property-maintenance-budapest.html", hu: "/hu/ingatlan-karbantartas-budapest.html" },
@@ -3537,6 +3542,123 @@
   const phoneActionLabel = (lang = currentLang()) =>
     directCallViewport() ? t("callNow", lang) : t("copyPhone", lang);
 
+  const quoteFormText = {
+    en: {
+      kicker: "Request a quote",
+      title: "Send structured details on WhatsApp",
+      intro: "Fill in the essentials and WhatsApp will open with a ready-to-send message. Add your photos there before sending.",
+      name: "Name",
+      service: "Service type",
+      location: "Budapest location or district",
+      description: "Short task description",
+      timing: "Preferred timing",
+      access: "Access information",
+      propertyType: "Property type",
+      photosReady: "I have photos ready and will attach them in WhatsApp.",
+      consent: "I understand that WhatsApp will open with these details and that photos must be attached manually before sending.",
+      submit: "Continue in WhatsApp",
+      note: "WhatsApp will open with the details below. Add your photos there before sending.",
+      required: "Required",
+      requiredError: "Please complete this field.",
+      consentError: "Please confirm before continuing to WhatsApp.",
+      statusOpening: "WhatsApp is opening. Attach your photos before sending the message.",
+      counter: (count, max) => `${count} / ${max}`,
+      messageGreeting: "Hello! I would like to request a quote from Budapest Property Services.",
+      messageLabels: {
+        name: "Name",
+        service: "Service",
+        propertyType: "Property type",
+        location: "Location / district",
+        timing: "Preferred timing",
+        access: "Access information",
+        description: "Task description",
+        photos: "Photos",
+        page: "Page",
+      },
+      photosYes: "Photos are ready and will be attached in WhatsApp.",
+      photosNo: "No photos yet / I will explain in WhatsApp.",
+      placeholderName: "Your name",
+      placeholderLocation: "Example: District V, District XIII, Buda side",
+      placeholderAccess: "Optional: keys, concierge, tenant contact or access window",
+      placeholderDescription: "Briefly describe what needs to be checked, repaired, cleaned or prepared.",
+    },
+    hu: {
+      kicker: "Ajánlatkérés",
+      title: "Küldjön rendezett részleteket WhatsAppon",
+      intro: "Töltse ki a legfontosabb adatokat, és a WhatsApp egy előkészített üzenettel nyílik meg. A fotókat küldés előtt ott tudja csatolni.",
+      name: "Név",
+      service: "Szolgáltatás",
+      location: "Budapesti helyszín vagy kerület",
+      description: "Rövid feladatleírás",
+      timing: "Kívánt időpont",
+      access: "Bejutási információ",
+      propertyType: "Ingatlan típusa",
+      photosReady: "Vannak fotóim, és a WhatsApp megnyitása után csatolom őket.",
+      consent: "Tudomásul veszem, hogy a WhatsApp az alábbi adatokkal nyílik meg, a fotókat pedig küldés előtt kézzel kell csatolnom.",
+      submit: "Folytatás WhatsAppon",
+      note: "A WhatsApp megnyílik az alábbi adatokkal. Küldés előtt ott csatold a fotókat.",
+      required: "Kötelező",
+      requiredError: "Kérjük, töltse ki ezt a mezőt.",
+      consentError: "Kérjük, erősítse meg, mielőtt WhatsAppon folytatja.",
+      statusOpening: "Megnyílik a WhatsApp. Az üzenet elküldése előtt csatold a fotókat.",
+      counter: (count, max) => `${count} / ${max}`,
+      messageGreeting: "Üdvözlöm! Ajánlatot szeretnék kérni a Budapest Property Servicestől.",
+      messageLabels: {
+        name: "Név",
+        service: "Szolgáltatás",
+        propertyType: "Ingatlan típusa",
+        location: "Helyszín / kerület",
+        timing: "Kívánt időpont",
+        access: "Bejutási információ",
+        description: "Feladat leírása",
+        photos: "Fotók",
+        page: "Oldal",
+      },
+      photosYes: "Vannak fotók, és WhatsAppon csatolom őket.",
+      photosNo: "Még nincsenek fotók / WhatsAppon pontosítom.",
+      placeholderName: "Az Ön neve",
+      placeholderLocation: "Például: V. kerület, XIII. kerület, budai oldal",
+      placeholderAccess: "Opcionális: kulcs, portaszolgálat, bérlői kapcsolat vagy bejutási idősáv",
+      placeholderDescription: "Írja le röviden, mit kell ellenőrizni, javítani, takarítani vagy előkészíteni.",
+    },
+  };
+  const quoteServiceOptions = [
+    { value: "maintenance", en: "Property maintenance", hu: "Ingatlankarbantartás" },
+    { value: "handyman", en: "Handyman / small repairs", hu: "Ezermester / kisebb javítások" },
+    { value: "painting", en: "Painting and wall repairs", hu: "Szobafestés és faljavítás" },
+    { value: "garden", en: "Garden maintenance", hu: "Kertfenntartás" },
+    { value: "cleaning", en: "Cleaning", hu: "Takarítás" },
+    { value: "airbnb", en: "Airbnb maintenance", hu: "Airbnb-karbantartás" },
+    { value: "foreign_owner", en: "Property support for a foreign owner", hu: "Ingatlankezelési segítség külföldi tulajdonosnak" },
+    { value: "other", en: "Other", hu: "Egyéb" },
+  ];
+  const quotePropertyOptions = [
+    { value: "", en: "Select if relevant", hu: "Válasszon, ha releváns" },
+    { value: "apartment", en: "Apartment", hu: "Lakás" },
+    { value: "house", en: "House", hu: "Ház" },
+    { value: "airbnb_rental", en: "Airbnb / rental", hu: "Airbnb / kiadó ingatlan" },
+    { value: "office", en: "Office", hu: "Iroda" },
+    { value: "representative_property", en: "Representative property", hu: "Képviseleti ingatlan" },
+    { value: "garden_outdoor", en: "Garden / outdoor area", hu: "Kert / kültéri terület" },
+    { value: "other", en: "Other", hu: "Egyéb" },
+  ];
+  const quoteTimingOptions = [
+    { value: "asap", en: "As soon as possible", hu: "Amint lehetséges" },
+    { value: "week", en: "Within one week", hu: "Egy héten belül" },
+    { value: "month", en: "Within one month", hu: "Egy hónapon belül" },
+    { value: "flexible", en: "Flexible / just requesting information", hu: "Rugalmas / egyelőre érdeklődöm" },
+  ];
+  const quoteRouteService = {
+    home: "maintenance",
+    maintenance: "maintenance",
+    handyman: "handyman",
+    painting: "painting",
+    garden: "garden",
+    cleaning: "cleaning",
+    airbnb: "airbnb",
+    foreignOwners: "foreign_owner",
+  };
+
   const pathForHref = (href = "") => {
     try {
       return normalizePath(new URL(href || ".", window.location.href).pathname);
@@ -6744,6 +6866,299 @@
     closeLanguageSelector();
   });
 
+  const quoteFormLang = () => (routeLanguage() === "hu" ? "hu" : "en");
+  const quotePagePath = () => normalizePath(window.location.pathname);
+  const quoteEventBase = () => ({
+    page_path: quotePagePath(),
+    page_language: quoteFormLang(),
+  });
+  const quoteEscape = (value) =>
+    String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  const quoteLabel = (options, value, lang) => options.find((option) => option.value === value)?.[lang] || "";
+  const quoteCleanLine = (value) => String(value || "").replace(/\s+/g, " ").trim();
+  const quoteControl = (form, name) => form.elements.namedItem(name);
+  const quoteCanonicalUrl = () => {
+    const canonical = document.querySelector('link[rel="canonical"]')?.href || routeHref(currentRouteKey(), quoteFormLang());
+    const url = new URL(canonical, window.location.origin);
+    url.search = "";
+    url.hash = "";
+    return url.href;
+  };
+  const pushConversionEvent = (event, params = {}) => {
+    try {
+      if (!Array.isArray(window.dataLayer)) window.dataLayer = [];
+      window.dataLayer.push({ event, ...params });
+    } catch {
+      /* Analytics is optional and must never block site interactions. */
+    }
+  };
+  const preselectedQuoteService = () => quoteRouteService[currentRouteKey()] || "maintenance";
+  const quoteOptionsMarkup = (options, lang, selected = "") =>
+    options
+      .map((option) => {
+        const isSelected = option.value === selected ? " selected" : "";
+        return `<option value="${quoteEscape(option.value)}"${isSelected}>${quoteEscape(option[lang])}</option>`;
+      })
+      .join("");
+  const quoteFieldErrorId = (formId, field) => `${formId}-${field}-error`;
+  const quoteField = ({ formId, name, label, type = "text", required = false, value = "", placeholder = "", help = "" }) => {
+    const id = `${formId}-${name}`;
+    const errorId = quoteFieldErrorId(formId, name);
+    const helpId = help ? `${formId}-${name}-help` : "";
+    const describedBy = [helpId, errorId].filter(Boolean).join(" ");
+    const requiredText = quoteEscape(quoteFormText[quoteFormLang()]?.required || "Required");
+    return `
+      <div class="quote-field">
+        <label for="${id}">${quoteEscape(label)}${required ? ` <span aria-hidden="true">*</span><span class="sr-only"> ${requiredText}</span>` : ""}</label>
+        <input id="${id}" name="${quoteEscape(name)}" type="${quoteEscape(type)}" value="${quoteEscape(value)}" placeholder="${quoteEscape(placeholder)}"${required ? " required" : ""} aria-describedby="${describedBy}">
+        ${help ? `<p class="quote-help" id="${helpId}">${quoteEscape(help)}</p>` : ""}
+        <p class="quote-field-error" id="${errorId}" data-quote-error="${quoteEscape(name)}" aria-live="polite"></p>
+      </div>`;
+  };
+  const quoteTextarea = ({ formId, name, label, required = false, placeholder = "", maxlength = 1000 }) => {
+    const id = `${formId}-${name}`;
+    const errorId = quoteFieldErrorId(formId, name);
+    const counterId = `${formId}-${name}-counter`;
+    const requiredText = quoteEscape(quoteFormText[quoteFormLang()]?.required || "Required");
+    return `
+      <div class="quote-field quote-field-full">
+        <label for="${id}">${quoteEscape(label)}${required ? ` <span aria-hidden="true">*</span><span class="sr-only"> ${requiredText}</span>` : ""}</label>
+        <textarea id="${id}" name="${quoteEscape(name)}" rows="5" maxlength="${maxlength}" placeholder="${quoteEscape(placeholder)}"${required ? " required" : ""} aria-describedby="${counterId} ${errorId}"></textarea>
+        <div class="quote-meta-row">
+          <p class="quote-field-error" id="${errorId}" data-quote-error="${quoteEscape(name)}" aria-live="polite"></p>
+          <p class="quote-counter" id="${counterId}" data-quote-counter="${quoteEscape(name)}">0 / ${maxlength}</p>
+        </div>
+      </div>`;
+  };
+  const quoteSelect = ({ formId, name, label, options, lang, selected = "", required = false }) => {
+    const id = `${formId}-${name}`;
+    const errorId = quoteFieldErrorId(formId, name);
+    const requiredText = quoteEscape(quoteFormText[quoteFormLang()]?.required || "Required");
+    return `
+      <div class="quote-field">
+        <label for="${id}">${quoteEscape(label)}${required ? ` <span aria-hidden="true">*</span><span class="sr-only"> ${requiredText}</span>` : ""}</label>
+        <select id="${id}" name="${quoteEscape(name)}"${required ? " required" : ""} aria-describedby="${errorId}">
+          ${quoteOptionsMarkup(options, lang, selected)}
+        </select>
+        <p class="quote-field-error" id="${errorId}" data-quote-error="${quoteEscape(name)}" aria-live="polite"></p>
+      </div>`;
+  };
+  const quoteCheckbox = ({ formId, name, label, required = false }) => {
+    const id = `${formId}-${name}`;
+    const errorId = quoteFieldErrorId(formId, name);
+    const requiredText = quoteEscape(quoteFormText[quoteFormLang()]?.required || "Required");
+    return `
+      <div class="quote-check">
+        <input id="${id}" name="${quoteEscape(name)}" type="checkbox"${required ? " required" : ""} aria-describedby="${errorId}">
+        <label for="${id}">${quoteEscape(label)}${required ? ` <span aria-hidden="true">*</span><span class="sr-only"> ${requiredText}</span>` : ""}</label>
+        <p class="quote-field-error" id="${errorId}" data-quote-error="${quoteEscape(name)}" aria-live="polite"></p>
+      </div>`;
+  };
+  const buildQuoteMessage = (payload, lang) => {
+    const text = quoteFormText[lang];
+    const labels = text.messageLabels;
+    const lines = [
+      text.messageGreeting,
+      "",
+      `${labels.name}: ${payload.name}`,
+      `${labels.service}: ${payload.serviceLabel}`,
+    ];
+
+    if (payload.propertyTypeLabel) lines.push(`${labels.propertyType}: ${payload.propertyTypeLabel}`);
+    lines.push(`${labels.location}: ${payload.location}`);
+    lines.push(`${labels.timing}: ${payload.timingLabel}`);
+    if (payload.access) lines.push(`${labels.access}: ${payload.access}`);
+    lines.push(`${labels.description}:`);
+    lines.push(payload.description);
+    lines.push("");
+    lines.push(`${labels.photos}: ${payload.photosReady ? text.photosYes : text.photosNo}`);
+    lines.push(`${labels.page}: ${payload.page}`);
+    return lines.join("\n");
+  };
+  const quotePayloadFromForm = (form, lang) => {
+    const field = (name) => quoteControl(form, name);
+    const service = field("service")?.value || preselectedQuoteService();
+    const propertyType = field("propertyType")?.value || "";
+    const timing = field("timing")?.value || "asap";
+    return {
+      name: quoteCleanLine(field("name")?.value),
+      service,
+      serviceLabel: quoteLabel(quoteServiceOptions, service, lang),
+      propertyType,
+      propertyTypeLabel: propertyType ? quoteLabel(quotePropertyOptions, propertyType, lang) : "",
+      location: quoteCleanLine(field("location")?.value),
+      timing,
+      timingLabel: quoteLabel(quoteTimingOptions, timing, lang),
+      access: quoteCleanLine(field("access")?.value),
+      description: String(field("description")?.value || "").trim(),
+      photosReady: Boolean(field("photosReady")?.checked),
+      page: quoteCanonicalUrl(),
+    };
+  };
+  const setQuoteFieldError = (form, fieldName, message = "") => {
+    const control = quoteControl(form, fieldName);
+    const error = form.querySelector(`[data-quote-error="${fieldName}"]`);
+    if (control) control.setAttribute("aria-invalid", message ? "true" : "false");
+    if (error) error.textContent = message;
+  };
+  const validateQuoteForm = (form, lang) => {
+    const text = quoteFormText[lang];
+    const requiredFields = ["name", "service", "location", "description", "timing"];
+    const invalidFields = [];
+
+    requiredFields.forEach((fieldName) => {
+      const control = quoteControl(form, fieldName);
+      const missing = !String(control?.value || "").trim();
+      setQuoteFieldError(form, fieldName, missing ? text.requiredError : "");
+      if (missing) invalidFields.push(fieldName);
+    });
+
+    const consentMissing = !quoteControl(form, "consent")?.checked;
+    setQuoteFieldError(form, "consent", consentMissing ? text.consentError : "");
+    if (consentMissing) invalidFields.push("consent");
+
+    if (invalidFields.length) {
+      pushConversionEvent("quote_form_validation_error", {
+        ...quoteEventBase(),
+        error_field_count: invalidFields.length,
+      });
+      quoteControl(form, invalidFields[0])?.focus();
+      return false;
+    }
+    return true;
+  };
+  const bindQuoteForm = (form, lang) => {
+    if (form.dataset.quoteBound === "true") return;
+    form.dataset.quoteBound = "true";
+    const text = quoteFormText[lang];
+    const counters = [...form.querySelectorAll("[data-quote-counter]")];
+    const submit = form.querySelector('[data-quote-submit]');
+    const status = form.querySelector("[data-quote-status]");
+    let started = false;
+
+    const trackStart = () => {
+      if (started) return;
+      started = true;
+      pushConversionEvent("quote_form_start", {
+        ...quoteEventBase(),
+        preselected_service: preselectedQuoteService(),
+      });
+    };
+    const updateCounters = () => {
+      counters.forEach((counter) => {
+        const control = quoteControl(form, counter.dataset.quoteCounter);
+        if (!control) return;
+        counter.textContent = text.counter(control.value.length, Number(control.maxLength) || 1000);
+      });
+    };
+
+    ["focusin", "input", "change", "pointerdown", "keydown"].forEach((eventName) => {
+      form.addEventListener(eventName, trackStart, { once: true });
+    });
+    form.addEventListener("input", updateCounters);
+    updateCounters();
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (form.dataset.quoteOpening === "true") return;
+      if (!validateQuoteForm(form, lang)) return;
+
+      const payload = quotePayloadFromForm(form, lang);
+      const message = buildQuoteMessage(payload, lang);
+      const whatsappUrl = `https://wa.me/36206671832?text=${encodeURIComponent(message)}`;
+      pushConversionEvent("quote_whatsapp_open", {
+        ...quoteEventBase(),
+        service_type: payload.service,
+        property_type: payload.propertyType || "not_selected",
+        preferred_timing: payload.timing,
+        photos_ready: payload.photosReady,
+        form_location: "contact_section",
+      });
+
+      form.dataset.quoteOpening = "true";
+      if (submit) submit.disabled = true;
+      if (status) status.textContent = text.statusOpening;
+
+      const opened = window.open(whatsappUrl, "_blank", "noopener");
+      if (!opened) window.location.href = whatsappUrl;
+
+      window.setTimeout(() => {
+        delete form.dataset.quoteOpening;
+        if (submit) submit.disabled = false;
+      }, 1800);
+    });
+  };
+  const renderQuoteForm = (mount, index) => {
+    const lang = quoteFormLang();
+    const routeKey = currentRouteKey();
+    if (mount.dataset.quoteRendered === `${lang}:${routeKey}`) return;
+
+    const text = quoteFormText[lang];
+    const formId = `quote-form-${index + 1}`;
+    const selectedService = preselectedQuoteService();
+    mount.innerHTML = `
+      <form class="whatsapp-quote" data-quote-form novalidate>
+        <div class="quote-form-header">
+          <span class="quote-kicker">${quoteEscape(text.kicker)}</span>
+          <h3>${quoteEscape(text.title)}</h3>
+          <p>${quoteEscape(text.intro)}</p>
+        </div>
+        <div class="quote-form-grid">
+          ${quoteField({ formId, name: "name", label: text.name, required: true, placeholder: text.placeholderName })}
+          ${quoteSelect({ formId, name: "service", label: text.service, options: quoteServiceOptions, lang, selected: selectedService, required: true })}
+          ${quoteField({ formId, name: "location", label: text.location, required: true, placeholder: text.placeholderLocation })}
+          ${quoteSelect({ formId, name: "timing", label: text.timing, options: quoteTimingOptions, lang, selected: "asap", required: true })}
+          ${quoteSelect({ formId, name: "propertyType", label: text.propertyType, options: quotePropertyOptions, lang })}
+          ${quoteTextarea({ formId, name: "access", label: text.access, placeholder: text.placeholderAccess, maxlength: 500 })}
+          ${quoteTextarea({ formId, name: "description", label: text.description, required: true, placeholder: text.placeholderDescription, maxlength: 1000 })}
+        </div>
+        ${quoteCheckbox({ formId, name: "photosReady", label: text.photosReady })}
+        ${quoteCheckbox({ formId, name: "consent", label: text.consent, required: true })}
+        <p class="quote-note">${quoteEscape(text.note)}</p>
+        <button class="btn primary quote-submit" type="submit" data-quote-submit>${quoteEscape(text.submit)}</button>
+        <p class="quote-status" data-quote-status role="status" aria-live="polite" aria-atomic="true"></p>
+      </form>
+    `;
+    mount.dataset.quoteRendered = `${lang}:${routeKey}`;
+    const form = mount.querySelector("[data-quote-form]");
+    if (form) bindQuoteForm(form, lang);
+  };
+  const ensureQuoteFormPlaceholders = () => {
+    document.querySelectorAll("#contact .contact-card").forEach((card) => {
+      if (card.querySelector("[data-whatsapp-quote-form]")) return;
+      const placeholder = document.createElement("div");
+      placeholder.dataset.whatsappQuoteForm = "true";
+      card.insertBefore(placeholder, card.firstChild);
+    });
+  };
+  const bindQuoteForms = () => {
+    ensureQuoteFormPlaceholders();
+    document.querySelectorAll("[data-whatsapp-quote-form]").forEach((mount, index) => renderQuoteForm(mount, index));
+  };
+  let conversionTrackingBound = false;
+  const bindConversionActionTracking = () => {
+    if (conversionTrackingBound) return;
+    conversionTrackingBound = true;
+    document.addEventListener(
+      "click",
+      (event) => {
+        const link = event.target.closest?.("a[href]");
+        if (!link) return;
+        const href = link.href || "";
+        if (href.includes("wa.me/36206671832")) {
+          pushConversionEvent("whatsapp_click", quoteEventBase());
+        } else if (href.startsWith(tel)) {
+          pushConversionEvent("phone_click", quoteEventBase());
+        }
+      },
+      { capture: true }
+    );
+  };
+
   const copyPhoneUsingSelection = () => {
     let input;
     try {
@@ -6835,6 +7250,8 @@
     ensureStandaloneCleaningLink();
     applyStandaloneLanguage();
     enhanceHeaderNavigation();
+    bindConversionActionTracking();
+    bindQuoteForms();
     bindPhoneActions();
     if (document.body?.dataset.page === "garden-maintenance") {
       bindGardenImageGallery();
@@ -7090,6 +7507,8 @@
     applyPageLanguage();
     bindHeroLightbox();
     bindPaintReveal();
+    bindConversionActionTracking();
+    bindQuoteForms();
   };
 
   const scheduleHomeEnhancements = () => {
