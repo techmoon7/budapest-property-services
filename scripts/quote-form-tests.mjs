@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
 
 const serviceOptions = {
   maintenance: { en: "Property maintenance", hu: "Ingatlankarbantartás" },
@@ -100,7 +101,7 @@ const buildMessage = (payload, lang) => {
     `${t.service}: ${serviceOptions[payload.service][lang]}`,
   ];
   if (payload.propertyType) lines.push(`${t.propertyType}: ${propertyOptions[payload.propertyType][lang]}`);
-  lines.push(`${t.location}: ${payload.location}`);
+  if (String(payload.location || "").trim()) lines.push(`${t.location}: ${payload.location.trim()}`);
   lines.push(`${t.timing}: ${timingOptions[payload.timing][lang]}`);
   if (payload.access) lines.push(`${t.access}: ${payload.access}`);
   lines.push(`${t.description}:`);
@@ -112,7 +113,7 @@ const buildMessage = (payload, lang) => {
 };
 
 const validateRequired = (payload) =>
-  ["name", "service", "location", "description", "timing", "consent"].filter((field) => {
+  ["name", "service", "description", "timing", "consent"].filter((field) => {
     if (field === "consent") return !payload.consent;
     return !String(payload[field] || "").trim();
   });
@@ -162,8 +163,11 @@ const hungarianPayload = {
   page: "https://budapestpropertyservices.hu/hu/kertfenntartas-budapest.html?utm=test#contact",
 };
 
-assert.deepEqual(validateRequired({}), ["name", "service", "location", "description", "timing", "consent"]);
+assert.deepEqual(validateRequired({}), ["name", "service", "description", "timing", "consent"]);
 assert.deepEqual(validateRequired(englishPayload), []);
+["Budapest", "Buda", "Pest", "13", "XIII", "belváros", "nem tudom", ""].forEach((location) => {
+  assert.deepEqual(validateRequired({ ...englishPayload, location }), []);
+});
 
 const englishMessage = buildMessage(englishPayload, "en");
 assert.match(englishMessage, /Painting and wall repairs/);
@@ -171,12 +175,18 @@ assert.match(englishMessage, /Page: https:\/\/budapestpropertyservices.hu\/paint
 assert.doesNotMatch(englishMessage, /undefined/);
 assert.doesNotMatch(englishMessage, /utm=/);
 
+const englishWithoutLocation = buildMessage({ ...englishPayload, location: "   " }, "en");
+assert.doesNotMatch(englishWithoutLocation, /Location \/ district:/);
+
 const hungarianMessage = buildMessage(hungarianPayload, "hu");
 assert.match(hungarianMessage, /Üdvözlöm!/);
 assert.match(hungarianMessage, /Kertfenntartás/);
 assert.match(hungarianMessage, /Sövényvágást/);
 assert.doesNotMatch(hungarianMessage, /Ingatlan típusa:/);
 assert.doesNotMatch(hungarianMessage, /Bejutási információ:/);
+
+const hungarianWithoutLocation = buildMessage({ ...hungarianPayload, location: "" }, "hu");
+assert.doesNotMatch(hungarianWithoutLocation, /Helyszín \/ kerület:/);
 
 const encodedUrl = `https://wa.me/36206671832?text=${encodeURIComponent(hungarianMessage)}`;
 assert.equal(decodeURIComponent(new URL(encodedUrl).searchParams.get("text")), hungarianMessage);
@@ -192,6 +202,39 @@ const eventJson = JSON.stringify(eventPayload);
 piiValues.forEach((value) => assert.equal(eventJson.includes(value), false));
 assert.equal(eventPayload.service_type, "painting");
 assert.equal(eventPayload.form_location, "contact_section");
+
+const setFieldError = (state, field, message = "") => {
+  state[field] = { invalid: Boolean(message), message };
+};
+const refreshField = (state, payload, field, showErrors = false) => {
+  const message = validateRequired(payload).includes(field) ? "Please complete this field." : "";
+  if (!message || showErrors) setFieldError(state, field, message);
+};
+const formState = { name: { invalid: true, message: "Please complete this field." } };
+refreshField(formState, { ...englishPayload, name: "Jane Owner" }, "name");
+assert.deepEqual(formState.name, { invalid: false, message: "" });
+
+const scriptSource = fs.readFileSync("script.js", "utf8");
+const stylesSource = fs.readFileSync("styles.css", "utf8");
+const englishHome = fs.readFileSync("index.html", "utf8");
+const hungarianHome = fs.readFileSync("hu/index.html", "utf8");
+
+assert.match(scriptSource, /const assetBuildId = "mobile-ux-hotfix-v1-2026-07-25-01"/);
+assert.doesNotMatch(scriptSource, /insertAdjacentElement\("afterend", languageSelector\)/);
+assert.doesNotMatch(scriptSource, /mobileTools\.insertBefore\(languageSelector/);
+assert.match(scriptSource, /languageSelectorTrigger/);
+assert.match(scriptSource, /openLanguageSelectorFromTrigger/);
+assert.match(stylesSource, /\.language-menu\s*\{[\s\S]*?position:\s*absolute/);
+assert.match(stylesSource, /@media \(max-width: 1120px\)[\s\S]*?\.language-menu\s*\{[\s\S]*?position:\s*fixed/);
+assert.match(stylesSource, /pointer-events:\s*auto;/);
+assert.match(englishHome, /<button class="language-trust-badge" type="button" data-language-selector-trigger/);
+assert.match(hungarianHome, /<button class="language-trust-badge" type="button" data-language-selector-trigger/);
+
+["index.html", "hu/index.html"].forEach((file) => {
+  const html = fs.readFileSync(file, "utf8");
+  assert.equal((html.match(/id="langBtn"/g) || []).length, 1);
+  assert.equal((html.match(/id="languageMenu"/g) || []).length, 1);
+});
 
 let opening = false;
 const guardedSubmit = () => {

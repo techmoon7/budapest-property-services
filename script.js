@@ -11,7 +11,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "whatsapp-quote-v1-2026-07-23-01";
+  const assetBuildId = "mobile-ux-hotfix-v1-2026-07-25-01";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
@@ -3549,7 +3549,7 @@
       intro: "Fill in the essentials and WhatsApp will open with a ready-to-send message. Add your photos there before sending.",
       name: "Name",
       service: "Service type",
-      location: "Budapest location or district",
+      location: "Location or district (optional)",
       description: "Short task description",
       timing: "Preferred timing",
       access: "Access information",
@@ -3578,7 +3578,8 @@
       photosYes: "Photos are ready and will be attached in WhatsApp.",
       photosNo: "No photos yet / I will explain in WhatsApp.",
       placeholderName: "Your name",
-      placeholderLocation: "Example: District V, District XIII, Buda side",
+      placeholderLocation: "Example: District XIII, Buda, city centre - or leave blank",
+      locationHelp: "An exact address is not needed for the first message.",
       placeholderAccess: "Optional: keys, concierge, tenant contact or access window",
       placeholderDescription: "Briefly describe what needs to be checked, repaired, cleaned or prepared.",
     },
@@ -3588,7 +3589,7 @@
       intro: "Töltse ki a legfontosabb adatokat, és a WhatsApp egy előkészített üzenettel nyílik meg. A fotókat küldés előtt ott tudja csatolni.",
       name: "Név",
       service: "Szolgáltatás",
-      location: "Budapesti helyszín vagy kerület",
+      location: "Helyszín vagy kerület (nem kötelező)",
       description: "Rövid feladatleírás",
       timing: "Kívánt időpont",
       access: "Bejutási információ",
@@ -3617,7 +3618,8 @@
       photosYes: "Vannak fotók, és WhatsAppon csatolom őket.",
       photosNo: "Még nincsenek fotók / WhatsAppon pontosítom.",
       placeholderName: "Az Ön neve",
-      placeholderLocation: "Például: V. kerület, XIII. kerület, budai oldal",
+      placeholderLocation: "Például: XIII. kerület, Buda, belváros - vagy hagyd üresen",
+      locationHelp: "Az első üzenethez nem kell pontos címet megadni.",
       placeholderAccess: "Opcionális: kulcs, portaszolgálat, bérlői kapcsolat vagy bejutási idősáv",
       placeholderDescription: "Írja le röviden, mit kell ellenőrizni, javítani, takarítani vagy előkészíteni.",
     },
@@ -3701,21 +3703,15 @@
       header.style.setProperty("--header-height", `${Math.ceil(header.getBoundingClientRect().height)}px`);
       const nav = header.querySelector(".nav");
       const dropdown = header.querySelector("[data-services-dropdown]");
-      const mobileTools = nav?.querySelector("[data-nav-mobile-tools]");
       const actions = header.querySelector(".actions, .header-actions");
       const languageSelector = header.querySelector(".language-selector") || nav?.querySelector(".language-selector");
       const languageHome = header.querySelector("[data-language-home]");
-      const mobilePhone = mobileTools?.querySelector("[data-nav-mobile-phone]");
 
-      if (isCompact && mobileTools && languageSelector) {
-        if (mobilePhone) {
-          mobilePhone.insertAdjacentElement("afterend", languageSelector);
-        } else if (!mobileTools.contains(languageSelector)) {
-          mobileTools.insertBefore(languageSelector, mobileTools.firstChild);
-        }
-      } else if (!isCompact && languageSelector && languageHome && !actions?.contains(languageSelector)) {
+      if (languageSelector && languageHome && !actions?.contains(languageSelector)) {
         actions?.insertBefore(languageSelector, languageHome);
       }
+
+      const mobilePhone = nav?.querySelector("[data-nav-mobile-phone]");
 
       if (mobilePhone) {
         mobilePhone.textContent = directCallViewport() ? phoneActionLabel(documentLang()) : phone;
@@ -3883,15 +3879,23 @@
     syncHeaderNavigationState();
   };
 
-  const closeLanguageSelector = () => {
+  let languageReturnFocus = null;
+  const closeLanguageSelector = ({ restoreFocus = false } = {}) => {
     document.querySelectorAll(".language-selector.open").forEach((selector) => {
       selector.classList.remove("open");
       selector.querySelector("#langBtn")?.setAttribute("aria-expanded", "false");
     });
+    if (restoreFocus && languageReturnFocus?.isConnected) languageReturnFocus.focus({ preventScroll: true });
+    if (restoreFocus) languageReturnFocus = null;
   };
 
-  const openLanguageSelector = (selector) => {
+  const openLanguageSelector = (selector, trigger = null) => {
     if (!selector) return;
+    document.querySelectorAll(".header").forEach((header) => {
+      closeHeaderNavigation(header);
+      closeServicesDropdown(header.querySelector("[data-services-dropdown]"));
+    });
+    languageReturnFocus = trigger || selector.querySelector("#langBtn") || null;
     selector.classList.add("open");
     selector.querySelector("#langBtn")?.setAttribute("aria-expanded", "true");
   };
@@ -3910,6 +3914,7 @@
       existingButton.replaceWith(selector);
       selector.appendChild(existingButton);
       existingButton.classList.add("language-toggle");
+      existingButton.dataset.languageSelectorTrigger = "true";
       existingButton.setAttribute("aria-haspopup", "true");
       existingButton.setAttribute("aria-expanded", "false");
       existingButton.setAttribute("aria-controls", "languageMenu");
@@ -3925,12 +3930,14 @@
     const menu = selector.querySelector(".language-menu");
     button.type = "button";
     button.classList.add("lang", "language-toggle");
+    button.dataset.languageSelectorTrigger = "true";
     button.setAttribute("aria-label", t("openLanguageMenu", lang));
     button.setAttribute("aria-expanded", selector.classList.contains("open") ? "true" : "false");
     menu.setAttribute("aria-label", t("languageBadge", lang));
     const buttonMarkup = `
       <span class="language-current">
-        <span>${activeLanguage.label}</span>
+        <span class="language-current-full">${activeLanguage.label}</span>
+        <span class="language-current-short" aria-hidden="true">${activeLanguage.short}</span>
       </span>
       <span class="language-chevron" aria-hidden="true"></span>`;
     if (button.innerHTML !== buttonMarkup) button.innerHTML = buttonMarkup;
@@ -3972,14 +3979,14 @@
           closeLanguageSelector();
         } else {
           closeLanguageSelector();
-          openLanguageSelector(selector);
+          openLanguageSelector(selector, button);
         }
       });
 
       button.addEventListener("keydown", (event) => {
         if (!["ArrowDown", "ArrowUp"].includes(event.key)) return;
         event.preventDefault();
-        openLanguageSelector(selector);
+        openLanguageSelector(selector, button);
         focusLanguageOption(event.key === "ArrowDown" ? 1 : -1);
       });
 
@@ -3992,8 +3999,7 @@
 
       selector.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
-          closeLanguageSelector();
-          button.focus();
+          closeLanguageSelector({ restoreFocus: true });
           return;
         }
 
@@ -4086,6 +4092,7 @@
     document.querySelectorAll("[aria-label]:not([data-aria-hu])").forEach((node) => translateAttribute(node, "aria-label", lang));
     document.querySelectorAll("img[alt]").forEach((node) => translateAttribute(node, "alt", lang));
     renderLanguageSelector();
+    bindLanguageSelectorTriggers();
     applyTextNodeTranslations(lang);
     enhanceHeaderNavigation();
     bindStickyHeaderShadow();
@@ -6861,9 +6868,44 @@
     }
   });
 
-  document.addEventListener("click", (event) => {
-    if (event.target.closest(".language-selector")) return;
+  let languageTriggerEventsBound = false;
+  const openLanguageSelectorFromTrigger = (trigger) => {
+    const selector = renderLanguageSelector() || document.querySelector(".language-selector");
+    if (!selector) return;
     closeLanguageSelector();
+    openLanguageSelector(selector, trigger);
+    window.setTimeout(() => {
+      selector.querySelector("[data-language-option]")?.focus({ preventScroll: true });
+    }, 0);
+  };
+  const bindLanguageSelectorTriggers = () => {
+    if (languageTriggerEventsBound) return;
+    languageTriggerEventsBound = true;
+
+    document.addEventListener("click", (event) => {
+      const trigger = event.target.closest?.("[data-language-selector-trigger]");
+      if (!trigger || trigger.closest(".language-selector")) return;
+      event.preventDefault();
+      openLanguageSelectorFromTrigger(trigger);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && document.querySelector(".language-selector.open")) {
+        closeLanguageSelector({ restoreFocus: true });
+        return;
+      }
+
+      if (!["Enter", " "].includes(event.key)) return;
+      const trigger = event.target.closest?.("[data-language-selector-trigger]");
+      if (!trigger || trigger.closest(".language-selector")) return;
+      event.preventDefault();
+      openLanguageSelectorFromTrigger(trigger);
+    });
+  };
+
+  document.addEventListener("click", (event) => {
+    if (event.target.closest(".language-selector, [data-language-selector-trigger]")) return;
+    closeLanguageSelector({ restoreFocus: true });
   });
 
   const quoteFormLang = () => (routeLanguage() === "hu" ? "hu" : "en");
@@ -6969,7 +7011,7 @@
     ];
 
     if (payload.propertyTypeLabel) lines.push(`${labels.propertyType}: ${payload.propertyTypeLabel}`);
-    lines.push(`${labels.location}: ${payload.location}`);
+    if (payload.location) lines.push(`${labels.location}: ${payload.location}`);
     lines.push(`${labels.timing}: ${payload.timingLabel}`);
     if (payload.access) lines.push(`${labels.access}: ${payload.access}`);
     lines.push(`${labels.description}:`);
@@ -7005,21 +7047,29 @@
     if (control) control.setAttribute("aria-invalid", message ? "true" : "false");
     if (error) error.textContent = message;
   };
-  const validateQuoteForm = (form, lang) => {
+  const quoteRequiredFields = ["name", "service", "description", "timing"];
+  const quoteFieldValidationMessage = (form, fieldName, lang) => {
     const text = quoteFormText[lang];
-    const requiredFields = ["name", "service", "location", "description", "timing"];
+    if (quoteRequiredFields.includes(fieldName)) {
+      return String(quoteControl(form, fieldName)?.value || "").trim() ? "" : text.requiredError;
+    }
+    if (fieldName === "consent") return quoteControl(form, "consent")?.checked ? "" : text.consentError;
+    return "";
+  };
+  const refreshQuoteFieldValidity = (form, fieldName, lang, showErrors = false) => {
+    const message = quoteFieldValidationMessage(form, fieldName, lang);
+    if (!message || showErrors) setQuoteFieldError(form, fieldName, message);
+    return !message;
+  };
+  const validateQuoteForm = (form, lang) => {
     const invalidFields = [];
 
-    requiredFields.forEach((fieldName) => {
-      const control = quoteControl(form, fieldName);
-      const missing = !String(control?.value || "").trim();
-      setQuoteFieldError(form, fieldName, missing ? text.requiredError : "");
-      if (missing) invalidFields.push(fieldName);
+    quoteRequiredFields.forEach((fieldName) => {
+      if (!refreshQuoteFieldValidity(form, fieldName, lang, true)) invalidFields.push(fieldName);
     });
 
-    const consentMissing = !quoteControl(form, "consent")?.checked;
-    setQuoteFieldError(form, "consent", consentMissing ? text.consentError : "");
-    if (consentMissing) invalidFields.push("consent");
+    setQuoteFieldError(form, "location", "");
+    if (!refreshQuoteFieldValidity(form, "consent", lang, true)) invalidFields.push("consent");
 
     if (invalidFields.length) {
       pushConversionEvent("quote_form_validation_error", {
@@ -7055,17 +7105,26 @@
         counter.textContent = text.counter(control.value.length, Number(control.maxLength) || 1000);
       });
     };
+    const updateFieldValidity = (event) => {
+      const field = event.target?.closest?.("[name]");
+      if (!field || !form.contains(field)) return;
+      refreshQuoteFieldValidity(form, field.name, lang, form.dataset.quoteSubmitted === "true");
+    };
 
     ["focusin", "input", "change", "pointerdown", "keydown"].forEach((eventName) => {
       form.addEventListener(eventName, trackStart, { once: true });
     });
     form.addEventListener("input", updateCounters);
+    form.addEventListener("input", updateFieldValidity);
+    form.addEventListener("change", updateFieldValidity);
     updateCounters();
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       if (form.dataset.quoteOpening === "true") return;
+      form.dataset.quoteSubmitted = "true";
       if (!validateQuoteForm(form, lang)) return;
+      delete form.dataset.quoteSubmitted;
 
       const payload = quotePayloadFromForm(form, lang);
       const message = buildQuoteMessage(payload, lang);
@@ -7110,7 +7169,7 @@
         <div class="quote-form-grid">
           ${quoteField({ formId, name: "name", label: text.name, required: true, placeholder: text.placeholderName })}
           ${quoteSelect({ formId, name: "service", label: text.service, options: quoteServiceOptions, lang, selected: selectedService, required: true })}
-          ${quoteField({ formId, name: "location", label: text.location, required: true, placeholder: text.placeholderLocation })}
+          ${quoteField({ formId, name: "location", label: text.location, placeholder: text.placeholderLocation, help: text.locationHelp })}
           ${quoteSelect({ formId, name: "timing", label: text.timing, options: quoteTimingOptions, lang, selected: "asap", required: true })}
           ${quoteSelect({ formId, name: "propertyType", label: text.propertyType, options: quotePropertyOptions, lang })}
           ${quoteTextarea({ formId, name: "access", label: text.access, placeholder: text.placeholderAccess, maxlength: 500 })}

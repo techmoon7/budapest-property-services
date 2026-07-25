@@ -134,11 +134,11 @@
   };
   const languageBadgeText = () => window.BPS_I18N?.t?.("languageBadge", state.lang) || languageBadgeFallback[state.lang] || languageBadgeFallback.en;
   const languageTrustBadge = () => `
-    <div class="language-trust-badge" aria-label="${languageBadgeText()}: ${languageNames}">
+    <button class="language-trust-badge" type="button" data-language-selector-trigger aria-label="${languageBadgeText()}: ${languageNames}">
       <span class="language-badge-icon" aria-hidden="true"><span class="language-badge-globe"></span><span class="language-badge-count">5</span></span>
       <span class="language-badge-copy"><strong>${languageBadgeText()}</strong><small>${languageNames}</small></span>
       <span class="language-badge-flags" aria-hidden="true"><span class="flag-icon flag-hu" aria-hidden="true"></span><span class="flag-icon flag-en" aria-hidden="true"></span><span class="flag-icon flag-de" aria-hidden="true"></span><span class="flag-icon flag-uk" aria-hidden="true"></span><span class="flag-icon flag-zh" aria-hidden="true"></span></span>
-    </div>`;
+    </button>`;
   const paintHintMarkup = () => `
     <span class="paint-reveal-hint" aria-hidden="true">
       <span data-lang-panel="hu">Fesd át a falat az ujjaddal</span>

@@ -141,6 +141,23 @@ summary:focus-visible {
     linear-gradient(135deg, rgba(255, 252, 246, 0.94), rgba(255, 250, 242, 0.82));
   box-shadow: 0 18px 46px rgba(25, 38, 31, 0.12);
   color: var(--green2);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  touch-action: manipulation;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.language-trust-badge:hover,
+.language-trust-badge:focus-visible {
+  border-color: rgba(155, 93, 52, 0.34);
+  box-shadow: 0 22px 56px rgba(25, 38, 31, 0.16);
+  transform: translateY(-1px);
+}
+
+.language-trust-badge:focus-visible {
+  outline: 3px solid rgba(193, 132, 75, 0.52);
+  outline-offset: 3px;
 }
 
 .language-badge-icon {
@@ -2414,6 +2431,10 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
   line-height: 1.08;
 }
 
+.language-current-short {
+  display: none;
+}
+
 .language-current > span,
 .language-option-copy strong {
   overflow: hidden;
@@ -2606,19 +2627,62 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
     order: 1;
     flex: 1 1 auto;
     min-width: 0;
-    max-width: calc(100% - 74px);
+    max-width: calc(100% - 136px);
   }
 
   .header[data-nav-enhanced="true"] .actions,
   .header[data-nav-enhanced="true"] .header-actions {
+    display: inline-flex;
+    order: 2;
+    flex: 0 0 auto;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .header[data-nav-enhanced="true"] .actions .phone,
+  .header[data-nav-enhanced="true"] .header-actions > .btn {
     display: none;
   }
 
+  .header[data-nav-enhanced="true"] .actions .language-selector,
+  .header[data-nav-enhanced="true"] .header-actions .language-selector {
+    display: inline-flex;
+  }
+
   .header[data-nav-enhanced="true"] .nav-toggle {
-    order: 2;
+    order: 3;
     display: inline-flex;
     flex: 0 0 auto;
-    margin-left: auto;
+    margin-left: 0;
+  }
+
+  .header[data-nav-enhanced="true"] .language-toggle {
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+    border-radius: 15px;
+  }
+
+  .header[data-nav-enhanced="true"] .language-current-full {
+    display: none;
+  }
+
+  .header[data-nav-enhanced="true"] .language-current-short {
+    display: block;
+    max-width: none;
+    font-size: 0.9rem;
+    font-weight: 950;
+  }
+
+  .header[data-nav-enhanced="true"] .language-chevron {
+    position: absolute;
+    right: 5px;
+    bottom: 6px;
+    width: 6px;
+    height: 6px;
   }
 
   .header[data-nav-enhanced="true"] .nav {
@@ -2735,58 +2799,39 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
     border-top: 1px solid rgba(84, 75, 61, 0.14);
   }
 
-  .nav-mobile-tools .language-selector {
-    display: grid;
-    width: 100%;
-    min-width: 0;
-    order: 2;
-  }
-
   .nav-mobile-tools .nav-contact-btn {
     order: 1;
   }
 
-  .nav-mobile-tools .language-toggle,
   .nav-mobile-tools .nav-contact-btn {
     width: 100%;
     min-height: 52px;
     justify-content: space-between;
   }
 
-  .nav-mobile-tools .language-menu {
-    position: static;
-    width: 100%;
+  .language-menu {
+    position: fixed;
+    top: calc(var(--header-height, 76px) + 10px);
+    right: 12px;
+    left: 12px;
+    z-index: 160;
+    width: auto;
     min-width: 0;
-    max-height: min(42vh, 310px);
+    max-height: min(72vh, 430px);
     overflow-y: auto;
     overscroll-behavior: contain;
-    margin-top: 8px;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-6px);
-    visibility: hidden;
+    transform-origin: top center;
+    touch-action: manipulation;
   }
 
-  .nav-mobile-tools .language-selector.open .language-menu {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-    visibility: visible;
-  }
-
-  .nav-mobile-tools .language-menu button {
-    min-height: 54px;
+  .language-menu button {
+    min-height: 56px;
   }
 }
 
 @media (max-width: 700px) {
   .header[data-nav-enhanced="true"] .brand {
-    max-width: calc(100% - 62px);
-  }
-
-  .nav-mobile-tools .language-current,
-  .nav-mobile-tools .language-option-copy {
-    display: grid;
+    max-width: calc(100% - 112px);
   }
 }
 
@@ -2895,6 +2940,17 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
 .language-menu button:focus-visible,
 .language-menu button[aria-checked="true"] {
   transform: none;
+}
+
+@media (max-width: 1120px) {
+  .header[data-nav-enhanced="true"] .language-menu,
+  .language-menu {
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: calc(100vw - 24px);
+    min-width: 0;
+  }
 }
 
 body:not(.service-page) .hero-copy {
