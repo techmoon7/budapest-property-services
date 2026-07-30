@@ -743,9 +743,10 @@ details[open] .disclosure-link {
 }
 
 .quote-check {
-  grid-template-columns: 20px minmax(0, 1fr);
+  grid-template-columns: 22px minmax(0, 1fr);
   align-items: start;
   column-gap: 10px;
+  min-height: 48px;
   padding: 11px 12px;
   border: 1px solid rgba(45, 55, 47, 0.11);
   border-radius: 14px;
@@ -753,10 +754,14 @@ details[open] .disclosure-link {
 }
 
 .quote-check input {
-  width: 18px;
-  height: 18px;
-  margin: 2px 0 0;
+  width: 22px;
+  height: 22px;
+  margin: 0;
   accent-color: var(--green);
+}
+
+.quote-check label {
+  cursor: pointer;
 }
 
 .quote-check .quote-field-error {
@@ -2856,6 +2861,27 @@ body[data-page="cleaning-services"] .service-hero-visual > img {
     column-gap: 8px;
   }
 
+  body:not(.service-page) .header[data-nav-enhanced="true"] .brand {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: calc(100% - 104px);
+    gap: 10px;
+  }
+
+  body:not(.service-page) .header[data-nav-enhanced="true"] .brand > span:not(.logo) {
+    min-width: 0;
+  }
+
+  body:not(.service-page) .header[data-nav-enhanced="true"] .brand strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body:not(.service-page) .header[data-nav-enhanced="true"] .brand small {
+    display: none;
+  }
+
   .header[data-nav-enhanced="true"] .brand strong {
     font-size: 14px;
   }
@@ -3212,6 +3238,13 @@ body:not(.service-page) .hero .lead {
   .problem-actions .text-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .footer .text-btn {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding-block: 8px;
   }
 }
 
@@ -4015,6 +4048,49 @@ body:not(.service-page) .project-card.rich.featured .body {
 
   .transformation-copy {
     padding: 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-proof-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+    padding-bottom: 0;
+    scroll-snap-type: none;
+  }
+
+  .hero-proof-grid li {
+    min-width: 0;
+    width: 100%;
+    white-space: normal;
+  }
+
+  body:not(.service-page) .stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+
+  body:not(.service-page) .stat {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .section-head {
+    min-width: 0;
+  }
+
+  .section-head h2,
+  .section-head p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .section-index {
+    display: block;
   }
 }
 

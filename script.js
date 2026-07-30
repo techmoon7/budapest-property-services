@@ -11,7 +11,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "mobile-ux-hotfix-v1-2026-07-25-01";
+  const assetBuildId = "mobile-stabilization-v1-2026-07-30-01";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
@@ -7365,8 +7365,8 @@
       const source = situationImages[index];
       if (!source) return;
 
-      const absolute = new URL(source, document.baseURI).href;
-      if (image.src !== absolute) image.src = source;
+      const absolute = new URL(source, scriptBaseUrl).href;
+      if (image.src !== absolute) image.src = absolute;
       image.removeAttribute("srcset");
     });
   };
