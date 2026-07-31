@@ -11,7 +11,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "mobile-nav-v1-2026-07-31-04";
+  const assetBuildId = "paint-showcase-v1-2026-07-31-01";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
@@ -4416,6 +4416,10 @@
         effect: "color",
         icon: "roller",
         preview: false,
+        material: {
+          webp: "assets/paint-showcase-galaxy-night-mural.webp",
+          fallback: "assets/paint-showcase-galaxy-night-mural.jpg",
+        },
         hint: {
           hu: "Fesd át a falat az ujjaddal",
           en: "Paint the wall with your finger",
@@ -4433,6 +4437,10 @@
         effect: "color",
         icon: "roller",
         preview: false,
+        material: {
+          webp: "assets/paint-showcase-galaxy-night-mural.webp",
+          fallback: "assets/paint-showcase-galaxy-night-mural.jpg",
+        },
         hint: {
           hu: "Fesd át a falat az ujjaddal",
           en: "Paint the wall with your finger",
@@ -4630,6 +4638,38 @@
       root.style.setProperty("--paint-reveal-accent", root.dataset.paintAccent || activePalette.accent);
       root.dataset.paintMode = paintMode;
       root.dataset.paintIcon = activePalette.icon;
+      const materialSources = activePalette.material || null;
+      let materialImage = null;
+      let materialImageReady = false;
+      let materialImageFallbackTried = false;
+      let refreshMaterialAfterLoad = () => {};
+      const loadMaterialImage = (source) => {
+        if (!source) return;
+        materialImageReady = false;
+        materialImage = new Image();
+        materialImage.decoding = "async";
+        if ("fetchPriority" in materialImage) materialImage.fetchPriority = "low";
+        materialImage.onload = () => {
+          materialImageReady = true;
+          if (root.classList.contains("paint-reveal-used")) refreshMaterialAfterLoad();
+          paintLog("paint-material-image-loaded", {
+            source,
+            width: materialImage.naturalWidth || 0,
+            height: materialImage.naturalHeight || 0,
+          });
+        };
+        materialImage.onerror = () => {
+          paintLog("paint-material-image-error", { source });
+          if (!materialImageFallbackTried && materialSources?.fallback && source !== materialSources.fallback) {
+            materialImageFallbackTried = true;
+            loadMaterialImage(materialSources.fallback);
+          }
+        };
+        materialImage.src = new URL(source, scriptBaseUrl).href;
+      };
+      if (materialSources?.webp || materialSources?.fallback) {
+        loadMaterialImage(materialSources.webp || materialSources.fallback);
+      }
       const clickSuppressionTargets = [
         root,
         root.closest("[data-hero-lightbox]"),
@@ -5149,6 +5189,20 @@
         context.drawImage(image, cover.x, cover.y, cover.width, cover.height);
       };
 
+      const drawCoverSourceTo = (context, source) => {
+        const cover = getImagePaintRect();
+        const sourceWidth = source.naturalWidth || source.videoWidth || source.width || 0;
+        const sourceHeight = source.naturalHeight || source.videoHeight || source.height || 0;
+        if (!sourceWidth || !sourceHeight || !cover.width || !cover.height) return false;
+        const scale = Math.max(cover.width / sourceWidth, cover.height / sourceHeight);
+        const cropWidth = cover.width / scale;
+        const cropHeight = cover.height / scale;
+        const cropX = (sourceWidth - cropWidth) / 2;
+        const cropY = (sourceHeight - cropHeight) / 2;
+        context.drawImage(source, cropX, cropY, cropWidth, cropHeight, cover.x, cover.y, cover.width, cover.height);
+        return true;
+      };
+
       const buildWallMask = () => {
         wallMaskCtx.clearRect(0, 0, cssWidth, cssHeight);
         wallMaskCtx.save();
@@ -5175,30 +5229,46 @@
           });
         }
         layerCtx.clearRect(0, 0, cssWidth, cssHeight);
-        drawImageTo(layerCtx);
 
-        const strength = clamp(paintOpacity, activePalette.effect === "color" ? 0.92 : 0.58, 0.98);
-        layerCtx.save();
-        layerCtx.globalCompositeOperation = "source-atop";
-        layerCtx.globalAlpha = strength;
-        layerCtx.fillStyle = paintColor;
-        layerCtx.fillRect(0, 0, cssWidth, cssHeight);
-
-        if (activePalette.effect === "color") {
+        if (materialImageReady && materialImage && drawCoverSourceTo(layerCtx, materialImage)) {
+          layerCtx.save();
           layerCtx.globalCompositeOperation = "multiply";
-          layerCtx.globalAlpha = 0.16;
+          layerCtx.globalAlpha = 0.18;
           drawImageTo(layerCtx);
           layerCtx.globalCompositeOperation = "screen";
-          layerCtx.globalAlpha = 0.06;
-          layerCtx.fillStyle = paintHighlightColor;
-          layerCtx.fillRect(0, 0, cssWidth, cssHeight);
-        } else {
+          layerCtx.globalAlpha = 0.08;
+          drawImageTo(layerCtx);
           layerCtx.globalCompositeOperation = "source-atop";
-          layerCtx.globalAlpha = 0.12;
-          layerCtx.fillStyle = paintHighlightColor;
+          layerCtx.globalAlpha = 0.08;
+          layerCtx.fillStyle = "rgba(12, 23, 49, 0.7)";
           layerCtx.fillRect(0, 0, cssWidth, cssHeight);
+          layerCtx.restore();
+        } else {
+          drawImageTo(layerCtx);
+
+          const strength = clamp(paintOpacity, activePalette.effect === "color" ? 0.92 : 0.58, 0.98);
+          layerCtx.save();
+          layerCtx.globalCompositeOperation = "source-atop";
+          layerCtx.globalAlpha = strength;
+          layerCtx.fillStyle = paintColor;
+          layerCtx.fillRect(0, 0, cssWidth, cssHeight);
+
+          if (activePalette.effect === "color") {
+            layerCtx.globalCompositeOperation = "multiply";
+            layerCtx.globalAlpha = 0.16;
+            drawImageTo(layerCtx);
+            layerCtx.globalCompositeOperation = "screen";
+            layerCtx.globalAlpha = 0.06;
+            layerCtx.fillStyle = paintHighlightColor;
+            layerCtx.fillRect(0, 0, cssWidth, cssHeight);
+          } else {
+            layerCtx.globalCompositeOperation = "source-atop";
+            layerCtx.globalAlpha = 0.12;
+            layerCtx.fillStyle = paintHighlightColor;
+            layerCtx.fillRect(0, 0, cssWidth, cssHeight);
+          }
+          layerCtx.restore();
         }
-        layerCtx.restore();
         layerCtx.globalCompositeOperation = "source-over";
         layerCtx.globalAlpha = 1;
         paintMaterialReady = true;
@@ -5241,6 +5311,12 @@
       const requestRender = () => {
         if (renderFrame) return;
         renderFrame = window.requestAnimationFrame(renderPaintedWall);
+      };
+
+      refreshMaterialAfterLoad = () => {
+        paintMaterialReady = false;
+        buildPaintMaterial();
+        requestRender();
       };
 
       const randomUnit = (seed) => {
