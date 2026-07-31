@@ -11,7 +11,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "mobile-stabilization-v1-2026-07-30-01";
+  const assetBuildId = "mobile-nav-v1-2026-07-31-04";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
@@ -635,6 +635,13 @@
       de: "Menü öffnen",
       uk: "Відкрити меню",
       "zh-CN": "打开菜单",
+    },
+    menuClose: {
+      hu: "Menü bezárása",
+      en: "Close menu",
+      de: "Menü schließen",
+      uk: "Закрити меню",
+      "zh-CN": "关闭菜单",
     },
     services: {
       hu: "Szolgáltatások",
@@ -3685,10 +3692,48 @@
     }
   };
 
-  const closeHeaderNavigation = (header) => {
+  const mobileNavigationQuery = "(max-width: 1120px)";
+  let mobileNavigationReturnFocus = null;
+
+  const compactNavigationActive = () => window.matchMedia(mobileNavigationQuery).matches;
+
+  const setMobileNavigationLock = (locked) => {
+    document.documentElement.classList.toggle("nav-menu-open", locked);
+    document.body.classList.toggle("nav-menu-open", locked);
+  };
+
+  const visibleFocusItems = (container) =>
+    [
+      ...container.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      ),
+    ].filter((item) => {
+      if (item.hidden || item.getAttribute("aria-hidden") === "true") return false;
+      const style = window.getComputedStyle(item);
+      if (style.display === "none" || style.visibility === "hidden") return false;
+      const rect = item.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+
+  const closeHeaderNavigation = (header, { restoreFocus = false } = {}) => {
     if (!header) return;
     header.classList.remove("nav-open");
     header.querySelector(".nav-toggle")?.setAttribute("aria-expanded", "false");
+    setMobileNavigationLock(false);
+    if (restoreFocus && mobileNavigationReturnFocus?.isConnected) {
+      mobileNavigationReturnFocus.focus({ preventScroll: true });
+    }
+    if (restoreFocus) mobileNavigationReturnFocus = null;
+  };
+
+  const openHeaderNavigation = (header, opener = null) => {
+    if (!header) return;
+    header.classList.add("nav-open");
+    header.querySelector(".nav-toggle")?.setAttribute("aria-expanded", "true");
+    setMobileNavigationLock(compactNavigationActive());
+    closeLanguageSelector();
+    mobileNavigationReturnFocus = opener || header.querySelector(".nav-toggle");
+    requestAnimationFrame(() => header.querySelector("[data-mobile-nav-close]")?.focus({ preventScroll: true }));
   };
 
   const closeServicesDropdown = (dropdown) => {
@@ -3698,7 +3743,7 @@
   };
 
   const syncHeaderNavigationState = () => {
-    const isCompact = window.matchMedia("(max-width: 1120px)").matches;
+    const isCompact = compactNavigationActive();
     document.querySelectorAll(".header[data-nav-enhanced='true']").forEach((header) => {
       header.style.setProperty("--header-height", `${Math.ceil(header.getBoundingClientRect().height)}px`);
       const nav = header.querySelector(".nav");
@@ -3720,7 +3765,10 @@
 
       dropdown
         ?.querySelector(".nav-dropdown-toggle")
-        ?.setAttribute("aria-expanded", String(isCompact || dropdown.classList.contains("open")));
+        ?.setAttribute(
+          "aria-expanded",
+          String(isCompact ? !dropdown.classList.contains("mobile-collapsed") : dropdown.classList.contains("open"))
+        );
       if (!isCompact) closeHeaderNavigation(header);
       if (isCompact) dropdown?.classList.remove("open");
     });
@@ -3750,6 +3798,22 @@
     }
     menuToggle.setAttribute("aria-label", t("menuOpen", lang));
 
+    let mobileChrome = nav.querySelector("[data-mobile-nav-chrome]");
+    if (!mobileChrome) {
+      mobileChrome = document.createElement("div");
+      mobileChrome.className = "mobile-nav-chrome";
+      mobileChrome.dataset.mobileNavChrome = "true";
+      mobileChrome.innerHTML = `
+        <p class="mobile-nav-title"></p>
+        <button class="mobile-nav-close" type="button" data-mobile-nav-close></button>
+      `;
+      nav.insertBefore(mobileChrome, nav.firstChild);
+    }
+    mobileChrome.querySelector(".mobile-nav-title").textContent = t("services", lang);
+    const closeButton = mobileChrome.querySelector("[data-mobile-nav-close]");
+    closeButton.textContent = t("menuClose", lang);
+    closeButton.setAttribute("aria-label", t("menuClose", lang));
+
     let dropdown = nav.querySelector("[data-services-dropdown]");
     if (!dropdown) {
       dropdown = document.createElement("div");
@@ -3759,7 +3823,7 @@
         <button class="nav-dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false"></button>
         <div class="nav-dropdown-menu" role="menu"></div>
       `;
-      nav.insertBefore(dropdown, nav.firstChild);
+      nav.insertBefore(dropdown, mobileChrome.nextSibling);
     }
 
     const dropdownToggle = dropdown.querySelector(".nav-dropdown-toggle");
@@ -3774,6 +3838,40 @@
       mobileTools.dataset.navMobileTools = "true";
       mobileTools.innerHTML = `<a class="btn primary nav-contact-btn" href="${tel}" data-phone-action data-phone-label data-nav-mobile-phone>${phoneActionLabel(lang)}</a>`;
       nav.appendChild(mobileTools);
+    }
+
+    let mobileLanguage = nav.querySelector("[data-nav-mobile-language]");
+    if (!mobileLanguage) {
+      mobileLanguage = document.createElement("div");
+      mobileLanguage.className = "nav-mobile-language";
+      mobileLanguage.dataset.navMobileLanguage = "true";
+      nav.insertBefore(mobileLanguage, mobileTools);
+    }
+    const mobileLanguageMarkup = `
+      <div class="nav-mobile-section-head">
+        <span>${t("languageLabel", lang)}</span>
+        <small>${t("languageSelectorHint", lang)}</small>
+      </div>
+      <div class="nav-mobile-language-list" role="group" aria-label="${t("openLanguageMenu", lang)}">
+        ${supportedLanguages
+          .map(
+            (language) => `
+              <button class="nav-mobile-language-option" type="button" data-mobile-language-option="${language.code}" aria-pressed="${String(
+                language.code === lang
+              )}">
+                <span class="flag-icon flag-${language.flag}" aria-hidden="true"></span>
+                <span class="language-option-copy"><strong>${language.label}</strong><small>${language.complete}</small></span>
+              </button>`
+          )
+          .join("")}
+      </div>`;
+    if (mobileLanguage.dataset.renderedLang !== lang) {
+      mobileLanguage.innerHTML = mobileLanguageMarkup;
+      mobileLanguage.dataset.renderedLang = lang;
+    } else {
+      mobileLanguage.querySelectorAll("[data-mobile-language-option]").forEach((option) => {
+        option.setAttribute("aria-pressed", String(option.dataset.mobileLanguageOption === lang));
+      });
     }
 
     const actions = header.querySelector(".actions, .header-actions");
@@ -3846,15 +3944,34 @@
       header.dataset.navEventsBound = "true";
 
       menuToggle.addEventListener("click", () => {
-        const isOpen = header.classList.toggle("nav-open");
-        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        if (header.classList.contains("nav-open")) {
+          closeHeaderNavigation(header);
+        } else {
+          openHeaderNavigation(header, menuToggle);
+        }
       });
 
       dropdownToggle.addEventListener("click", (event) => {
-        if (window.matchMedia("(max-width: 1120px)").matches) return;
+        if (compactNavigationActive()) {
+          event.preventDefault();
+          const isCollapsed = dropdown.classList.toggle("mobile-collapsed");
+          dropdownToggle.setAttribute("aria-expanded", String(!isCollapsed));
+          return;
+        }
         event.preventDefault();
         const isOpen = dropdown.classList.toggle("open");
         dropdownToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      closeButton.addEventListener("click", () => {
+        closeHeaderNavigation(header, { restoreFocus: true });
+      });
+
+      mobileLanguage.addEventListener("click", (event) => {
+        const option = event.target.closest("[data-mobile-language-option]");
+        if (!option) return;
+        event.preventDefault();
+        setLanguage(option.dataset.mobileLanguageOption);
       });
 
       nav.addEventListener("click", (event) => {
@@ -3864,16 +3981,34 @@
       });
 
       document.addEventListener("click", (event) => {
-        if (header.contains(event.target)) return;
+        if (header.contains(event.target) || event.target.closest?.(".nav-toggle, .nav")) return;
         closeHeaderNavigation(header);
         closeServicesDropdown(dropdown);
       });
 
       document.addEventListener("keydown", (event) => {
         if (event.key !== "Escape") return;
-        closeHeaderNavigation(header);
+        closeHeaderNavigation(header, { restoreFocus: true });
         closeServicesDropdown(dropdown);
       });
+
+      header.addEventListener("keydown", (event) => {
+        if (event.key !== "Tab" || !header.classList.contains("nav-open") || !compactNavigationActive()) return;
+        const focusItems = visibleFocusItems(header);
+        if (!focusItems.length) return;
+        const first = focusItems[0];
+        const last = focusItems[focusItems.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
+
+      window.addEventListener("resize", syncHeaderNavigationState, { passive: true });
+      window.addEventListener("orientationchange", syncHeaderNavigationState, { passive: true });
     }
 
     syncHeaderNavigationState();
@@ -4037,7 +4172,7 @@
       acceptNode(node) {
         const parent = node.parentElement;
         if (!parent) return NodeFilter.FILTER_REJECT;
-        if (parent.closest("script, style, .language-selector, [data-lang-panel]")) return NodeFilter.FILTER_REJECT;
+        if (parent.closest("script, style, .language-selector, .nav-mobile-language, [data-lang-panel]")) return NodeFilter.FILTER_REJECT;
         if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
         return NodeFilter.FILTER_ACCEPT;
       },
