@@ -404,11 +404,15 @@ details[open] .disclosure-link {
   position: relative;
   z-index: 6;
   isolation: isolate;
+  min-height: 420px;
+  overflow: hidden;
   border: 1px solid rgba(255, 250, 242, 0.2);
+  border-radius: 24px;
   background: #0f1712;
   cursor: ew-resize;
   outline-offset: 5px;
   touch-action: pan-y;
+  --split: 50%;
   animation: compare-stage-in 280ms ease both;
   transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
@@ -450,18 +454,30 @@ details[open] .disclosure-link {
 
 .compare .before,
 .compare .after {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   pointer-events: none;
+  user-select: none;
 }
 
 .compare .before {
+  z-index: 2;
+  clip-path: inset(0 calc(100% - var(--split)) 0 0);
   filter: saturate(0.94) contrast(0.98);
 }
 
 .compare .after {
+  z-index: 1;
   filter: saturate(1.03) contrast(1.02);
 }
 
 .compare .label {
+  position: absolute;
+  top: 16px;
   z-index: 4;
   display: inline-flex;
   align-items: center;
@@ -475,6 +491,14 @@ details[open] .disclosure-link {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   transition: opacity 180ms ease, transform 180ms ease, background 180ms ease;
+}
+
+.compare .label.left {
+  left: 16px;
+}
+
+.compare .label.right {
+  right: 16px;
 }
 
 .compare .label::before {
@@ -492,6 +516,11 @@ details[open] .disclosure-link {
 }
 
 .handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--split);
+  transform: translateX(-50%);
   z-index: 5;
   width: 2px;
   background: linear-gradient(180deg, rgba(255, 250, 242, 0.24), var(--card), rgba(255, 250, 242, 0.24));
@@ -499,8 +528,14 @@ details[open] .disclosure-link {
 }
 
 .handle::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
   width: 54px;
   height: 54px;
+  border-radius: 999px;
   border: 1px solid rgba(255, 250, 242, 0.78);
   background:
     linear-gradient(145deg, rgba(255, 250, 242, 0.98), rgba(237, 201, 130, 0.92));
@@ -510,6 +545,7 @@ details[open] .disclosure-link {
   font-family: Georgia, Cambria, "Times New Roman", serif;
   font-size: 24px;
   letter-spacing: -0.08em;
+  transform: translate(-50%, -50%);
 }
 
 .compare:hover .handle::after,
