@@ -219,7 +219,7 @@ const stylesSource = fs.readFileSync("styles.css", "utf8");
 const englishHome = fs.readFileSync("index.html", "utf8");
 const hungarianHome = fs.readFileSync("hu/index.html", "utf8");
 
-assert.match(scriptSource, /const assetBuildId = "mobile-nav-v1-2026-07-31-04"/);
+assert.match(scriptSource, /const assetBuildId = "image-recovery-v1-2026-08-04-01"/);
 assert.doesNotMatch(scriptSource, /insertAdjacentElement\("afterend", languageSelector\)/);
 assert.doesNotMatch(scriptSource, /mobileTools\.insertBefore\(languageSelector/);
 assert.match(scriptSource, /languageSelectorTrigger/);

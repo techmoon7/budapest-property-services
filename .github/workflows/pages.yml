@@ -52,9 +52,9 @@ jobs:
           cp -R hu _site/hu
           test "$(head -n 1 _site/index.html)" = "<!DOCTYPE html>"
           grep -F '<link rel="stylesheet" href="styles.css?v=mobile-nav-v1-2026-07-31-04">' _site/index.html
-          grep -F '<script src="script.js?v=language-gate-v1-2026-08-04-01" defer></script>' _site/index.html
+          grep -F '<script src="script.js?v=image-recovery-v1-2026-08-04-01" defer></script>' _site/index.html
           grep -F '<link rel="stylesheet" href="../styles.css?v=mobile-nav-v1-2026-07-31-04">' _site/hu/index.html
-          grep -F '<script src="../script.js?v=language-gate-v1-2026-08-04-01" defer></script>' _site/hu/index.html
+          grep -F '<script src="../script.js?v=image-recovery-v1-2026-08-04-01" defer></script>' _site/hu/index.html
           test -s _site/property-maintenance-budapest.html
           test -s _site/handyman-services-budapest.html
           test -s _site/painting-wall-repairs-budapest.html
