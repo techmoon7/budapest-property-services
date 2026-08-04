@@ -3935,10 +3935,44 @@ body:not(.service-page) .project-card.rich {
   border-radius: 30px;
 }
 
+body:not(.service-page) .project-card.rich .case-comparison {
+  display: grid;
+  min-width: 0;
+}
+
+body:not(.service-page) .project-card.rich .compare-card {
+  width: 100%;
+  min-height: clamp(300px, 34vw, 420px);
+  border: 0;
+  border-radius: 30px 30px 0 0;
+  box-shadow: none;
+}
+
+body:not(.service-page) .project-card.rich .compare-hint {
+  margin: 10px clamp(18px, 2vw, 24px) 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
 body:not(.service-page) .project-card.rich.featured {
   grid-column: span 12;
   display: grid;
   grid-template-columns: minmax(0, 1.16fr) minmax(340px, 0.84fr);
+}
+
+body:not(.service-page) .project-card.rich.featured .case-comparison {
+  min-height: 100%;
+}
+
+body:not(.service-page) .project-card.rich.featured .compare-card {
+  height: 100%;
+  min-height: 460px;
+  border-radius: 30px 0 0 30px;
+}
+
+body:not(.service-page) .project-card.rich.featured .compare-hint {
+  margin-bottom: 18px;
 }
 
 body:not(.service-page) .project-card.rich.featured .case-preview {
@@ -4144,6 +4178,11 @@ body:not(.service-page) .project-card.rich.featured .body {
 
   body:not(.service-page) .project-card.rich.featured {
     grid-template-columns: 1fr;
+  }
+
+  body:not(.service-page) .project-card.rich.featured .compare-card {
+    min-height: 320px;
+    border-radius: 30px 30px 0 0;
   }
 
   body:not(.service-page) .project-card.rich.featured .case-preview {

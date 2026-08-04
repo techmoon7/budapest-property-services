@@ -1,7 +1,7 @@
 # Image Asset Register
 
 Phase: Image Quality & Before/After Recovery V1  
-Build ID: `compare-fix-v1-2026-08-04-01`
+Build ID: `compare-slider-v1-2026-08-04-01`
 Date: 2026-08-04  
 
 This register documents the image assets replaced or edited during this phase. The website continues to state that images are illustrative examples of typical work processes and expected results, not completed client projects.

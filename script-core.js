@@ -1187,16 +1187,13 @@
           const index = projects.indexOf(item);
           const images = item.images || [];
           const counts = phaseCounts(images);
+          const compareId = `cardCompare-${index}`;
+          const compareHintId = `cardCompareHint-${index}`;
           return `
         <article class="project project-card rich${index === 0 ? " featured" : ""}" data-reveal>
-          <button class="case-preview" type="button" data-project-gallery="${index}" aria-label="${state.lang === "hu" ? `${tx(item.title)} képgalériájának megnyitása` : `Open image gallery for ${tx(item.title)}`}">
-              <img src="${img(item.before)}" alt="${tx(phaseLabel.before)}" loading="lazy" decoding="async">
-              <img src="${img(item.after)}" alt="${tx(phaseLabel.after)}" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">${tx(phaseLabel.before)}</span>
-              <span class="mini-label after">${tx(phaseLabel.after)}</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+          <div class="case-comparison">
+            ${compareMarkup(item, { id: compareId, hintId: compareHintId, className: "compare-card" })}
+          </div>
           <button class="case-open" type="button" data-project="${index}" aria-label="${tx(item.title)}">
             <div class="body">
               <span class="case-type">${tx(item.type)}</span>
@@ -1397,6 +1394,7 @@
     bind();
     reveal();
     initCarousels(document);
+    document.querySelectorAll(".project-grid-rich [data-compare]").forEach(initCompare);
     window.BPS_I18N?.afterHomeRender?.();
     scheduleHashScroll();
   };
