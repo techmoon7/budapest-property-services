@@ -106,8 +106,8 @@
   };
   const compareHintText = () =>
     state.lang === "hu"
-      ? "Azonos helyszínt közel azonos nézőpontból bemutató, illusztratív állapotpár. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket az összehasonlításhoz."
-      : "A matched illustrative condition pair showing the same location from nearly the same viewpoint. Click or focus the slider first, then drag the handle or use the arrow keys to compare.";
+      ? "Illusztratív előtte-utána összehasonlítás, amely a munkafolyamat jellegét és a várható eredményt mutatja. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket."
+      : "An illustrative before-and-after comparison showing the type of work and the expected result. Click or focus the slider, then drag the handle or use the arrow keys.";
   const compareMarkup = (item, options = {}) => {
     const id = options.id || "compare";
     const hintId = options.hintId || `${id}-hint`;

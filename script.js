@@ -8,7 +8,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "image-recovery-v1-2026-08-04-01";
+  const assetBuildId = "compare-fix-v1-2026-08-04-01";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
@@ -804,7 +804,7 @@
     ["Prepare a short task list, attach photos and note who can approve any scope changes.", "Erstellen Sie eine kurze Aufgabenliste, fügen Sie Fotos hinzu und nennen Sie, wer Änderungen am Umfang freigeben kann.", "Підготуйте короткий список завдань, додайте фото й зазначте, хто може погоджувати зміни в обсязі.", "请准备简短任务清单、附上照片，并注明谁可以批准范围变化。"],
     ["Send outdoor photos, access details and any weather-sensitive deadline. This helps set a realistic schedule.", "Senden Sie Außenfotos, Zugangsinformationen und wetterabhängige Fristen. So lässt sich ein realistischer Zeitplan festlegen.", "Надішліть фото зовнішньої зони, деталі доступу та строки, які залежать від погоди. Це допоможе скласти реалістичний графік.", "请发送户外照片、进入方式和任何受天气影响的期限。这有助于制定现实的时间安排。"],
     ["Send photos of the details that matter before the visit, plus operating hours and access rules. The work can then be scheduled discreetly.", "Senden Sie Fotos der Details, die vor dem Besuch wichtig sind, sowie Betriebszeiten und Zugangsregeln. Die Arbeit kann dann diskret eingeplant werden.", "Надішліть фото важливих деталей перед візитом, а також робочий час і правила доступу. Тоді роботу можна запланувати непомітно.", "请发送访客到来前需要处理的细节照片，以及运营时间和进入规则。随后可低调安排工作。"],
-    ["A matched illustrative condition pair showing the same location from nearly the same viewpoint. Click or focus the slider first, then drag the handle or use the arrow keys to compare.", "Ein passendes illustratives Zustandspaar zeigt denselben Ort aus nahezu derselben Perspektive. Klicken oder fokussieren Sie zuerst den Schieberegler, ziehen Sie dann den Griff oder verwenden Sie die Pfeiltasten zum Vergleichen.", "Ілюстративна пара станів показує те саме місце майже з того самого ракурсу. Спочатку клацніть або сфокусуйте повзунок, потім перетягніть ручку чи використовуйте клавіші зі стрілками для порівняння.", "这组匹配的示意状态图从几乎相同视角展示同一位置。请先点击或聚焦滑块，然后拖动手柄或使用方向键比较。"],
+    ["An illustrative before-and-after comparison showing the type of work and the expected result. Click or focus the slider, then drag the handle or use the arrow keys.", "Ein illustrativer Vorher-Nachher-Vergleich, der die Art der Arbeit und das erwartete Ergebnis zeigt. Klicken oder fokussieren Sie den Schieberegler, ziehen Sie dann den Griff oder nutzen Sie die Pfeiltasten.", "Ілюстративне порівняння до і після, яке показує тип роботи та очікуваний результат. Спочатку клацніть або сфокусуйте повзунок, потім перетягніть ручку чи використовуйте клавіші зі стрілками.", "用于展示工作类型和预期效果的示意性前后对比。请先点击或聚焦滑块，然后拖动手柄或使用方向键。"],
     ["What we do", "Leistungen", "Що ми робимо", "服务内容"],
     ["Process", "Ablauf", "Процес", "流程"],
     ["FAQ", "FAQ", "Поширені запитання", "常见问题"],
