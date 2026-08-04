@@ -5,13 +5,10 @@
   const supportedLanguages = [
     { code: "hu", label: "Magyar", short: "HU", html: "hu", flag: "hu", complete: "Teljes weboldal" },
     { code: "en", label: "English", short: "EN", html: "en", flag: "en", complete: "Complete website" },
-    { code: "de", label: "Deutsch", short: "DE", html: "de", flag: "de", complete: "Komplette Website" },
-    { code: "uk", label: "Українська", short: "UK", html: "uk", flag: "uk", complete: "Повний сайт" },
-    { code: "zh-CN", label: "中文", short: "中", html: "zh-CN", flag: "zh", complete: "完整网站" },
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "paint-showcase-v1-2026-07-31-01";
+  const assetBuildId = "language-gate-v1-2026-08-04-01";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
@@ -602,18 +599,12 @@
       "zh-CN": "语言",
     },
     languageBadge: {
-      hu: "Elérhető 5 nyelven",
-      en: "Available in 5 languages",
-      de: "In 5 Sprachen verfügbar",
-      uk: "Доступно 5 мовами",
-      "zh-CN": "支持 5 种语言",
+      hu: "Elérhető magyarul és angolul",
+      en: "Available in Hungarian and English",
     },
     languageSelectorHint: {
-      hu: "5 nyelv",
-      en: "5 languages",
-      de: "5 Sprachen",
-      uk: "5 мов",
-      "zh-CN": "5 种语言",
+      hu: "HU / EN",
+      en: "HU / EN",
     },
     openLanguageMenu: {
       hu: "Nyelv kiválasztása",

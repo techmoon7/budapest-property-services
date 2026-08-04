@@ -124,20 +124,17 @@
       <p class="compare-hint" id="${hintId}">${compareHintText()}</p>`;
   };
   const photoCaption = (photo) => tx(photo?.[2]) || phaseText(photo?.[1]);
-  const languageNames = "Magyar · English · Deutsch · Українська · 中文";
+  const languageNames = "Magyar / English";
   const languageBadgeFallback = {
-    hu: "Elérhető 5 nyelven",
-    en: "Available in 5 languages",
-    de: "In 5 Sprachen verfügbar",
-    uk: "Доступно 5 мовами",
-    "zh-CN": "支持 5 种语言",
+    hu: "Elérhető magyarul és angolul",
+    en: "Available in Hungarian and English",
   };
   const languageBadgeText = () => window.BPS_I18N?.t?.("languageBadge", state.lang) || languageBadgeFallback[state.lang] || languageBadgeFallback.en;
   const languageTrustBadge = () => `
     <button class="language-trust-badge" type="button" data-language-selector-trigger aria-label="${languageBadgeText()}: ${languageNames}">
-      <span class="language-badge-icon" aria-hidden="true"><span class="language-badge-globe"></span><span class="language-badge-count">5</span></span>
+      <span class="language-badge-icon" aria-hidden="true"><span class="language-badge-globe"></span><span class="language-badge-count">2</span></span>
       <span class="language-badge-copy"><strong>${languageBadgeText()}</strong><small>${languageNames}</small></span>
-      <span class="language-badge-flags" aria-hidden="true"><span class="flag-icon flag-hu" aria-hidden="true"></span><span class="flag-icon flag-en" aria-hidden="true"></span><span class="flag-icon flag-de" aria-hidden="true"></span><span class="flag-icon flag-uk" aria-hidden="true"></span><span class="flag-icon flag-zh" aria-hidden="true"></span></span>
+      <span class="language-badge-flags" aria-hidden="true"><span class="flag-icon flag-hu" aria-hidden="true"></span><span class="flag-icon flag-en" aria-hidden="true"></span></span>
     </button>`;
   const paintHintMarkup = () => `
     <span class="paint-reveal-hint" aria-hidden="true">
