@@ -1129,6 +1129,24 @@ details[open] .disclosure-link {
   box-shadow: var(--shadow-soft);
 }
 
+.maintenance-showcase-visuals .showcase-photo[data-hero-lightbox] {
+  cursor: zoom-in;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.maintenance-showcase-visuals .showcase-photo[data-hero-lightbox]:focus-visible {
+  outline: 3px solid rgba(195, 116, 63, 0.72);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .maintenance-showcase-visuals .showcase-photo[data-hero-lightbox]:hover {
+    border-color: rgba(195, 116, 63, 0.36);
+    box-shadow: 0 24px 62px rgba(27, 52, 40, 0.18);
+    transform: translateY(-2px);
+  }
+}
+
 .showcase-photo::after {
   position: absolute;
   inset: 0;

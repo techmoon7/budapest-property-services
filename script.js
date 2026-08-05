@@ -8,7 +8,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "compare-slider-v1-2026-08-04-01";
+  const assetBuildId = "ux-gallery-before-v1-2026-08-05-01";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
@@ -4323,7 +4323,9 @@
   };
 
   const bindHeroLightbox = () => {
-    document.querySelectorAll(".hero-media, .service-hero-visual, .showcase-photo[data-paint-reveal]").forEach((target) => {
+    document.querySelectorAll(
+      ".hero-media, .service-hero-visual, .showcase-photo[data-paint-reveal], .maintenance-showcase-visuals .showcase-photo"
+    ).forEach((target) => {
       if (target.dataset.heroLightboxBound === "true") return;
 
       const image = target.querySelector("img");
@@ -4333,7 +4335,7 @@
       target.dataset.heroLightboxBound = "true";
       target.setAttribute("role", "button");
       target.setAttribute("tabindex", "0");
-      target.setAttribute("aria-label", "Open hero image");
+      target.setAttribute("aria-label", image.alt ? `Open image: ${image.alt}` : "Open image");
 
       target.addEventListener("click", (event) => {
         if (
