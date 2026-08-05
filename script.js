@@ -3459,7 +3459,6 @@
 
   const normalizeLanguage = (lang = "") => {
     const value = String(lang).trim();
-    if (value.toLowerCase() === "zh-cn" || value.toLowerCase().startsWith("zh")) return "zh-CN";
     const short = value.slice(0, 2).toLowerCase();
     if (languageCodes.has(value)) return value;
     if (languageCodes.has(short)) return short;
