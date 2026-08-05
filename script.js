@@ -8,7 +8,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "ux-gallery-before-v1-2026-08-05-01";
+  const assetBuildId = "ux-garden-quality-v1-2026-08-05-01";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
@@ -1790,10 +1790,10 @@
           "de": "Von der ersten Nachricht bis zum organisierten Job",
           "zh-CN": "从第一条消息到有组织的工作"
       },
-      "From neglected outdoor area to a tidier arrival": {
-          "uk": "Від запущеної відкритої території до більш охайного прибуття",
-          "de": "Vom vernachlässigten Außenbereich zum aufgeräumteren Ankommen",
-          "zh-CN": "从被忽视的户外区域到更整洁的到达"
+      "From overgrown courtyard to a cared-for arrival": {
+          "uk": "Від зарослого подвір’я до доглянутішого входу",
+          "de": "Vom überwucherten Hof zu einem gepflegteren Ankommen",
+          "zh-CN": "从杂草丛生的庭院到更整洁的到达印象"
       },
       "From tired walls to a clean finish": {
           "uk": "Від втомлених стін до чистої обробки",
@@ -7555,7 +7555,7 @@
     "assets/budapest-airbnb-before-turnover-matched.jpg",
     "assets/budapest-painting-before-matched.jpg",
     "assets/budapest-handyman-before-matched.jpg",
-    "assets/budapest-garden-before-matched.jpg",
+    "assets/budapest-courtyard-before-entrance.jpg",
     "assets/budapest-office-before-touchup-matched.jpg",
   ];
 

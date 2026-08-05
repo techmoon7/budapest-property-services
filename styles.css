@@ -387,6 +387,14 @@ details[open] .disclosure-link {
   background: var(--green2);
 }
 
+.case-preview.single-image {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.case-preview.single-image img {
+  grid-column: 1;
+}
+
 .case-preview .mini-label,
 .video-type,
 .label,

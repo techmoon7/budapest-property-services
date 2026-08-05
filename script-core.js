@@ -108,6 +108,7 @@
     state.lang === "hu"
       ? "Illusztratív előtte-utána összehasonlítás, amely a munkafolyamat jellegét és a várható eredményt mutatja. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket."
       : "An illustrative before-and-after comparison showing the type of work and the expected result. Click or focus the slider, then drag the handle or use the arrow keys.";
+  const hasProjectComparison = (item) => item?.comparison !== false && !!item?.before && !!item?.after;
   const compareMarkup = (item, options = {}) => {
     const id = options.id || "compare";
     const hintId = options.hintId || `${id}-hint`;
@@ -145,10 +146,12 @@
       <span data-lang-panel="zh-CN" hidden>用手指粉刷墙面</span>
     </span>`;
   const projectLightboxImages = (project) => {
-    const pair = [
-      [project.before, "before", { hu: `${tx(project.title)} - kiinduló állapot`, en: `${tx(project.title)} - starting condition` }],
-      [project.after, "after", { hu: `${tx(project.title)} - rendezett kész állapot`, en: `${tx(project.title)} - finished condition` }],
-    ];
+    const pair = hasProjectComparison(project)
+      ? [
+          [project.before, "before", { hu: `${tx(project.title)} - kiinduló állapot`, en: `${tx(project.title)} - starting condition` }],
+          [project.after, "after", { hu: `${tx(project.title)} - rendezett kész állapot`, en: `${tx(project.title)} - finished condition` }],
+        ]
+      : [];
     const seen = new Set(pair.map((photo) => photo[0]));
     return [...pair, ...(project.images || []).filter((photo) => !seen.has(photo[0]))];
   };
@@ -414,15 +417,15 @@
     {
       key: "garden",
       type: { hu: "Kert / udvar", en: "Garden / outdoor" },
-      cover: "assets/budapest-courtyard-garden-1.jpg",
-      before: "assets/budapest-garden-before-matched.jpg",
+      cover: "assets/garden-maintenance-hero-garden.jpg",
+      before: "assets/budapest-courtyard-before-entrance.jpg",
       after: "assets/budapest-courtyard-garden-1.jpg",
-      title: { hu: "Elhanyagolt külső részből rendezett érkezés", en: "From neglected outdoor area to a tidier arrival" },
+      title: { hu: "Benőtt udvarból gondozottabb érkezés", en: "From overgrown courtyard to a cared-for arrival" },
       summary: {
         hu:
           "A kert, udvar vagy bejárat gyakran az első pont, ahol az érdeklődő képet alkot az ingatlanról.",
         en:
-          "The garden, yard or entrance is often the first place where a visitor forms an opinion about the property.",
+          "The garden, yard or entrance often shapes trust before anyone steps inside the property.",
       },
       result: {
         hu: "Az ingatlan rendezettebbnek és gondozottabbnak tűnik már érkezéskor, ami bérleménynél és Airbnb-nél különösen fontos.",
@@ -968,16 +971,16 @@
     },
     {
       projectIndex: 2,
-      before: "assets/budapest-garden-before-matched.jpg",
+      before: "assets/budapest-courtyard-before-entrance.jpg",
       after: "assets/budapest-courtyard-garden-1.jpg",
       tag: { hu: "Udvar és kert", en: "Courtyard and garden", de: "Hof und Garten", uk: "Двір і сад", "zh-CN": "庭院与花园" },
-      title: { hu: "Elhanyagolt érkezésből gondozott első benyomás", en: "From neglected arrival to a cared-for first impression", de: "Vom vernachlässigten Eingang zum gepflegten ersten Eindruck", uk: "Від занедбаного входу до доглянутого першого враження", "zh-CN": "从被忽视的入口到维护良好的第一印象" },
+      title: { hu: "Benőtt udvarból gondozottabb érkezés", en: "From overgrown courtyard to a cared-for arrival", de: "Vom überwucherten Hof zu einem gepflegteren Ankommen", uk: "Від зарослого подвір’я до доглянутішого входу", "zh-CN": "从杂草丛生的庭院到更整洁的到达印象" },
       text: {
-        hu: "A külső rend sokszor még az ajtó előtt bizalmat épít, különösen bérleményeknél és vendégfogadásnál.",
-        en: "Outdoor order often builds trust before the door is opened, especially for rentals and guest stays.",
-        de: "Ein gepflegter Außenbereich schafft oft Vertrauen, noch bevor die Tür geöffnet wird.",
-        uk: "Охайна зовнішня зона часто формує довіру ще до відкриття дверей.",
-        "zh-CN": "整洁的户外环境常常在开门前就建立信任，尤其适合出租和接待客人。",
+        hu: "Hitelesebb kültéri változás: magasabb fű és fáradt növényzet helyett rendezettebb első benyomás.",
+        en: "A more believable outdoor change: long grass and tired planting replaced by a tidier first impression.",
+        de: "Eine glaubwürdigere Veränderung im Außenbereich: höheres Gras und müde Bepflanzung werden zu einem gepflegteren ersten Eindruck.",
+        uk: "Більш правдоподібна зовнішня зміна: висока трава й втомлені насадження поступаються охайнішому першому враженню.",
+        "zh-CN": "更可信的户外变化：较高草丛和疲惫植栽被更整洁的第一印象取代。",
       },
     },
   ];
@@ -1163,7 +1166,15 @@
     projects
       .slice(0, 4)
       .map(
-        (item, index) => `
+        (item, index) => {
+          const referenceCopy = hasProjectComparison(item)
+            ? state.lang === "hu"
+              ? "Előtte, munkafolyamat és kész állapot kizárólag ehhez a munkatípushoz rendezve."
+              : "Before, work-in-progress and finished images organised only for this service type."
+            : state.lang === "hu"
+              ? "Valósághű kert-, udvar- és kültéri karbantartási képek kizárólag ehhez a munkatípushoz rendezve."
+              : "Realistic garden, courtyard and outdoor maintenance images organised only for this service type.";
+          return `
         <article class="video-card media-reference-card" data-reveal>
           <button type="button" data-project-gallery="${index}" aria-label="${state.lang === "hu" ? `${tx(item.title)} képgalériájának megnyitása` : `Open image gallery for ${tx(item.title)}`}">
             <div class="video-poster">
@@ -1173,10 +1184,11 @@
             </div>
             <div class="body">
               <h3>${tx(item.title)}</h3>
-              <p>${state.lang === "hu" ? "Előtte, munkafolyamat és kész állapot kizárólag ehhez a munkatípushoz rendezve." : "Before, work-in-progress and finished images organised only for this service type."}</p>
+              <p>${referenceCopy}</p>
             </div>
           </button>
-        </article>`
+        </article>`;
+        }
       )
       .join("");
 
@@ -1192,7 +1204,11 @@
           return `
         <article class="project project-card rich${index === 0 ? " featured" : ""}" data-reveal>
           <div class="case-comparison">
-            ${compareMarkup(item, { id: compareId, hintId: compareHintId, className: "compare-card" })}
+            ${
+              hasProjectComparison(item)
+                ? compareMarkup(item, { id: compareId, hintId: compareHintId, className: "compare-card" })
+                : `<button class="case-preview single-image" type="button" data-project-gallery="${index}" aria-label="${state.lang === "hu" ? `${tx(item.title)} képgalériájának megnyitása` : `Open image gallery for ${tx(item.title)}`}"><img src="${img(item.cover, 1100)}" alt="${tx(item.title)}" loading="lazy" decoding="async"><span class="inspect-icon" aria-hidden="true"></span></button>`
+            }
           </div>
           <button class="case-open" type="button" data-project="${index}" aria-label="${tx(item.title)}">
             <div class="body">
@@ -1577,8 +1593,12 @@
     document.getElementById("projectInner").innerHTML = `
       <div class="project-layout" data-project-index="${index}">
         <div>
-          ${compareMarkup(item, { id: "compare", hintId: "compareHint" })}
-          <button class="btn compare-fullscreen-btn" type="button" data-full-comparison="${index}">${compareText("viewFullComparison")}</button>
+          ${
+            hasProjectComparison(item)
+              ? `${compareMarkup(item, { id: "compare", hintId: "compareHint" })}
+          <button class="btn compare-fullscreen-btn" type="button" data-full-comparison="${index}">${compareText("viewFullComparison")}</button>`
+              : `<div class="case-preview single-image modal-single-preview"><img src="${img(item.cover, 1400)}" alt="${tx(item.title)}" loading="eager" decoding="async"><span class="inspect-icon" aria-hidden="true"></span></div>`
+          }
           <div class="phase-filter">
             <button class="active" data-phase-filter="all">${state.lang === "hu" ? "Összes kép" : "All photos"}</button>
             <button data-phase-filter="before">${tx(phaseLabel.before)} (${counts.before})</button>
@@ -1634,6 +1654,7 @@
 
   const openFullComparison = (index) => {
     const item = projects[index];
+    if (!hasProjectComparison(item)) return;
     state.projectIndex = index;
     document.getElementById("galleryInner").innerHTML = `
       <div class="gallery-layout comparison-lightbox-layout">

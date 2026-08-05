@@ -13,6 +13,7 @@ This register documents the image assets replaced or edited during this phase. T
 - The original source/licence metadata for the pre-existing repository images was not present in the repository at the start of this phase.
 - AI generation was not used in this phase. Before-state recovery images were created with local procedural image editing from matching after-state assets, then manually reviewed.
 - New files were saved as optimized progressive JPGs to preserve existing browser compatibility and avoid broad markup changes.
+- 2026-08-05 follow-up: the generated garden before image was removed because it did not meet the required natural visual quality. The garden/outdoor pair now uses the existing real-looking `assets/budapest-courtyard-before-entrance.jpg` image as the before state.
 
 ## Replaced Or Edited Assets
 
@@ -22,7 +23,7 @@ This register documents the image assets replaced or edited during this phase. T
 | `assets/budapest-finished-room-1.jpg` | Homepage hero, painting after image, gallery | Existing repository asset | Existing project asset; original source not documented | No | Mild contrast, colour and sharpness optimization for clearer finished state. | 208,500 B | 280,478 B |
 | `assets/budapest-drywall-before-matched.jpg` | Homepage and modal drywall before image | Existing repository asset `assets/painting-wall-repairs-spackle-smoothing.jpg` | Existing project asset; original source not documented | No | Replaced the artificial wall-mark edit with a real close-up wall repair and smoothing photo. | 193,581 B | 153,151 B |
 | `assets/budapest-finished-room-2.jpg` | Drywall after image and gallery | Existing repository asset | Existing project asset; original source not documented | No | Mild contrast, colour and sharpness optimization for clearer finished state. | 147,763 B | 197,962 B |
-| `assets/budapest-garden-before-matched.jpg` | Homepage and modal garden before image | Existing repository asset `assets/budapest-courtyard-before-overgrown-lawn.jpg` | Existing project asset; original source not documented | No | Replaced the edited lawn state with a real overgrown courtyard/garden before photo. | 448,515 B | 417,789 B |
+| `assets/budapest-courtyard-before-entrance.jpg` | Homepage and modal garden before image | Existing repository asset | Existing project asset; original source not documented | No | Replaced the artificial garden before image with a more credible overgrown Budapest courtyard image. | Existing | Existing |
 | `assets/budapest-courtyard-garden-1.jpg` | Garden after image, homepage service imagery, gallery | Existing repository asset | Existing project asset; original source not documented | No | Mild contrast, colour and sharpness optimization for clearer maintained-garden result. | 311,705 B | 401,576 B |
 | `assets/budapest-airbnb-before-turnover-matched.jpg` | Homepage and modal Airbnb before image | Existing repository asset `assets/cleaning-services-move-out-room.jpg` | Existing project asset; original source not documented | No | Replaced the too-subtle same-room edit with a real empty move-out room photo for a clearer turnover story. | 256,529 B | 130,087 B |
 | `assets/budapest-airbnb-living-room.jpg` | Airbnb after image, foreign-owner support imagery, gallery | Existing repository asset | Existing project asset; original source not documented | No | Mild contrast, colour and sharpness optimization for clearer guest-ready state. | 194,985 B | 265,440 B |
@@ -40,7 +41,7 @@ This register documents the image assets replaced or edited during this phase. T
 |---|---|---|---|
 | Painting / wall repair | `assets/budapest-painting-before-matched.jpg` | `assets/budapest-finished-room-1.jpg` | Real renovation-room before photo with patched walls; after remains a clean Budapest apartment-style finish. |
 | Drywall / ceiling | `assets/budapest-drywall-before-matched.jpg` | `assets/budapest-finished-room-2.jpg` | Real wall smoothing before detail; after shows a clean paint-ready room. |
-| Garden / outdoor | `assets/budapest-garden-before-matched.jpg` | `assets/budapest-courtyard-garden-1.jpg` | Real overgrown courtyard before; after shows a maintained Budapest-style courtyard garden. |
+| Garden / outdoor | `assets/budapest-courtyard-before-entrance.jpg` | `assets/budapest-courtyard-garden-1.jpg` | Replaced the artificial garden before image with a more credible overgrown Budapest courtyard before image. |
 | Airbnb / tenant turnover | `assets/budapest-airbnb-before-turnover-matched.jpg` | `assets/budapest-airbnb-living-room.jpg` | Real empty move-out room before; after shows a furnished, guest-ready apartment interior. |
 | Office touch-up | `assets/budapest-office-before-touchup-matched.jpg` | `assets/budapest-office-finished-1.jpg` | Real wall touch-up process before; after shows a tidy office/representative room. |
 | Handyman / small fixes | `assets/budapest-handyman-before-matched.jpg` | `assets/budapest-airbnb-bedroom.jpg` | Real wall drilling/fixing before; after shows a tidy prepared apartment room. |
