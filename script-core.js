@@ -372,6 +372,7 @@
       key: "paint",
       type: { hu: "Festés / faljavítás", en: "Painting / wall repair" },
       cover: "assets/budapest-finished-room-1.jpg",
+      comparison: false,
       before: "assets/budapest-painting-before-matched.jpg",
       after: "assets/budapest-finished-room-1.jpg",
       title: { hu: "Kopott falból tiszta, egységes felület", en: "From tired walls to a clean finish" },
@@ -395,6 +396,7 @@
       key: "drywall",
       type: { hu: "Gipszkarton / mennyezet", en: "Drywall / ceiling" },
       cover: "assets/budapest-finished-room-2.jpg",
+      comparison: false,
       before: "assets/budapest-drywall-before-matched.jpg",
       after: "assets/budapest-finished-room-2.jpg",
       title: { hu: "Félkész gipszkartonból festésre kész felület", en: "Drywall prepared for a finished interior" },
@@ -529,6 +531,7 @@
       category: "airbnb",
       type: { hu: "Airbnb / bérlőváltás", en: "Airbnb / tenant turnover" },
       cover: "assets/budapest-airbnb-living-room.jpg",
+      comparison: false,
       before: "assets/budapest-airbnb-before-turnover-matched.jpg",
       after: "assets/budapest-airbnb-living-room.jpg",
       title: { hu: "Lakásfrissítés vendégérkezés előtt", en: "Apartment refresh before guest arrival" },
@@ -590,6 +593,7 @@
       category: "office",
       type: { hu: "Iroda / képviseleti tér", en: "Office / representative space" },
       cover: "assets/budapest-office-finished-1.jpg",
+      comparison: false,
       before: "assets/budapest-office-before-touchup-matched.jpg",
       after: "assets/budapest-office-finished-1.jpg",
       title: { hu: "Iroda gyors frissítése látogatás előtt", en: "Office touch-up before a visit" },
@@ -651,6 +655,7 @@
       category: "handyman",
       type: { hu: "Kisebb javítások / átadás", en: "Small repairs / handover" },
       cover: "assets/budapest-airbnb-bedroom.jpg",
+      comparison: false,
       before: "assets/budapest-handyman-before-matched.jpg",
       after: "assets/budapest-airbnb-bedroom.jpg",
       title: { hu: "Apró hibákból rendezett átadás", en: "Small defects turned into a tidy handover" },
@@ -942,34 +947,6 @@
 
   const transformationHighlights = [
     {
-      projectIndex: 0,
-      before: "assets/budapest-painting-before-matched.jpg",
-      after: "assets/budapest-finished-room-1.jpg",
-      tag: { hu: "Falfrissítés", en: "Wall refresh", de: "Wandauffrischung", uk: "Оновлення стін", "zh-CN": "墙面焕新" },
-      title: { hu: "Kopott falból bemutatható lakótér", en: "From tired walls to a presentable room", de: "Von müden Wänden zu einem präsentablen Raum", uk: "Від зношених стін до презентабельної кімнати", "zh-CN": "从疲旧墙面到适合展示的房间" },
-      text: {
-        hu: "Jól látható, hiteles állapotváltás: foltok és kopások helyett egységesebb, tisztább felület.",
-        en: "A clear, believable change: marks and wear replaced by a cleaner, more consistent surface.",
-        de: "Eine klare, glaubwürdige Veränderung: statt Flecken und Abnutzung eine sauberere, einheitlichere Fläche.",
-        uk: "Чітка й правдоподібна зміна: замість слідів і зносу чистіша, рівніша поверхня.",
-        "zh-CN": "清晰可信的变化：用更干净、更统一的表面替代污迹和磨损。",
-      },
-    },
-    {
-      projectIndex: 3,
-      before: "assets/budapest-airbnb-before-turnover-matched.jpg",
-      after: "assets/budapest-airbnb-living-room.jpg",
-      tag: { hu: "Airbnb előkészítés", en: "Airbnb preparation", de: "Airbnb-Vorbereitung", uk: "Підготовка Airbnb", "zh-CN": "Airbnb 准备" },
-      title: { hu: "Vendégérkezés előtt rendezett összkép", en: "A guest-ready impression before arrival", de: "Ein gastbereiter Eindruck vor der Ankunft", uk: "Готове до гостей враження перед заїздом", "zh-CN": "客人抵达前的整洁印象" },
-      text: {
-        hu: "Apró hibák, falnyomok és rendezetlenség helyett olyan tér, amelyet könnyebb jó szívvel átadni.",
-        en: "Small defects, wall marks and disorder replaced by a space that is easier to hand over confidently.",
-        de: "Kleine Mängel, Wandspuren und Unordnung werden durch einen Raum ersetzt, der sich sicherer übergeben lässt.",
-        uk: "Замість дрібних дефектів, слідів на стінах і безладу — простір, який легше впевнено передати.",
-        "zh-CN": "将小缺陷、墙面痕迹和杂乱，转变为更容易放心交付的空间。",
-      },
-    },
-    {
       projectIndex: 2,
       before: "assets/budapest-courtyard-before-entrance.jpg",
       after: "assets/budapest-courtyard-garden-1.jpg",
@@ -1172,8 +1149,8 @@
               ? "Előtte, munkafolyamat és kész állapot kizárólag ehhez a munkatípushoz rendezve."
               : "Before, work-in-progress and finished images organised only for this service type."
             : state.lang === "hu"
-              ? "Valósághű kert-, udvar- és kültéri karbantartási képek kizárólag ehhez a munkatípushoz rendezve."
-              : "Realistic garden, courtyard and outdoor maintenance images organised only for this service type.";
+              ? "Valósághű, szolgáltatástípus szerint rendezett képek, gyenge előtte-utána állítás nélkül."
+              : "Realistic service-specific images shown without forcing a weak before-and-after claim.";
           return `
         <article class="video-card media-reference-card" data-reveal>
           <button type="button" data-project-gallery="${index}" aria-label="${state.lang === "hu" ? `${tx(item.title)} képgalériájának megnyitása` : `Open image gallery for ${tx(item.title)}`}">
@@ -1295,13 +1272,6 @@
             >
               <div class="hero-image-shell hero-main-image"><img src="${img(heroImage)}" width="1600" height="1200" fetchpriority="high" alt="${state.lang === "hu" ? "Frissen rendezett budapesti lakásbelső tiszta falakkal és parkettával" : "Freshly prepared Budapest apartment interior with clean walls and parquet flooring"}"></div>
               ${paintHintMarkup()}
-              <div class="hero-before-after-card" aria-label="${compareText("compareSliderName")}">
-                <span class="hero-ba-title">${tx({ hu: "Látható átalakulás", en: "Visible transformation", de: "Sichtbare Veränderung", uk: "Помітна зміна", "zh-CN": "清晰变化" })}</span>
-                <span class="hero-mini-compare">
-                  <span><img src="${img("assets/budapest-painting-before-matched.jpg", 900)}" width="450" height="300" alt="${compareText("compareBefore")}" loading="eager" decoding="async"><b>${compareText("compareBefore")}</b></span>
-                  <span><img src="${img("assets/budapest-finished-room-1.jpg", 900)}" width="450" height="300" alt="${compareText("compareAfter")}" loading="eager" decoding="async"><b>${compareText("compareAfter")}</b></span>
-                </span>
-              </div>
               <div class="hero-visual-note">
                 <strong>WhatsApp</strong>
                 <span>${tx({ hu: "Fotók alapján gyorsabb első egyeztetés", en: "Photos make the first check faster", de: "Fotos beschleunigen die erste Abstimmung", uk: "Фото пришвидшують першу оцінку", "zh-CN": "照片让首次沟通更快" })}</span>
@@ -1355,7 +1325,7 @@
         </section>
 
         <section id="media" class="section wrap">
-          <div class="section-head" data-reveal><span class="section-index">05</span><h2>${state.lang === "hu" ? "Képes munkafolyamatok" : "Visual work processes"}</h2><p>${state.lang === "hu" ? "Nézze meg a szolgáltatástípusonként rendezett képsorozatokat. A részletes galéria és az előtte-utána összehasonlítás egyetlen nézetben nyílik meg." : "Browse image sequences organised by service type. Each opens a focused view with the full gallery and before-and-after comparison."}</p></div>
+          <div class="section-head" data-reveal><span class="section-index">05</span><h2>${state.lang === "hu" ? "Képes munkafolyamatok" : "Visual work processes"}</h2><p>${state.lang === "hu" ? "Nézze meg a szolgáltatástípusonként rendezett képsorozatokat. A részletes galéria egy fókuszált nézetben nyílik meg, az előtte-utána összehasonlítás pedig csak ott marad, ahol a változás azonnal érthető." : "Browse image sequences organised by service type. Each opens a focused gallery view, with before-and-after comparison kept only where the change is immediately clear."}</p></div>
           <div class="video-grid">${mediaReferenceCards()}</div>
         </section>
 

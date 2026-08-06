@@ -4246,18 +4246,31 @@ body:not(.service-page) .project-card.rich.featured .body {
   }
 
   .hero-proof-grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 8px;
-    overflow-x: auto;
+    overflow-x: visible;
     padding-bottom: 4px;
-    scroll-snap-type: x proximity;
+    scroll-snap-type: none;
   }
 
   .hero-proof-grid li {
-    flex: 0 0 auto;
-    min-width: max-content;
-    scroll-snap-align: start;
-    white-space: nowrap;
+    min-width: 0;
+    width: 100%;
+    scroll-snap-align: none;
+    white-space: normal;
+  }
+
+  body:not(.service-page) .stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+
+  body:not(.service-page) .stat {
+    width: 100%;
+    flex: 1 1 auto;
   }
 
   .hero-before-after-card {
