@@ -45,3 +45,30 @@ This register documents the image assets replaced or edited during this phase. T
 | Airbnb / tenant turnover | `assets/budapest-airbnb-before-turnover-matched.jpg` | `assets/budapest-airbnb-living-room.jpg` | Real empty move-out room before; after shows a furnished, guest-ready apartment interior. |
 | Office touch-up | `assets/budapest-office-before-touchup-matched.jpg` | `assets/budapest-office-finished-1.jpg` | Real wall touch-up process before; after shows a tidy office/representative room. |
 | Handyman / small fixes | `assets/budapest-handyman-before-matched.jpg` | `assets/budapest-airbnb-bedroom.jpg` | Real wall drilling/fixing before; after shows a tidy prepared apartment room. |
+
+## 2026-08-08 Before / After Visual Recovery V2
+
+Baseline commit: `4df087a8641ff02b8f8e6d84b09d483536fe99de`
+
+Backup branch: `backup-before-before-after-recovery-v2`
+
+This pass replaced weak or nearly identical before states with stronger same-scene illustrative edits. No new third-party stock downloads were added. The edited before images are derived from the corresponding existing after image so that room geometry, camera position, windows, doors, radiators, flooring and fixed furniture stay aligned. The images remain illustrative examples only and are not presented as completed client projects.
+
+| Local file | Component/page | Source platform / source URL / creator | Usage basis | AI-assisted? | What changed | Final dimensions | Final file size |
+|---|---|---|---|---|---|---:|---:|
+| `assets/budapest-painting-before-matched.jpg` | Homepage EN/HU transformation card, work example card, project modal and full comparison | Existing repository asset `assets/budapest-finished-room-1.jpg`; original source URL and creator not present in repository | Existing project asset, edited locally for same-scene illustrative comparison | No | Added visible wall cracks, uneven old paint, repair patches, protective floor/furniture covering and masking tape while preserving the same Budapest apartment room geometry. | 1600x1067 | 269,657 B |
+| `assets/budapest-drywall-before-matched.jpg` | Homepage EN/HU work example card, project modal and full comparison | Existing repository asset `assets/budapest-finished-room-2.jpg`; original source URL and creator not present in repository | Existing project asset, edited locally for same-scene illustrative comparison | No | Added unfinished drywall seams, repair patches, cracks and protective covering while preserving the same room, window, radiator and floor alignment. | 1600x1067 | 198,051 B |
+| `assets/budapest-airbnb-before-turnover-matched.jpg` | Homepage EN/HU transformation card, situation card, work example card, project modal and full comparison | Existing repository asset `assets/budapest-airbnb-living-room.jpg`; original source URL and creator not present in repository | Existing project asset, edited locally for same-scene illustrative comparison | No | Added guest-left soft furnishings, used cups, a small bin and wall marks while preserving the same living room composition. | 1600x1067 | 249,191 B |
+| `assets/budapest-office-before-touchup-matched.jpg` | Homepage EN/HU situation card, work example card, project modal and full comparison | Existing repository asset `assets/budapest-office-finished-1.jpg`; original source URL and creator not present in repository | Existing project asset, edited locally for same-scene illustrative comparison | No | Added central wall marks, desk/table clutter, papers and a less visitor-ready office impression while preserving the same office geometry. | 1600x1067 | 223,903 B |
+| `assets/budapest-handyman-before-matched.jpg` | Homepage EN/HU situation card, work example card, project modal and full comparison | Existing repository asset `assets/budapest-airbnb-bedroom.jpg`; original source URL and creator not present in repository | Existing project asset, edited locally for same-scene illustrative comparison | No | Added a loose curtain rail, mounting holes, small wall marks and a less prepared handover state while preserving the same bedroom composition. | 1600x1067 | 213,252 B |
+
+## 2026-08-08 Pair Review
+
+| Pair | Decision | Reason |
+|---|---|---|
+| Painting / wall repair | Replaced | Previous before state was too close to the after state. The new pair keeps the same room and shows visible cracks, repair preparation and protective covering. |
+| Drywall / ceiling | Replaced | Previous before state did not clearly show an unfinished surface. The new pair keeps the same room and shows seams, cracks and paint-ready preparation. |
+| Garden / outdoor | Retained | The pair already communicates neglected courtyard to maintained courtyard clearly, with a believable Budapest-style outdoor setting. |
+| Airbnb / tenant turnover | Replaced | Previous before state was nearly identical to the after state. The new pair keeps the same living room and shows a guest-left condition before cleaning and preparation. |
+| Office / representative space | Replaced | Previous before state was too subtle. The new pair keeps the same office and adds visible wall marks and untidy work surfaces. |
+| Small fixes / handover | Replaced | Previous before state was too subtle. The new pair keeps the same bedroom and shows a loose fitting and small wall defects before handover. |

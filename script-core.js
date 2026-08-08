@@ -3,10 +3,21 @@
   const tel = "tel:+36206671832";
   const wa = "https://wa.me/36206671832";
   const scriptBaseUrl = document.currentScript?.src || new URL("script-core.js", document.baseURI).href;
-  const img = (id, w = 1200) =>
-    id.startsWith("assets/")
-      ? new URL(id, scriptBaseUrl).href
-      : `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
+  const localAssetVersion = (() => {
+    try {
+      return new URL(scriptBaseUrl).search;
+    } catch {
+      return "";
+    }
+  })();
+  const img = (id, w = 1200) => {
+    if (id.startsWith("assets/")) {
+      const url = new URL(id, scriptBaseUrl);
+      if (localAssetVersion) url.search = localAssetVersion;
+      return url.href;
+    }
+    return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
+  };
 
   const heroImage = "assets/budapest-finished-room-1.jpg";
 
@@ -372,7 +383,7 @@
       key: "paint",
       type: { hu: "Festés / faljavítás", en: "Painting / wall repair" },
       cover: "assets/budapest-finished-room-1.jpg",
-      comparison: false,
+      comparison: true,
       before: "assets/budapest-painting-before-matched.jpg",
       after: "assets/budapest-finished-room-1.jpg",
       title: { hu: "Kopott falból tiszta, egységes felület", en: "From tired walls to a clean finish" },
@@ -396,7 +407,7 @@
       key: "drywall",
       type: { hu: "Gipszkarton / mennyezet", en: "Drywall / ceiling" },
       cover: "assets/budapest-finished-room-2.jpg",
-      comparison: false,
+      comparison: true,
       before: "assets/budapest-drywall-before-matched.jpg",
       after: "assets/budapest-finished-room-2.jpg",
       title: { hu: "Félkész gipszkartonból festésre kész felület", en: "Drywall prepared for a finished interior" },
@@ -531,7 +542,7 @@
       category: "airbnb",
       type: { hu: "Airbnb / bérlőváltás", en: "Airbnb / tenant turnover" },
       cover: "assets/budapest-airbnb-living-room.jpg",
-      comparison: false,
+      comparison: true,
       before: "assets/budapest-airbnb-before-turnover-matched.jpg",
       after: "assets/budapest-airbnb-living-room.jpg",
       title: { hu: "Lakásfrissítés vendégérkezés előtt", en: "Apartment refresh before guest arrival" },
@@ -593,7 +604,7 @@
       category: "office",
       type: { hu: "Iroda / képviseleti tér", en: "Office / representative space" },
       cover: "assets/budapest-office-finished-1.jpg",
-      comparison: false,
+      comparison: true,
       before: "assets/budapest-office-before-touchup-matched.jpg",
       after: "assets/budapest-office-finished-1.jpg",
       title: { hu: "Iroda gyors frissítése látogatás előtt", en: "Office touch-up before a visit" },
@@ -655,7 +666,7 @@
       category: "handyman",
       type: { hu: "Kisebb javítások / átadás", en: "Small repairs / handover" },
       cover: "assets/budapest-airbnb-bedroom.jpg",
-      comparison: false,
+      comparison: true,
       before: "assets/budapest-handyman-before-matched.jpg",
       after: "assets/budapest-airbnb-bedroom.jpg",
       title: { hu: "Apró hibákból rendezett átadás", en: "Small defects turned into a tidy handover" },
