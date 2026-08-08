@@ -2828,6 +2828,14 @@ body.nav-menu-open .mobile-cta {
     visibility: visible;
   }
 
+  html.nav-menu-open .header[data-nav-enhanced="true"].nav-open .nav,
+  body.nav-menu-open .header[data-nav-enhanced="true"].nav-open .nav {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    visibility: visible;
+  }
+
   .mobile-nav-chrome {
     position: sticky;
     top: 0;
