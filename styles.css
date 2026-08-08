@@ -419,7 +419,7 @@ details[open] .disclosure-link {
   background: #0f1712;
   cursor: ew-resize;
   outline-offset: 5px;
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
   --split: 50%;
   animation: compare-stage-in 280ms ease both;
   transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
@@ -4324,6 +4324,33 @@ body:not(.service-page) .project-card.rich.featured .body {
 }
 
 @media (max-width: 360px) {
+  .audience-layout,
+  .faq-layout,
+  .process-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .audience-layout > *,
+  .faq-layout > *,
+  .process-layout > *,
+  .faq-list,
+  .steps,
+  .trust-panel {
+    min-width: 0;
+  }
+
+  .faq summary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .faq summary .disclosure-icon[data-disclosure-label] {
+    justify-self: start;
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+  }
+
   .hero-proof-grid {
     display: grid;
     grid-template-columns: 1fr;

@@ -1672,10 +1672,19 @@
   const initCompare = (compare) => {
     if (compare.dataset.bound === "true") return;
     compare.dataset.bound = "true";
+    const dragThreshold = 3;
+    const scrollThreshold = 9;
     let dragging = false;
     let animationFrame = 0;
     let pendingClientX = 0;
     let activeRect = null;
+    let activePointerId = null;
+    let activePointerType = "";
+    let startX = 0;
+    let startY = 0;
+    let activeTouchId = null;
+    let touchStartX = 0;
+    let touchStartY = 0;
     const updateFromClientX = (clientX) => {
       pendingClientX = clientX;
       if (animationFrame) return;
@@ -1689,29 +1698,13 @@
     const updateFromPointer = (event) => {
       updateFromClientX(event.clientX);
     };
-    compare.addEventListener("pointerdown", (event) => {
-      if (event.pointerType === "mouse" && event.button !== 0) return;
+    const beginDrag = (clientX) => {
       dragging = true;
-      activeRect = compare.getBoundingClientRect();
       compare.classList.add("is-dragging");
       compare.focus({ preventScroll: true });
-      if (event.pointerType === "mouse") event.preventDefault();
-      try {
-        compare.setPointerCapture?.(event.pointerId);
-      } catch {
-        // The pointer may already be inactive after an interrupted touch gesture.
-      }
-      updateFromPointer(event);
-    });
-    compare.addEventListener("pointermove", (event) => {
-      if (!dragging) return;
-      if (event.cancelable) event.preventDefault();
-      updateFromPointer(event);
-    });
-    const stop = (event) => {
-      dragging = false;
-      activeRect = null;
-      compare.classList.remove("is-dragging");
+      updateFromClientX(clientX);
+    };
+    const releasePointerCapture = (event) => {
       try {
         if (event?.pointerId !== undefined && compare.hasPointerCapture?.(event.pointerId)) {
           compare.releasePointerCapture(event.pointerId);
@@ -1720,9 +1713,128 @@
         // Pointer capture may already have been released by the browser.
       }
     };
-    compare.addEventListener("pointerup", stop);
-    compare.addEventListener("pointercancel", stop);
-    compare.addEventListener("lostpointercapture", stop);
+    const resetPointerState = (event) => {
+      releasePointerCapture(event);
+      dragging = false;
+      activePointerId = null;
+      activePointerType = "";
+      activeRect = null;
+      compare.classList.remove("is-dragging");
+    };
+    const shouldLetPageScroll = (dx, dy) =>
+      Math.abs(dy) > scrollThreshold && Math.abs(dy) > Math.abs(dx) * 1.2;
+
+    if (window.PointerEvent) {
+      const handlePointerDown = (event) => {
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+        if (event.isPrimary === false) return;
+        if (activePointerId !== null) resetPointerState(event);
+        activePointerId = event.pointerId;
+        activePointerType = event.pointerType || "mouse";
+        startX = event.clientX;
+        startY = event.clientY;
+        activeRect = compare.getBoundingClientRect();
+        compare.focus({ preventScroll: true });
+        try {
+          compare.setPointerCapture?.(event.pointerId);
+        } catch {
+          // Some browsers can deny capture during interrupted touch gestures.
+        }
+        if (activePointerType === "mouse") {
+          event.preventDefault();
+          beginDrag(event.clientX);
+        }
+      };
+      const handlePointerMove = (event) => {
+        if (event.pointerId !== activePointerId) return;
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        if (!dragging) {
+          if (activePointerType !== "mouse") {
+            if (shouldLetPageScroll(dx, dy)) {
+              resetPointerState(event);
+              return;
+            }
+            if (Math.hypot(dx, dy) < dragThreshold) return;
+          }
+          beginDrag(event.clientX);
+        }
+        if (event.cancelable) event.preventDefault();
+        updateFromPointer(event);
+      };
+      const handlePointerEnd = (event) => {
+        if (event.pointerId !== activePointerId) return;
+        resetPointerState(event);
+      };
+      compare.addEventListener("pointerdown", handlePointerDown);
+      document.addEventListener("pointermove", handlePointerMove);
+      document.addEventListener("pointerup", handlePointerEnd);
+      document.addEventListener("pointercancel", handlePointerEnd);
+      compare.addEventListener("lostpointercapture", handlePointerEnd);
+    } else {
+      const findTouch = (touches, identifier) => [...touches].find((touch) => touch.identifier === identifier);
+      const resetTouchState = () => {
+        dragging = false;
+        activeTouchId = null;
+        activeRect = null;
+        compare.classList.remove("is-dragging");
+      };
+      compare.addEventListener(
+        "touchstart",
+        (event) => {
+          if (activeTouchId !== null || event.changedTouches.length !== 1) return;
+          const touch = event.changedTouches[0];
+          activeTouchId = touch.identifier;
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+          activeRect = compare.getBoundingClientRect();
+          compare.focus({ preventScroll: true });
+        },
+        { passive: true }
+      );
+      document.addEventListener(
+        "touchmove",
+        (event) => {
+          if (activeTouchId === null) return;
+          const touch = findTouch(event.changedTouches, activeTouchId) || findTouch(event.touches, activeTouchId);
+          if (!touch) return;
+          const dx = touch.clientX - touchStartX;
+          const dy = touch.clientY - touchStartY;
+          if (!dragging) {
+            if (shouldLetPageScroll(dx, dy)) {
+              resetTouchState();
+              return;
+            }
+            if (Math.hypot(dx, dy) < dragThreshold) return;
+            beginDrag(touch.clientX);
+          }
+          if (event.cancelable) event.preventDefault();
+          updateFromClientX(touch.clientX);
+        },
+        { passive: false }
+      );
+      const handleTouchEnd = (event) => {
+        if (activeTouchId === null) return;
+        if (findTouch(event.changedTouches, activeTouchId)) resetTouchState();
+      };
+      document.addEventListener("touchend", handleTouchEnd, { passive: true });
+      document.addEventListener("touchcancel", handleTouchEnd, { passive: true });
+    }
+    const resetTouchState = () => {
+      dragging = false;
+      activeTouchId = null;
+      activeRect = null;
+      compare.classList.remove("is-dragging");
+    };
+    window.addEventListener("blur", () => {
+      if (activePointerId !== null) resetPointerState();
+      if (activeTouchId !== null) resetTouchState();
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState !== "hidden") return;
+      if (activePointerId !== null) resetPointerState();
+      if (activeTouchId !== null) resetTouchState();
+    });
     compare.addEventListener("keydown", (event) => {
       const current = Number(compare.getAttribute("aria-valuenow")) || 50;
       const step = event.shiftKey ? 5 : 1;

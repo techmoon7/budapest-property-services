@@ -1115,7 +1115,7 @@ details[open] .disclosure-link span {
   border-radius: 18px;
   background: #111;
   box-shadow: 0 18px 54px rgba(0, 0, 0, 0.16);
-  touch-action: none;
+  touch-action: pan-y pinch-zoom;
 }
 
 .compare img,
