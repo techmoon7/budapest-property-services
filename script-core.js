@@ -1665,176 +1665,217 @@
   const setComparePosition = (compare, value) => {
     const next = Math.max(0, Math.min(100, Number(value)));
     compare.style.setProperty("--split", `${next}%`);
-    compare.setAttribute("aria-valuenow", String(Math.round(next)));
-    compare.setAttribute("aria-valuetext", compareValueText(next));
+    const rounded = String(Math.round(next));
+    if (compare.getAttribute("aria-valuenow") !== rounded) {
+      compare.setAttribute("aria-valuenow", rounded);
+      compare.setAttribute("aria-valuetext", compareValueText(next));
+    }
+  };
+
+  let activeCompareDrag = null;
+  let compareFrame = 0;
+  let comparePendingClientX = 0;
+  let compareDocumentListenersBound = false;
+  let compareTouchFallbackListenersBound = false;
+  let activeCompareTouch = null;
+
+  const comparePercentFromClientX = (state, clientX) => {
+    if (!state?.rect?.width) return 50;
+    return ((clientX - state.rect.left) / state.rect.width) * 100;
+  };
+
+  const renderCompareFromClientX = (state, clientX) => {
+    if (!state?.compare) return;
+    setComparePosition(state.compare, comparePercentFromClientX(state, clientX));
+  };
+
+  const scheduleCompareRender = (clientX) => {
+    if (!activeCompareDrag) return;
+    comparePendingClientX = clientX;
+    if (compareFrame) return;
+    compareFrame = requestAnimationFrame(() => {
+      compareFrame = 0;
+      if (!activeCompareDrag) return;
+      renderCompareFromClientX(activeCompareDrag, comparePendingClientX);
+    });
+  };
+
+  const releaseComparePointerCapture = (state, event) => {
+    try {
+      const pointerId = event?.pointerId ?? state?.pointerId;
+      if (state?.compare && pointerId !== undefined && state.compare.hasPointerCapture?.(pointerId)) {
+        state.compare.releasePointerCapture(pointerId);
+      }
+    } catch {
+      // Pointer capture may already have been released by the browser.
+    }
+  };
+
+  const finishCompareDrag = (event, { finalUpdate = false } = {}) => {
+    if (!activeCompareDrag) return;
+    if (event?.pointerId !== undefined && event.pointerId !== activeCompareDrag.pointerId) return;
+    const state = activeCompareDrag;
+    if (finalUpdate && event?.clientX !== undefined) renderCompareFromClientX(state, event.clientX);
+    if (compareFrame) {
+      cancelAnimationFrame(compareFrame);
+      compareFrame = 0;
+    }
+    releaseComparePointerCapture(state, event);
+    state.compare.classList.remove("is-dragging");
+    activeCompareDrag = null;
+  };
+
+  const handleComparePointerMove = (event) => {
+    if (!activeCompareDrag || event.pointerId !== activeCompareDrag.pointerId) return;
+    if (activeCompareDrag.touchIntent === "pending") {
+      const dx = event.clientX - activeCompareDrag.startX;
+      const dy = event.clientY - activeCompareDrag.startY;
+      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx) * 1.2) {
+        setComparePosition(activeCompareDrag.compare, activeCompareDrag.startValue);
+        finishCompareDrag(event);
+        return;
+      }
+      if (Math.abs(dx) >= Math.abs(dy)) activeCompareDrag.touchIntent = "drag";
+    }
+    scheduleCompareRender(event.clientX);
+  };
+
+  const handleComparePointerEnd = (event) => {
+    finishCompareDrag(event, { finalUpdate: event.type === "pointerup" });
+  };
+
+  const bindCompareDocumentListeners = () => {
+    if (compareDocumentListenersBound) return;
+    compareDocumentListenersBound = true;
+    document.addEventListener("pointermove", handleComparePointerMove);
+    document.addEventListener("pointerup", handleComparePointerEnd);
+    document.addEventListener("pointercancel", handleComparePointerEnd);
+    document.addEventListener("lostpointercapture", handleComparePointerEnd, true);
+    window.addEventListener("blur", () => finishCompareDrag());
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") finishCompareDrag();
+    });
+    window.addEventListener("resize", () => finishCompareDrag());
+    window.addEventListener("orientationchange", () => finishCompareDrag());
+  };
+
+  const startCompareDrag = (compare, event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (event.isPrimary === false) return;
+    finishCompareDrag();
+
+    const rect = compare.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
+    activeCompareDrag = {
+      compare,
+      pointerId: event.pointerId,
+      pointerType: event.pointerType || "mouse",
+      rect,
+      startX: event.clientX,
+      startY: event.clientY,
+      startValue: Number(compare.getAttribute("aria-valuenow")) || 50,
+      touchIntent: event.pointerType && event.pointerType !== "mouse" ? "pending" : "drag"
+    };
+    compare.classList.add("is-dragging");
+    compare.focus({ preventScroll: true });
+    try {
+      compare.setPointerCapture?.(event.pointerId);
+    } catch {
+      // Some browsers can deny capture during interrupted gestures.
+    }
+    renderCompareFromClientX(activeCompareDrag, event.clientX);
+  };
+
+  const findCompareTouch = (touches, identifier) => [...touches].find((touch) => touch.identifier === identifier);
+
+  const finishCompareTouch = (event, { finalUpdate = false } = {}) => {
+    if (!activeCompareTouch) return;
+    const state = activeCompareTouch;
+    const touch = event ? findCompareTouch(event.changedTouches || [], state.identifier) : null;
+    if (finalUpdate && touch) renderCompareFromClientX(state, touch.clientX);
+    if (compareFrame) {
+      cancelAnimationFrame(compareFrame);
+      compareFrame = 0;
+    }
+    state.compare.classList.remove("is-dragging");
+    activeCompareTouch = null;
+  };
+
+  const bindCompareTouchFallbackListeners = () => {
+    if (compareTouchFallbackListenersBound) return;
+    compareTouchFallbackListenersBound = true;
+    document.addEventListener(
+      "touchmove",
+      (event) => {
+        if (!activeCompareTouch) return;
+        const touch = findCompareTouch(event.changedTouches, activeCompareTouch.identifier) || findCompareTouch(event.touches, activeCompareTouch.identifier);
+        if (!touch) return;
+        const dx = touch.clientX - activeCompareTouch.startX;
+        const dy = touch.clientY - activeCompareTouch.startY;
+        if (activeCompareTouch.touchIntent === "pending") {
+          if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx) * 1.2) {
+            setComparePosition(activeCompareTouch.compare, activeCompareTouch.startValue);
+            finishCompareTouch();
+            return;
+          }
+          if (Math.abs(dx) >= Math.abs(dy)) activeCompareTouch.touchIntent = "drag";
+        }
+        if (event.cancelable && Math.abs(dx) >= Math.abs(dy)) event.preventDefault();
+        comparePendingClientX = touch.clientX;
+        if (compareFrame) return;
+        compareFrame = requestAnimationFrame(() => {
+          compareFrame = 0;
+          if (!activeCompareTouch) return;
+          renderCompareFromClientX(activeCompareTouch, comparePendingClientX);
+        });
+      },
+      { passive: false }
+    );
+    document.addEventListener("touchend", (event) => finishCompareTouch(event, { finalUpdate: true }), { passive: true });
+    document.addEventListener("touchcancel", (event) => finishCompareTouch(event), { passive: true });
+    window.addEventListener("blur", () => finishCompareTouch());
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") finishCompareTouch();
+    });
+    window.addEventListener("resize", () => finishCompareTouch());
+    window.addEventListener("orientationchange", () => finishCompareTouch());
+  };
+
+  const startCompareTouchFallback = (compare, event) => {
+    if (activeCompareTouch) finishCompareTouch();
+    if (event.changedTouches.length !== 1) return;
+    const touch = event.changedTouches[0];
+    const rect = compare.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    activeCompareTouch = {
+      compare,
+      identifier: touch.identifier,
+      rect,
+      startX: touch.clientX,
+      startY: touch.clientY,
+      startValue: Number(compare.getAttribute("aria-valuenow")) || 50,
+      touchIntent: "pending"
+    };
+    compare.classList.add("is-dragging");
+    compare.focus({ preventScroll: true });
+    renderCompareFromClientX(activeCompareTouch, touch.clientX);
   };
 
   const initCompare = (compare) => {
     if (compare.dataset.bound === "true") return;
     compare.dataset.bound = "true";
-    const dragThreshold = 3;
-    const scrollThreshold = 9;
-    let dragging = false;
-    let animationFrame = 0;
-    let pendingClientX = 0;
-    let activeRect = null;
-    let activePointerId = null;
-    let activePointerType = "";
-    let startX = 0;
-    let startY = 0;
-    let activeTouchId = null;
-    let touchStartX = 0;
-    let touchStartY = 0;
-    const updateFromClientX = (clientX) => {
-      pendingClientX = clientX;
-      if (animationFrame) return;
-      animationFrame = requestAnimationFrame(() => {
-        animationFrame = 0;
-        const rect = activeRect || compare.getBoundingClientRect();
-        if (!rect.width) return;
-        setComparePosition(compare, ((pendingClientX - rect.left) / rect.width) * 100);
-      });
-    };
-    const updateFromPointer = (event) => {
-      updateFromClientX(event.clientX);
-    };
-    const beginDrag = (clientX) => {
-      dragging = true;
-      compare.classList.add("is-dragging");
-      compare.focus({ preventScroll: true });
-      updateFromClientX(clientX);
-    };
-    const releasePointerCapture = (event) => {
-      try {
-        if (event?.pointerId !== undefined && compare.hasPointerCapture?.(event.pointerId)) {
-          compare.releasePointerCapture(event.pointerId);
-        }
-      } catch {
-        // Pointer capture may already have been released by the browser.
-      }
-    };
-    const resetPointerState = (event) => {
-      releasePointerCapture(event);
-      dragging = false;
-      activePointerId = null;
-      activePointerType = "";
-      activeRect = null;
-      compare.classList.remove("is-dragging");
-    };
-    const shouldLetPageScroll = (dx, dy) =>
-      Math.abs(dy) > scrollThreshold && Math.abs(dy) > Math.abs(dx) * 1.2;
-
     if (window.PointerEvent) {
-      const handlePointerDown = (event) => {
-        if (event.pointerType === "mouse" && event.button !== 0) return;
-        if (event.isPrimary === false) return;
-        if (activePointerId !== null) resetPointerState(event);
-        activePointerId = event.pointerId;
-        activePointerType = event.pointerType || "mouse";
-        startX = event.clientX;
-        startY = event.clientY;
-        activeRect = compare.getBoundingClientRect();
-        compare.focus({ preventScroll: true });
-        try {
-          compare.setPointerCapture?.(event.pointerId);
-        } catch {
-          // Some browsers can deny capture during interrupted touch gestures.
-        }
-        if (activePointerType === "mouse") {
-          event.preventDefault();
-          beginDrag(event.clientX);
-        }
-      };
-      const handlePointerMove = (event) => {
-        if (event.pointerId !== activePointerId) return;
-        const dx = event.clientX - startX;
-        const dy = event.clientY - startY;
-        if (!dragging) {
-          if (activePointerType !== "mouse") {
-            if (shouldLetPageScroll(dx, dy)) {
-              resetPointerState(event);
-              return;
-            }
-            if (Math.hypot(dx, dy) < dragThreshold) return;
-          }
-          beginDrag(event.clientX);
-        }
-        if (event.cancelable) event.preventDefault();
-        updateFromPointer(event);
-      };
-      const handlePointerEnd = (event) => {
-        if (event.pointerId !== activePointerId) return;
-        resetPointerState(event);
-      };
-      compare.addEventListener("pointerdown", handlePointerDown);
-      document.addEventListener("pointermove", handlePointerMove);
-      document.addEventListener("pointerup", handlePointerEnd);
-      document.addEventListener("pointercancel", handlePointerEnd);
-      compare.addEventListener("lostpointercapture", handlePointerEnd);
+      bindCompareDocumentListeners();
+      compare.addEventListener("pointerdown", (event) => startCompareDrag(compare, event));
     } else {
-      const findTouch = (touches, identifier) => [...touches].find((touch) => touch.identifier === identifier);
-      const resetTouchState = () => {
-        dragging = false;
-        activeTouchId = null;
-        activeRect = null;
-        compare.classList.remove("is-dragging");
-      };
+      bindCompareTouchFallbackListeners();
       compare.addEventListener(
         "touchstart",
-        (event) => {
-          if (activeTouchId !== null || event.changedTouches.length !== 1) return;
-          const touch = event.changedTouches[0];
-          activeTouchId = touch.identifier;
-          touchStartX = touch.clientX;
-          touchStartY = touch.clientY;
-          activeRect = compare.getBoundingClientRect();
-          compare.focus({ preventScroll: true });
-        },
+        (event) => startCompareTouchFallback(compare, event),
         { passive: true }
       );
-      document.addEventListener(
-        "touchmove",
-        (event) => {
-          if (activeTouchId === null) return;
-          const touch = findTouch(event.changedTouches, activeTouchId) || findTouch(event.touches, activeTouchId);
-          if (!touch) return;
-          const dx = touch.clientX - touchStartX;
-          const dy = touch.clientY - touchStartY;
-          if (!dragging) {
-            if (shouldLetPageScroll(dx, dy)) {
-              resetTouchState();
-              return;
-            }
-            if (Math.hypot(dx, dy) < dragThreshold) return;
-            beginDrag(touch.clientX);
-          }
-          if (event.cancelable) event.preventDefault();
-          updateFromClientX(touch.clientX);
-        },
-        { passive: false }
-      );
-      const handleTouchEnd = (event) => {
-        if (activeTouchId === null) return;
-        if (findTouch(event.changedTouches, activeTouchId)) resetTouchState();
-      };
-      document.addEventListener("touchend", handleTouchEnd, { passive: true });
-      document.addEventListener("touchcancel", handleTouchEnd, { passive: true });
     }
-    const resetTouchState = () => {
-      dragging = false;
-      activeTouchId = null;
-      activeRect = null;
-      compare.classList.remove("is-dragging");
-    };
-    window.addEventListener("blur", () => {
-      if (activePointerId !== null) resetPointerState();
-      if (activeTouchId !== null) resetTouchState();
-    });
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState !== "hidden") return;
-      if (activePointerId !== null) resetPointerState();
-      if (activeTouchId !== null) resetTouchState();
-    });
     compare.addEventListener("keydown", (event) => {
       const current = Number(compare.getAttribute("aria-valuenow")) || 50;
       const step = event.shiftKey ? 5 : 1;
