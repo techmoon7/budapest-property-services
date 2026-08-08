@@ -2830,10 +2830,10 @@ body.nav-menu-open .mobile-cta {
 
   html.nav-menu-open .header[data-nav-enhanced="true"].nav-open .nav,
   body.nav-menu-open .header[data-nav-enhanced="true"].nav-open .nav {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-    visibility: visible;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateY(0) !important;
+    visibility: visible !important;
   }
 
   .mobile-nav-chrome {
