@@ -8,7 +8,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "functional-qa-v1-2026-08-08-01";
+  const assetBuildId = "functional-qa-v1-2026-08-08-02";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
