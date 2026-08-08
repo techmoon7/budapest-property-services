@@ -472,6 +472,12 @@ details[open] .disclosure-link {
   user-select: none;
 }
 
+.compare .label,
+.compare .handle {
+  pointer-events: none;
+  touch-action: pan-y pinch-zoom;
+}
+
 .compare .before {
   z-index: 2;
   clip-path: inset(0 calc(100% - var(--split)) 0 0);

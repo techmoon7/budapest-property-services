@@ -1700,6 +1700,16 @@
     });
   };
 
+  const findCompareAtPoint = (event) => {
+    const directCompare = event.target?.closest?.("[data-compare]");
+    if (directCompare) return directCompare;
+    const candidates = [...document.querySelectorAll("[data-compare]")].filter((compare) => {
+      const rect = compare.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 && event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+    });
+    return candidates.at(-1) || null;
+  };
+
   const releaseComparePointerCapture = (state, event) => {
     try {
       const pointerId = event?.pointerId ?? state?.pointerId;
@@ -1744,9 +1754,16 @@
     finishCompareDrag(event, { finalUpdate: event.type === "pointerup" });
   };
 
+  const handleComparePointerDown = (event) => {
+    const compare = findCompareAtPoint(event);
+    if (!compare) return;
+    startCompareDrag(compare, event);
+  };
+
   const bindCompareDocumentListeners = () => {
     if (compareDocumentListenersBound) return;
     compareDocumentListenersBound = true;
+    document.addEventListener("pointerdown", handleComparePointerDown, true);
     document.addEventListener("pointermove", handleComparePointerMove);
     document.addEventListener("pointerup", handleComparePointerEnd);
     document.addEventListener("pointercancel", handleComparePointerEnd);
@@ -1867,7 +1884,6 @@
     compare.dataset.bound = "true";
     if (window.PointerEvent) {
       bindCompareDocumentListeners();
-      compare.addEventListener("pointerdown", (event) => startCompareDrag(compare, event));
     } else {
       bindCompareTouchFallbackListeners();
       compare.addEventListener(

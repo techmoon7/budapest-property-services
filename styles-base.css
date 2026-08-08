@@ -1121,6 +1121,8 @@ details[open] .disclosure-link span {
 .compare img,
 .compare .label,
 .compare .handle {
+  pointer-events: none;
+  touch-action: pan-y pinch-zoom;
   user-select: none;
 }
 
