@@ -26,7 +26,8 @@
   <meta name="twitter:image" content="https://budapestpropertyservices.hu/assets/budapest-apartment-wall-refresh.jpg">
   <meta name="twitter:image:alt" content="Budapest Property Services illusztratív szolgáltatási kép">
   <meta name="theme-color" content="#275c43">
-  <link rel="stylesheet" href="../styles.css?v=slider-hitfix-v1-2026-08-08-01">
+  <link rel="stylesheet" href="../styles-base.css?v=homepage-simplify-v1-2026-08-27-01">
+  <link rel="stylesheet" href="../styles.css?v=homepage-simplify-v1-2026-08-27-01">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -70,7 +71,7 @@
   ]
 }
   </script>
-  <script src="../script.js?v=slider-hitfix-v1-2026-08-08-01" defer></script>
+  <script src="../script.js?v=homepage-simplify-v1-2026-08-27-01" defer></script>
 </head>
 <body data-route-lang="hu">
       <header class="header" data-nav-enhanced="true">
@@ -205,42 +206,7 @@
             <h2 id="transformation-title">A különbség az első pillanatban látszik</h2>
             <p>A legtöbb érdeklődő néhány másodperc alatt dönt arról, hogy egy ingatlan gondozottnak tűnik-e. A célunk a tiszta, rendezett, bemutatható állapot, nem a túlzó látvány.</p>
           </div>
-          <div class="transformation-grid">
-        <article class="transformation-card featured" data-reveal="">
-          <button type="button" data-project="0" aria-label="Kopott falból bemutatható lakótér">
-            <span class="transformation-visual" aria-hidden="true">
-              <span class="transformation-frame before"><img src="../assets/budapest-painting-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Budapesti lakásfal festési frissítés előtt" loading="eager" decoding="async"></span>
-              <span class="transformation-frame after"><img src="../assets/budapest-finished-room-1.jpg?v=before-after-v2-2026-08-08-01" alt="Budapesti lakásszoba falfrissítés után" loading="eager" decoding="async"></span>
-              <span class="transformation-divider"></span>
-              <span class="transformation-label before">Előtte</span>
-              <span class="transformation-label after">Utána</span>
-            </span>
-            <span class="transformation-copy">
-              <small>Falfrissítés</small>
-              <strong>Kopott falból bemutatható lakótér</strong>
-              <span>Jól látható, hiteles állapotváltás: foltok és kopások helyett egységesebb, tisztább felület.</span>
-              <em>Példa megnyitása</em>
-            </span>
-          </button>
-        </article>
-        <article class="transformation-card" data-reveal="">
-          <button type="button" data-project="3" aria-label="Vendégérkezés előtt rendezett összkép">
-            <span class="transformation-visual" aria-hidden="true">
-              <span class="transformation-frame before"><img src="../assets/budapest-airbnb-before-turnover-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Budapesti Airbnb-lakás vendégfogadás előtti frissítés előtt" loading="lazy" decoding="async"></span>
-              <span class="transformation-frame after"><img src="../assets/budapest-airbnb-living-room.jpg?v=before-after-v2-2026-08-08-01" alt="Vendégeknek előkészített budapesti Airbnb-nappali" loading="lazy" decoding="async"></span>
-              <span class="transformation-divider"></span>
-              <span class="transformation-label before">Előtte</span>
-              <span class="transformation-label after">Utána</span>
-            </span>
-            <span class="transformation-copy">
-              <small>Airbnb előkészítés</small>
-              <strong>Vendégérkezés előtt rendezett összkép</strong>
-              <span>Apró hibák, falnyomok és rendezetlenség helyett olyan tér, amelyet könnyebb jó szívvel átadni.</span>
-              <em>Példa megnyitása</em>
-            </span>
-          </button>
-        </article>
-        <article class="transformation-card" data-reveal="">
+          <div class="transformation-grid"><article class="transformation-card featured" data-reveal="">
           <button type="button" data-project="2" aria-label="Benőtt udvarból gondozottabb érkezés">
             <span class="transformation-visual" aria-hidden="true">
               <span class="transformation-frame before"><img src="../assets/budapest-courtyard-before-entrance.jpg?v=before-after-v2-2026-08-08-01" alt="Benőtt budapesti udvar kertfenntartás előtt" loading="lazy" decoding="async"></span>
@@ -495,15 +461,17 @@
             </div>
             <div class="filterbar" data-reveal=""><button class="active" data-project-filter="all">Összes munkatípus</button><button  data-project-filter="painting">Festés</button><button  data-project-filter="drywall">Gipszkarton</button><button  data-project-filter="garden">Kert</button><button  data-project-filter="airbnb">Airbnb</button><button  data-project-filter="office">Iroda</button><button  data-project-filter="handyman">Kisebb javítás</button></div>
             <div class="grid project-grid-rich">
-        <article class="project project-card rich featured" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="0" aria-label="Kopott falból tiszta, egységes felület képgalériájának megnyitása">
-              <img src="../assets/budapest-painting-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Előtte" loading="lazy" decoding="async">
-              <img src="../assets/budapest-finished-room-1.jpg?v=before-after-v2-2026-08-08-01" alt="Kész állapot" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Előtte</span>
-              <span class="mini-label after">Kész állapot</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich featured" data-reveal="" data-project-category="painting">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-0" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% előtte kép látható" aria-label="Előtte-utána összehasonlító csúszka" aria-describedby="cardCompareHint-0">
+        <img class="after" src="../assets/budapest-finished-room-1.jpg?v=before-after-v2-2026-08-08-01" alt="Kopott falból tiszta, egységes felület - Utána" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="../assets/budapest-painting-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Kopott falból tiszta, egységes felület - Előtte" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Előtte</span>
+        <span class="label compare-label right">Utána</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-0">Illusztratív előtte-utána összehasonlítás, amely a munkafolyamat jellegét és a várható eredményt mutatja. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket.</p>
+          </div>
           <button class="case-open" type="button" data-project="0" aria-label="Kopott falból tiszta, egységes felület">
             <div class="body">
               <span class="case-type">Festés / faljavítás</span>
@@ -526,15 +494,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="1" aria-label="Félkész gipszkartonból festésre kész felület képgalériájának megnyitása">
-              <img src="../assets/budapest-drywall-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Előtte" loading="lazy" decoding="async">
-              <img src="../assets/budapest-finished-room-2.jpg?v=before-after-v2-2026-08-08-01" alt="Kész állapot" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Előtte</span>
-              <span class="mini-label after">Kész állapot</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="drywall">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-1" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% előtte kép látható" aria-label="Előtte-utána összehasonlító csúszka" aria-describedby="cardCompareHint-1">
+        <img class="after" src="../assets/budapest-finished-room-2.jpg?v=before-after-v2-2026-08-08-01" alt="Félkész gipszkartonból festésre kész felület - Utána" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="../assets/budapest-drywall-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Félkész gipszkartonból festésre kész felület - Előtte" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Előtte</span>
+        <span class="label compare-label right">Utána</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-1">Illusztratív előtte-utána összehasonlítás, amely a munkafolyamat jellegét és a várható eredményt mutatja. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket.</p>
+          </div>
           <button class="case-open" type="button" data-project="1" aria-label="Félkész gipszkartonból festésre kész felület">
             <div class="body">
               <span class="case-type">Gipszkarton / mennyezet</span>
@@ -557,15 +527,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="2" aria-label="Benőtt udvarból gondozottabb érkezés képgalériájának megnyitása">
-              <img src="../assets/budapest-courtyard-before-entrance.jpg?v=before-after-v2-2026-08-08-01" alt="Előtte" loading="lazy" decoding="async">
-              <img src="../assets/budapest-courtyard-garden-1.jpg?v=before-after-v2-2026-08-08-01" alt="Kész állapot" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Előtte</span>
-              <span class="mini-label after">Kész állapot</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="garden">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-2" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% előtte kép látható" aria-label="Előtte-utána összehasonlító csúszka" aria-describedby="cardCompareHint-2">
+        <img class="after" src="../assets/budapest-courtyard-garden-1.jpg?v=before-after-v2-2026-08-08-01" alt="Benőtt udvarból gondozottabb érkezés - Utána" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="../assets/budapest-courtyard-before-entrance.jpg?v=before-after-v2-2026-08-08-01" alt="Benőtt udvarból gondozottabb érkezés - Előtte" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Előtte</span>
+        <span class="label compare-label right">Utána</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-2">Illusztratív előtte-utána összehasonlítás, amely a munkafolyamat jellegét és a várható eredményt mutatja. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket.</p>
+          </div>
           <button class="case-open" type="button" data-project="2" aria-label="Benőtt udvarból gondozottabb érkezés">
             <div class="body">
               <span class="case-type">Kert / udvar</span>
@@ -588,15 +560,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="3" aria-label="Lakásfrissítés vendégérkezés előtt képgalériájának megnyitása">
-              <img src="../assets/budapest-airbnb-before-turnover-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Előtte" loading="lazy" decoding="async">
-              <img src="../assets/budapest-airbnb-living-room.jpg?v=before-after-v2-2026-08-08-01" alt="Kész állapot" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Előtte</span>
-              <span class="mini-label after">Kész állapot</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="airbnb">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-3" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% előtte kép látható" aria-label="Előtte-utána összehasonlító csúszka" aria-describedby="cardCompareHint-3">
+        <img class="after" src="../assets/budapest-airbnb-living-room.jpg?v=before-after-v2-2026-08-08-01" alt="Lakásfrissítés vendégérkezés előtt - Utána" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="../assets/budapest-airbnb-before-turnover-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Lakásfrissítés vendégérkezés előtt - Előtte" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Előtte</span>
+        <span class="label compare-label right">Utána</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-3">Illusztratív előtte-utána összehasonlítás, amely a munkafolyamat jellegét és a várható eredményt mutatja. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket.</p>
+          </div>
           <button class="case-open" type="button" data-project="3" aria-label="Lakásfrissítés vendégérkezés előtt">
             <div class="body">
               <span class="case-type">Airbnb / bérlőváltás</span>
@@ -619,15 +593,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="4" aria-label="Iroda gyors frissítése látogatás előtt képgalériájának megnyitása">
-              <img src="../assets/budapest-office-before-touchup-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Előtte" loading="lazy" decoding="async">
-              <img src="../assets/budapest-office-finished-1.jpg?v=before-after-v2-2026-08-08-01" alt="Kész állapot" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Előtte</span>
-              <span class="mini-label after">Kész állapot</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="office">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-4" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% előtte kép látható" aria-label="Előtte-utána összehasonlító csúszka" aria-describedby="cardCompareHint-4">
+        <img class="after" src="../assets/budapest-office-finished-1.jpg?v=before-after-v2-2026-08-08-01" alt="Iroda gyors frissítése látogatás előtt - Utána" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="../assets/budapest-office-before-touchup-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Iroda gyors frissítése látogatás előtt - Előtte" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Előtte</span>
+        <span class="label compare-label right">Utána</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-4">Illusztratív előtte-utána összehasonlítás, amely a munkafolyamat jellegét és a várható eredményt mutatja. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket.</p>
+          </div>
           <button class="case-open" type="button" data-project="4" aria-label="Iroda gyors frissítése látogatás előtt">
             <div class="body">
               <span class="case-type">Iroda / képviseleti tér</span>
@@ -650,15 +626,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="5" aria-label="Apró hibákból rendezett átadás képgalériájának megnyitása">
-              <img src="../assets/budapest-handyman-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Előtte" loading="lazy" decoding="async">
-              <img src="../assets/budapest-airbnb-bedroom.jpg?v=before-after-v2-2026-08-08-01" alt="Kész állapot" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Előtte</span>
-              <span class="mini-label after">Kész állapot</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="handyman">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-5" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% előtte kép látható" aria-label="Előtte-utána összehasonlító csúszka" aria-describedby="cardCompareHint-5">
+        <img class="after" src="../assets/budapest-airbnb-bedroom.jpg?v=before-after-v2-2026-08-08-01" alt="Apró hibákból rendezett átadás - Utána" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="../assets/budapest-handyman-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Apró hibákból rendezett átadás - Előtte" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Előtte</span>
+        <span class="label compare-label right">Utána</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-5">Illusztratív előtte-utána összehasonlítás, amely a munkafolyamat jellegét és a várható eredményt mutatja. Kattintson vagy fókuszáljon a csúszkára, majd húzza a fogantyút, vagy használja a nyílbillentyűket.</p>
+          </div>
           <button class="case-open" type="button" data-project="5" aria-label="Apró hibákból rendezett átadás">
             <div class="body">
               <span class="case-type">Kisebb javítások / átadás</span>
@@ -685,7 +663,7 @@
         </section>
 
         <section id="media" class="section wrap">
-          <div class="section-head" data-reveal=""><span class="section-index">05</span><h2>Képes munkafolyamatok</h2><p>Nézze meg a szolgáltatástípusonként rendezett képsorozatokat. A részletes galéria és az előtte-utána összehasonlítás egyetlen nézetben nyílik meg.</p></div>
+          <div class="section-head" data-reveal=""><span class="section-index">05</span><h2>Képes munkafolyamatok</h2><p>Nézze meg a szolgáltatástípusonként rendezett képsorozatokat. A részletes galéria egy fókuszált nézetben nyílik meg, az előtte-utána összehasonlítás pedig csak ott marad, ahol a változás azonnal érthető.</p></div>
           <div class="video-grid">
         <article class="video-card media-reference-card" data-reveal="">
           <button type="button" data-project-gallery="0" aria-label="Kopott falból tiszta, egységes felület képgalériájának megnyitása">
@@ -704,7 +682,7 @@
           <button type="button" data-project-gallery="1" aria-label="Félkész gipszkartonból festésre kész felület képgalériájának megnyitása">
             <div class="video-poster">
               <img src="../assets/budapest-finished-room-2.jpg?v=before-after-v2-2026-08-08-01" alt="Félkész gipszkartonból festésre kész felület" loading="lazy" decoding="async">
-              <span class="video-type">12 képes galéria</span>
+              <span class="video-type">11 képes galéria</span>
               <span class="inspect-icon" aria-hidden="true"></span>
             </div>
             <div class="body">
@@ -717,7 +695,7 @@
           <button type="button" data-project-gallery="2" aria-label="Benőtt udvarból gondozottabb érkezés képgalériájának megnyitása">
             <div class="video-poster">
               <img src="../assets/budapest-courtyard-garden-1.jpg?v=before-after-v2-2026-08-08-01" alt="Benőtt udvarból gondozottabb érkezés" loading="lazy" decoding="async">
-              <span class="video-type">11 képes galéria</span>
+              <span class="video-type">10 képes galéria</span>
               <span class="inspect-icon" aria-hidden="true"></span>
             </div>
             <div class="body">

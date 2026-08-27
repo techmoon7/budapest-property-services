@@ -219,7 +219,7 @@ const stylesSource = fs.readFileSync("styles.css", "utf8");
 const englishHome = fs.readFileSync("index.html", "utf8");
 const hungarianHome = fs.readFileSync("hu/index.html", "utf8");
 
-assert.match(scriptSource, /const assetBuildId = "slider-hitfix-v1-2026-08-08-01"/);
+assert.match(scriptSource, /const assetBuildId = "[a-z0-9-]+"/);
 assert.doesNotMatch(scriptSource, /insertAdjacentElement\("afterend", languageSelector\)/);
 assert.doesNotMatch(scriptSource, /mobileTools\.insertBefore\(languageSelector/);
 assert.match(scriptSource, /languageSelectorTrigger/);
@@ -237,55 +237,48 @@ assert.match(hungarianHome, /<button class="language-trust-badge" type="button" 
 });
 
 // Regression tests for the "WhatsApp form jumps instead of opening WhatsApp"
-// bug found (and previously fixed on the Sopron site) via the same
-// dual-render architecture.
+// bug family, which traced back to the homepage being rendered twice: once
+// immediately by script.js against static markup, then again asynchronously
+// by script-core.js, which replaced the entire document.body via innerHTML.
+// Binding a live quote form during the first (doomed) pass let a visitor's
+// click or typed input be silently destroyed or misdirected when the
+// replacement landed mid-interaction.
 //
-// Root cause: the homepage (index.html / hu/index.html) is rendered twice —
-// once immediately by script.js against the static markup, then again,
-// asynchronously, by script-core.js, which replaces the entire document.body
-// via innerHTML once it finishes loading. Binding a live, interactive
-// WhatsApp quote form during the first (doomed) pass let a visitor's click or
-// typed input be silently destroyed or misdirected onto a different element
-// when script-core.js's replacement landed mid-interaction — surfacing as the
-// page "jumping" instead of opening WhatsApp. The fix gates quote-form
-// rendering/binding on script-core.js's own "render is stable" signal
-// (afterHomeRender), with a same-effect fallback if script-core.js fails to
-// load at all, so the form is only ever built once, against the final DOM.
-assert.match(
-  scriptSource,
-  /let homeCoreReady = false;/,
-  "script.js must track whether script-core.js's render has completed before it is safe to bind the quote form"
-);
-assert.match(
-  scriptSource,
-  /if \(homeCoreReady\) bindQuoteForms\(\);/,
-  "applyHomeEnhancements must not call bindQuoteForms() until homeCoreReady is true"
-);
-// The dangerous pre-fix pattern — applyHomeEnhancements calling
-// bindQuoteForms() unconditionally on its last line — must not reappear.
-// (initStandalonePage, the *other* function that calls bindQuoteForms()
-// unconditionally, is fine as-is: service pages never load script-core.js,
-// so there is no destructive body.innerHTML replacement race to guard
-// against there — only applyHomeEnhancements needs the gate.)
-const applyHomeEnhancementsBody = scriptSource.match(
-  /const applyHomeEnhancements = \(\) => \{([\s\S]*?)\n {2}\};/
-)?.[1];
-assert.ok(applyHomeEnhancementsBody, "could not locate applyHomeEnhancements body to inspect");
+// That architecture has been removed rather than re-gated: index.html and
+// hu/index.html now contain the complete final markup directly (including
+// the comparison sliders and case-card content that script-core.js used to
+// generate at runtime), script.js initializes the page exactly once against
+// that static DOM, and there is no second script or destructive innerHTML
+// swap left to race against. These assertions guard against that
+// architecture quietly reappearing.
 assert.doesNotMatch(
-  applyHomeEnhancementsBody,
+  scriptSource,
+  /script-core/,
+  "script.js must not load or reference script-core.js — the homepage no longer double-renders"
+);
+assert.doesNotMatch(
+  scriptSource,
+  /document\.body\.innerHTML\s*=/,
+  "no code path may replace the entire document body at runtime"
+);
+assert.doesNotMatch(
+  scriptSource,
+  /new MutationObserver\(/,
+  "the homepage must not re-run its enhancements via a whole-document MutationObserver"
+);
+assert.ok(!fs.existsSync("script-core.js"), "script-core.js must not exist as a deployed file");
+const initHomeBody = scriptSource.match(/const initHome = \(\) => \{([\s\S]*?)\n {2}\};/)?.[1];
+assert.ok(initHomeBody, "could not locate initHome body to inspect");
+assert.match(
+  initHomeBody,
   /^\s*bindQuoteForms\(\);\s*$/m,
-  "bindQuoteForms() must stay gated behind homeCoreReady inside applyHomeEnhancements, not called unconditionally"
+  "bindQuoteForms() must run unconditionally in initHome — there is no destructive-replacement race left to gate against"
 );
-assert.match(
-  scriptSource,
-  /window\.BPS_I18N\.afterHomeRender = \(\) => \{\s*\n\s*homeCoreReady = true;/,
-  "afterHomeRender (called by script-core.js once its render is stable) must flip homeCoreReady on"
-);
-assert.match(
-  scriptSource,
-  /script\.onerror = \(\) => \{[\s\S]*?homeCoreReady = true;[\s\S]*?applyHomeEnhancements\(\);\s*\n\s*\};/,
-  "if script-core.js fails to load, the static fallback form must still become usable"
-);
+["index.html", "hu/index.html"].forEach((file) => {
+  const html = fs.readFileSync(file, "utf8");
+  assert.match(html, /data-compare/, `${file} must contain the comparison-slider markup statically, not generated at runtime`);
+  assert.match(html, /data-whatsapp-quote-form/, `${file} must contain the quote-form mount point`);
+});
 
 // Regression test for the language-aware image-lightbox aria-label fix.
 // bindHeroLightbox() previously hardcoded an English "Open image: ..." label

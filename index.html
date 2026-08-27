@@ -26,7 +26,8 @@
   <meta name="twitter:image" content="https://budapestpropertyservices.hu/assets/budapest-apartment-wall-refresh.jpg">
   <meta name="twitter:image:alt" content="Budapest Property Services illustrative service image">
   <meta name="theme-color" content="#275c43">
-  <link rel="stylesheet" href="styles.css?v=slider-hitfix-v1-2026-08-08-01">
+  <link rel="stylesheet" href="styles-base.css?v=homepage-simplify-v1-2026-08-27-01">
+  <link rel="stylesheet" href="styles.css?v=homepage-simplify-v1-2026-08-27-01">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -70,7 +71,7 @@
   ]
 }
   </script>
-  <script src="script.js?v=slider-hitfix-v1-2026-08-08-01" defer></script>
+  <script src="script.js?v=homepage-simplify-v1-2026-08-27-01" defer></script>
 </head>
 <body data-route-lang="en">
       <header class="header" data-nav-enhanced="true">
@@ -205,42 +206,7 @@
             <h2 id="transformation-title">The difference should be visible at first glance</h2>
             <p>Most visitors decide within seconds whether a property feels cared for. Our focus is a clean, orderly, presentable condition, not exaggerated visual tricks.</p>
           </div>
-          <div class="transformation-grid">
-        <article class="transformation-card featured" data-reveal="">
-          <button type="button" data-project="0" aria-label="From tired walls to a presentable room">
-            <span class="transformation-visual" aria-hidden="true">
-              <span class="transformation-frame before"><img src="assets/budapest-painting-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Budapest apartment wall before painting refresh" loading="eager" decoding="async"></span>
-              <span class="transformation-frame after"><img src="assets/budapest-finished-room-1.jpg?v=before-after-v2-2026-08-08-01" alt="Budapest apartment room after wall refresh" loading="eager" decoding="async"></span>
-              <span class="transformation-divider"></span>
-              <span class="transformation-label before">Before</span>
-              <span class="transformation-label after">After</span>
-            </span>
-            <span class="transformation-copy">
-              <small>Wall refresh</small>
-              <strong>From tired walls to a presentable room</strong>
-              <span>A clear, believable change: marks and wear replaced by a cleaner, more consistent surface.</span>
-              <em>Open example</em>
-            </span>
-          </button>
-        </article>
-        <article class="transformation-card" data-reveal="">
-          <button type="button" data-project="3" aria-label="A guest-ready impression before arrival">
-            <span class="transformation-visual" aria-hidden="true">
-              <span class="transformation-frame before"><img src="assets/budapest-airbnb-before-turnover-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Budapest Airbnb apartment before guest-ready refresh" loading="lazy" decoding="async"></span>
-              <span class="transformation-frame after"><img src="assets/budapest-airbnb-living-room.jpg?v=before-after-v2-2026-08-08-01" alt="Budapest Airbnb living room prepared for guests" loading="lazy" decoding="async"></span>
-              <span class="transformation-divider"></span>
-              <span class="transformation-label before">Before</span>
-              <span class="transformation-label after">After</span>
-            </span>
-            <span class="transformation-copy">
-              <small>Airbnb preparation</small>
-              <strong>A guest-ready impression before arrival</strong>
-              <span>Small defects, wall marks and disorder replaced by a space that is easier to hand over confidently.</span>
-              <em>Open example</em>
-            </span>
-          </button>
-        </article>
-        <article class="transformation-card" data-reveal="">
+          <div class="transformation-grid"><article class="transformation-card featured" data-reveal="">
           <button type="button" data-project="2" aria-label="From overgrown courtyard to a cared-for arrival">
             <span class="transformation-visual" aria-hidden="true">
               <span class="transformation-frame before"><img src="assets/budapest-courtyard-before-entrance.jpg?v=before-after-v2-2026-08-08-01" alt="Overgrown Budapest courtyard before garden maintenance" loading="lazy" decoding="async"></span>
@@ -495,15 +461,17 @@
             </div>
             <div class="filterbar" data-reveal=""><button class="active" data-project-filter="all">All service types</button><button  data-project-filter="painting">Painting</button><button  data-project-filter="drywall">Drywall</button><button  data-project-filter="garden">Garden</button><button  data-project-filter="airbnb">Airbnb</button><button  data-project-filter="office">Office</button><button  data-project-filter="handyman">Small fixes</button></div>
             <div class="grid project-grid-rich">
-        <article class="project project-card rich featured" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="0" aria-label="Open image gallery for From tired walls to a clean finish">
-              <img src="assets/budapest-painting-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Before" loading="lazy" decoding="async">
-              <img src="assets/budapest-finished-room-1.jpg?v=before-after-v2-2026-08-08-01" alt="Finished" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Before</span>
-              <span class="mini-label after">Finished</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich featured" data-reveal="" data-project-category="painting">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-0" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% before image visible" aria-label="Before and after comparison slider" aria-describedby="cardCompareHint-0">
+        <img class="after" src="assets/budapest-finished-room-1.jpg?v=before-after-v2-2026-08-08-01" alt="From tired walls to a clean finish - After" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="assets/budapest-painting-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="From tired walls to a clean finish - Before" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Before</span>
+        <span class="label compare-label right">After</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-0">An illustrative before-and-after comparison showing the type of work and the expected result. Click or focus the slider, then drag the handle or use the arrow keys.</p>
+          </div>
           <button class="case-open" type="button" data-project="0" aria-label="From tired walls to a clean finish">
             <div class="body">
               <span class="case-type">Painting / wall repair</span>
@@ -526,15 +494,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="1" aria-label="Open image gallery for Drywall prepared for a finished interior">
-              <img src="assets/budapest-drywall-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Before" loading="lazy" decoding="async">
-              <img src="assets/budapest-finished-room-2.jpg?v=before-after-v2-2026-08-08-01" alt="Finished" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Before</span>
-              <span class="mini-label after">Finished</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="drywall">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-1" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% before image visible" aria-label="Before and after comparison slider" aria-describedby="cardCompareHint-1">
+        <img class="after" src="assets/budapest-finished-room-2.jpg?v=before-after-v2-2026-08-08-01" alt="Drywall prepared for a finished interior - After" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="assets/budapest-drywall-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Drywall prepared for a finished interior - Before" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Before</span>
+        <span class="label compare-label right">After</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-1">An illustrative before-and-after comparison showing the type of work and the expected result. Click or focus the slider, then drag the handle or use the arrow keys.</p>
+          </div>
           <button class="case-open" type="button" data-project="1" aria-label="Drywall prepared for a finished interior">
             <div class="body">
               <span class="case-type">Drywall / ceiling</span>
@@ -557,15 +527,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="2" aria-label="Open image gallery for From overgrown courtyard to a cared-for arrival">
-              <img src="assets/budapest-courtyard-before-entrance.jpg?v=before-after-v2-2026-08-08-01" alt="Before" loading="lazy" decoding="async">
-              <img src="assets/budapest-courtyard-garden-1.jpg?v=before-after-v2-2026-08-08-01" alt="Finished" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Before</span>
-              <span class="mini-label after">Finished</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="garden">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-2" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% before image visible" aria-label="Before and after comparison slider" aria-describedby="cardCompareHint-2">
+        <img class="after" src="assets/budapest-courtyard-garden-1.jpg?v=before-after-v2-2026-08-08-01" alt="From overgrown courtyard to a cared-for arrival - After" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="assets/budapest-courtyard-before-entrance.jpg?v=before-after-v2-2026-08-08-01" alt="From overgrown courtyard to a cared-for arrival - Before" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Before</span>
+        <span class="label compare-label right">After</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-2">An illustrative before-and-after comparison showing the type of work and the expected result. Click or focus the slider, then drag the handle or use the arrow keys.</p>
+          </div>
           <button class="case-open" type="button" data-project="2" aria-label="From overgrown courtyard to a cared-for arrival">
             <div class="body">
               <span class="case-type">Garden / outdoor</span>
@@ -588,15 +560,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="3" aria-label="Open image gallery for Apartment refresh before guest arrival">
-              <img src="assets/budapest-airbnb-before-turnover-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Before" loading="lazy" decoding="async">
-              <img src="assets/budapest-airbnb-living-room.jpg?v=before-after-v2-2026-08-08-01" alt="Finished" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Before</span>
-              <span class="mini-label after">Finished</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="airbnb">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-3" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% before image visible" aria-label="Before and after comparison slider" aria-describedby="cardCompareHint-3">
+        <img class="after" src="assets/budapest-airbnb-living-room.jpg?v=before-after-v2-2026-08-08-01" alt="Apartment refresh before guest arrival - After" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="assets/budapest-airbnb-before-turnover-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Apartment refresh before guest arrival - Before" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Before</span>
+        <span class="label compare-label right">After</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-3">An illustrative before-and-after comparison showing the type of work and the expected result. Click or focus the slider, then drag the handle or use the arrow keys.</p>
+          </div>
           <button class="case-open" type="button" data-project="3" aria-label="Apartment refresh before guest arrival">
             <div class="body">
               <span class="case-type">Airbnb / tenant turnover</span>
@@ -619,15 +593,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="4" aria-label="Open image gallery for Office touch-up before a visit">
-              <img src="assets/budapest-office-before-touchup-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Before" loading="lazy" decoding="async">
-              <img src="assets/budapest-office-finished-1.jpg?v=before-after-v2-2026-08-08-01" alt="Finished" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Before</span>
-              <span class="mini-label after">Finished</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="office">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-4" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% before image visible" aria-label="Before and after comparison slider" aria-describedby="cardCompareHint-4">
+        <img class="after" src="assets/budapest-office-finished-1.jpg?v=before-after-v2-2026-08-08-01" alt="Office touch-up before a visit - After" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="assets/budapest-office-before-touchup-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Office touch-up before a visit - Before" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Before</span>
+        <span class="label compare-label right">After</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-4">An illustrative before-and-after comparison showing the type of work and the expected result. Click or focus the slider, then drag the handle or use the arrow keys.</p>
+          </div>
           <button class="case-open" type="button" data-project="4" aria-label="Office touch-up before a visit">
             <div class="body">
               <span class="case-type">Office / representative space</span>
@@ -650,15 +626,17 @@
             </div>
           </button>
         </article>
-        <article class="project project-card rich" data-reveal="">
-          <button class="case-preview" type="button" data-project-gallery="5" aria-label="Open image gallery for Small defects turned into a tidy handover">
-              <img src="assets/budapest-handyman-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Before" loading="lazy" decoding="async">
-              <img src="assets/budapest-airbnb-bedroom.jpg?v=before-after-v2-2026-08-08-01" alt="Finished" loading="lazy" decoding="async">
-              <span class="divider"></span>
-              <span class="mini-label before">Before</span>
-              <span class="mini-label after">Finished</span>
-              <span class="inspect-icon" aria-hidden="true"></span>
-          </button>
+        <article class="project project-card rich" data-reveal="" data-project-category="handyman">
+          <div class="case-comparison">
+      <div class="compare compare-card" id="cardCompare-5" data-compare role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% before image visible" aria-label="Before and after comparison slider" aria-describedby="cardCompareHint-5">
+        <img class="after" src="assets/budapest-airbnb-bedroom.jpg?v=before-after-v2-2026-08-08-01" alt="Small defects turned into a tidy handover - After" loading="lazy" decoding="async" draggable="false">
+        <img class="before" src="assets/budapest-handyman-before-matched.jpg?v=before-after-v2-2026-08-08-01" alt="Small defects turned into a tidy handover - Before" loading="lazy" decoding="async" draggable="false">
+        <span class="label compare-label left">Before</span>
+        <span class="label compare-label right">After</span>
+        <span class="handle" aria-hidden="true"></span>
+      </div>
+      <p class="compare-hint" id="cardCompareHint-5">An illustrative before-and-after comparison showing the type of work and the expected result. Click or focus the slider, then drag the handle or use the arrow keys.</p>
+          </div>
           <button class="case-open" type="button" data-project="5" aria-label="Small defects turned into a tidy handover">
             <div class="body">
               <span class="case-type">Small repairs / handover</span>
@@ -685,7 +663,7 @@
         </section>
 
         <section id="media" class="section wrap">
-          <div class="section-head" data-reveal=""><span class="section-index">05</span><h2>Visual work processes</h2><p>Browse image sequences organised by service type. Each opens a focused view with the full gallery and before-and-after comparison.</p></div>
+          <div class="section-head" data-reveal=""><span class="section-index">05</span><h2>Visual work processes</h2><p>Browse image sequences organised by service type. Each opens a focused gallery view, with before-and-after comparison kept only where the change is immediately clear.</p></div>
           <div class="video-grid">
         <article class="video-card media-reference-card" data-reveal="">
           <button type="button" data-project-gallery="0" aria-label="Open image gallery for From tired walls to a clean finish">
@@ -704,7 +682,7 @@
           <button type="button" data-project-gallery="1" aria-label="Open image gallery for Drywall prepared for a finished interior">
             <div class="video-poster">
               <img src="assets/budapest-finished-room-2.jpg?v=before-after-v2-2026-08-08-01" alt="Drywall prepared for a finished interior" loading="lazy" decoding="async">
-              <span class="video-type">12-photo gallery</span>
+              <span class="video-type">11-photo gallery</span>
               <span class="inspect-icon" aria-hidden="true"></span>
             </div>
             <div class="body">
@@ -717,7 +695,7 @@
           <button type="button" data-project-gallery="2" aria-label="Open image gallery for From overgrown courtyard to a cared-for arrival">
             <div class="video-poster">
               <img src="assets/budapest-courtyard-garden-1.jpg?v=before-after-v2-2026-08-08-01" alt="From overgrown courtyard to a cared-for arrival" loading="lazy" decoding="async">
-              <span class="video-type">11-photo gallery</span>
+              <span class="video-type">10-photo gallery</span>
               <span class="inspect-icon" aria-hidden="true"></span>
             </div>
             <div class="body">
