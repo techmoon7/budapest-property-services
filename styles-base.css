@@ -2601,10 +2601,8 @@ details[open] .disclosure-link span {
     gap: 8px;
   }
 
-  .quote-form-active .mobile-cta {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+  body.no-mobile-cta .mobile-cta {
+    display: none;
   }
 
   .mobile-cta a {
