@@ -2,9 +2,16 @@
  * TEMPORARY mobile diagnostic instrumentation for the homepage WhatsApp quote
  * form's "Service type" scroll-jump bug.
  *
- * Fully gated behind ?quoteDebug=1: without that exact query parameter this
- * script does nothing at all -- no DOM changes, no event listeners, no
- * sessionStorage writes, zero behavioral impact on normal visitors.
+ * Fully gated behind ?quoteDebug=1 or ?quoteDebug=trace: without one of those
+ * exact query parameter values this script does nothing at all -- no DOM
+ * changes, no event listeners, no sessionStorage writes, zero behavioral
+ * impact on normal visitors.
+ *
+ * - ?quoteDebug=1  : live capture + panel (the original instrumentation).
+ * - ?quoteDebug=trace : read-only retrieval. Reads the trace already saved
+ *   by a prior ?quoteDebug=1 visit and displays it as plain text in a
+ *   full-screen <textarea>, with no button/focus/scroll interaction
+ *   required. Registers no listeners and never writes to sessionStorage.
  *
  * Read-only observation only, even when active:
  * - never calls preventDefault()
@@ -26,12 +33,106 @@
   } catch {
     return; // can't determine intent -- stay fully inactive
   }
-  if (params.get("quoteDebug") !== "1") return; // <-- the entire gate
+  const mode = params.get("quoteDebug");
+  if (mode !== "1" && mode !== "trace") return; // <-- the entire gate
 
+  const STORAGE_KEY = "bps_quote_diag_trace_v1";
+
+  const fmtTime = (t) => {
+    const d = new Date(t);
+    const pad = (n, len = 2) => String(n).padStart(len, "0");
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${pad(d.getMilliseconds(), 3)}`;
+  };
+
+  const formatEntry = (e) =>
+    [
+      fmtTime(e.t),
+      e.type,
+      e.target ? `target=${e.target}` : null,
+      `active=${e.active || "-"}`,
+      `scrollY=${e.scrollY}`,
+      `vvH=${e.vvH}`,
+      `vvOffsetTop=${e.vvOffsetTop}`,
+      `vvPageTop=${e.vvPageTop}`,
+      `innerH=${e.innerH}`,
+      `clientH=${e.clientH}`,
+    ]
+      .filter((p) => p !== null)
+      .join(" | ");
+
+  if (mode === "trace") {
+    // Read-only retrieval view. Does not register any listener, does not
+    // write to sessionStorage, does not touch the existing trace in any way
+    // -- it only reads what a prior ?quoteDebug=1 visit already saved.
+    let raw = null;
+    try {
+      raw = sessionStorage.getItem(STORAGE_KEY);
+    } catch {
+      raw = null;
+    }
+    let entries = [];
+    try {
+      const parsed = raw ? JSON.parse(raw) : null;
+      if (Array.isArray(parsed)) entries = parsed;
+    } catch {
+      entries = [];
+    }
+
+    const headerLines = [
+      "SAVED QUOTE TRACE",
+      `entries: ${entries.length}`,
+      entries.length ? `first event: ${fmtTime(entries[0].t)}` : "(no trace found in sessionStorage for this tab)",
+      entries.length ? `last event:  ${fmtTime(entries[entries.length - 1].t)}` : "",
+      "",
+    ];
+    const bodyLines = entries.map(formatEntry);
+    const footerLines = ["", "===== END OF TRACE (line just above = most recent event) ====="];
+    const fullText = headerLines.concat(bodyLines, footerLines).join("\n");
+
+    const buildTraceView = () => {
+      const wrap = document.createElement("div");
+      wrap.id = "bps-quote-trace-view";
+      wrap.style.cssText =
+        "position:fixed !important;inset:0 !important;z-index:2147483647 !important;" +
+        "background:#06100c;display:flex;flex-direction:column;padding:10px;box-sizing:border-box;";
+
+      const title = document.createElement("div");
+      title.textContent = "SAVED QUOTE TRACE";
+      title.style.cssText = "font:900 20px/1.2 system-ui,sans-serif;color:#ff5b5b;margin-bottom:4px;flex:0 0 auto;";
+
+      const sub = document.createElement("div");
+      sub.textContent = `${entries.length} event(s) captured. Select all text below and copy.`;
+      sub.style.cssText = "font:700 12px/1.3 system-ui,sans-serif;color:#d8f3dc;margin-bottom:8px;flex:0 0 auto;";
+
+      const ta = document.createElement("textarea");
+      ta.readOnly = true;
+      ta.value = fullText;
+      ta.style.cssText =
+        "flex:1 1 auto;width:100%;background:rgba(255,255,255,0.06);color:#fffaf2;" +
+        "border:1px solid rgba(255,255,255,0.25);border-radius:8px;padding:8px;" +
+        "font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;" +
+        "box-sizing:border-box;resize:none;white-space:pre-wrap;word-break:break-word;";
+
+      wrap.appendChild(title);
+      wrap.appendChild(sub);
+      wrap.appendChild(ta);
+      document.body.appendChild(wrap);
+      // Deliberately no .focus(), no .select(), no scrollIntoView/scrollTo --
+      // the page must display exactly as-is with zero interaction required.
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", buildTraceView, { once: true, passive: true });
+    } else {
+      buildTraceView();
+    }
+    return; // trace mode does nothing else -- no listeners registered below
+  }
+
+  // mode === "1": live capture + panel (unchanged from before).
   const MAX_ENTRIES = 300;
   const SCROLL_THROTTLE_MS = 40;
   const LIVE_REFRESH_MS = 250;
-  const STORAGE_KEY = "bps_quote_diag_trace_v1";
 
   let trace = [];
   try {
@@ -48,12 +149,6 @@
     } catch {
       /* storage full or unavailable -- trace still lives in memory */
     }
-  };
-
-  const fmtTime = (t) => {
-    const d = new Date(t);
-    const pad = (n, len = 2) => String(n).padStart(len, "0");
-    return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${pad(d.getMilliseconds(), 3)}`;
   };
 
   const describeEl = (el) => {
@@ -102,24 +197,7 @@
     renderPanelIfOpen();
   };
 
-  const formatTraceText = () =>
-    trace
-      .map((e) => {
-        const parts = [
-          fmtTime(e.t),
-          e.type,
-          e.target ? `target=${e.target}` : null,
-          `active=${e.active || "-"}`,
-          `scrollY=${e.scrollY}`,
-          `vvH=${e.vvH}`,
-          `vvOffsetTop=${e.vvOffsetTop}`,
-          `vvPageTop=${e.vvPageTop}`,
-          `innerH=${e.innerH}`,
-          `clientH=${e.clientH}`,
-        ].filter((p) => p !== null);
-        return parts.join(" | ");
-      })
-      .join("\n");
+  const formatTraceText = () => trace.map(formatEntry).join("\n");
 
   log("QUOTE_DIAG_START");
 
