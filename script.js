@@ -7329,6 +7329,29 @@
     form.addEventListener("change", updateFieldValidity);
     updateCounters();
 
+    // On mobile, the fixed .mobile-cta bar can be re-anchored to the visual
+    // viewport by the software keyboard and float over this form, intercepting
+    // taps meant for a field (e.g. Service) instead of the CTA. Hiding it for
+    // as long as focus stays anywhere inside this form removes the overlap
+    // without guessing at viewport heights. Homepage only, per currentRouteKey().
+    if (currentRouteKey() === "home") {
+      let quoteFormBlurTimer = null;
+      const setQuoteFormActive = (active) => {
+        if (quoteFormBlurTimer !== null) {
+          window.clearTimeout(quoteFormBlurTimer);
+          quoteFormBlurTimer = null;
+        }
+        document.body.classList.toggle("quote-form-active", active);
+      };
+      form.addEventListener("focusin", () => setQuoteFormActive(true));
+      form.addEventListener("focusout", () => {
+        quoteFormBlurTimer = window.setTimeout(() => {
+          quoteFormBlurTimer = null;
+          if (!form.contains(document.activeElement)) setQuoteFormActive(false);
+        }, 0);
+      });
+    }
+
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       if (form.dataset.quoteOpening === "true") return;
