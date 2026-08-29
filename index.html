@@ -886,7 +886,88 @@
         <section id="contact" class="section wrap">
           <div class="contact" data-reveal="">
             <div class="contact-copy"><span class="eyebrow">First step</span><h2>Send photos and we’ll clarify the next step</h2><p>For the fastest start, send 2-3 photos, the Budapest address or district, access details and your preferred timing. We will respond with what is still needed and what the realistic next step can be.</p><div class="contact-points"><span>2-3 photos</span><span>Budapest address or district</span><span>Access</span><span>Timing</span></div></div>
-            <div class="contact-card"><div data-whatsapp-quote-form></div><span class="contact-number">+36 20 667 1832</span><a class="btn primary" href="https://wa.me/36206671832" target="_blank" rel="noopener">Send a WhatsApp message</a><a class="btn" href="tel:+36206671832" data-phone-action="" data-phone-label="" aria-label="Copy phone number">Copy phone number</a><small>A short message is enough: photos, location and timing. Primary service area: Budapest and nearby locations.</small></div>
+            <div class="contact-card"><div data-whatsapp-quote-form="">
+      <form class="whatsapp-quote" data-quote-form="" novalidate="">
+        <div class="quote-form-header">
+          <span class="quote-kicker">Request a quote</span>
+          <h3>Send structured details on WhatsApp</h3>
+          <p>Fill in the essentials and WhatsApp will open with a ready-to-send message. Add your photos there before sending.</p>
+        </div>
+        <div class="quote-form-grid">
+
+      <div class="quote-field">
+        <label for="quote-form-1-name">Name <span aria-hidden="true">*</span><span class="sr-only"> Required</span></label>
+        <input id="quote-form-1-name" name="name" type="text" value="" placeholder="Your name" required="" aria-describedby="quote-form-1-name-error">
+
+        <p class="quote-field-error" id="quote-form-1-name-error" data-quote-error="name" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field">
+        <label for="quote-form-1-service">Service type <span aria-hidden="true">*</span><span class="sr-only"> Required</span></label>
+        <select id="quote-form-1-service" name="service" required="" aria-describedby="quote-form-1-service-error">
+          <option value="maintenance" selected="">Property maintenance</option><option value="handyman">Handyman / small repairs</option><option value="painting">Painting and wall repairs</option><option value="garden">Garden maintenance</option><option value="cleaning">Cleaning</option><option value="airbnb">Airbnb maintenance</option><option value="foreign_owner">Property support for a foreign owner</option><option value="other">Other</option>
+        </select>
+        <p class="quote-field-error" id="quote-form-1-service-error" data-quote-error="service" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field">
+        <label for="quote-form-1-location">Location or district (optional)</label>
+        <input id="quote-form-1-location" name="location" type="text" value="" placeholder="Example: District XIII, Buda, city centre - or leave blank" aria-describedby="quote-form-1-location-help quote-form-1-location-error">
+        <p class="quote-help" id="quote-form-1-location-help">An exact address is not needed for the first message.</p>
+        <p class="quote-field-error" id="quote-form-1-location-error" data-quote-error="location" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field">
+        <label for="quote-form-1-timing">Preferred timing <span aria-hidden="true">*</span><span class="sr-only"> Required</span></label>
+        <select id="quote-form-1-timing" name="timing" required="" aria-describedby="quote-form-1-timing-error">
+          <option value="asap" selected="">As soon as possible</option><option value="week">Within one week</option><option value="month">Within one month</option><option value="flexible">Flexible / just requesting information</option>
+        </select>
+        <p class="quote-field-error" id="quote-form-1-timing-error" data-quote-error="timing" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field">
+        <label for="quote-form-1-propertyType">Property type</label>
+        <select id="quote-form-1-propertyType" name="propertyType" aria-describedby="quote-form-1-propertyType-error">
+          <option value="" selected="">Select if relevant</option><option value="apartment">Apartment</option><option value="house">House</option><option value="airbnb_rental">Airbnb / rental</option><option value="office">Office</option><option value="representative_property">Representative property</option><option value="garden_outdoor">Garden / outdoor area</option><option value="other">Other</option>
+        </select>
+        <p class="quote-field-error" id="quote-form-1-propertyType-error" data-quote-error="propertyType" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field quote-field-full">
+        <label for="quote-form-1-access">Access information</label>
+        <textarea id="quote-form-1-access" name="access" rows="5" maxlength="500" placeholder="Optional: keys, concierge, tenant contact or access window" aria-describedby="quote-form-1-access-counter quote-form-1-access-error"></textarea>
+        <div class="quote-meta-row">
+          <p class="quote-field-error" id="quote-form-1-access-error" data-quote-error="access" aria-live="polite"></p>
+          <p class="quote-counter" id="quote-form-1-access-counter" data-quote-counter="access">0 / 500</p>
+        </div>
+      </div>
+
+      <div class="quote-field quote-field-full">
+        <label for="quote-form-1-description">Short task description <span aria-hidden="true">*</span><span class="sr-only"> Required</span></label>
+        <textarea id="quote-form-1-description" name="description" rows="5" maxlength="1000" placeholder="Briefly describe what needs to be checked, repaired, cleaned or prepared." required="" aria-describedby="quote-form-1-description-counter quote-form-1-description-error"></textarea>
+        <div class="quote-meta-row">
+          <p class="quote-field-error" id="quote-form-1-description-error" data-quote-error="description" aria-live="polite"></p>
+          <p class="quote-counter" id="quote-form-1-description-counter" data-quote-counter="description">0 / 1000</p>
+        </div>
+      </div>
+        </div>
+
+      <div class="quote-check">
+        <input id="quote-form-1-photosReady" name="photosReady" type="checkbox" aria-describedby="quote-form-1-photosReady-error">
+        <label for="quote-form-1-photosReady">I have photos ready and will attach them in WhatsApp.</label>
+        <p class="quote-field-error" id="quote-form-1-photosReady-error" data-quote-error="photosReady" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-check">
+        <input id="quote-form-1-consent" name="consent" type="checkbox" required="" aria-describedby="quote-form-1-consent-error">
+        <label for="quote-form-1-consent">I understand that WhatsApp will open with these details and that photos must be attached manually before sending. <span aria-hidden="true">*</span><span class="sr-only"> Required</span></label>
+        <p class="quote-field-error" id="quote-form-1-consent-error" data-quote-error="consent" aria-live="polite"></p>
+      </div>
+        <p class="quote-note">WhatsApp will open with the details below. Add your photos there before sending.</p>
+        <button class="btn primary quote-submit" type="submit" data-quote-submit="">Continue in WhatsApp</button>
+        <p class="quote-status" data-quote-status="" role="status" aria-live="polite" aria-atomic="true"></p>
+      </form>
+    </div><span class="contact-number">+36 20 667 1832</span><a class="btn primary" href="https://wa.me/36206671832" target="_blank" rel="noopener">Send a WhatsApp message</a><a class="btn" href="tel:+36206671832" data-phone-action="" data-phone-label="" aria-label="Copy phone number">Copy phone number</a><small>A short message is enough: photos, location and timing. Primary service area: Budapest and nearby locations.</small></div>
           </div>
         </section>
       </main>

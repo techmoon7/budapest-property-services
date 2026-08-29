@@ -886,7 +886,88 @@
         <section id="contact" class="section wrap">
           <div class="contact" data-reveal="">
             <div class="contact-copy"><span class="eyebrow">Első lépés</span><h2>Küldjön fotót, és tisztázzuk a következő lépést</h2><p>A leggyorsabb kezdéshez küldjön 2-3 fotót, az ingatlan budapesti címét vagy kerületét, a hozzáférés módját és a kívánt időzítést. Röviden visszajelzünk, milyen információ hiányzik még, és mi lehet a reális következő lépés.</p><div class="contact-points"><span>2-3 fotó</span><span>Budapesti cím vagy kerület</span><span>Hozzáférés</span><span>Időzítés</span></div></div>
-            <div class="contact-card"><div data-whatsapp-quote-form></div><span class="contact-number">+36 20 667 1832</span><a class="btn primary" href="https://wa.me/36206671832" target="_blank" rel="noopener">WhatsApp üzenet küldése</a><a class="btn" href="tel:+36206671832" data-phone-action="" data-phone-label="" aria-label="Telefonszám másolása">Telefonszám másolása</a><small>Rövid üzenet is elég: fotók, helyszín, határidő. Elsődleges terület: Budapest és közvetlen környéke.</small></div>
+            <div class="contact-card"><div data-whatsapp-quote-form="">
+      <form class="whatsapp-quote" data-quote-form="" novalidate="">
+        <div class="quote-form-header">
+          <span class="quote-kicker">Ajánlatkérés</span>
+          <h3>Küldjön rendezett részleteket WhatsAppon</h3>
+          <p>Töltse ki a legfontosabb adatokat, és a WhatsApp egy előkészített üzenettel nyílik meg. A fotókat küldés előtt ott tudja csatolni.</p>
+        </div>
+        <div class="quote-form-grid">
+
+      <div class="quote-field">
+        <label for="quote-form-1-name">Név <span aria-hidden="true">*</span><span class="sr-only"> Kötelező</span></label>
+        <input id="quote-form-1-name" name="name" type="text" value="" placeholder="Az Ön neve" required="" aria-describedby="quote-form-1-name-error">
+
+        <p class="quote-field-error" id="quote-form-1-name-error" data-quote-error="name" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field">
+        <label for="quote-form-1-service">Szolgáltatás <span aria-hidden="true">*</span><span class="sr-only"> Kötelező</span></label>
+        <select id="quote-form-1-service" name="service" required="" aria-describedby="quote-form-1-service-error">
+          <option value="maintenance" selected="">Ingatlankarbantartás</option><option value="handyman">Ezermester / kisebb javítások</option><option value="painting">Szobafestés és faljavítás</option><option value="garden">Kertfenntartás</option><option value="cleaning">Takarítás</option><option value="airbnb">Airbnb-karbantartás</option><option value="foreign_owner">Ingatlankezelési segítség külföldi tulajdonosnak</option><option value="other">Egyéb</option>
+        </select>
+        <p class="quote-field-error" id="quote-form-1-service-error" data-quote-error="service" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field">
+        <label for="quote-form-1-location">Helyszín vagy kerület (nem kötelező)</label>
+        <input id="quote-form-1-location" name="location" type="text" value="" placeholder="Például: XIII. kerület, Buda, belváros - vagy hagyd üresen" aria-describedby="quote-form-1-location-help quote-form-1-location-error">
+        <p class="quote-help" id="quote-form-1-location-help">Az első üzenethez nem kell pontos címet megadni.</p>
+        <p class="quote-field-error" id="quote-form-1-location-error" data-quote-error="location" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field">
+        <label for="quote-form-1-timing">Kívánt időpont <span aria-hidden="true">*</span><span class="sr-only"> Kötelező</span></label>
+        <select id="quote-form-1-timing" name="timing" required="" aria-describedby="quote-form-1-timing-error">
+          <option value="asap" selected="">Amint lehetséges</option><option value="week">Egy héten belül</option><option value="month">Egy hónapon belül</option><option value="flexible">Rugalmas / egyelőre érdeklődöm</option>
+        </select>
+        <p class="quote-field-error" id="quote-form-1-timing-error" data-quote-error="timing" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field">
+        <label for="quote-form-1-propertyType">Ingatlan típusa</label>
+        <select id="quote-form-1-propertyType" name="propertyType" aria-describedby="quote-form-1-propertyType-error">
+          <option value="" selected="">Válasszon, ha releváns</option><option value="apartment">Lakás</option><option value="house">Ház</option><option value="airbnb_rental">Airbnb / kiadó ingatlan</option><option value="office">Iroda</option><option value="representative_property">Képviseleti ingatlan</option><option value="garden_outdoor">Kert / kültéri terület</option><option value="other">Egyéb</option>
+        </select>
+        <p class="quote-field-error" id="quote-form-1-propertyType-error" data-quote-error="propertyType" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-field quote-field-full">
+        <label for="quote-form-1-access">Bejutási információ</label>
+        <textarea id="quote-form-1-access" name="access" rows="5" maxlength="500" placeholder="Opcionális: kulcs, portaszolgálat, bérlői kapcsolat vagy bejutási idősáv" aria-describedby="quote-form-1-access-counter quote-form-1-access-error"></textarea>
+        <div class="quote-meta-row">
+          <p class="quote-field-error" id="quote-form-1-access-error" data-quote-error="access" aria-live="polite"></p>
+          <p class="quote-counter" id="quote-form-1-access-counter" data-quote-counter="access">0 / 500</p>
+        </div>
+      </div>
+
+      <div class="quote-field quote-field-full">
+        <label for="quote-form-1-description">Rövid feladatleírás <span aria-hidden="true">*</span><span class="sr-only"> Kötelező</span></label>
+        <textarea id="quote-form-1-description" name="description" rows="5" maxlength="1000" placeholder="Írja le röviden, mit kell ellenőrizni, javítani, takarítani vagy előkészíteni." required="" aria-describedby="quote-form-1-description-counter quote-form-1-description-error"></textarea>
+        <div class="quote-meta-row">
+          <p class="quote-field-error" id="quote-form-1-description-error" data-quote-error="description" aria-live="polite"></p>
+          <p class="quote-counter" id="quote-form-1-description-counter" data-quote-counter="description">0 / 1000</p>
+        </div>
+      </div>
+        </div>
+
+      <div class="quote-check">
+        <input id="quote-form-1-photosReady" name="photosReady" type="checkbox" aria-describedby="quote-form-1-photosReady-error">
+        <label for="quote-form-1-photosReady">Vannak fotóim, és a WhatsApp megnyitása után csatolom őket.</label>
+        <p class="quote-field-error" id="quote-form-1-photosReady-error" data-quote-error="photosReady" aria-live="polite"></p>
+      </div>
+
+      <div class="quote-check">
+        <input id="quote-form-1-consent" name="consent" type="checkbox" required="" aria-describedby="quote-form-1-consent-error">
+        <label for="quote-form-1-consent">Tudomásul veszem, hogy a WhatsApp az alábbi adatokkal nyílik meg, a fotókat pedig küldés előtt kézzel kell csatolnom. <span aria-hidden="true">*</span><span class="sr-only"> Kötelező</span></label>
+        <p class="quote-field-error" id="quote-form-1-consent-error" data-quote-error="consent" aria-live="polite"></p>
+      </div>
+        <p class="quote-note">A WhatsApp megnyílik az alábbi adatokkal. Küldés előtt ott csatold a fotókat.</p>
+        <button class="btn primary quote-submit" type="submit" data-quote-submit="">Folytatás WhatsAppon</button>
+        <p class="quote-status" data-quote-status="" role="status" aria-live="polite" aria-atomic="true"></p>
+      </form>
+    </div><span class="contact-number">+36 20 667 1832</span><a class="btn primary" href="https://wa.me/36206671832" target="_blank" rel="noopener">WhatsApp üzenet küldése</a><a class="btn" href="tel:+36206671832" data-phone-action="" data-phone-label="" aria-label="Telefonszám másolása">Telefonszám másolása</a><small>Rövid üzenet is elég: fotók, helyszín, határidő. Elsődleges terület: Budapest és közvetlen környéke.</small></div>
           </div>
         </section>
       </main>

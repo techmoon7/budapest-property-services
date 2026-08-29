@@ -7366,6 +7366,17 @@
     const routeKey = currentRouteKey();
     if (mount.dataset.quoteRendered === `${lang}:${routeKey}`) return;
 
+    // The homepage ships this form pre-rendered in the static HTML (avoids the
+    // empty-mount-to-full-form layout shift that raced with real-device focus
+    // scrolling). When that static markup is already present, only bind its
+    // behavior -- do not tear it down and rebuild it via innerHTML.
+    const existingForm = mount.querySelector("[data-quote-form]");
+    if (existingForm) {
+      mount.dataset.quoteRendered = `${lang}:${routeKey}`;
+      bindQuoteForm(existingForm, lang);
+      return;
+    }
+
     const text = quoteFormText[lang];
     const formId = `quote-form-${index + 1}`;
     const selectedService = preselectedQuoteService();
