@@ -184,27 +184,34 @@
     const style = document.createElement("style");
     style.textContent = `
       #bps-quote-diag-toggle {
-        position: fixed;
-        bottom: 84px;
-        left: 8px;
-        z-index: 2147483647;
-        width: 40px;
-        height: 40px;
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        top: auto !important;
+        right: auto !important;
+        z-index: 2147483647 !important;
+        width: 56px;
+        height: 56px;
+        min-width: 56px;
+        min-height: 56px;
         border-radius: 999px;
-        border: none;
-        background: rgba(16, 44, 33, 0.82);
-        color: #fffaf2;
-        font: 700 11px/1 system-ui, sans-serif;
+        border: 3px solid #fff;
+        background: #ff2d2d;
+        color: #fff;
+        font: 900 12px/1.1 system-ui, sans-serif;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+        text-shadow: 0 1px 2px rgba(0,0,0,0.4);
       }
       #bps-quote-diag-panel {
-        position: fixed;
-        top: 8px;
-        right: 8px;
-        left: 8px;
+        position: fixed !important;
+        top: 8px !important;
+        right: 8px !important;
+        left: 8px !important;
+        bottom: auto !important;
         max-height: 70vh;
         z-index: 2147483647;
         background: rgba(10, 24, 18, 0.96);
@@ -245,8 +252,8 @@
     toggle.id = "bps-quote-diag-toggle";
     toggle.type = "button";
     toggle.setAttribute("aria-label", "Open quote form diagnostics");
-    toggle.textContent = "0";
-    countBadge = toggle;
+    toggle.innerHTML = '<span>DEBUG</span><span data-diag-count>0</span>';
+    countBadge = toggle.querySelector("[data-diag-count]");
 
     const panel = document.createElement("div");
     panel.id = "bps-quote-diag-panel";
@@ -265,6 +272,20 @@
     document.body.appendChild(toggle);
     document.body.appendChild(panel);
     panelEl = panel;
+
+    // Second, position-independent way to reach the trace: ?quoteDebug=1
+    // opens the panel immediately, no need to find/tap the toggle at all.
+    let autoOpen = false;
+    try {
+      autoOpen = new URLSearchParams(window.location.search).get("quoteDebug") === "1";
+    } catch {
+      /* URLSearchParams unsupported in some old browser -- toggle button still works */
+    }
+    if (autoOpen) {
+      panel.hidden = false;
+      panel.querySelector("[data-diag-status]").textContent = "Diagnostics active (loaded via ?quoteDebug=1).";
+      renderPanelIfOpen();
+    }
 
     toggle.addEventListener(
       "click",
