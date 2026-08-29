@@ -1,6 +1,12 @@
 /*
  * TEMPORARY mobile diagnostic instrumentation for the homepage WhatsApp quote
- * form's "Service type" scroll-jump bug. Read-only observation only:
+ * form's "Service type" scroll-jump bug.
+ *
+ * Fully gated behind ?quoteDebug=1: without that exact query parameter this
+ * script does nothing at all -- no DOM changes, no event listeners, no
+ * sessionStorage writes, zero behavioral impact on normal visitors.
+ *
+ * Read-only observation only, even when active:
  * - never calls preventDefault()
  * - never calls scrollTo/scrollBy/scrollIntoView
  * - never calls .focus()/.blur() on anything
@@ -14,8 +20,17 @@
 (() => {
   "use strict";
 
+  let params;
+  try {
+    params = new URLSearchParams(window.location.search);
+  } catch {
+    return; // can't determine intent -- stay fully inactive
+  }
+  if (params.get("quoteDebug") !== "1") return; // <-- the entire gate
+
   const MAX_ENTRIES = 300;
   const SCROLL_THROTTLE_MS = 40;
+  const LIVE_REFRESH_MS = 250;
   const STORAGE_KEY = "bps_quote_diag_trace_v1";
 
   let trace = [];
@@ -65,14 +80,17 @@
   };
 
   let panelEl = null;
-  let countBadge = null;
+  let lastEventLabel = "-";
 
   const renderPanelIfOpen = () => {
     if (!panelEl || panelEl.hidden) return;
     const body = panelEl.querySelector("[data-diag-body]");
-    if (!body) return;
-    body.textContent = formatTraceText();
-    body.scrollTop = body.scrollHeight;
+    if (body) {
+      body.textContent = formatTraceText();
+      body.scrollTop = body.scrollHeight;
+    }
+    const countEl = panelEl.querySelector("[data-diag-count]");
+    if (countEl) countEl.textContent = String(trace.length);
   };
 
   const log = (type, extra) => {
@@ -80,7 +98,7 @@
     trace.push(entry);
     if (trace.length > MAX_ENTRIES) trace.splice(0, trace.length - MAX_ENTRIES);
     persist();
-    if (countBadge) countBadge.textContent = String(trace.length);
+    lastEventLabel = `${fmtTime(entry.t)} ${type}${entry.target ? " (" + entry.target + ")" : ""}`;
     renderPanelIfOpen();
   };
 
@@ -178,8 +196,8 @@
     );
   }
 
-  // -- Retrieval overlay: position:fixed, never in document flow, never
-  // affects scrollHeight/layout. Collapsed to a small toggle by default. --
+  // -- Retrieval UI: position:fixed, never in document flow, never affects
+  // scrollHeight/layout. Only ever created because ?quoteDebug=1 was present. --
   const buildPanel = () => {
     const style = document.createElement("style");
     style.textContent = `
@@ -206,43 +224,69 @@
         box-shadow: 0 8px 24px rgba(0,0,0,0.45);
         text-shadow: 0 1px 2px rgba(0,0,0,0.4);
       }
+      #bps-quote-diag-toggle[hidden] { display: none !important; }
       #bps-quote-diag-panel {
         position: fixed !important;
-        top: 8px !important;
-        right: 8px !important;
-        left: 8px !important;
+        top: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
         bottom: auto !important;
-        max-height: 70vh;
-        z-index: 2147483647;
-        background: rgba(10, 24, 18, 0.96);
+        max-height: 85vh;
+        z-index: 2147483647 !important;
+        background: rgba(6, 16, 12, 0.98);
         color: #fffaf2;
-        border-radius: 12px;
-        padding: 10px;
+        border-radius: 0 0 14px 14px;
+        padding: 10px 10px 12px;
         font: 11px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.5);
         display: flex;
         flex-direction: column;
         gap: 8px;
+        box-sizing: border-box;
       }
       #bps-quote-diag-panel[hidden] { display: none; }
+      #bps-quote-diag-panel .diag-title {
+        font: 900 15px/1.2 system-ui, sans-serif;
+        letter-spacing: 0.04em;
+        color: #ff5b5b;
+      }
+      #bps-quote-diag-panel .diag-active {
+        font: 900 11px/1.2 system-ui, sans-serif;
+        color: #6df0a0;
+        letter-spacing: 0.06em;
+      }
+      #bps-quote-diag-panel .diag-live {
+        background: rgba(255,255,255,0.08);
+        border-radius: 8px;
+        padding: 8px;
+        font: 11px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      #bps-quote-diag-panel .diag-live div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       #bps-quote-diag-panel [data-diag-body] {
         overflow: auto;
         white-space: pre-wrap;
         word-break: break-word;
-        max-height: 50vh;
+        flex: 1 1 auto;
+        min-height: 80px;
         background: rgba(255,255,255,0.05);
         border-radius: 8px;
         padding: 6px;
       }
-      #bps-quote-diag-panel .diag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+      #bps-quote-diag-panel .diag-row { display: flex; gap: 8px; flex-wrap: wrap; }
       #bps-quote-diag-panel button {
         appearance: none;
         border: 0;
         border-radius: 999px;
         background: #fffaf2;
         color: #102c21;
-        padding: 6px 10px;
-        font: 700 11px/1 system-ui, sans-serif;
+        padding: 8px 12px;
+        font: 700 12px/1 system-ui, sans-serif;
+      }
+      #bps-quote-diag-panel [data-diag-copy] {
+        background: #ff2d2d;
+        color: #fff;
+        font: 900 14px/1 system-ui, sans-serif;
+        padding: 12px 18px;
       }
       #bps-quote-diag-panel .diag-status { color: #d8f3dc; }
     `;
@@ -251,20 +295,30 @@
     const toggle = document.createElement("button");
     toggle.id = "bps-quote-diag-toggle";
     toggle.type = "button";
-    toggle.setAttribute("aria-label", "Open quote form diagnostics");
+    toggle.setAttribute("aria-label", "Reopen quote form diagnostics");
     toggle.innerHTML = '<span>DEBUG</span><span data-diag-count>0</span>';
-    countBadge = toggle.querySelector("[data-diag-count]");
+    toggle.hidden = true; // panel starts open; toggle only appears once minimized
 
     const panel = document.createElement("div");
     panel.id = "bps-quote-diag-panel";
-    panel.hidden = true;
     panel.innerHTML = `
-      <div class="diag-row">
-        <button type="button" data-diag-copy>Copy diagnostics</button>
-        <button type="button" data-diag-clear>Clear</button>
-        <button type="button" data-diag-close>Close</button>
+      <div class="diag-title">QUOTE DEBUG</div>
+      <div class="diag-active">DIAGNOSTICS ACTIVE</div>
+      <div class="diag-live">
+        <div data-live-scroll>scrollY: -</div>
+        <div data-live-active>activeElement: -</div>
+        <div data-live-innerh>innerHeight: -</div>
+        <div data-live-vvh>visualViewport.height: -</div>
+        <div data-live-last>last event: -</div>
       </div>
-      <div class="diag-status" data-diag-status></div>
+      <div class="diag-row">
+        <button type="button" data-diag-copy>COPY TRACE</button>
+      </div>
+      <div class="diag-row">
+        <button type="button" data-diag-minimize>Minimize</button>
+        <button type="button" data-diag-clear>Clear</button>
+        <span class="diag-status" data-diag-status></span>
+      </div>
       <div data-diag-body tabindex="0"></div>
       <textarea data-diag-fallback style="position:absolute;left:-9999px;top:0;width:1px;height:1px;" readonly></textarea>
     `;
@@ -272,34 +326,43 @@
     document.body.appendChild(toggle);
     document.body.appendChild(panel);
     panelEl = panel;
+    panel.querySelector("[data-diag-status]").textContent = "Diagnostics active (loaded via ?quoteDebug=1).";
+    renderPanelIfOpen();
 
-    // Second, position-independent way to reach the trace: ?quoteDebug=1
-    // opens the panel immediately, no need to find/tap the toggle at all.
-    let autoOpen = false;
-    try {
-      autoOpen = new URLSearchParams(window.location.search).get("quoteDebug") === "1";
-    } catch {
-      /* URLSearchParams unsupported in some old browser -- toggle button still works */
-    }
-    if (autoOpen) {
-      panel.hidden = false;
-      panel.querySelector("[data-diag-status]").textContent = "Diagnostics active (loaded via ?quoteDebug=1).";
-      renderPanelIfOpen();
-    }
+    const liveScroll = panel.querySelector("[data-live-scroll]");
+    const liveActive = panel.querySelector("[data-live-active]");
+    const liveInnerH = panel.querySelector("[data-live-innerh]");
+    const liveVvH = panel.querySelector("[data-live-vvh]");
+    const liveLast = panel.querySelector("[data-live-last]");
+
+    const refreshLive = () => {
+      if (panel.hidden) return;
+      const s = snapshot();
+      liveScroll.textContent = `scrollY: ${s.scrollY}`;
+      liveActive.textContent = `activeElement: ${s.active || "-"}`;
+      liveInnerH.textContent = `innerHeight: ${s.innerH}`;
+      liveVvH.textContent = `visualViewport.height: ${s.vvH}`;
+      liveLast.textContent = `last event: ${lastEventLabel}`;
+    };
+    window.setInterval(refreshLive, LIVE_REFRESH_MS);
+    refreshLive();
 
     toggle.addEventListener(
       "click",
       () => {
-        panel.hidden = !panel.hidden;
-        if (!panel.hidden) renderPanelIfOpen();
+        panel.hidden = false;
+        toggle.hidden = true;
+        renderPanelIfOpen();
+        refreshLive();
       },
       { passive: true }
     );
 
-    panel.querySelector("[data-diag-close]").addEventListener(
+    panel.querySelector("[data-diag-minimize]").addEventListener(
       "click",
       () => {
         panel.hidden = true;
+        toggle.hidden = false;
       },
       { passive: true }
     );
@@ -309,7 +372,6 @@
       () => {
         trace = [];
         persist();
-        countBadge.textContent = "0";
         renderPanelIfOpen();
         panel.querySelector("[data-diag-status]").textContent = "Cleared.";
       },
