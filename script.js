@@ -3673,6 +3673,12 @@
     }
   };
   const serviceItemForHref = (href = "") => {
+    // A same-page anchor (e.g. "#faq") always resolves to the current page's
+    // own path, whose route key matches this page's own service item on every
+    // service page -- misclassifying same-page nav links (FAQ, Process, What
+    // we do, Contact) as service links and stripping them out. Same-page
+    // anchors are never service links, so skip path resolution for them.
+    if (href.startsWith("#")) return undefined;
     const path = pathForHref(href);
     const routeKey = routeInfoForPath(path)?.key;
     if (routeKey) return serviceNavigationItems.find((item) => item.key === routeKey);
