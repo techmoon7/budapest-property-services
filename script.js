@@ -7510,7 +7510,7 @@
   };
 
   const initStandaloneReveals = () => {
-    const items = document.querySelectorAll("[data-reveal]");
+    const items = [...document.querySelectorAll("[data-reveal]")];
     if (!items.length) return;
 
     if (!("IntersectionObserver" in window)) {
@@ -7518,18 +7518,42 @@
       return;
     }
 
+    const pending = new Set(items);
+    let sweepReached = null;
+    const reveal = (item) => {
+      if (!pending.has(item)) return;
+      item.classList.add("visible");
+      pending.delete(item);
+      observer.unobserve(item);
+      if (!pending.size && sweepReached) {
+        window.removeEventListener("scroll", sweepReached);
+        sweepReached = null;
+      }
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("visible");
-          observer.unobserve(entry.target);
+          reveal(entry.target);
         });
       },
       { threshold: 0.16 }
     );
 
     items.forEach((item) => observer.observe(item));
+
+    // A fast/instant scroll (flick, or a hash-link jump) can move past an
+    // element before the observer ever samples it, leaving it permanently
+    // opacity:0. Sweep anything already scrolled to or past and force it
+    // visible so the reveal animation never blocks content from appearing.
+    sweepReached = () => {
+      pending.forEach((item) => {
+        if (item.getBoundingClientRect().top < window.innerHeight) reveal(item);
+      });
+    };
+    window.addEventListener("scroll", sweepReached, { passive: true });
+    window.setTimeout(sweepReached, 1000);
   };
 
   const initStandalonePage = () => {
@@ -8298,6 +8322,7 @@
 
     let globalEventsBound = false;
     let revealObserver;
+    let revealSweepListener;
     const modalOpeners = new WeakMap();
 
 
@@ -8997,21 +9022,47 @@
     };
 
     const reveal = () => {
-      const items = document.querySelectorAll("[data-reveal]");
+      const items = [...document.querySelectorAll("[data-reveal]")];
       revealObserver?.disconnect();
+      if (revealSweepListener) {
+        window.removeEventListener("scroll", revealSweepListener);
+        revealSweepListener = null;
+      }
       if (!("IntersectionObserver" in window)) {
         items.forEach((item) => item.classList.add("visible"));
         return;
       }
+      const pending = new Set(items);
+      const revealItem = (item) => {
+        if (!pending.has(item)) return;
+        item.classList.add("visible");
+        pending.delete(item);
+        revealObserver.unobserve(item);
+        if (!pending.size && revealSweepListener) {
+          window.removeEventListener("scroll", revealSweepListener);
+          revealSweepListener = null;
+        }
+      };
       revealObserver = new IntersectionObserver(
         (entries) => entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("visible");
-          revealObserver.unobserve(entry.target);
+          revealItem(entry.target);
         }),
         { threshold: 0.12 }
       );
       items.forEach((item) => revealObserver.observe(item));
+
+      // A fast/instant scroll (flick, or a hash-link jump) can move past an
+      // element before the observer ever samples it, leaving it permanently
+      // opacity:0. Sweep anything already scrolled to or past and force it
+      // visible so the reveal animation never blocks content from appearing.
+      revealSweepListener = () => {
+        pending.forEach((item) => {
+          if (item.getBoundingClientRect().top < window.innerHeight) revealItem(item);
+        });
+      };
+      window.addEventListener("scroll", revealSweepListener, { passive: true });
+      window.setTimeout(revealSweepListener, 1000);
     };
 
     window.addEventListener("hashchange", scheduleHashScroll);
