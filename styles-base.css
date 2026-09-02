@@ -1619,6 +1619,14 @@ details[open] .disclosure-link span {
   margin: 0 0 6px;
 }
 
+.faq h3 {
+  padding: 20px 4px;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(21px, 2vw, 27px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
 .step p,
 .audience p,
 .review p,
@@ -2550,6 +2558,10 @@ details[open] .disclosure-link span {
 
   .faq summary {
     min-height: 84px;
+    font-size: 21px;
+  }
+
+  .faq h3 {
     font-size: 21px;
   }
 

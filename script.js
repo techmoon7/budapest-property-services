@@ -8365,7 +8365,7 @@
           syncDisclosure(detail);
         });
       };
-      document.querySelectorAll("details.stat, details.problem, details.audience, details.faq").forEach(bindDisclosure);
+      document.querySelectorAll("details.stat, details.problem, details.audience").forEach(bindDisclosure);
       document.querySelectorAll("[data-accordion-group]").forEach((group) => {
         group.querySelectorAll("details").forEach((detail) => {
           detail.addEventListener("toggle", () => {
