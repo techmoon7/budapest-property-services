@@ -1,6 +1,7 @@
 (() => {
   const phone = "+36 20 667 1832";
   const tel = "tel:+36206671832";
+  const contactEmail = "contactcreativefabrication@gmail.com";
   const storageKey = "bps-lang";
   const supportedLanguages = [
     { code: "hu", label: "Magyar", short: "HU", html: "hu", flag: "hu", complete: "Teljes weboldal" },
@@ -3559,13 +3560,16 @@
       access: "Access information",
       propertyType: "Property type",
       photosReady: "I have photos ready and will attach them in WhatsApp.",
-      consent: "I understand that WhatsApp will open with these details and that photos must be attached manually before sending.",
+      consent: "I understand that WhatsApp or email will open with these details and that photos must be attached manually before sending.",
       submit: "Continue in WhatsApp",
-      note: "WhatsApp will open with the details below. Add your photos there before sending.",
+      submitEmail: "Send via email",
+      emailSubjectPrefix: "Quote request",
+      note: "WhatsApp or email will open with the details below. Add your photos there before sending.",
       required: "Required",
       requiredError: "Please complete this field.",
-      consentError: "Please confirm before continuing to WhatsApp.",
+      consentError: "Please confirm before continuing.",
       statusOpening: "WhatsApp is opening. Attach your photos before sending the message.",
+      statusOpeningEmail: "Your email app is opening. Attach your photos before sending the message.",
       counter: (count, max) => `${count} / ${max}`,
       messageGreeting: "Hello! I would like to request a quote from Budapest Property Services.",
       messageLabels: {
@@ -3599,13 +3603,16 @@
       access: "Bejutási információ",
       propertyType: "Ingatlan típusa",
       photosReady: "Vannak fotóim, és a WhatsApp megnyitása után csatolom őket.",
-      consent: "Tudomásul veszem, hogy a WhatsApp az alábbi adatokkal nyílik meg, a fotókat pedig küldés előtt kézzel kell csatolnom.",
+      consent: "Tudomásul veszem, hogy a WhatsApp vagy az email az alábbi adatokkal nyílik meg, a fotókat pedig küldés előtt kézzel kell csatolnom.",
       submit: "Folytatás WhatsAppon",
-      note: "A WhatsApp megnyílik az alábbi adatokkal. Küldés előtt ott csatold a fotókat.",
+      submitEmail: "Küldés emailben",
+      emailSubjectPrefix: "Árajánlatkérés",
+      note: "A WhatsApp vagy az email megnyílik az alábbi adatokkal. Küldés előtt ott csatold a fotókat.",
       required: "Kötelező",
       requiredError: "Kérjük, töltse ki ezt a mezőt.",
-      consentError: "Kérjük, erősítse meg, mielőtt WhatsAppon folytatja.",
+      consentError: "Kérjük, erősítse meg, mielőtt folytatja.",
       statusOpening: "Megnyílik a WhatsApp. Az üzenet elküldése előtt csatold a fotókat.",
+      statusOpeningEmail: "Megnyílik az email alkalmazás. Az üzenet elküldése előtt csatold a fotókat.",
       counter: (count, max) => `${count} / ${max}`,
       messageGreeting: "Üdvözlöm! Ajánlatot szeretnék kérni a Budapest Property Servicestől.",
       messageLabels: {
@@ -7303,6 +7310,7 @@
     const text = quoteFormText[lang];
     const counters = [...form.querySelectorAll("[data-quote-counter]")];
     const submit = form.querySelector('[data-quote-submit]');
+    const submitEmail = form.querySelector('[data-quote-submit-email]');
     const status = form.querySelector("[data-quote-status]");
     let started = false;
 
@@ -7366,6 +7374,37 @@
         if (submit) submit.disabled = false;
       }, 1800);
     });
+
+    submitEmail?.addEventListener("click", () => {
+      if (form.dataset.quoteOpening === "true") return;
+      form.dataset.quoteSubmitted = "true";
+      if (!validateQuoteForm(form, lang)) return;
+      delete form.dataset.quoteSubmitted;
+
+      const payload = quotePayloadFromForm(form, lang);
+      const message = buildQuoteMessage(payload, lang);
+      const subject = `${text.emailSubjectPrefix} – ${payload.serviceLabel}`;
+      const mailtoUrl = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+      pushConversionEvent("quote_email_open", {
+        ...quoteEventBase(),
+        service_type: payload.service,
+        property_type: payload.propertyType || "not_selected",
+        preferred_timing: payload.timing,
+        photos_ready: payload.photosReady,
+        form_location: "contact_section",
+      });
+
+      form.dataset.quoteOpening = "true";
+      submitEmail.disabled = true;
+      if (status) status.textContent = text.statusOpeningEmail;
+
+      window.location.href = mailtoUrl;
+
+      window.setTimeout(() => {
+        delete form.dataset.quoteOpening;
+        submitEmail.disabled = false;
+      }, 1800);
+    });
   };
   const renderQuoteForm = (mount, index) => {
     const lang = quoteFormLang();
@@ -7405,7 +7444,10 @@
         ${quoteCheckbox({ formId, name: "photosReady", label: text.photosReady })}
         ${quoteCheckbox({ formId, name: "consent", label: text.consent, required: true })}
         <p class="quote-note">${quoteEscape(text.note)}</p>
-        <button class="btn primary quote-submit" type="submit" data-quote-submit>${quoteEscape(text.submit)}</button>
+        <div class="quote-submit-actions">
+          <button class="btn primary quote-submit" type="submit" data-quote-submit>${quoteEscape(text.submit)}</button>
+          <button class="btn quote-submit-email" type="button" data-quote-submit-email>${quoteEscape(text.submitEmail)}</button>
+        </div>
         <p class="quote-status" data-quote-status role="status" aria-live="polite" aria-atomic="true"></p>
       </form>
     `;
