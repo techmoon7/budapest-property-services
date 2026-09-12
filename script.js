@@ -29,6 +29,7 @@
       en: "/property-management-for-foreign-owners-budapest.html",
       hu: "/hu/ingatlankezeles-kulfoldi-tulajdonosoknak-budapest.html",
     },
+    impresszum: { en: "/impresszum.html", hu: "/hu/impresszum.html" },
   };
   const routeLookup = new Map();
   Object.entries(routePairs).forEach(([key, pair]) => {
@@ -7719,7 +7720,7 @@
     routeLanguage,
   };
 
-  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services", "airbnb-property-maintenance", "property-management-foreign-owners"].includes(document.body?.dataset.page)) {
+  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services", "airbnb-property-maintenance", "property-management-foreign-owners", "impresszum"].includes(document.body?.dataset.page)) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initStandalonePage, { once: true });
     } else {
