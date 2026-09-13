@@ -9,7 +9,7 @@
   ];
   const fallbackLanguage = "en";
   const languageCodes = new Set(supportedLanguages.map((language) => language.code));
-  const assetBuildId = "homepage-simplify-v1-2026-08-27-01";
+  const assetBuildId = "__ASSET_VERSION__";
   const paintDebugBuild = assetBuildId;
   const scriptBaseUrl = document.currentScript?.src || new URL("script.js", document.baseURI).href;
   try {
