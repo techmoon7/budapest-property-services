@@ -16,10 +16,13 @@ const routes = {
     hu: "/hu/ingatlankezeles-kulfoldi-tulajdonosoknak-budapest.html",
   },
   impresszum: { en: "/impresszum.html", hu: "/hu/impresszum.html" },
+  privacy: { hu: "/hu/adatkezelesi-tajekoztato.html" },
 };
 
+// Legal pages (imprint, privacy notice) carry no schema and are not service pages.
+const legalPages = new Set(["impresszum", "privacy"]);
 const pages = Object.entries(routes).flatMap(([key, value]) =>
-  ["en", "hu"].map((lang) => {
+  ["en", "hu"].filter((lang) => value[lang]).map((lang) => {
     const urlPath = value[lang];
     const file =
       urlPath === "/"
@@ -119,17 +122,22 @@ for (const page of pages) {
     pageAlternates[attr(tag, "hreflang")] = attr(tag, "href");
   }
   alternatesByUrl.set(page.url, pageAlternates);
-  for (const lang of languages) {
-    if (pageAlternates[lang] !== `${site}${routes[page.key][lang]}`) fail(`${page.file}: missing ${lang} hreflang`);
+  if (languages.every((lang) => routes[page.key][lang])) {
+    for (const lang of languages) {
+      if (pageAlternates[lang] !== `${site}${routes[page.key][lang]}`) fail(`${page.file}: missing ${lang} hreflang`);
+    }
+    if (pageAlternates["x-default"] !== `${site}${routes[page.key][defaultLanguage]}`) fail(`${page.file}: missing x-default hreflang`);
+  } else if (Object.keys(pageAlternates).length) {
+    // A page without a translation (yet) must not point search engines to one.
+    fail(`${page.file}: single-language page must not carry hreflang alternates`);
   }
-  if (pageAlternates["x-default"] !== `${site}${routes[page.key][defaultLanguage]}`) fail(`${page.file}: missing x-default hreflang`);
 
   const h1s = tags(body, /<h1\b[\s\S]*?<\/h1>/gi);
   if (h1s.length !== 1) fail(`${page.file}: expected exactly one H1, found ${h1s.length}`);
   if (h1s[0] && !stripTags(h1s[0])) fail(`${page.file}: H1 is empty`);
 
   const jsonScripts = [...head.matchAll(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].map((match) => match[1]);
-  if (!jsonScripts.length && page.key !== "impresszum") fail(`${page.file}: missing JSON-LD`);
+  if (!jsonScripts.length && !legalPages.has(page.key)) fail(`${page.file}: missing JSON-LD`);
   const jsonTypes = [];
   const graphNodes = [];
   for (const jsonText of jsonScripts) {
@@ -146,7 +154,7 @@ for (const page of pages) {
   }
   const businessTypes = ["LocalBusiness", "HomeAndConstructionBusiness"];
   const business = graphNodes.find((node) => [].concat(node["@type"]).some((type) => businessTypes.includes(type)));
-  if (page.key === "impresszum") {
+  if (legalPages.has(page.key)) {
     // Legal notice page: its content is maintained separately and carries no schema.
   } else {
     if (!business) fail(`${page.file}: missing LocalBusiness / HomeAndConstructionBusiness schema`);
@@ -166,7 +174,7 @@ for (const page of pages) {
   }
   if (page.key === "home") {
     if (!jsonTypes.includes("WebSite")) fail(`${page.file}: homepage missing WebSite schema`);
-  } else if (page.key !== "impresszum") {
+  } else if (!legalPages.has(page.key)) {
     if (!jsonTypes.includes("Service")) fail(`${page.file}: service page missing Service schema`);
     if (!jsonTypes.includes("BreadcrumbList")) fail(`${page.file}: service page missing BreadcrumbList schema`);
     if (/<details\b[^>]*class=["'][^"']*faq/i.test(body) && !jsonTypes.includes("FAQPage")) {

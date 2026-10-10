@@ -79,3 +79,45 @@ This pass replaced weak or nearly identical before states with stronger same-sce
 - Processed masters are recorded in `scripts/image-manifest.json` by content hash, so running the script again only touches new or replaced images. To replace an image: overwrite the JPG with the new original, run `python scripts/optimize-images.py`, and commit the JPG, the new WebP variants and the manifest.
 - Pages reference the variants through `srcset`/`sizes` (sizes measured from the rendered layout at 390, 1024 and 1440 px); the JPG stays as `src` fallback, lightbox source and `og:image`.
 - The deploy hash (`__ASSET_VERSION__`) now also covers `assets/*`, so replaced images bust browser caches automatically.
+
+## 2026-10-10 – Project gallery photos hosted locally instead of hotlinked from Pexels
+
+The project modal galleries on the home pages previously loaded 35 photos directly from the Pexels CDN (`images.pexels.com`) by numeric photo ID. The same photos (no change to what is shown) are now downloaded once, re-encoded by `scripts/optimize-images.py` and served from `assets/`, so visitors' browsers no longer contact Pexels and a removed or changed Pexels photo can no longer break a gallery. All photos are used under the [Pexels License](https://www.pexels.com/license/): free for commercial use, attribution not required, modification allowed. Downloaded and checked on 2026-10-10.
+
+| Local file | Previously | Pexels photo | Photographer | Licence |
+|---|---|---|---|---|
+| `assets/budapest-gallery-painting-before-1.jpg` | hotlinked Pexels ID 12036084 | [12036084](https://www.pexels.com/photo/neglected-apartment-before-renovation-12036084/) | Faruk Tokluoğlu | Pexels License |
+| `assets/budapest-gallery-painting-before-2.jpg` | hotlinked Pexels ID 804392 | [804392](https://www.pexels.com/photo/unfinished-wall-804392/) | Laurie Shaw | Pexels License |
+| `assets/budapest-gallery-painting-process-1.jpg` | hotlinked Pexels ID 3616757 | [3616757](https://www.pexels.com/photo/renovating-a-room-3616757/) | La Miko | Pexels License |
+| `assets/budapest-gallery-painting-process-2.jpg` | hotlinked Pexels ID 3615721 | [3615721](https://www.pexels.com/photo/room-renovation-3615721/) | La Miko | Pexels License |
+| `assets/budapest-gallery-painting-process-3.jpg` | hotlinked Pexels ID 6474471 | [6474471](https://www.pexels.com/photo/man-painting-the-wall-6474471/) | Tima Miroshnichenko | Pexels License |
+| `assets/budapest-gallery-painting-process-4.jpg` | hotlinked Pexels ID 6473978 | [6473978](https://www.pexels.com/photo/a-man-sanding-the-wall-6473978/) | Tima Miroshnichenko | Pexels License |
+| `assets/budapest-gallery-drywall-before-1.jpg` | hotlinked Pexels ID 15798783 | [15798783](https://www.pexels.com/photo/building-during-refurbishment-15798783/) | Francesco Ungaro | Pexels License |
+| `assets/budapest-gallery-drywall-before-2.jpg` | hotlinked Pexels ID 5606879 | [5606879](https://www.pexels.com/photo/room-under-constr-5606879/) | Kazi Khadem | Pexels License |
+| `assets/budapest-gallery-drywall-process-1.jpg` | hotlinked Pexels ID 3990359 | [3990359](https://www.pexels.com/photo/house-renovation-3990359/) | Rene Terp | Pexels License |
+| `assets/budapest-gallery-drywall-process-2.jpg` | hotlinked Pexels ID 6474313 | [6474313](https://www.pexels.com/photo/wooden-materials-in-a-room-6474313/) | Tima Miroshnichenko | Pexels License |
+| `assets/budapest-gallery-drywall-process-3.jpg` | hotlinked Pexels ID 6474202 | [6474202](https://www.pexels.com/photo/a-man-in-white-shirt-painting-a-house-6474202/) | Tima Miroshnichenko | Pexels License |
+| `assets/budapest-gallery-drywall-process-4.jpg` | hotlinked Pexels ID 6474343 | [6474343](https://www.pexels.com/photo/man-polishing-the-ceiling-6474343/) | Tima Miroshnichenko | Pexels License |
+| `assets/budapest-gallery-drywall-process-5.jpg` | hotlinked Pexels ID 6474300 | [6474300](https://www.pexels.com/photo/man-in-black-jacket-and-black-pants-wearing-white-helmet-6474300/) | Tima Miroshnichenko | Pexels License |
+| `assets/budapest-gallery-drywall-process-6.jpg` | hotlinked Pexels ID 6474129 | [6474129](https://www.pexels.com/photo/man-polishing-the-ceiling-6474129/) | Tima Miroshnichenko | Pexels License |
+| `assets/budapest-gallery-drywall-after-1.jpg` | hotlinked Pexels ID 9826455 | [9826455](https://www.pexels.com/photo/an-empty-room-9826455/) | Gustavo Galeano Maz | Pexels License |
+| `assets/budapest-gallery-handyman-before-1.jpg` | hotlinked Pexels ID 13909112 | [13909112](https://www.pexels.com/photo/bookshelves-on-a-wall-13909112/) | Yunus Tuğ | Pexels License |
+| `assets/budapest-gallery-handyman-before-2.jpg` | hotlinked Pexels ID 13588248 | [13588248](https://www.pexels.com/photo/shelves-on-a-wall-13588248/) | Zeynep Merve Kılıç Çakır | Pexels License |
+| `assets/budapest-gallery-handyman-process-1.jpg` | hotlinked Pexels ID 23224978 | [23224978](https://www.pexels.com/photo/man-putting-picture-on-wall-23224978/) | Vitaly Gariev | Pexels License |
+| `assets/budapest-gallery-handyman-process-2.jpg` | hotlinked Pexels ID 4981802 | [4981802](https://www.pexels.com/photo/man-drilling-in-a-wall-in-an-apartment-4981802/) | Antoni Shkraba | Pexels License |
+| `assets/budapest-gallery-handyman-after-1.jpg` | hotlinked Pexels ID 19109111 | [19109111](https://www.pexels.com/photo/shelves-on-green-wall-in-room-19109111/) | Avery Arwood | Pexels License |
+| `assets/budapest-gallery-handyman-after-2.jpg` | hotlinked Pexels ID 9565966 | [9565966](https://www.pexels.com/photo/wooden-shelves-mounted-on-the-wall-9565966/) | Taryn Elliott | Pexels License |
+| `assets/budapest-gallery-handyman-after-3.jpg` | hotlinked Pexels ID 5824546 | [5824546](https://www.pexels.com/photo/interior-of-dense-room-with-shelves-on-brick-wall-5824546/) | Charlotte May | Pexels License |
+| `assets/budapest-gallery-handyman-after-4.jpg` | hotlinked Pexels ID 5824575 | [5824575](https://www.pexels.com/photo/bookshelves-on-brick-wall-in-room-5824575/) | Charlotte May | Pexels License |
+| `assets/budapest-gallery-airbnb-before-1.jpg` | hotlinked Pexels ID 5102904 | [5102904](https://www.pexels.com/photo/a-messy-living-room-5102904/) | Angelina Lobanova | Pexels License |
+| `assets/budapest-gallery-airbnb-process-1.jpg` | hotlinked Pexels ID 6195959 | [6195959](https://www.pexels.com/photo/a-woman-cleaning-the-living-room-6195959/) | Tima Miroshnichenko | Pexels License |
+| `assets/budapest-gallery-airbnb-after-1.jpg` | hotlinked Pexels ID 6764827 | [6764827](https://www.pexels.com/photo/modern-living-room-in-an-apartment-6764827/) | Femke | Pexels License |
+| `assets/budapest-gallery-airbnb-after-2.jpg` | hotlinked Pexels ID 8135495 | [8135495](https://www.pexels.com/photo/a-clean-bedroom-8135495/) | Max Vakhtbovych | Pexels License |
+| `assets/budapest-gallery-airbnb-after-3.jpg` | hotlinked Pexels ID 19899060 | [19899060](https://www.pexels.com/photo/tables-armchair-and-couch-in-living-room-19899060/) | Lisa Anna | Pexels License |
+| `assets/budapest-gallery-airbnb-after-4.jpg` | hotlinked Pexels ID 271624 | [271624](https://www.pexels.com/photo/bedroom-interior-setup-271624/) | Pixabay | Pexels License |
+| `assets/budapest-gallery-office-before-1.jpg` | hotlinked Pexels ID 5483236 | [5483236](https://www.pexels.com/photo/an-empty-office-5483236/) | cottonbro studio | Pexels License |
+| `assets/budapest-gallery-office-before-2.jpg` | hotlinked Pexels ID 8477444 | [8477444](https://www.pexels.com/photo/an-empty-office-8477444/) | Gustavo Galeano Maz | Pexels License |
+| `assets/budapest-gallery-office-process-1.jpg` | hotlinked Pexels ID 5511098 | [5511098](https://www.pexels.com/photo/an-interior-of-an-office-5511098/) | Mike van Schoonderwalt | Pexels License |
+| `assets/budapest-gallery-office-after-1.jpg` | hotlinked Pexels ID 7534216 | [7534216](https://www.pexels.com/photo/modern-interior-of-office-room-7534216/) | Max Vakhtbovych | Pexels License |
+| `assets/budapest-gallery-office-after-2.jpg` | hotlinked Pexels ID 36631699 | [36631699](https://www.pexels.com/photo/spacious-modern-office-interior-with-open-cubicles-36631699/) | DOAN THANH BINH | Pexels License |
+| `assets/budapest-gallery-office-after-3.jpg` | hotlinked Pexels ID 1181406 | [1181406](https://www.pexels.com/photo/group-of-people-on-a-conference-room-1181406/) | Christina Morillo | Pexels License |

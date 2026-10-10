@@ -30,6 +30,7 @@
       hu: "/hu/ingatlankezeles-kulfoldi-tulajdonosoknak-budapest.html",
     },
     impresszum: { en: "/impresszum.html", hu: "/hu/impresszum.html" },
+    privacy: { hu: "/hu/adatkezelesi-tajekoztato.html" },
   };
   const routeLookup = new Map();
   Object.entries(routePairs).forEach(([key, pair]) => {
@@ -1189,7 +1190,13 @@
     // shift); data-nav-static only hides the not-yet-restructured link list until now.
     delete header.dataset.navStatic;
     const brand = header.querySelector(".brand");
-    if (brand) brand.setAttribute("href", `${routeHref("home", navigationLanguage())}#top`);
+    if (brand) {
+      brand.setAttribute("href", `${routeHref("home", navigationLanguage())}#top`);
+      // The link is named by its visible text (WCAG 2.5.3 label in name); the logo
+      // abbreviation is decorative.
+      brand.removeAttribute("aria-label");
+      brand.querySelector(".logo")?.setAttribute("aria-hidden", "true");
+    }
 
     let menuToggle = header.querySelector(".nav-toggle");
     if (!menuToggle) {
@@ -1471,7 +1478,9 @@
     button.type = "button";
     button.classList.add("lang", "language-toggle");
     button.dataset.languageSelectorTrigger = "true";
-    button.setAttribute("aria-label", t("openLanguageMenu", lang));
+    // Contains both visible forms of the current language (full name on wide screens, code on
+    // narrow ones), so speech-input users can say what they see (WCAG 2.5.3).
+    button.setAttribute("aria-label", `${activeLanguage.label}, ${activeLanguage.short} – ${t("openLanguageMenu", lang)}`);
     button.setAttribute("aria-expanded", selector.classList.contains("open") ? "true" : "false");
     menu.setAttribute("aria-label", t("languageBadge", lang));
     const buttonMarkup = `
@@ -5094,7 +5103,7 @@
     routeLanguage,
   };
 
-  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services", "airbnb-property-maintenance", "property-management-foreign-owners", "impresszum"].includes(document.body?.dataset.page)) {
+  if (["property-maintenance", "handyman-services", "painting-wall-repairs", "garden-maintenance", "cleaning-services", "airbnb-property-maintenance", "property-management-foreign-owners", "impresszum", "privacy"].includes(document.body?.dataset.page)) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initStandalonePage, { once: true });
     } else {
@@ -5263,12 +5272,12 @@
             "Refresh marked, patched or tired walls before guest changes, tenant handovers, photoshoots or office visits. The aim is a clean surface, a consistent room impression and a handover you can feel comfortable with.",
         },
         photos: [
-          ["12036084", "before", { hu: "Régi, sérült falfelület: itt a fal állapotát kellett javíthatóvá tenni.", en: "Old damaged wall surface: the first task was to make the wall repairable." }],
-          ["804392", "before", { hu: "Felújítás előtti helyiség, ahol a falhibák és az alsó falsáv külön figyelmet igényelt.", en: "Room before refresh, with visible wall damage and a lower wall section needing attention." }],
-          ["3616757", "process", { hu: "Festésre előkészített teljes szoba, takart padlóval és összekészített anyagokkal.", en: "Full room prepared for painting, with flooring protected and materials arranged." }],
-          ["3615721", "process", { hu: "A munkaterület rendezése festés előtt: a szoba használható állapotban marad a kivitelezéshez.", en: "Work area set up before painting so the room remains controlled during the job." }],
-          ["6474471", "process", { hu: "Teljes falfelület javítása és hengerlése, nem csak egy közeli részlet.", en: "A full wall being repaired and rolled, not just a close-up detail." }],
-          ["6473978", "process", { hu: "Nagyobb falmező csiszolása és simítása, hogy a festés egyenletes legyen.", en: "Large wall section being sanded and levelled so the paint finish looks even." }],
+          ["assets/budapest-gallery-painting-before-1.jpg", "before", { hu: "Régi, sérült falfelület: itt a fal állapotát kellett javíthatóvá tenni.", en: "Old damaged wall surface: the first task was to make the wall repairable." }],
+          ["assets/budapest-gallery-painting-before-2.jpg", "before", { hu: "Felújítás előtti helyiség, ahol a falhibák és az alsó falsáv külön figyelmet igényelt.", en: "Room before refresh, with visible wall damage and a lower wall section needing attention." }],
+          ["assets/budapest-gallery-painting-process-1.jpg", "process", { hu: "Festésre előkészített teljes szoba, takart padlóval és összekészített anyagokkal.", en: "Full room prepared for painting, with flooring protected and materials arranged." }],
+          ["assets/budapest-gallery-painting-process-2.jpg", "process", { hu: "A munkaterület rendezése festés előtt: a szoba használható állapotban marad a kivitelezéshez.", en: "Work area set up before painting so the room remains controlled during the job." }],
+          ["assets/budapest-gallery-painting-process-3.jpg", "process", { hu: "Teljes falfelület javítása és hengerlése, nem csak egy közeli részlet.", en: "A full wall being repaired and rolled, not just a close-up detail." }],
+          ["assets/budapest-gallery-painting-process-4.jpg", "process", { hu: "Nagyobb falmező csiszolása és simítása, hogy a festés egyenletes legyen.", en: "Large wall section being sanded and levelled so the paint finish looks even." }],
           ["assets/budapest-finished-room-1.jpg", "after", { hu: "Frissen festett budapesti lakószoba tiszta falakkal, radiátorral és parkettával.", en: "Freshly painted Budapest living room with clean walls, radiators and parquet flooring." }],
           ["assets/budapest-finished-room-2.jpg", "after", { hu: "Üres, átadásra kész budapesti szoba egységes falfelülettel és hétköznapi kialakítással.", en: "Empty Budapest room ready for handover, with consistent walls and an everyday layout." }],
           ["assets/budapest-airbnb-living-room.jpg", "after", { hu: "Rendezett, világos budapesti lakótér friss falakkal és praktikus berendezéssel.", en: "Tidy, bright Budapest living space with refreshed walls and practical furnishings." }],
@@ -5287,15 +5296,15 @@
         },
         photos: [
           ["assets/budapest-drywall-before-matched.jpg", "before", { hu: "Üres, félkész helyiség gipszkarton és festés előtti állapotban: a teljes tér látszik.", en: "Empty unfinished room before drywall finishing and painting, showing the full space." }],
-          ["15798783", "before", { hu: "Felújítás alatti teljes szoba, ahol a falak és mennyezeti csatlakozások még rendezésre várnak.", en: "Full room under renovation where walls and ceiling junctions still need finishing." }],
-          ["5606879", "before", { hu: "Nagyobb belső munkaterület nyitott mennyezettel és javítandó felületekkel.", en: "Large interior work area with an open ceiling and surfaces still needing repair." }],
-          ["3990359", "process", { hu: "Teljes felújítás alatti helyiség: létrák, takarás és előkészített munkaterület.", en: "Full room under renovation with ladders, protection and prepared working area." }],
-          ["6474313", "process", { hu: "Mennyezeti gipszkarton felület hézagolás előtt, jól látható teljes felülettel.", en: "Drywall ceiling before joint finishing, with the broader surface visible." }],
-          ["6474202", "process", { hu: "Mennyezeti illesztések kezelése nagyobb felületen, nem elszigetelt részletként.", en: "Ceiling joints handled across a larger surface, not as an isolated close-up." }],
-          ["6474343", "process", { hu: "Gipszkarton mennyezet csiszolása és simítása festés előtt.", en: "Drywall ceiling being sanded and smoothed before painting." }],
-          ["6474300", "process", { hu: "Teljes szoba előkészítése: takarás, csiszolás, poros munkafázis kontrolláltan.", en: "Full room preparation with masking, sanding and controlled dusty work." }],
-          ["6474129", "process", { hu: "Mennyezeti javítás munka közben, a teljes felülethez igazítva.", en: "Ceiling repair in progress, aligned with the whole surface." }],
-          ["9826455", "after", { hu: "Kész, üres helyiség: a javított felületek tiszta, festés utáni szobaképet adnak.", en: "Finished empty room where repaired surfaces create a clean post-work interior." }],
+          ["assets/budapest-gallery-drywall-before-1.jpg", "before", { hu: "Felújítás alatti teljes szoba, ahol a falak és mennyezeti csatlakozások még rendezésre várnak.", en: "Full room under renovation where walls and ceiling junctions still need finishing." }],
+          ["assets/budapest-gallery-drywall-before-2.jpg", "before", { hu: "Nagyobb belső munkaterület nyitott mennyezettel és javítandó felületekkel.", en: "Large interior work area with an open ceiling and surfaces still needing repair." }],
+          ["assets/budapest-gallery-drywall-process-1.jpg", "process", { hu: "Teljes felújítás alatti helyiség: létrák, takarás és előkészített munkaterület.", en: "Full room under renovation with ladders, protection and prepared working area." }],
+          ["assets/budapest-gallery-drywall-process-2.jpg", "process", { hu: "Mennyezeti gipszkarton felület hézagolás előtt, jól látható teljes felülettel.", en: "Drywall ceiling before joint finishing, with the broader surface visible." }],
+          ["assets/budapest-gallery-drywall-process-3.jpg", "process", { hu: "Mennyezeti illesztések kezelése nagyobb felületen, nem elszigetelt részletként.", en: "Ceiling joints handled across a larger surface, not as an isolated close-up." }],
+          ["assets/budapest-gallery-drywall-process-4.jpg", "process", { hu: "Gipszkarton mennyezet csiszolása és simítása festés előtt.", en: "Drywall ceiling being sanded and smoothed before painting." }],
+          ["assets/budapest-gallery-drywall-process-5.jpg", "process", { hu: "Teljes szoba előkészítése: takarás, csiszolás, poros munkafázis kontrolláltan.", en: "Full room preparation with masking, sanding and controlled dusty work." }],
+          ["assets/budapest-gallery-drywall-process-6.jpg", "process", { hu: "Mennyezeti javítás munka közben, a teljes felülethez igazítva.", en: "Ceiling repair in progress, aligned with the whole surface." }],
+          ["assets/budapest-gallery-drywall-after-1.jpg", "after", { hu: "Kész, üres helyiség: a javított felületek tiszta, festés utáni szobaképet adnak.", en: "Finished empty room where repaired surfaces create a clean post-work interior." }],
         ],
       },
       {
@@ -5332,16 +5341,16 @@
             "Shelves, curtain rails, door adjustments, trims, fixings and small handover issues organised into one task list. Individually they may seem minor, but together they strongly affect how the property feels.",
         },
         photos: [
-          ["13909112", "before", { hu: "Belső tér átadás előtt, ahol a kisebb szerelési és rendezési pontok adják meg a végső képet.", en: "Interior before handover where small installation and tidying points shape the final impression." }],
-          ["13588248", "before", { hu: "Rendezetlenebb fali tároló és dekorációs felület: a cél egy használhatóbb, tisztább összkép.", en: "Less orderly wall storage and decor area before creating a more usable, cleaner impression." }],
-          ["23224978", "process", { hu: "Fali kép vagy tartó pontos beállítása, hogy a helyiség rendezettebb legyen.", en: "Wall picture or mount being aligned so the room feels more orderly." }],
-          ["4981802", "process", { hu: "Fali rögzítés és szerelés olyan helyen, ahol a kész eredmény használhatóbbá teszi a szobát.", en: "Wall fixing work that makes the room more usable once completed." }],
+          ["assets/budapest-gallery-handyman-before-1.jpg", "before", { hu: "Belső tér átadás előtt, ahol a kisebb szerelési és rendezési pontok adják meg a végső képet.", en: "Interior before handover where small installation and tidying points shape the final impression." }],
+          ["assets/budapest-gallery-handyman-before-2.jpg", "before", { hu: "Rendezetlenebb fali tároló és dekorációs felület: a cél egy használhatóbb, tisztább összkép.", en: "Less orderly wall storage and decor area before creating a more usable, cleaner impression." }],
+          ["assets/budapest-gallery-handyman-process-1.jpg", "process", { hu: "Fali kép vagy tartó pontos beállítása, hogy a helyiség rendezettebb legyen.", en: "Wall picture or mount being aligned so the room feels more orderly." }],
+          ["assets/budapest-gallery-handyman-process-2.jpg", "process", { hu: "Fali rögzítés és szerelés olyan helyen, ahol a kész eredmény használhatóbbá teszi a szobát.", en: "Wall fixing work that makes the room more usable once completed." }],
           ["assets/handyman-services-wall-fixtures.jpg", "after", { hu: "Felszerelt, rendezett fali polcok: a javítás használható tárolást és tisztább képet ad.", en: "Installed wall shelves creating usable storage and a cleaner visual result." }],
-          ["19109111", "after", { hu: "Stabil, kész polcrendszer, amely a korábbi üres vagy rendezetlen falfelületet használhatóvá teszi.", en: "Stable finished shelving that turns an empty or untidy wall into useful storage." }],
-          ["9565966", "after", { hu: "Rendezett fali tároló kisebb szerelés után, átadásra alkalmasabb belső képpel.", en: "Orderly wall storage after small installation work, improving the handover impression." }],
-          ["5824546", "after", { hu: "Teljes falon megjelenő tároló és polcrendszer kész állapotban.", en: "Full wall storage and shelving shown in finished condition." }],
-          ["19109111", "after", { hu: "Egyszerű, stabil fali polc elkészült állapotban, hétköznapi lakásbelsőben.", en: "A simple, stable wall shelf in a normal apartment interior." }],
-          ["5824575", "after", { hu: "Kész fali tároló teljes nézetben, ahol a javítás eredménye egyértelműen látszik.", en: "Finished wall storage shown in full view, making the result easy to understand." }],
+          ["assets/budapest-gallery-handyman-after-1.jpg", "after", { hu: "Stabil, kész polcrendszer, amely a korábbi üres vagy rendezetlen falfelületet használhatóvá teszi.", en: "Stable finished shelving that turns an empty or untidy wall into useful storage." }],
+          ["assets/budapest-gallery-handyman-after-2.jpg", "after", { hu: "Rendezett fali tároló kisebb szerelés után, átadásra alkalmasabb belső képpel.", en: "Orderly wall storage after small installation work, improving the handover impression." }],
+          ["assets/budapest-gallery-handyman-after-3.jpg", "after", { hu: "Teljes falon megjelenő tároló és polcrendszer kész állapotban.", en: "Full wall storage and shelving shown in finished condition." }],
+          ["assets/budapest-gallery-handyman-after-1.jpg", "after", { hu: "Egyszerű, stabil fali polc elkészült állapotban, hétköznapi lakásbelsőben.", en: "A simple, stable wall shelf in a normal apartment interior." }],
+          ["assets/budapest-gallery-handyman-after-4.jpg", "after", { hu: "Kész fali tároló teljes nézetben, ahol a javítás eredménye egyértelműen látszik.", en: "Finished wall storage shown in full view, making the result easy to understand." }],
         ],
       },
     ];
@@ -5555,16 +5564,16 @@
           { n: "1", hu: "kapcsolattartási pont", en: "contact point" },
         ],
         photos: [
-          ["5102904", "before", { hu: "Vendégváltás előtti lakott állapot: a nappalit rendezettebbé és fotózhatóbbá kell tenni.", en: "Lived-in condition before guest turnover: the living room needs to become tidier and easier to present." }],
-          ["6195959", "process", { hu: "Airbnb előkészítés takarítással és ellenőrzéssel, teljesebb lakótérben látható munkával.", en: "Airbnb preparation with cleaning and checking, shown in a fuller living-space context." }],
-          ["6764827", "after", { hu: "Kész, rendezett nappali vendégérkezéshez: tiszta, átlátható és használható tér.", en: "Finished living room for guest arrival: clean, clear and usable." }],
-          ["8135495", "after", { hu: "Rendezett hálószoba átadás előtt, tiszta textillel és ellenőrizhető összképpel.", en: "Tidy bedroom before handover, with clean textiles and a reviewable overall condition." }],
-          ["19899060", "after", { hu: "Világos, teljes nappali kész állapotban, amely jól mutat vendégfotón és átadáskor.", en: "Bright full living room in finished condition, suitable for guest photos and handover." }],
+          ["assets/budapest-gallery-airbnb-before-1.jpg", "before", { hu: "Vendégváltás előtti lakott állapot: a nappalit rendezettebbé és fotózhatóbbá kell tenni.", en: "Lived-in condition before guest turnover: the living room needs to become tidier and easier to present." }],
+          ["assets/budapest-gallery-airbnb-process-1.jpg", "process", { hu: "Airbnb előkészítés takarítással és ellenőrzéssel, teljesebb lakótérben látható munkával.", en: "Airbnb preparation with cleaning and checking, shown in a fuller living-space context." }],
+          ["assets/budapest-gallery-airbnb-after-1.jpg", "after", { hu: "Kész, rendezett nappali vendégérkezéshez: tiszta, átlátható és használható tér.", en: "Finished living room for guest arrival: clean, clear and usable." }],
+          ["assets/budapest-gallery-airbnb-after-2.jpg", "after", { hu: "Rendezett hálószoba átadás előtt, tiszta textillel és ellenőrizhető összképpel.", en: "Tidy bedroom before handover, with clean textiles and a reviewable overall condition." }],
+          ["assets/budapest-gallery-airbnb-after-3.jpg", "after", { hu: "Világos, teljes nappali kész állapotban, amely jól mutat vendégfotón és átadáskor.", en: "Bright full living room in finished condition, suitable for guest photos and handover." }],
           ["assets/budapest-airbnb-living-room.jpg", "after", { hu: "Hétköznapi budapesti nappali rendezett, vendégfogadásra kész állapotban.", en: "Everyday Budapest living room in a tidy, guest-ready condition." }],
           ["assets/budapest-finished-room-2.jpg", "after", { hu: "Frissen festett, egyszerű budapesti szoba tiszta járófelülettel.", en: "Freshly painted, simple Budapest room with clear circulation." }],
           ["assets/budapest-finished-room-1.jpg", "after", { hu: "Világos budapesti lakószoba rendezett falakkal, átadásra kész állapotban.", en: "Bright Budapest living room with tidy walls, ready for handover." }],
           ["assets/budapest-airbnb-bedroom.jpg", "after", { hu: "Tiszta, visszafogott hálószoba, amely vendégnek és tulajdonosnak is könnyen ellenőrizhető.", en: "Clean, understated bedroom that is easy for both guest and owner to review." }],
-          ["271624", "after", { hu: "Kompakt Airbnb lakótér kész állapotban, rendezett fallal és használható elrendezéssel.", en: "Compact Airbnb living area in finished condition, with tidy walls and usable layout." }],
+          ["assets/budapest-gallery-airbnb-after-4.jpg", "after", { hu: "Kompakt Airbnb lakótér kész állapotban, rendezett fallal és használható elrendezéssel.", en: "Compact Airbnb living area in finished condition, with tidy walls and usable layout." }],
         ],
       },
       {
@@ -5617,16 +5626,16 @@
           { n: "10", hu: "kép", en: "images" },
         ],
         photos: [
-          ["5483236", "before", { hu: "Üres irodatér frissítés előtt: a cél a tiszta, használatra kész munkakörnyezet.", en: "Empty office before refresh, with the goal of a clean, usable work environment." }],
-          ["8477444", "before", { hu: "Nagyobb nyitott iroda átadás előtt, ahol a teljes tér összképe számít.", en: "Large open office before handover, where the overall impression matters." }],
+          ["assets/budapest-gallery-office-before-1.jpg", "before", { hu: "Üres irodatér frissítés előtt: a cél a tiszta, használatra kész munkakörnyezet.", en: "Empty office before refresh, with the goal of a clean, usable work environment." }],
+          ["assets/budapest-gallery-office-before-2.jpg", "before", { hu: "Nagyobb nyitott iroda átadás előtt, ahol a teljes tér összképe számít.", en: "Large open office before handover, where the overall impression matters." }],
           ["assets/budapest-office-process-wall-touchup.jpg", "process", { hu: "Szervezett javítófestés egy budapesti iroda kisebb falszakaszán.", en: "Organised touch-up painting on a small wall section in a Budapest office." }],
-          ["5511098", "process", { hu: "Nagyobb irodai munkatér ellenőrzése frissítés előtt, teljesebb perspektívából.", en: "Larger office workspace reviewed before refresh, shown from a wider perspective." }],
+          ["assets/budapest-gallery-office-process-1.jpg", "process", { hu: "Nagyobb irodai munkatér ellenőrzése frissítés előtt, teljesebb perspektívából.", en: "Larger office workspace reviewed before refresh, shown from a wider perspective." }],
           ["assets/budapest-office-finished-1.jpg", "after", { hu: "Rendezett budapesti irodatér tiszta falakkal és hétköznapi berendezéssel.", en: "Tidy Budapest office with clean walls and practical furnishings." }],
           ["assets/budapest-office-finished-2.jpg", "after", { hu: "Világos, látogatófogadásra kész budapesti váró- és közösségi tér.", en: "Bright Budapest waiting and shared area ready to receive visitors." }],
           ["assets/budapest-office-finished-3.jpg", "after", { hu: "Egyszerű budapesti tárgyaló egységes falakkal és rendezett összképpel.", en: "Simple Budapest meeting room with consistent walls and an orderly appearance." }],
-          ["7534216", "after", { hu: "Kész tárgyaló jellegű tér, tiszta falakkal és rendezett összképpel.", en: "Finished meeting-style room with clean walls and an orderly appearance." }],
-          ["36631699", "after", { hu: "Tágas iroda teljes nézetben, rendezett munkaállomásokkal.", en: "Spacious office shown in full view, with orderly workstations." }],
-          ["1181406", "after", { hu: "Teljes irodatér használat közben: a frissített környezet professzionálisabb képet ad.", en: "Full office area in use, with the refreshed environment supporting a more professional feel." }],
+          ["assets/budapest-gallery-office-after-1.jpg", "after", { hu: "Kész tárgyaló jellegű tér, tiszta falakkal és rendezett összképpel.", en: "Finished meeting-style room with clean walls and an orderly appearance." }],
+          ["assets/budapest-gallery-office-after-2.jpg", "after", { hu: "Tágas iroda teljes nézetben, rendezett munkaállomásokkal.", en: "Spacious office shown in full view, with orderly workstations." }],
+          ["assets/budapest-gallery-office-after-3.jpg", "after", { hu: "Teljes irodatér használat közben: a frissített környezet professzionálisabb képet ad.", en: "Full office area in use, with the refreshed environment supporting a more professional feel." }],
         ],
       },
       {
