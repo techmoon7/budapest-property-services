@@ -1162,7 +1162,8 @@ details[open] .disclosure-link {
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
-.maintenance-showcase-visuals .showcase-photo[data-hero-lightbox]:focus-visible {
+.maintenance-showcase-visuals .showcase-photo[data-hero-lightbox]:focus-visible,
+.maintenance-showcase-visuals .showcase-photo[data-hero-lightbox]:has(> img:focus-visible) {
   outline: 3px solid rgba(195, 116, 63, 0.72);
   outline-offset: 4px;
 }
@@ -1521,7 +1522,9 @@ details[open] .disclosure-link {
 }
 
 .hero-media[data-hero-lightbox]:focus-visible .hero-image-shell,
-.service-hero-visual[data-hero-lightbox]:focus-visible {
+.hero-media[data-hero-lightbox]:has(img:focus-visible) .hero-image-shell,
+.service-hero-visual[data-hero-lightbox]:focus-visible,
+.service-hero-visual[data-hero-lightbox]:has(> img:focus-visible) {
   outline: 3px solid var(--accent2);
   outline-offset: 6px;
 }
@@ -1864,12 +1867,14 @@ body[data-page="cleaning-services"] [data-cleaning-gallery-item] {
   transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
 }
 
-body[data-page="garden-maintenance"] [data-garden-gallery-item]:focus-visible {
+body[data-page="garden-maintenance"] [data-garden-gallery-item]:focus-visible,
+body[data-page="garden-maintenance"] [data-garden-gallery-item]:has(img:focus-visible) {
   outline: 3px solid var(--accent2);
   outline-offset: 6px;
 }
 
-body[data-page="cleaning-services"] [data-cleaning-gallery-item]:focus-visible {
+body[data-page="cleaning-services"] [data-cleaning-gallery-item]:focus-visible,
+body[data-page="cleaning-services"] [data-cleaning-gallery-item]:has(img:focus-visible) {
   outline: 3px solid var(--accent2);
   outline-offset: 6px;
 }
@@ -4460,5 +4465,20 @@ body:not(.service-page) .project-card.rich.featured .body {
   .quote-kicker,
   .compare .label {
     font-size: 12px;
+  }
+}
+
+/* Header before script.js has restructured it (data-nav-static): keep the brand at its
+   final width and hide the plain link list, so the header already has its final height
+   and nothing below it shifts when the navigation is enhanced. */
+.header[data-nav-static] .brand {
+  flex-shrink: 0;
+}
+
+/* Only when scripts run: without JavaScript the plain link list stays visible. */
+@media (scripting: enabled) {
+  .header[data-nav-static] .nav {
+    overflow: hidden;
+    visibility: hidden;
   }
 }

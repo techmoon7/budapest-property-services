@@ -284,11 +284,23 @@ assert.match(
 // bindHeroLightbox() previously hardcoded an English "Open image: ..." label
 // regardless of page language, so Hungarian-page screen-reader users heard
 // English text. It must now go through the same t()-based lookup used for
-// the neighbouring closeImage/previousImage/nextImage labels.
+// the neighbouring closeImage/previousImage/nextImage labels. The label (and the
+// button role) now sit on the image inside the figure, via makeImageButton(),
+// because ARIA does not allow role="button" on <figure>.
 assert.match(
   scriptSource,
-  /target\.setAttribute\("aria-label", image\.alt \? `\$\{t\("openImage"\)\}: \$\{image\.alt\}` : t\("openImage"\)\);/,
-  "bindHeroLightbox must build its aria-label from the language-aware openImage translation, not a hardcoded English string"
+  /const imageOpenLabel = \(alt\) => \{\s*const prefix = t\("openImage"\)/,
+  "image lightbox labels must come from the language-aware openImage translation, not a hardcoded English string"
+);
+assert.match(
+  scriptSource,
+  /const control = makeImageButton\(target, image\);\s*target\.addEventListener\("click"/,
+  "bindHeroLightbox must put the button semantics on the image via makeImageButton()"
+);
+assert.doesNotMatch(
+  scriptSource,
+  /target\.setAttribute\("role", "button"\)/,
+  "lightbox/gallery figures must not get role=button"
 );
 assert.doesNotMatch(
   scriptSource,

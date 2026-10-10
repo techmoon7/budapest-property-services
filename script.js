@@ -1185,6 +1185,9 @@
     const navId = nav.id || "primary-navigation";
     nav.id = navId;
     header.dataset.navEnhanced = "true";
+    // The static HTML header carries the final compact layout from the first paint (no layout
+    // shift); data-nav-static only hides the not-yet-restructured link list until now.
+    delete header.dataset.navStatic;
     const brand = header.querySelector(".brand");
     if (brand) brand.setAttribute("href", `${routeHref("home", navigationLanguage())}#top`);
 
@@ -1725,6 +1728,22 @@
     requestAnimationFrame(() => panel?.focus());
   };
 
+  // Lightbox / gallery triggers: <figure> may not carry role="button" (ARIA), so the
+  // button semantics go on the image inside it; click and key events still bubble to
+  // the figure's handlers. The label follows the page language.
+  const imageOpenLabel = (alt) => {
+    const prefix = t("openImage") || "Open image";
+    return alt ? `${prefix}: ${alt}` : prefix;
+  };
+  const makeImageButton = (target, image) => {
+    const control = image || target;
+    if (control !== target) ["role", "tabindex", "aria-label"].forEach((name) => target.removeAttribute(name));
+    control.setAttribute("role", "button");
+    control.setAttribute("tabindex", "0");
+    control.setAttribute("aria-label", imageOpenLabel(image?.alt));
+    return control;
+  };
+
   const bindHeroLightbox = () => {
     document.querySelectorAll(
       ".hero-media, .service-hero-visual, .showcase-photo[data-paint-reveal], .maintenance-showcase-visuals .showcase-photo"
@@ -1736,9 +1755,7 @@
 
       target.dataset.heroLightbox = "true";
       target.dataset.heroLightboxBound = "true";
-      target.setAttribute("role", "button");
-      target.setAttribute("tabindex", "0");
-      target.setAttribute("aria-label", image.alt ? `${t("openImage")}: ${image.alt}` : t("openImage"));
+      const control = makeImageButton(target, image);
 
       target.addEventListener("click", (event) => {
         if (
@@ -1749,12 +1766,12 @@
           event.stopPropagation();
           return;
         }
-        openHeroLightbox(image, target);
+        openHeroLightbox(image, control);
       });
       target.addEventListener("keydown", (event) => {
         if (!["Enter", " "].includes(event.key)) return;
         event.preventDefault();
-        openHeroLightbox(image, target);
+        openHeroLightbox(image, control);
       });
     });
   };
@@ -4254,15 +4271,13 @@
       const image = target.querySelector("img");
       target.dataset.gardenGalleryBound = "true";
       target.dataset.gardenGalleryItem = "true";
-      target.setAttribute("role", "button");
-      target.setAttribute("tabindex", "0");
-      target.setAttribute("aria-label", image?.alt ? `Open image: ${image.alt}` : "Open garden image");
+      const control = makeImageButton(target, image);
 
-      target.addEventListener("click", () => openGardenGallery(index, target));
+      target.addEventListener("click", () => openGardenGallery(index, control));
       target.addEventListener("keydown", (event) => {
         if (!["Enter", " "].includes(event.key)) return;
         event.preventDefault();
-        openGardenGallery(index, target);
+        openGardenGallery(index, control);
       });
     });
   };
@@ -4402,15 +4417,13 @@
       const image = target.querySelector("img");
       target.dataset.cleaningGalleryBound = "true";
       target.dataset.cleaningGalleryItem = "true";
-      target.setAttribute("role", "button");
-      target.setAttribute("tabindex", "0");
-      target.setAttribute("aria-label", image?.alt ? `Open image: ${image.alt}` : "Open cleaning image");
+      const control = makeImageButton(target, image);
 
-      target.addEventListener("click", () => openCleaningGallery(index, target));
+      target.addEventListener("click", () => openCleaningGallery(index, control));
       target.addEventListener("keydown", (event) => {
         if (!["Enter", " "].includes(event.key)) return;
         event.preventDefault();
-        openCleaningGallery(index, target);
+        openCleaningGallery(index, control);
       });
     });
   };
