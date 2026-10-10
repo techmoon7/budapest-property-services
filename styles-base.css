@@ -525,7 +525,7 @@ details[open] .disclosure-link span {
   backdrop-filter: blur(8px);
 }
 
-.illustration-note span {
+.illustration-note > span {
   display: grid;
   flex: 0 0 30px;
   width: 30px;

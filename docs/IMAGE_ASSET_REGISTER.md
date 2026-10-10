@@ -72,3 +72,10 @@ This pass replaced weak or nearly identical before states with stronger same-sce
 | Airbnb / tenant turnover | Replaced | Previous before state was nearly identical to the after state. The new pair keeps the same living room and shows a guest-left condition before cleaning and preparation. |
 | Office / representative space | Replaced | Previous before state was too subtle. The new pair keeps the same office and adds visible wall marks and untidy work surfaces. |
 | Small fixes / handover | Replaced | Previous before state was too subtle. The new pair keeps the same bedroom and shows a loose fitting and small wall defects before handover. |
+
+## 2026-10-10 – Image optimisation (no change to what the images show)
+
+- `scripts/optimize-images.py` re-encodes every `assets/*.jpg` master to at most 1600 px on the long side (progressive, metadata-free sRGB JPG, quality 80) and writes responsive WebP variants `<name>-<width>w.webp` (480/800/1200/1600 px).
+- Processed masters are recorded in `scripts/image-manifest.json` by content hash, so running the script again only touches new or replaced images. To replace an image: overwrite the JPG with the new original, run `python scripts/optimize-images.py`, and commit the JPG, the new WebP variants and the manifest.
+- Pages reference the variants through `srcset`/`sizes` (sizes measured from the rendered layout at 390, 1024 and 1440 px); the JPG stays as `src` fallback, lightbox source and `og:image`.
+- The deploy hash (`__ASSET_VERSION__`) now also covers `assets/*`, so replaced images bust browser caches automatically.

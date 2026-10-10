@@ -33,24 +33,33 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "LocalBusiness",
+      "@type": "HomeAndConstructionBusiness",
       "@id": "https://budapestpropertyservices.hu/#localbusiness",
       "name": "Budapest Property Services",
       "url": "https://budapestpropertyservices.hu/",
       "telephone": "+36206671832",
+      "email": "contactcreativefabrication@gmail.com",
+      "description": "Property maintenance in Budapest and the surrounding area: minor repairs, painting and wall repairs, cleaning, garden care and Airbnb support for owners living abroad, landlords and offices, with English or Hungarian coordination and photo updates.",
       "image": "https://budapestpropertyservices.hu/assets/budapest-apartment-wall-refresh.jpg",
       "logo": "https://budapestpropertyservices.hu/assets/favicon.svg",
-      "areaServed": {
-        "@type": "City",
-        "name": "Budapest"
-      },
-      "availableLanguage": [
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Budapest"
+        },
+        {
+          "@type": "Place",
+          "name": "Budapest and the surrounding area"
+        }
+      ],
+      "knowsLanguage": [
         "Hungarian",
         "English"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+36206671832",
+        "email": "contactcreativefabrication@gmail.com",
         "contactType": "customer service",
         "availableLanguage": [
           "Hungarian",
@@ -247,7 +256,7 @@
         </div>
       </div>
       <div class="service-hero-visual" data-reveal data-paint-reveal data-paint-mode="garden" data-paint-region="0.035,0.31 0.965,0.29 0.965,0.965 0.035,0.965" data-paint-brush="154" data-paint-fade-delay="3600" data-paint-color="#6f935d" data-paint-opacity="0.68" data-paint-accent="#5f8b4e">
-        <img src="assets/garden-maintenance-hero-garden.jpg" alt="Hungarian apartment garden with lawn, hedges and trees" loading="eager" decoding="async">
+        <img src="assets/garden-maintenance-hero-garden.jpg" alt="Hungarian apartment garden with lawn, hedges and trees" loading="eager" decoding="async" srcset="assets/garden-maintenance-hero-garden-480w.webp 480w, assets/garden-maintenance-hero-garden-800w.webp 800w, assets/garden-maintenance-hero-garden-1200w.webp 1200w, assets/garden-maintenance-hero-garden-1500w.webp 1500w" sizes="(max-width: 700px) 95vw, (max-width: 1200px) 85vw, 493px" fetchpriority="high">
         <div class="service-hero-panel">
           <span data-lang-panel="hu" hidden aria-hidden="true">Mire figyelünk?</span>
           <span data-lang-panel="en">What matters</span>
@@ -361,26 +370,26 @@
 
       <div class="maintenance-showcase-visuals garden-gallery" data-reveal aria-label="Illustrative garden maintenance examples">
         <figure class="showcase-photo showcase-photo-large">
-          <img src="assets/garden-maintenance-lawn-trimming.jpg" alt="Close-up of a grass trimmer cutting lawn edges" loading="lazy" decoding="async">
+          <img src="assets/garden-maintenance-lawn-trimming.jpg" alt="Close-up of a grass trimmer cutting lawn edges" loading="lazy" decoding="async" srcset="assets/garden-maintenance-lawn-trimming-480w.webp 480w, assets/garden-maintenance-lawn-trimming-800w.webp 800w, assets/garden-maintenance-lawn-trimming-1200w.webp 1200w, assets/garden-maintenance-lawn-trimming-1600w.webp 1600w" sizes="(max-width: 700px) 95vw, (max-width: 1200px) 95vw, 642px">
           <figcaption><strong><span data-lang-panel="hu" hidden aria-hidden="true">Fű és szegélyek</span><span data-lang-panel="en">Lawn and edges</span></strong><span data-lang-panel="hu" hidden aria-hidden="true">Rendezettebb udvari kép fűnyírás és szegélyezés után.</span><span data-lang-panel="en">A tidier outdoor impression after mowing and edging.</span></figcaption>
         </figure>
         <div class="showcase-photo-row">
           <figure class="showcase-photo showcase-photo-small">
-            <img src="assets/garden-maintenance-hedge-trimming.jpg" alt="Garden worker trimming a hedge in a private residential garden" loading="lazy" decoding="async">
+            <img src="assets/garden-maintenance-hedge-trimming.jpg" alt="Garden worker trimming a hedge in a private residential garden" loading="lazy" decoding="async" srcset="assets/garden-maintenance-hedge-trimming-480w.webp 480w, assets/garden-maintenance-hedge-trimming-800w.webp 800w, assets/garden-maintenance-hedge-trimming-1200w.webp 1200w, assets/garden-maintenance-hedge-trimming-1600w.webp 1600w" sizes="(max-width: 700px) 95vw, (max-width: 1200px) 50vw, 311px">
             <figcaption><strong><span data-lang-panel="hu" hidden aria-hidden="true">Sövényigazítás</span><span data-lang-panel="en">Hedge trimming</span></strong><span data-lang-panel="hu" hidden aria-hidden="true">Túlnőtt növényzet visszafogott rendezése.</span><span data-lang-panel="en">Controlled tidying of overgrown greenery.</span></figcaption>
           </figure>
           <figure class="showcase-photo showcase-photo-small">
-            <img src="assets/garden-maintenance-leaf-cleanup.jpg" alt="Autumn leaves along a residential path before seasonal cleanup" loading="lazy" decoding="async">
+            <img src="assets/garden-maintenance-leaf-cleanup.jpg" alt="Autumn leaves along a residential path before seasonal cleanup" loading="lazy" decoding="async" srcset="assets/garden-maintenance-leaf-cleanup-480w.webp 480w, assets/garden-maintenance-leaf-cleanup-800w.webp 800w, assets/garden-maintenance-leaf-cleanup-1067w.webp 1067w" sizes="(max-width: 700px) 95vw, (max-width: 1200px) 50vw, 311px">
             <figcaption><strong><span data-lang-panel="hu" hidden aria-hidden="true">Lomb és zöldhulladék</span><span data-lang-panel="en">Leaves and green waste</span></strong><span data-lang-panel="hu" hidden aria-hidden="true">Szezonális tisztítás a járdák és udvarok körül.</span><span data-lang-panel="en">Seasonal cleanup around paths and courtyards.</span></figcaption>
           </figure>
         </div>
         <div class="showcase-photo-row">
           <figure class="showcase-photo showcase-photo-small">
-            <img src="assets/garden-maintenance-residential-hedge.jpg" alt="Worker pressure washing stone steps and outdoor paving" loading="lazy" decoding="async">
+            <img src="assets/garden-maintenance-residential-hedge.jpg" alt="Worker pressure washing stone steps and outdoor paving" loading="lazy" decoding="async" srcset="assets/garden-maintenance-residential-hedge-480w.webp 480w, assets/garden-maintenance-residential-hedge-800w.webp 800w, assets/garden-maintenance-residential-hedge-1200w.webp 1200w, assets/garden-maintenance-residential-hedge-1600w.webp 1600w" sizes="(max-width: 700px) 95vw, (max-width: 1200px) 50vw, 311px">
             <figcaption><strong><span data-lang-panel="hu" hidden aria-hidden="true">Burkolatok tisztítása</span><span data-lang-panel="en">Path and paving cleanup</span></strong><span data-lang-panel="hu" hidden aria-hidden="true">Kerti utak, lépcsők és bejáratok tisztább megjelenése.</span><span data-lang-panel="en">Cleaner paths, steps and entrance areas.</span></figcaption>
           </figure>
           <figure class="showcase-photo showcase-photo-small">
-            <img src="assets/garden-maintenance-residential-front-garden.jpg" alt="Gardener pruning shrubs with hand shears in natural light" loading="lazy" decoding="async">
+            <img src="assets/garden-maintenance-residential-front-garden.jpg" alt="Gardener pruning shrubs with hand shears in natural light" loading="lazy" decoding="async" srcset="assets/garden-maintenance-residential-front-garden-480w.webp 480w, assets/garden-maintenance-residential-front-garden-800w.webp 800w, assets/garden-maintenance-residential-front-garden-1200w.webp 1200w, assets/garden-maintenance-residential-front-garden-1600w.webp 1600w" sizes="(max-width: 700px) 95vw, (max-width: 1200px) 50vw, 311px">
             <figcaption><strong><span data-lang-panel="hu" hidden aria-hidden="true">Metszés és cserjék</span><span data-lang-panel="en">Pruning and shrubs</span></strong><span data-lang-panel="hu" hidden aria-hidden="true">Cserjék, bokrok és kisebb növényzet gondozása.</span><span data-lang-panel="en">Care for shrubs, bushes and smaller greenery.</span></figcaption>
           </figure>
         </div>

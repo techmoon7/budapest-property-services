@@ -1,0 +1,544 @@
+{
+  "budapest-airbnb-bedroom.jpg": {
+    "height": 1067,
+    "sha256": "f4f4e768964535d008e2d7237e9eb7b0fe21d1ad11c6aa624d0829bf9025f4e2",
+    "variants": [
+      "budapest-airbnb-bedroom-480w.webp",
+      "budapest-airbnb-bedroom-800w.webp",
+      "budapest-airbnb-bedroom-1200w.webp",
+      "budapest-airbnb-bedroom-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-airbnb-before-turnover-matched.jpg": {
+    "height": 1067,
+    "sha256": "3e239b2da5356c3341df4252c49d5587d713ca95cccd4317f6b183890723fa0c",
+    "variants": [
+      "budapest-airbnb-before-turnover-matched-480w.webp",
+      "budapest-airbnb-before-turnover-matched-800w.webp",
+      "budapest-airbnb-before-turnover-matched-1200w.webp",
+      "budapest-airbnb-before-turnover-matched-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-airbnb-living-room.jpg": {
+    "height": 1067,
+    "sha256": "617f5c7a1ac482e540efeeed947da27be7b756336f8e18aaa469e6a63a5122c3",
+    "variants": [
+      "budapest-airbnb-living-room-480w.webp",
+      "budapest-airbnb-living-room-800w.webp",
+      "budapest-airbnb-living-room-1200w.webp",
+      "budapest-airbnb-living-room-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-apartment-wall-refresh.jpg": {
+    "height": 800,
+    "sha256": "ded1974854fc3350d412b8fee09a068de3674b736e49cd534807393cb78746a1",
+    "variants": [
+      "budapest-apartment-wall-refresh-480w.webp",
+      "budapest-apartment-wall-refresh-800w.webp",
+      "budapest-apartment-wall-refresh-1200w.webp",
+      "budapest-apartment-wall-refresh-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-courtyard-before-entrance.jpg": {
+    "height": 1067,
+    "sha256": "a0544738765ee3077fc736ed6140bc509f9df803d330b2fa1484f9aaf7c15b7b",
+    "variants": [
+      "budapest-courtyard-before-entrance-480w.webp",
+      "budapest-courtyard-before-entrance-800w.webp",
+      "budapest-courtyard-before-entrance-1200w.webp",
+      "budapest-courtyard-before-entrance-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-courtyard-before-overgrown-lawn.jpg": {
+    "height": 1067,
+    "sha256": "1206a33d9c29c183cb70885aa5fdc05913cce5abdcef9730fe13ab4cb3e848d9",
+    "variants": [
+      "budapest-courtyard-before-overgrown-lawn-480w.webp",
+      "budapest-courtyard-before-overgrown-lawn-800w.webp",
+      "budapest-courtyard-before-overgrown-lawn-1200w.webp",
+      "budapest-courtyard-before-overgrown-lawn-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-courtyard-before-overgrown-wall.jpg": {
+    "height": 1067,
+    "sha256": "b25f1014ec6a704fba16559254e68f2637ab7a255c5471f1b2d5e927d92d1b52",
+    "variants": [
+      "budapest-courtyard-before-overgrown-wall-480w.webp",
+      "budapest-courtyard-before-overgrown-wall-800w.webp",
+      "budapest-courtyard-before-overgrown-wall-1200w.webp",
+      "budapest-courtyard-before-overgrown-wall-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-courtyard-garden-1.jpg": {
+    "height": 844,
+    "sha256": "1493f40c76eeaab44a7e1b6b4ed73a76cbf0010f95b934bfb8dd3eb3b8ed2a7a",
+    "variants": [
+      "budapest-courtyard-garden-1-480w.webp",
+      "budapest-courtyard-garden-1-800w.webp",
+      "budapest-courtyard-garden-1-1200w.webp",
+      "budapest-courtyard-garden-1-1500w.webp"
+    ],
+    "width": 1500
+  },
+  "budapest-courtyard-garden-2.jpg": {
+    "height": 844,
+    "sha256": "bdd6c1259e036a2bda38c029b060455363a4ffb56bca553a862e96c1dcac2f73",
+    "variants": [
+      "budapest-courtyard-garden-2-480w.webp",
+      "budapest-courtyard-garden-2-800w.webp",
+      "budapest-courtyard-garden-2-1200w.webp",
+      "budapest-courtyard-garden-2-1500w.webp"
+    ],
+    "width": 1500
+  },
+  "budapest-courtyard-garden-3.jpg": {
+    "height": 1000,
+    "sha256": "9ccb72dd00b319f61b0ccd727dfa0e15f2a615504e0ea38aa06c0f3eab78a61b",
+    "variants": [
+      "budapest-courtyard-garden-3-480w.webp",
+      "budapest-courtyard-garden-3-800w.webp",
+      "budapest-courtyard-garden-3-1200w.webp",
+      "budapest-courtyard-garden-3-1500w.webp"
+    ],
+    "width": 1500
+  },
+  "budapest-courtyard-process-green-waste.jpg": {
+    "height": 1067,
+    "sha256": "788d7ac83a50eaae925cf9b6af3b693eae623edc0db94a3f704ec815ef23efeb",
+    "variants": [
+      "budapest-courtyard-process-green-waste-480w.webp",
+      "budapest-courtyard-process-green-waste-800w.webp",
+      "budapest-courtyard-process-green-waste-1200w.webp",
+      "budapest-courtyard-process-green-waste-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-courtyard-process-hedge-trimming.jpg": {
+    "height": 1067,
+    "sha256": "b5be9846a2b9077bd1d842f655e613afd6b71995a5bac7e4f869de6defc39ef8",
+    "variants": [
+      "budapest-courtyard-process-hedge-trimming-480w.webp",
+      "budapest-courtyard-process-hedge-trimming-800w.webp",
+      "budapest-courtyard-process-hedge-trimming-1200w.webp",
+      "budapest-courtyard-process-hedge-trimming-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-courtyard-process-mowing.jpg": {
+    "height": 1067,
+    "sha256": "c4be88074afd519f08a7ae6fb142a9538b837a9f159fcca9ca8f3786aaf6c8c3",
+    "variants": [
+      "budapest-courtyard-process-mowing-480w.webp",
+      "budapest-courtyard-process-mowing-800w.webp",
+      "budapest-courtyard-process-mowing-1200w.webp",
+      "budapest-courtyard-process-mowing-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-courtyard-process-shrub-pruning.jpg": {
+    "height": 1067,
+    "sha256": "406ab2ed80417ca62cedab71a1f2187cc1cc0ad23795bdcda9bcd2bec15a61ae",
+    "variants": [
+      "budapest-courtyard-process-shrub-pruning-480w.webp",
+      "budapest-courtyard-process-shrub-pruning-800w.webp",
+      "budapest-courtyard-process-shrub-pruning-1200w.webp",
+      "budapest-courtyard-process-shrub-pruning-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-drywall-before-matched.jpg": {
+    "height": 1067,
+    "sha256": "992113ee8801d45dd51ef284b5f2e8184d882e1604afd0b4ae298108b2bbfefa",
+    "variants": [
+      "budapest-drywall-before-matched-480w.webp",
+      "budapest-drywall-before-matched-800w.webp",
+      "budapest-drywall-before-matched-1200w.webp",
+      "budapest-drywall-before-matched-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-finished-room-1.jpg": {
+    "height": 1067,
+    "sha256": "d374e73dabc79865cc314d4ba9eb91b01ba9d3312d17c16c29fff0daa402b6fa",
+    "variants": [
+      "budapest-finished-room-1-480w.webp",
+      "budapest-finished-room-1-800w.webp",
+      "budapest-finished-room-1-1200w.webp",
+      "budapest-finished-room-1-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-finished-room-2.jpg": {
+    "height": 1067,
+    "sha256": "8a49dcaee6e2d7aaef5530c18491209f2fbfbb67a553105bee5312ccf53bad16",
+    "variants": [
+      "budapest-finished-room-2-480w.webp",
+      "budapest-finished-room-2-800w.webp",
+      "budapest-finished-room-2-1200w.webp",
+      "budapest-finished-room-2-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-handyman-before-matched.jpg": {
+    "height": 1067,
+    "sha256": "3ecbe489b75fe0620e26847bd65d2c2b75f28bb249554bc25cc7eb317be355bd",
+    "variants": [
+      "budapest-handyman-before-matched-480w.webp",
+      "budapest-handyman-before-matched-800w.webp",
+      "budapest-handyman-before-matched-1200w.webp",
+      "budapest-handyman-before-matched-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-office-before-touchup-matched.jpg": {
+    "height": 1067,
+    "sha256": "5a84a151eb29b40674c50d233fbd170c1de00a32e66409116da98854ccb73345",
+    "variants": [
+      "budapest-office-before-touchup-matched-480w.webp",
+      "budapest-office-before-touchup-matched-800w.webp",
+      "budapest-office-before-touchup-matched-1200w.webp",
+      "budapest-office-before-touchup-matched-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-office-finished-1.jpg": {
+    "height": 1067,
+    "sha256": "840b221bd317c409e7164d1d16c732bfd1845a748032f9d0078c0fe51d9d03f0",
+    "variants": [
+      "budapest-office-finished-1-480w.webp",
+      "budapest-office-finished-1-800w.webp",
+      "budapest-office-finished-1-1200w.webp",
+      "budapest-office-finished-1-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-office-finished-2.jpg": {
+    "height": 1067,
+    "sha256": "ad9ab46016dfb54fdff57c621d0dff60f5732e30d68d3fa40e6368e204953b4c",
+    "variants": [
+      "budapest-office-finished-2-480w.webp",
+      "budapest-office-finished-2-800w.webp",
+      "budapest-office-finished-2-1200w.webp",
+      "budapest-office-finished-2-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-office-finished-3.jpg": {
+    "height": 1067,
+    "sha256": "58519442319ff12c89cfa6ee57e9b3ca491e836a72eea8ad3d92f9937caaf0de",
+    "variants": [
+      "budapest-office-finished-3-480w.webp",
+      "budapest-office-finished-3-800w.webp",
+      "budapest-office-finished-3-1200w.webp",
+      "budapest-office-finished-3-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-office-process-wall-touchup.jpg": {
+    "height": 1067,
+    "sha256": "3f67253a5ed7ec795383d5d4771dfccb12a361c830978a9eb871b3fbac1d18b4",
+    "variants": [
+      "budapest-office-process-wall-touchup-480w.webp",
+      "budapest-office-process-wall-touchup-800w.webp",
+      "budapest-office-process-wall-touchup-1200w.webp",
+      "budapest-office-process-wall-touchup-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "budapest-painting-before-matched.jpg": {
+    "height": 1067,
+    "sha256": "eb93ef27d3588e932a18e796a6ceb5b5243f777dfde6716fb59ccaf7d52fd164",
+    "variants": [
+      "budapest-painting-before-matched-480w.webp",
+      "budapest-painting-before-matched-800w.webp",
+      "budapest-painting-before-matched-1200w.webp",
+      "budapest-painting-before-matched-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "cleaning-services-apartment-counter.jpg": {
+    "height": 1067,
+    "sha256": "cee1f21b23fbcec8cf56d24e7a4d7998d92858cede325af660f4c37e33a29445",
+    "variants": [
+      "cleaning-services-apartment-counter-480w.webp",
+      "cleaning-services-apartment-counter-800w.webp",
+      "cleaning-services-apartment-counter-1200w.webp",
+      "cleaning-services-apartment-counter-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "cleaning-services-budapest-interior.jpg": {
+    "height": 1272,
+    "sha256": "15d8f5c3013af237fc171ea9c14384372dde074a97000dc24496d6915eff8003",
+    "variants": [
+      "cleaning-services-budapest-interior-480w.webp",
+      "cleaning-services-budapest-interior-800w.webp",
+      "cleaning-services-budapest-interior-1200w.webp",
+      "cleaning-services-budapest-interior-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "cleaning-services-floor-sweeping.jpg": {
+    "height": 1068,
+    "sha256": "c181e4a386de93e774613a484ec5e19b73fbe3206a839a1e5652b788b79dbfd9",
+    "variants": [
+      "cleaning-services-floor-sweeping-480w.webp",
+      "cleaning-services-floor-sweeping-800w.webp",
+      "cleaning-services-floor-sweeping-1200w.webp",
+      "cleaning-services-floor-sweeping-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "cleaning-services-hero-budapest-kitchen.jpg": {
+    "height": 1600,
+    "sha256": "5b4604e6faa5dbba50685cd8ae2581cdee7acd889672cef1259b192f2a43fa7d",
+    "variants": [
+      "cleaning-services-hero-budapest-kitchen-480w.webp",
+      "cleaning-services-hero-budapest-kitchen-800w.webp",
+      "cleaning-services-hero-budapest-kitchen-1200w.webp",
+      "cleaning-services-hero-budapest-kitchen-1201w.webp"
+    ],
+    "width": 1201
+  },
+  "cleaning-services-move-out-room.jpg": {
+    "height": 1068,
+    "sha256": "3767c7066b2b9ccfe3ee83a34255d2218500feda19a498126cf388b482b1a896",
+    "variants": [
+      "cleaning-services-move-out-room-480w.webp",
+      "cleaning-services-move-out-room-800w.webp",
+      "cleaning-services-move-out-room-1200w.webp",
+      "cleaning-services-move-out-room-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "cleaning-services-office-desk.jpg": {
+    "height": 1067,
+    "sha256": "6b24cee88ec503bdb8e0047b092cce96151ff037c03d54fbd805f9b60f09497d",
+    "variants": [
+      "cleaning-services-office-desk-480w.webp",
+      "cleaning-services-office-desk-800w.webp",
+      "cleaning-services-office-desk-1200w.webp",
+      "cleaning-services-office-desk-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "cleaning-services-renovation-vacuum.jpg": {
+    "height": 1600,
+    "sha256": "8886c3f6db80a62988c3edbc00c4bb8b4dbe554f4636113d6043dc9a73832102",
+    "variants": [
+      "cleaning-services-renovation-vacuum-480w.webp",
+      "cleaning-services-renovation-vacuum-800w.webp",
+      "cleaning-services-renovation-vacuum-1067w.webp"
+    ],
+    "width": 1067
+  },
+  "garden-maintenance-hedge-trimming.jpg": {
+    "height": 1067,
+    "sha256": "fd9ebd78fee38855a0b4a8ab56179c31e6a334da0c8aae28739b31b3af96bbf4",
+    "variants": [
+      "garden-maintenance-hedge-trimming-480w.webp",
+      "garden-maintenance-hedge-trimming-800w.webp",
+      "garden-maintenance-hedge-trimming-1200w.webp",
+      "garden-maintenance-hedge-trimming-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "garden-maintenance-hero-garden.jpg": {
+    "height": 1000,
+    "sha256": "a96131ab2e93535789f46fadcfc7ead10ebbbcb6804aa0bdfb33f473480ac576",
+    "variants": [
+      "garden-maintenance-hero-garden-480w.webp",
+      "garden-maintenance-hero-garden-800w.webp",
+      "garden-maintenance-hero-garden-1200w.webp",
+      "garden-maintenance-hero-garden-1500w.webp"
+    ],
+    "width": 1500
+  },
+  "garden-maintenance-lawn-trimming.jpg": {
+    "height": 1067,
+    "sha256": "5f653b5c40f6d33e75bcdf69758d10918310224cd5df6e2dbe6711b7794fce9b",
+    "variants": [
+      "garden-maintenance-lawn-trimming-480w.webp",
+      "garden-maintenance-lawn-trimming-800w.webp",
+      "garden-maintenance-lawn-trimming-1200w.webp",
+      "garden-maintenance-lawn-trimming-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "garden-maintenance-leaf-cleanup.jpg": {
+    "height": 1600,
+    "sha256": "325f8c7cfa946c44b60ed7226fb91ed58d32169184e006c8f42944d1ebd0f149",
+    "variants": [
+      "garden-maintenance-leaf-cleanup-480w.webp",
+      "garden-maintenance-leaf-cleanup-800w.webp",
+      "garden-maintenance-leaf-cleanup-1067w.webp"
+    ],
+    "width": 1067
+  },
+  "garden-maintenance-residential-front-garden.jpg": {
+    "height": 1062,
+    "sha256": "9c75b9a9fd2b03ff7e0dacbb26698ea3a15664d2466b0eb3eca6fa3827a54ffa",
+    "variants": [
+      "garden-maintenance-residential-front-garden-480w.webp",
+      "garden-maintenance-residential-front-garden-800w.webp",
+      "garden-maintenance-residential-front-garden-1200w.webp",
+      "garden-maintenance-residential-front-garden-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "garden-maintenance-residential-hedge.jpg": {
+    "height": 1483,
+    "sha256": "be2ff3067d253acef4252d22fc1923283c2b0d8901725089da4c2aae43806a90",
+    "variants": [
+      "garden-maintenance-residential-hedge-480w.webp",
+      "garden-maintenance-residential-hedge-800w.webp",
+      "garden-maintenance-residential-hedge-1200w.webp",
+      "garden-maintenance-residential-hedge-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "handyman-services-drywall-drill.jpg": {
+    "height": 1067,
+    "sha256": "5686287a0716c13c90e9f160c999c4d67a87b2645019d1bef3e4dde634be4762",
+    "variants": [
+      "handyman-services-drywall-drill-480w.webp",
+      "handyman-services-drywall-drill-800w.webp",
+      "handyman-services-drywall-drill-1200w.webp",
+      "handyman-services-drywall-drill-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "handyman-services-furniture-assembly.jpg": {
+    "height": 1067,
+    "sha256": "547d2d09b274ca327ddd77d81fd05307d87371bf356a8c9142d84253a99df9cd",
+    "variants": [
+      "handyman-services-furniture-assembly-480w.webp",
+      "handyman-services-furniture-assembly-800w.webp",
+      "handyman-services-furniture-assembly-1200w.webp",
+      "handyman-services-furniture-assembly-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "handyman-services-hero-drilling.jpg": {
+    "height": 1600,
+    "sha256": "b6d63da567eb69c8d29ade5aa41b7fba757b67b3befd0f9d12c388107a4e1bdf",
+    "variants": [
+      "handyman-services-hero-drilling-480w.webp",
+      "handyman-services-hero-drilling-800w.webp",
+      "handyman-services-hero-drilling-1067w.webp"
+    ],
+    "width": 1067
+  },
+  "handyman-services-wall-fixtures.jpg": {
+    "height": 900,
+    "sha256": "0eaf635236960261e313f7dca787bf38f70dd7033cf40c69ca94890a90901bff",
+    "variants": [
+      "handyman-services-wall-fixtures-480w.webp",
+      "handyman-services-wall-fixtures-800w.webp",
+      "handyman-services-wall-fixtures-1200w.webp",
+      "handyman-services-wall-fixtures-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "paint-showcase-galaxy-night-mural.jpg": {
+    "height": 1024,
+    "sha256": "3332ffa3240289e57f1e6d217f84a903eaa16780ad7e4de2c26a4ce9e951e3ea",
+    "variants": [
+      "paint-showcase-galaxy-night-mural-480w.webp",
+      "paint-showcase-galaxy-night-mural-800w.webp",
+      "paint-showcase-galaxy-night-mural-1200w.webp",
+      "paint-showcase-galaxy-night-mural-1536w.webp"
+    ],
+    "width": 1536
+  },
+  "painting-wall-repairs-apartment-painting.jpg": {
+    "height": 1600,
+    "sha256": "43a3e7230a8c686ef7be61daa58894cfef57f2209e6ac023e5f38fbf34a1c0c4",
+    "variants": [
+      "painting-wall-repairs-apartment-painting-480w.webp",
+      "painting-wall-repairs-apartment-painting-800w.webp",
+      "painting-wall-repairs-apartment-painting-1068w.webp"
+    ],
+    "width": 1068
+  },
+  "painting-wall-repairs-hero-roller.jpg": {
+    "height": 1600,
+    "sha256": "62aa2efca035565631ff4a0071229b52d92d42513c824c91d514e1f1b46b6f49",
+    "variants": [
+      "painting-wall-repairs-hero-roller-480w.webp",
+      "painting-wall-repairs-hero-roller-800w.webp",
+      "painting-wall-repairs-hero-roller-1068w.webp"
+    ],
+    "width": 1068
+  },
+  "painting-wall-repairs-plastering.jpg": {
+    "height": 1600,
+    "sha256": "2fdb3b2647132120c8de934a00afde4f398e12e9ab07e631a3aeecede07ea472",
+    "variants": [
+      "painting-wall-repairs-plastering-480w.webp",
+      "painting-wall-repairs-plastering-800w.webp",
+      "painting-wall-repairs-plastering-1068w.webp"
+    ],
+    "width": 1068
+  },
+  "painting-wall-repairs-roller-detail.jpg": {
+    "height": 1600,
+    "sha256": "3949292bedcae06d5ec0ba4d51d989155a120346254de6a2734e5f7b90c16db8",
+    "variants": [
+      "painting-wall-repairs-roller-detail-480w.webp",
+      "painting-wall-repairs-roller-detail-800w.webp",
+      "painting-wall-repairs-roller-detail-1200w.webp"
+    ],
+    "width": 1200
+  },
+  "painting-wall-repairs-spackle-smoothing.jpg": {
+    "height": 1068,
+    "sha256": "a277a8708a8e7d9c8d516007af1fbb88dd6f77bb5aaa5e1b38c174e95e377882",
+    "variants": [
+      "painting-wall-repairs-spackle-smoothing-480w.webp",
+      "painting-wall-repairs-spackle-smoothing-800w.webp",
+      "painting-wall-repairs-spackle-smoothing-1200w.webp",
+      "painting-wall-repairs-spackle-smoothing-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "painting-wall-repairs-trowel-finish.jpg": {
+    "height": 1600,
+    "sha256": "5483e1f86952473c2e9f4b6ea36428a97cfa8675115f78366ee663a793cd05e2",
+    "variants": [
+      "painting-wall-repairs-trowel-finish-480w.webp",
+      "painting-wall-repairs-trowel-finish-800w.webp",
+      "painting-wall-repairs-trowel-finish-1068w.webp"
+    ],
+    "width": 1068
+  },
+  "property-maintenance-drywall-sanding.jpg": {
+    "height": 1067,
+    "sha256": "d055e36716eb90ed397d69765095ab90a7def9aa039adb94d711d3b214c29378",
+    "variants": [
+      "property-maintenance-drywall-sanding-480w.webp",
+      "property-maintenance-drywall-sanding-800w.webp",
+      "property-maintenance-drywall-sanding-1200w.webp",
+      "property-maintenance-drywall-sanding-1600w.webp"
+    ],
+    "width": 1600
+  },
+  "property-maintenance-hero-painting.jpg": {
+    "height": 1067,
+    "sha256": "5021f57013ca2a3c13803f28de54d77c28d9dcc07ea3214d04169687e5947959",
+    "variants": [
+      "property-maintenance-hero-painting-480w.webp",
+      "property-maintenance-hero-painting-800w.webp",
+      "property-maintenance-hero-painting-1200w.webp",
+      "property-maintenance-hero-painting-1600w.webp"
+    ],
+    "width": 1600
+  }
+}
